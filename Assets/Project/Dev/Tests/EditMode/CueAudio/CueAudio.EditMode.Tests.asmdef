@@ -1,0 +1,6 @@
+{
+  "name": "CueAudio.EditMode.Tests",
+  "references": ["CueAudio.Runtime", "CueAudio.Editor", "CueAudio.PlayMode.Tests"],
+  "includePlatforms": ["Editor"],
+  "optionalUnityReferences": ["TestAssemblies"]
+}

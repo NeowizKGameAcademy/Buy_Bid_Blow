@@ -1,0 +1,6 @@
+{
+  "name": "CueAudio.Editor",
+  "rootNamespace": "CueAudio.Editor",
+  "references": ["CueAudio.Runtime"],
+  "includePlatforms": ["Editor"]
+}

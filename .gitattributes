@@ -1,0 +1,157 @@
+# BuyBidBlow — Git 속성 (Blappy-Bird 설정 기반)
+#
+# 목적 두 가지.
+#
+#  1. 저장소에 기록되는 줄바꿈을 LF로 고정한다.
+#     각자의 core.autocrlf 설정보다 이 파일이 우선하므로, 윈도우에서
+#     autocrlf=false인 사람이 CRLF를 그대로 커밋해 "전 줄이 바뀐" diff와
+#     전면 충돌을 만드는 사고를 막는다. 유니티 YAML은 한 파일이 수천 줄이라
+#     한 번 이러면 머지가 사실상 불가능해진다.
+#
+#  2. 바이너리를 명시한다. git의 자동 감지에만 맡기면 파일 내용에 따라
+#     텍스트로 오판할 수 있고, 그 경우 줄바꿈 변환이 일어나 에셋이 깨진다.
+#
+# 작업 트리의 줄바꿈은 건드리지 않는다.
+# eol= 을 쓰지 않으므로 체크아웃된 파일은 각자의 core.autocrlf 를 따르고,
+# 이 파일을 추가해도 기존 파일이 재작성되지 않는다. 도입 시점의 diff는 0이다.
+
+* text=auto
+
+# ─────────────────────────────────────────────────────────────
+# 유니티 YAML 에셋
+# ─────────────────────────────────────────────────────────────
+# ProjectSettings/EditorSettings.asset 의 m_SerializationMode 가 2(ForceText)
+# 이므로 아래 확장자는 전부 텍스트 YAML이다. 바이너리 직렬화로 바꾸면
+# 이 블록의 전제가 깨지니 함께 검토해야 한다.
+#
+# merge=unityyamlmerge 는 유니티가 제공하는 YAML 전용 병합 도구를 쓰겠다는
+# 표시다. 드라이버를 설정하지 않은 사람에게는 git 기본 병합으로 조용히
+# 대체되므로, 아무 설정을 하지 않아도 안전하다. 설정법은 아래 주석 참고.
+
+*.unity            text merge=unityyamlmerge
+*.prefab           text merge=unityyamlmerge
+*.asset            text merge=unityyamlmerge
+*.mat              text merge=unityyamlmerge
+*.anim             text merge=unityyamlmerge
+*.controller       text merge=unityyamlmerge
+*.overrideController text merge=unityyamlmerge
+*.meta             text merge=unityyamlmerge
+*.lighting         text merge=unityyamlmerge
+*.physicMaterial   text merge=unityyamlmerge
+*.mask             text merge=unityyamlmerge
+*.playable         text merge=unityyamlmerge
+*.signal           text merge=unityyamlmerge
+*.terrainlayer     text merge=unityyamlmerge
+*.spriteatlas      text merge=unityyamlmerge
+*.renderTexture    text merge=unityyamlmerge
+*.mixer            text merge=unityyamlmerge
+*.guiskin          text merge=unityyamlmerge
+*.fontsettings     text merge=unityyamlmerge
+*.flare            text merge=unityyamlmerge
+*.brush            text merge=unityyamlmerge
+*.shadervariants   text merge=unityyamlmerge
+*.preset           text merge=unityyamlmerge
+*.physicsMaterial2D text merge=unityyamlmerge
+
+# UnityYAMLMerge 를 쓰려면 각자 한 번 설정한다 (선택).
+#   git config merge.unityyamlmerge.name "Unity SmartMerge"
+#   git config merge.unityyamlmerge.driver '"C:/Program Files/Unity/Hub/Editor/<버전>/Editor/Data/Tools/UnityYAMLMerge.exe" merge -p %O %A %B %A'
+
+# ─────────────────────────────────────────────────────────────
+# 코드 · 설정 텍스트
+# ─────────────────────────────────────────────────────────────
+*.cs               text diff=csharp
+*.shader           text
+*.shadergraph      text
+*.shadersubgraph   text
+*.cginc            text
+*.hlsl             text
+*.compute          text
+*.json             text
+*.asmdef           text
+*.asmref           text
+*.uss              text
+*.uxml             text
+*.jslib            text
+*.svg              text
+*.mtl              text
+*.inputactions     text
+*.xml              text
+*.yml              text
+*.yaml             text
+*.md               text
+*.txt              text
+*.css              text
+*.wlt              text
+*.vsconfig         text
+*.gitignore        text
+*.gitattributes    text
+
+# .obj 는 이 저장소에서 Wavefront 메시(평문)다. C/C++ 오브젝트 파일이 아니다.
+# 실제로 저장소에 LF 텍스트로 들어가 있어 diff 도 정상적으로 잡힌다.
+*.obj              text
+
+# ─────────────────────────────────────────────────────────────
+# 바이너리 — 줄바꿈 변환도 텍스트 diff 도 하지 않는다
+# ─────────────────────────────────────────────────────────────
+
+# 이미지
+*.png              binary
+*.jpg              binary
+*.jpeg             binary
+*.gif              binary
+*.bmp              binary
+*.tga              binary
+*.tif              binary
+*.tiff             binary
+*.psd              binary
+*.exr              binary
+*.hdr              binary
+*.iff              binary
+*.pict             binary
+
+# 오디오
+*.wav              binary
+*.mp3              binary
+*.ogg              binary
+*.aif              binary
+*.aiff             binary
+
+# 폰트
+*.ttf              binary
+*.otf              binary
+*.woff             binary
+*.woff2            binary
+*.eot              binary
+
+# 3D 모델 (바이너리 포맷)
+*.fbx              binary
+*.blend            binary
+*.dae              binary
+*.3ds              binary
+*.max              binary
+*.ma               binary
+*.mb               binary
+
+# 라이브러리 · 실행 파일
+*.dll              binary
+*.so               binary
+*.dylib            binary
+*.a                binary
+*.lib              binary
+*.exe              binary
+*.pdb              binary
+*.mdb              binary
+
+# 유니티 산출물 · 압축 · 문서
+*.unitypackage     binary
+*.cubemap          binary
+*.bundle           binary
+*.zip              binary
+*.7z               binary
+*.rar              binary
+*.gz               binary
+*.pdf              binary
+*.pptx             binary
+*.docx             binary
+*.xlsx             binary

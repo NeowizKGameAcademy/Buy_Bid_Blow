@@ -1,0 +1,106 @@
+{
+    "version": 1,
+    "cues": [
+        {
+            "id": "ui.click",
+            "clips": [
+                "demo_click"
+            ],
+            "selection": "randomNoRepeat",
+            "bus": "ui",
+            "volume": 0.6000000238418579,
+            "pitchRange": {
+                "x": 1.0,
+                "y": 1.0
+            },
+            "loop": false,
+            "spatialBlend": 0.0,
+            "minDistance": 1.0,
+            "maxDistance": 30.0,
+            "cooldownSeconds": 0.0,
+            "maxInstances": 8,
+            "overflow": "reject"
+        },
+        {
+            "id": "auction.bid",
+            "clips": [
+                "demo_bid_a",
+                "demo_bid_b"
+            ],
+            "selection": "randomNoRepeat",
+            "bus": "sfx",
+            "volume": 0.6000000238418579,
+            "pitchRange": {
+                "x": 0.9700000286102295,
+                "y": 1.0299999713897706
+            },
+            "loop": false,
+            "spatialBlend": 0.0,
+            "minDistance": 1.0,
+            "maxDistance": 30.0,
+            "cooldownSeconds": 0.10000000149011612,
+            "maxInstances": 3,
+            "overflow": "reject"
+        },
+        {
+            "id": "world.ping",
+            "clips": [
+                "demo_spatial"
+            ],
+            "selection": "randomNoRepeat",
+            "bus": "sfx",
+            "volume": 1.0,
+            "pitchRange": {
+                "x": 1.0,
+                "y": 1.0
+            },
+            "loop": false,
+            "spatialBlend": 1.0,
+            "minDistance": 2.0,
+            "maxDistance": 30.0,
+            "cooldownSeconds": 0.0,
+            "maxInstances": 8,
+            "overflow": "reject"
+        },
+        {
+            "id": "bgm.demo_a",
+            "clips": [
+                "demo_music_a"
+            ],
+            "selection": "randomNoRepeat",
+            "bus": "music",
+            "volume": 0.4000000059604645,
+            "pitchRange": {
+                "x": 1.0,
+                "y": 1.0
+            },
+            "loop": true,
+            "spatialBlend": 0.0,
+            "minDistance": 1.0,
+            "maxDistance": 30.0,
+            "cooldownSeconds": 0.0,
+            "maxInstances": 2,
+            "overflow": "reject"
+        },
+        {
+            "id": "bgm.demo_b",
+            "clips": [
+                "demo_music_b"
+            ],
+            "selection": "randomNoRepeat",
+            "bus": "music",
+            "volume": 0.4000000059604645,
+            "pitchRange": {
+                "x": 1.0,
+                "y": 1.0
+            },
+            "loop": true,
+            "spatialBlend": 0.0,
+            "minDistance": 1.0,
+            "maxDistance": 30.0,
+            "cooldownSeconds": 0.0,
+            "maxInstances": 2,
+            "overflow": "reject"
+        }
+    ]
+}
