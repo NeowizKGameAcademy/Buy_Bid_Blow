@@ -1,0 +1,6 @@
+{
+  "name": "BuyBidBlow.Core",
+  "rootNamespace": "BuyBidBlow.Core",
+  "references": [],
+  "noEngineReferences": true
+}
