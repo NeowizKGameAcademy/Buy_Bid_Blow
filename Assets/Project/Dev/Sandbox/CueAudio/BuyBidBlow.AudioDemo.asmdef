@@ -1,4 +1,18 @@
 {
-  "name": "BuyBidBlow.AudioDemo",
-  "references": ["CueAudio.Runtime"]
+    "name": "BuyBidBlow.AudioDemo",
+    "rootNamespace": "",
+    "references": [
+        "CueAudio.Runtime"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "UNITY_EDITOR"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

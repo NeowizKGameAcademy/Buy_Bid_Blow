@@ -1,0 +1,5 @@
+{
+  "name": "BuyBidBlow.Game",
+  "rootNamespace": "BuyBidBlow",
+  "references": ["BuyBidBlow.Systems", "Mirror"]
+}

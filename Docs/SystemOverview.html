@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>Buy Bid Blow 시스템 구성</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap">
+<style>
+  * { box-sizing: border-box; margin: 0; }
+  body { background: #D9D3C5; }
+  .slide { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: #F5F1E8; color: #1C2430; font-family: 'Noto Sans KR', Arial, sans-serif; word-break: keep-all; }
+  .slide > * { position: absolute; }
+  .col { display: flex; flex-direction: column; }
+</style>
+</head>
+<body>
+<div class="slide">
+<p style="left:96px;top:88px;width:1200px;font-size:24px;font-weight:700;color:#B4531A;letter-spacing:2px">BUY, BID, BLOW · 시스템 구성</p>
+<h2 style="left:96px;top:126px;width:1728px;font-size:56px;font-weight:900;line-height:1.15">캐릭터는 시스템을 이용할 뿐, 규칙은 시스템에 있다</h2>
+
+<p style="left:96px;top:214px;width:1040px;font-size:26px;font-weight:700;color:#5A6270">시스템 — 규칙과 상태를 가진 쪽 (Systems)</p>
+<p style="left:1216px;top:214px;width:608px;font-size:26px;font-weight:700;color:#5A6270">시스템에 붙는 것들 — 규칙 없음</p>
+
+<div class="col" style="left:96px;top:260px;width:1040px;height:116px;background:#FCFAF5;border:1px solid #D8D0BF;border-radius:16px;padding:20px 28px;gap:6px">
+<h3 style="font-size:28px;font-weight:700">아웃게임</h3>
+<p style="font-size:24px;color:#5A6270">메뉴 · 로비 (방 생성/참가 · 준비 · 넥타이 색 · 방 코드) · 결과</p>
+</div>
+
+<p style="left:96px;top:392px;width:400px;font-size:26px;font-weight:700">인게임</p>
+
+<div class="col" style="left:96px;top:436px;width:700px;height:96px;background:#1C2430;border-radius:16px;padding:14px 28px;gap:2px">
+<h3 style="font-size:28px;font-weight:700;color:#F5F1E8">Round 라운드 — 전체를 구동</h3>
+<p style="font-size:24px;color:#C9CFD8">100초 시계 · 경매 일정 · Closing Bell</p>
+</div>
+
+<div class="col" style="left:816px;top:436px;width:320px;height:96px;border:2px dashed #5A6270;border-radius:16px;padding:12px 24px;gap:2px">
+<h3 style="font-size:28px;font-weight:700">공간 · 관찰</h3>
+<p style="font-size:24px;color:#5A6270">이동 약 5초 · 방문 관찰</p>
+</div>
+
+<div class="col" style="left:96px;top:552px;width:300px;height:184px;background:#FCFAF5;border:2px solid #B4531A;border-radius:16px;padding:22px 24px;gap:8px">
+<h3 style="font-size:32px;font-weight:700;color:#B4531A">Auction 경매</h3>
+<p style="font-size:24px;line-height:1.4">Open · Secret · Dutch<br>낙찰자 신원 공개</p>
+</div>
+
+<div class="col" style="left:466px;top:552px;width:300px;height:184px;background:#FCFAF5;border:2px solid #1C2430;border-radius:16px;padding:22px 24px;gap:8px">
+<h3 style="font-size:32px;font-weight:700">Intel 정보</h3>
+<p style="font-size:24px;line-height:1.4">시장의 숨은 변동에서 만든 경매 상품</p>
+</div>
+
+<div class="col" style="left:836px;top:552px;width:300px;height:184px;background:#FCFAF5;border:2px solid #2C5A94;border-radius:16px;padding:22px 24px;gap:8px">
+<h3 style="font-size:32px;font-weight:700;color:#2C5A94">Market 주식</h3>
+<p style="font-size:24px;line-height:1.4">Straw · Timber · Brick<br>라운드 중 가격 고정</p>
+</div>
+
+<p style="left:262px;top:746px;width:240px;font-size:24px;font-weight:500;color:#B4531A">입찰금 예약·차감</p>
+<p style="left:1002px;top:746px;width:134px;font-size:24px;font-weight:500;color:#2C5A94">매수·매도</p>
+
+<div class="col" style="left:96px;top:790px;width:1040px;height:150px;background:#FCFAF5;border:2px solid #1C2430;border-radius:16px;padding:12px 28px;gap:2px">
+<h3 style="font-size:32px;font-weight:700;line-height:1.2">Portfolio 자산 <span style="color:#5A6270">— 본인에게만 공개</span></h3>
+<p style="font-size:24px;color:#5A6270">현금 · 예약금 · 보유 주식 · 획득 정보</p>
+<p style="font-size:24px;font-weight:700;color:#B4531A">사용 가능 현금 = 현금 − 예약금 → 경매와 투자가 같은 돈을 나눠 쓴다</p>
+</div>
+
+<p style="left:1140px;top:526px;width:76px;font-size:24px;font-weight:700;text-align:center;color:#5A6270">요청</p>
+<p style="left:1140px;top:712px;width:76px;font-size:24px;font-weight:700;text-align:center;color:#5A6270">읽기</p>
+
+<div class="col" style="left:1216px;top:260px;width:608px;height:676px;background:#EAE3D3;border-radius:16px;padding:30px 34px;justify-content:space-between">
+<div class="col" style="gap:4px">
+<h3 style="font-size:28px;font-weight:700">행위자</h3>
+<p style="font-size:24px;line-height:1.4;color:#3E4652">내 캐릭터 (1인칭 늑대) · 다른 플레이어 아바타 — 팻말을 들고 창구에 서는 모습이 관찰 재료</p>
+</div>
+<div class="col" style="gap:4px">
+<h3 style="font-size:28px;font-weight:700">상호작용 지점</h3>
+<p style="font-size:24px;line-height:1.4;color:#3E4652">회사별 거래 창구 · 경매석과 입찰 팻말 · 시세 전광판 · 시계 · 알림판 · 종 · 두 공간을 잇는 통로</p>
+</div>
+<div class="col" style="gap:4px">
+<h3 style="font-size:28px;font-weight:700">개인 UI</h3>
+<p style="font-size:24px;line-height:1.4;color:#3E4652">HUD · Portfolio 패널 · Intel 수첩 · 입찰 패널 · 거래 패널 · 알림</p>
+</div>
+<div class="col" style="gap:4px">
+<h3 style="font-size:28px;font-weight:700">피드백</h3>
+<p style="font-size:24px;line-height:1.4;color:#3E4652">CueAudio 큐 · 낙찰·변동 연출 · 음성 채팅</p>
+</div>
+</div>
+
+<svg style="left:0;top:0" width="1920" height="1080" viewBox="0 0 1920 1080" aria-hidden="true">
+<defs>
+<marker id="ink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1C2430"/></marker>
+<marker id="orange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#B4531A"/></marker>
+<marker id="blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#2C5A94"/></marker>
+<marker id="muted" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#5A6270"/></marker>
+</defs>
+<line x1="836" y1="644" x2="768" y2="644" stroke="#1C2430" stroke-width="3" marker-end="url(#ink)"/>
+<line x1="466" y1="644" x2="398" y2="644" stroke="#1C2430" stroke-width="3" marker-end="url(#ink)"/>
+<line x1="246" y1="738" x2="246" y2="788" stroke="#B4531A" stroke-width="3" marker-end="url(#orange)"/>
+<line x1="986" y1="738" x2="986" y2="788" stroke="#2C5A94" stroke-width="3" marker-end="url(#blue)"/>
+<line x1="1210" y1="584" x2="1144" y2="584" stroke="#5A6270" stroke-width="3" marker-end="url(#muted)"/>
+<line x1="1144" y1="700" x2="1210" y2="700" stroke="#5A6270" stroke-width="3" marker-end="url(#muted)"/>
+</svg>
+
+<p style="left:96px;bottom:64px;width:1728px;font-size:24px;color:#5A6270">요청 경로 <b style="color:#1C2430">PlayerNet → MatchHost → Match</b>  ·  판정은 Match 한 곳  ·  폴더 Systems / Network / Characters · World · UI</p>
+</div>
+</body>
+</html>

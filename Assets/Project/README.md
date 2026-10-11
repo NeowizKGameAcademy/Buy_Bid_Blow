@@ -6,28 +6,46 @@ BuyBidBlow의 게임 코드와 콘텐츠를 관리한다. 독립 오디오 엔�
 
 | 폴더 | 책임 |
 |---|---|
-| `Client/Lobby`, `Client/InGame` | 기능별 UI Model·View·Presenter. 현재 인게임 HUD는 `InGame/HUD`에 둔다 |
-| `Client/Player` | 입력·카메라·이동 표현 |
-| `Client/Integrations` | Mirror 클라이언트·Discord 연결 |
-| `Server/Rooms/Application`, `Server/InGame/Application` | 요청 조율·권한·중복 검사·처리 순서·저장 조율 |
-| `Server/Rooms/Domain`, `Server/InGame/Domain` | 방과 경기의 규칙·상태. 경매·시장·정보·라운드·자산 |
-| `Server/Integrations` | Mirror 서버·DB 연결 구현 |
-| `Shared/Types` | 양쪽이 공유하는 식별자·값 타입 |
-| `Shared/Protocol` | Command 인자·동기화 상태에 쓰는 값 타입과 enum |
-| `Shared/Networking` | 클라이언트·서버 계약. NetworkBehaviour(SyncVar·Command·Rpc)와 서버가 구현할 핸들러 인터페이스 |
-| `Content` | 캐릭터·소품 모델, 프리팹, 레벨 구성 에셋, 게임 설정 데이터 |
+| `Systems` | 게임 규칙·상태. 순수 C#(`BuyBidBlow.Systems.asmdef`, `noEngineReferences`). 기능별 폴더 `Auction`·`Market`·`Intel`·`Portfolio`·`Round`·`Room` |
+| `Systems/Types` | 식별자·값 타입, 요청·이벤트 struct, enum. Command 인자와 동기화 값으로도 그대로 쓴다 |
+| `Network` | Mirror 연결. NetworkManager, Match를 소유하고 Tick을 구동하는 `MatchHost`, NetworkBehaviour(`*Net`). `BuyBidBlow.Game.asmdef`가 여기 있다 |
+| `Characters` | 행위자. 내 캐릭터(입력·카메라·이동), 다른 플레이어 아바타, 입찰 팻말 |
+| `World` | 상호작용 지점. 거래 창구·시세 전광판·시계·알림판·종 등 씬에 놓이는 오브젝트 |
+| `UI` | 화면별 UI. `Menu`·`Lobby`·`HUD`·`Auction`·`Market`·`Portfolio`·`Intel`·`Result` |
+| `Common` | 여러 오브젝트가 함께 쓰는 컴포넌트·인터페이스 (예: `IInteractable`, 동기화 값 표시) |
+| `Content` | 여러 곳에서 함께 쓰는 에셋. 레벨(`Content/Levels`)·공용 모델·머티리얼, 게임 설정 데이터 |
 | `Audio/Clips`, `Audio/Cues` | 게임용 오디오 파일·JSON 큐 정의 |
 | `Scenes` | 실행 씬 |
 | `Dev` | 에디터 도구·실험·디버그·테스트 |
 
+## 오브젝트 폴더
+
+`Characters`·`World`·`UI`는 시스템을 이용하기만 하는 오브젝트를 담는다. 오브젝트 하나가 폴더 하나이며, 그 오브젝트만 쓰는 스크립트·프리팹·모델·머티리얼을 함께 둔다.
+
+```
+World/TradingCounter/
+├─ TradingCounter.cs
+├─ TradingCounter.prefab
+└─ Models/, Materials/
+```
+
+- 한 오브젝트만 쓰는 스크립트는 그 오브젝트 폴더에 둔다. 여러 오브젝트가 쓰면 `Common`으로 옮긴다.
+- 한 오브젝트만 쓰는 에셋은 그 오브젝트 폴더에, 여러 곳에서 쓰면 `Content`에 둔다.
+- 씬 배치는 `Scenes`의 씬이 담당한다. 거래소 씬의 오브젝트에는 `NetworkIdentity`를 붙이지 않는다. 요청은 `PlayerNet`으로 보내고, 표시는 `*Net`의 동기화 값을 읽는다.
+
 ## 의존 관계
 
-- `Client → Shared ← Server`. 클라이언트와 서버 구현을 서로 직접 참조하지 않는다.
-- 서버 Domain은 Mirror·UI·MySQL 구현에 의존하지 않는다. Application이 요청과 저장을 조율한다.
-- Client Model은 수신 상태를 보관하며, 최종 게임 판정은 서버에서 수행한다.
-- Shared에는 통신 형식을 두고 미래 주가 등 서버의 실제 비밀 상태를 넣지 않는다.
+- 어셈블리는 `Game → Systems` 두 개다. Systems는 UnityEngine·Mirror·UI·MySQL에 의존하지 않으며 asmdef로 강제한다.
+- `Network`의 `BuyBidBlow.Game.asmdef`가 Game 어셈블리를 정의하고, `Characters`·`World`·`UI`·`Common`은 각 폴더의 `BuyBidBlow.Game.asmref`로 같은 어셈블리에 포함된다. 새 최상위 코드 폴더를 만들면 asmref도 함께 둔다. 없으면 `Assembly-CSharp`로 컴파일된다.
+- 서버와 클라이언트는 같은 어셈블리(Game)에 있다. 경계는 컴파일러가 아니라 아래 규칙으로 지킨다.
+  - 게임 상태 변경은 서버에서 `Match.Handle`·`Match.Tick`을 통해서만 한다. `Match`와 `MatchHost`는 서버에서만 생성한다(`OnStartServer`).
+  - Client 코드는 `*Net`의 SyncVar·hook·Rpc로 받은 값만 읽는다. `Match`·`MatchHost`를 직접 참조하지 않는다.
+  - 서버 전용 메서드에는 `[Server]`, 클라이언트 전용 메서드에는 `[Client]`를 붙인다.
+  - 비공개 값(현금·보유 주식·예약금·획득 정보)은 플레이어 오브젝트의 Owner 동기화로만 보낸다.
+- 호스트 모드는 동기화 누락을 숨긴다. 원격 클라이언트(에디터 + 빌드 등)로 주기적으로 확인한다.
+- 경계 실수가 잦아지면 Server·Client 어셈블리를 분리한다. Systems 경계가 유지되면 분리 비용이 작다.
 - CueAudio는 게임 폴더 경로와 게임 규칙에 의존하지 않는다. 게임 쪽에서 큐 데이터를 제공한다.
-- 콘텐츠 폴더는 코드 의존 계층이 아니다. 프리팹은 필요한 컴포넌트를 참조할 수 있다.
+- `Content`는 코드 의존 계층이 아니다. 프리팹은 필요한 컴포넌트를 참조할 수 있다.
 
 ## 용어
 
@@ -54,23 +72,23 @@ BuyBidBlow의 게임 코드와 콘텐츠를 관리한다. 독립 오디오 엔�
 
 ## 네이밍 규칙
 
-**기능 이름**: Client·Server·Shared에서 같은 기능은 같은 폴더 이름을 쓴다. 인게임 기능은 `Auction`·`Market`(주가·거래)·`Intel`·`Portfolio`·`Round`다.
+**폴더 이름**: 최상위 폴더는 내용의 용도로 짓는다. `Scripts`·`Prefabs`처럼 파일 종류로 짓지 않는다. Systems와 UI에서 같은 기능은 같은 폴더 이름을 쓴다. 인게임 기능은 `Auction`·`Market`(주가·거래)·`Intel`·`Portfolio`·`Round`다.
 
-**네임스페이스**: `BuyBidBlow.{Client|Server|Shared}.{기능}` 형식이다. 예: `BuyBidBlow.Server.InGame.Auction`. 개발 도구는 `BuyBidBlow.Dev`, 오디오 엔진은 `CueAudio`를 쓴다.
+**네임스페이스**: 폴더 경로를 따른다. `BuyBidBlow.Systems.{기능}`(예: `BuyBidBlow.Systems.Auction`), `BuyBidBlow.Network`, `BuyBidBlow.Characters`, `BuyBidBlow.World`, `BuyBidBlow.UI.{화면}`, `BuyBidBlow.Common`이다. 개발 도구는 `BuyBidBlow.Dev`, 오디오 엔진은 `CueAudio`를 쓴다.
 
 **접미사**
 
 | 접미사 | 의미 | 위치 |
 |---|---|---|
-| `*Net` | Mirror NetworkBehaviour (SyncVar·Command·Rpc 계약) | `Shared` |
-| `*Handler` | `*Net`의 Command를 받는 서버 구현의 인터페이스 | `Shared` 정의, `Server/Integrations` 구현 |
-| `*Service` | 요청 조율 (Application) | `Server/*/Application` |
-| 접미사 없음 | Domain 개념 그대로 (`Match`, `Auction`, `Portfolio`) | `Server/*/Domain` |
-| `*Repository` | 저장 인터페이스·구현 | 인터페이스는 Application, 구현은 `Server/Integrations/Persistence` |
-| `*Model` · `*View` · `*Presenter` | 클라이언트 MVP | `Client/*` |
-| `*Gateway` | Presenter가 쓰는 요청 인터페이스. Mirror 구현과 Fake 구현을 교체한다 | 인터페이스는 `Client/*`, Mirror 구현은 `Client/Integrations` |
-| `Fake*` | 서버 없이 개발·테스트할 때 쓰는 대체 구현 | `Dev` |
+| 접미사 없음 | 규칙 개념 그대로 (`Match`, `Auction`, `Portfolio`) | `Systems` |
+| `*Request` · `*Event` | Match 입력 요청 / 처리 결과 이벤트 | `Systems/Types` |
+| `*Net` | Mirror NetworkBehaviour (SyncVar·Command·Rpc) | `Network` |
+| `*Host` | Systems 객체를 소유하고 네트워크에 반영하는 서버 측 구동자 (`MatchHost`) | `Network` |
+| `*View` | UI 컴포넌트. 로직이 커질 때만 `*Presenter`로 분리한다 | `UI/*` |
+| `*Repository` | 저장 인터페이스·구현 (저장 기능 도입 시) | 미정 |
 | `*Tests` | 테스트 클래스. 메서드 이름은 `조건_결과` 형식이다 | `Dev/Tests` |
+
+서버 없이 UI를 개발할 때는 별도 Fake 구현 대신 Mirror 호스트 모드를 쓴다.
 
 **Mirror 멤버**: Command는 `Cmd*`, ClientRpc는 `Rpc*`, TargetRpc는 `Target*`로 시작한다. SyncVar hook은 `On*Changed`다.
 
@@ -91,7 +109,7 @@ BuyBidBlow의 게임 코드와 콘텐츠를 관리한다. 독립 오디오 엔�
 
 ## 현재 전환 범위
 
-폴더 구조 전환 당시 기존 asmdef는 제거했다. 이후 작성된 CueAudio·데모·테스트에는 전용 asmdef를 추가했으며, 나머지 어셈블리는 코드 작성 시 의존 관계에 맞게 구성한다.
+게임 코드 어셈블리는 `BuyBidBlow.Systems`(참조 없음)와 `BuyBidBlow.Game`(→ Systems, Mirror) 두 개다. 다른 패키지 참조는 코드에서 필요해질 때 Game asmdef에 추가한다. CueAudio·데모·테스트는 각자의 전용 asmdef를 쓴다.
 서버·클라이언트 빌드 제외 설정, 플러그인 플랫폼 제한은 아직 적용하지 않았다.
 
 ## CueAudio 사용
