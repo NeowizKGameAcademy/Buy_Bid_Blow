@@ -46,6 +46,7 @@ namespace BuyBidBlow
         private void FixedUpdate()
         {
             Move();
+            LockRotation();
         }
 
         public void OnMove(InputAction.CallbackContext context)
@@ -99,8 +100,14 @@ namespace BuyBidBlow
             currentY -= mouseY;
             currentY = Mathf.Clamp(currentY, -upperLimit, lowerLimit);
 
-            playerCamera.CameraTransform.localRotation =
-                Quaternion.Euler(currentY, 0f, 0f);
+            playerCamera.CameraTransform.localRotation = Quaternion.Euler(currentY, 0f, 0f);
+        }
+
+        private void LockRotation()
+        {
+            Vector3 rotation = playerRb.rotation.eulerAngles;
+
+            playerRb.MoveRotation(Quaternion.Euler(0f, rotation.y, 0f));
         }
 
         private void OnCollisionEnter(Collision collision)
@@ -137,10 +144,7 @@ namespace BuyBidBlow
                 playerRb.linearVelocity.z
             );
 
-            playerRb.AddForce(
-                Vector3.up * jumpForce,
-                ForceMode.Impulse
-            );
+            playerRb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
     }
 }
