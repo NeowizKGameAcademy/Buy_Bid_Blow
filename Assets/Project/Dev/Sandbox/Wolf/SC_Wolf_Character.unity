@@ -901,6 +901,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1843058845}
   - component: {fileID: 1843058844}
+  - component: {fileID: 1843058846}
   m_Layer: 0
   m_Name: Key
   m_TagString: Untagged
@@ -988,6 +989,35 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1843058846
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1843058843}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_CustomShadowLayers: 0
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
+  m_RenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_ShadowRenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_Version: 4
+  m_LightLayerMask: 1
+  m_ShadowLayerMask: 1
+  m_RenderingLayers: 1
+  m_ShadowRenderingLayers: 1
 --- !u!1 &2068215399
 GameObject:
   m_ObjectHideFlags: 0
@@ -3524,6 +3554,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6950098910540157401}
+  - component: {fileID: 7726037922270612324}
   m_Layer: 0
   m_Name: Wolf_Outfits
   m_TagString: Untagged
@@ -3531,6 +3562,28 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!95 &7726037922270612324
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7726037922270612323}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 3d8e0129dade9d641bf1448856a8697f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage:
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!4 &7747366421142955266
 Transform:
   m_ObjectHideFlags: 0
@@ -3557,6 +3610,7 @@ GameObject:
   - component: {fileID: 5023170465095330937}
   - component: {fileID: 7778584535268806974}
   - component: {fileID: 7778584535268806973}
+  - component: {fileID: 7778584535268806975}
   m_Layer: 0
   m_Name: Wolf_Character
   m_TagString: Untagged
@@ -3574,7 +3628,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 227fb55825366d342a9a4ccfdf87b108, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::BBBWolfCharacterReview
   character: {fileID: 7778584535268806974}
   yaw: 180
@@ -3588,9 +3642,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8ce31caf03c6ab14d9b271bca58cf5dc, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::BBBWolfCharacter
   model: {fileID: 6950098910540157401}
+  animator: {fileID: 7726037922270612324}
+  appearance: {fileID: 7778584535268806975}
+  paddle: {fileID: 8750772518949982240}
+  expression: 3
+  speed: 1
+--- !u!114 &7778584535268806975
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7778584535268806972}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dedea8577e6411043a9129dee798933e, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: BuyBidBlow.Game::BBBWolfAppearance
   uppers:
   - {fileID: 7439622655140270445}
   - {fileID: 2566885834490244990}
@@ -3599,42 +3670,9 @@ MonoBehaviour:
   - {fileID: 2576327079902339218}
   - {fileID: 1032045546408894220}
   tie: {fileID: 186926967309604427}
-  faces:
-  - {fileID: 403782400}
-  - {fileID: 1315486718}
-  - {fileID: 767052292}
-  - {fileID: 1694887309}
-  paddle: {fileID: 8750772518949982240}
-  clips:
-  - {fileID: 7400000, guid: cc0568c49271ba148aa347d17089f4a5, type: 2}
-  - {fileID: 7400000, guid: 891802cb5840b8146ba59fcdbce9d479, type: 2}
-  - {fileID: 7400000, guid: f6a3267c0d0da12498e8ba283ad6a86c, type: 2}
-  - {fileID: 7400000, guid: d34349a8fb7ed4e47a7c40fc50cb647e, type: 2}
-  - {fileID: 7400000, guid: 4c940bf35c68a954d892e106364f55fa, type: 2}
-  - {fileID: 7400000, guid: 6ff49ba086e1eb9418bb66bfd3c542c5, type: 2}
-  - {fileID: 7400000, guid: 5ecc91285812bb44f80404c701748f39, type: 2}
-  - {fileID: 7400000, guid: bc569dccbf6c9bc4c827ca5b32623e9f, type: 2}
-  - {fileID: 7400000, guid: 03258023cca034f4bb51d23129313f6c, type: 2}
-  - {fileID: 7400000, guid: 4bd208b70ab1c8444a0053f04ba29cd4, type: 2}
-  actionLabels:
-  - Walk (prototype)
-  - Raise arms (prototype)
-  - Wave (prototype)
-  - Sit (prototype)
-  - Bid paddle (prototype)
-  - Mixamo / Walking
-  - Mixamo / Defeat
-  - Mixamo / Hand Raising
-  - Mixamo / Flair
-  - Mixamo / Hip Hop Dancing
   upper: 0
   lower: 0
-  expression: 3
   tieColor: {r: 0.54, g: 0.16, b: 0.22, a: 1}
-  animate: 0
-  action: 0
-  phase: 0
-  speed: 1
 --- !u!1 &8181676168239509326
 GameObject:
   m_ObjectHideFlags: 0

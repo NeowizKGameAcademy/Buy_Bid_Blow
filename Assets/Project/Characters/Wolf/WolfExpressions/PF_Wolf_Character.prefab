@@ -2580,6 +2580,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7891869873154946084}
   - component: {fileID: 8034733698800797458}
+  - component: {fileID: 4106414959278357255}
   m_Layer: 0
   m_Name: PF_Wolf_Character
   m_TagString: Untagged
@@ -2613,9 +2614,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8ce31caf03c6ab14d9b271bca58cf5dc, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::BBBWolfCharacter
   model: {fileID: 3993813636322060543}
+  animator: {fileID: 6007935175677043963}
+  appearance: {fileID: 4106414959278357255}
+  paddle: {fileID: 444398562207376689}
+  expression: 3
+  speed: 1
+--- !u!114 &4106414959278357255
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7725623120333061051}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dedea8577e6411043a9129dee798933e, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: BuyBidBlow.Game::BBBWolfAppearance
   uppers:
   - {fileID: 3952680989030047618}
   - {fileID: 3484490057887342851}
@@ -2624,42 +2642,9 @@ MonoBehaviour:
   - {fileID: 1252114894420230486}
   - {fileID: 8324433070584453977}
   tie: {fileID: 7956984629077065451}
-  faces:
-  - {fileID: 2167243693259139706}
-  - {fileID: 7759527084728486338}
-  - {fileID: 2878883561144704565}
-  - {fileID: 1691702555202637850}
-  paddle: {fileID: 444398562207376689}
-  clips:
-  - {fileID: 7400000, guid: cc0568c49271ba148aa347d17089f4a5, type: 2}
-  - {fileID: 7400000, guid: 891802cb5840b8146ba59fcdbce9d479, type: 2}
-  - {fileID: 7400000, guid: f6a3267c0d0da12498e8ba283ad6a86c, type: 2}
-  - {fileID: 7400000, guid: d34349a8fb7ed4e47a7c40fc50cb647e, type: 2}
-  - {fileID: 7400000, guid: 4c940bf35c68a954d892e106364f55fa, type: 2}
-  - {fileID: 7400000, guid: 6ff49ba086e1eb9418bb66bfd3c542c5, type: 2}
-  - {fileID: 7400000, guid: 5ecc91285812bb44f80404c701748f39, type: 2}
-  - {fileID: 7400000, guid: bc569dccbf6c9bc4c827ca5b32623e9f, type: 2}
-  - {fileID: 7400000, guid: 03258023cca034f4bb51d23129313f6c, type: 2}
-  - {fileID: 7400000, guid: 4bd208b70ab1c8444a0053f04ba29cd4, type: 2}
-  actionLabels:
-  - Walk (prototype)
-  - Raise arms (prototype)
-  - Wave (prototype)
-  - Sit (prototype)
-  - Bid paddle (prototype)
-  - Mixamo / Walking
-  - Mixamo / Defeat
-  - Mixamo / Hand Raising
-  - Mixamo / Flair
-  - Mixamo / Hip Hop Dancing
   upper: 0
   lower: 0
-  expression: 3
   tieColor: {r: 0.54, g: 0.16, b: 0.22, a: 1}
-  animate: 0
-  action: 0
-  phase: 0
-  speed: 1
 --- !u!1 &7759527084728486338
 GameObject:
   m_ObjectHideFlags: 0
@@ -2734,6 +2719,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3993813636322060543}
+  - component: {fileID: 6007935175677043963}
   m_Layer: 0
   m_Name: Wolf_Outfits
   m_TagString: Untagged
@@ -2765,6 +2751,28 @@ Transform:
   - {fileID: 863352532185583423}
   m_Father: {fileID: 7891869873154946084}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &6007935175677043963
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7803335477252549948}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 3d8e0129dade9d641bf1448856a8697f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage:
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &7912775660071140006
 GameObject:
   m_ObjectHideFlags: 0
