@@ -1,5 +1,0 @@
-{
-  "name": "CueAudio.PlayMode.Tests",
-  "references": ["CueAudio.Runtime"],
-  "optionalUnityReferences": ["TestAssemblies"]
-}

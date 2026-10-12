@@ -1,0 +1,16 @@
+{
+    "RoundCount": 6,
+    "RoundSeconds": 100,
+    "StartingCash": 100,
+    "StartingShares": 2,
+    "StartingPrices": [20, 25, 30],
+    "MinPrice": 1,
+    "PriceChange": {
+        "Amounts": [2, 4, 6],
+        "DistinctAmounts": true
+    },
+    "AuctionSlots": [
+        { "StartsAtSeconds": 20, "DurationSeconds": 15 },
+        { "StartsAtSeconds": 55, "DurationSeconds": 15 }
+    ]
+}
