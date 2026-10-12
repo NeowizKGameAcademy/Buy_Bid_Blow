@@ -10,7 +10,7 @@ BuyBidBlow의 게임 코드와 콘텐츠를 관리한다. 독립 오디오 엔�
 | `Systems/Types` | 식별자·값 타입, 요청·이벤트 struct, enum. Command 인자와 동기화 값으로도 그대로 쓴다 |
 | `Network` | Mirror 연결. NetworkManager, Match를 소유하고 Tick을 구동하는 `MatchHost`, NetworkBehaviour(`*Net`). `BuyBidBlow.Game.asmdef`가 여기 있다 |
 | `Characters` | 행위자. 내 캐릭터(입력·카메라·이동), 다른 플레이어 아바타, 입찰 팻말 |
-| `World` | 상호작용 지점. 거래 창구·시세 전광판·시계·알림판·종 등 씬에 놓이는 오브젝트 |
+| `Props` | 씬에 놓이는 소품. 거래 창구·시세 전광판·시계·알림판·종·회사 배너 등. 상호작용 여부로 폴더를 나누지 않는다 |
 | `UI` | 화면별 UI. `Menu`·`Lobby`·`HUD`·`Auction`·`Market`·`Portfolio`·`Intel`·`Result` |
 | `Common` | 여러 오브젝트가 함께 쓰는 컴포넌트·인터페이스 (예: `IInteractable`, 동기화 값 표시) |
 | `Content` | 여러 곳에서 함께 쓰는 에셋. 레벨(`Content/Levels`)·공용 모델·머티리얼, 게임 설정 데이터 |
@@ -20,12 +20,12 @@ BuyBidBlow의 게임 코드와 콘텐츠를 관리한다. 독립 오디오 엔�
 
 ## 오브젝트 폴더
 
-`Characters`·`World`·`UI`는 시스템을 이용하기만 하는 오브젝트를 담는다. 오브젝트 하나가 폴더 하나이며, 그 오브젝트만 쓰는 스크립트·프리팹·모델·머티리얼을 함께 둔다.
+`Characters`·`Props`·`UI`는 시스템을 이용하기만 하는 오브젝트를 담는다. 오브젝트 하나가 폴더 하나이며, 그 오브젝트만 쓰는 스크립트·프리팹·모델·머티리얼을 함께 둔다.
 
 ```
-World/TradingCounter/
-├─ TradingCounter.cs
-├─ TradingCounter.prefab
+Props/TradeCounter/
+├─ TradeCounter.cs
+├─ TradeCounter.prefab
 └─ Models/, Materials/
 ```
 
@@ -36,7 +36,7 @@ World/TradingCounter/
 ## 의존 관계
 
 - 어셈블리는 `Game → Systems` 두 개다. Systems는 UnityEngine·Mirror·UI·MySQL에 의존하지 않으며 asmdef로 강제한다.
-- `Network`의 `BuyBidBlow.Game.asmdef`가 Game 어셈블리를 정의하고, `Characters`·`World`·`UI`·`Common`은 각 폴더의 `BuyBidBlow.Game.asmref`로 같은 어셈블리에 포함된다. 새 최상위 코드 폴더를 만들면 asmref도 함께 둔다. 없으면 `Assembly-CSharp`로 컴파일된다.
+- `Network`의 `BuyBidBlow.Game.asmdef`가 Game 어셈블리를 정의하고, `Characters`·`Props`·`UI`·`Common`은 각 폴더의 `BuyBidBlow.Game.asmref`로 같은 어셈블리에 포함된다. 새 최상위 코드 폴더를 만들면 asmref도 함께 둔다. 없으면 `Assembly-CSharp`로 컴파일된다.
 - 서버와 클라이언트는 같은 어셈블리(Game)에 있다. 경계는 컴파일러가 아니라 아래 규칙으로 지킨다.
   - 게임 상태 변경은 서버에서 `Match.Handle`·`Match.Tick`을 통해서만 한다. `Match`와 `MatchHost`는 서버에서만 생성한다(`OnStartServer`).
   - Client 코드는 `*Net`의 SyncVar·hook·Rpc로 받은 값만 읽는다. `Match`·`MatchHost`를 직접 참조하지 않는다.
@@ -74,7 +74,7 @@ World/TradingCounter/
 
 **폴더 이름**: 최상위 폴더는 내용의 용도로 짓는다. `Scripts`·`Prefabs`처럼 파일 종류로 짓지 않는다. Systems와 UI에서 같은 기능은 같은 폴더 이름을 쓴다. 인게임 기능은 `Auction`·`Market`(주가·거래)·`Intel`·`Portfolio`·`Round`다.
 
-**네임스페이스**: 폴더 경로를 따른다. `BuyBidBlow.Systems.{기능}`(예: `BuyBidBlow.Systems.Auction`), `BuyBidBlow.Network`, `BuyBidBlow.Characters`, `BuyBidBlow.World`, `BuyBidBlow.UI.{화면}`, `BuyBidBlow.Common`이다. 개발 도구는 `BuyBidBlow.Dev`, 오디오 엔진은 `CueAudio`를 쓴다.
+**네임스페이스**: 폴더 경로를 따른다. `BuyBidBlow.Systems.{기능}`(예: `BuyBidBlow.Systems.Auction`), `BuyBidBlow.Network`, `BuyBidBlow.Characters`, `BuyBidBlow.Props`, `BuyBidBlow.UI.{화면}`, `BuyBidBlow.Common`이다. 개발 도구는 `BuyBidBlow.Dev`, 오디오 엔진은 `CueAudio`를 쓴다.
 
 **접미사**
 
@@ -105,16 +105,22 @@ World/TradingCounter/
 - 실제 씬 파일은 `Scenes`, 레벨 모델·머티리얼·조립 프리팹 등은 `Content/Levels`에 둔다.
 - `Dev/Editor`에는 에디터 전용 코드를, `Dev/Tests`에는 EditMode·PlayMode 테스트를 둔다.
 - `Dev/Sandbox` 씬은 배포용 빌드 씬 목록에 넣지 않는다.
-- `Dev/Debug`는 폴더 이름만으로 빌드에서 제외되지 않는다. 개발 전용 코드에는 조건부 컴파일 등을 적용한다.
+- `Dev`의 코드는 역할별 asmdef 4개로 빌드에서 빠진다. 하위 폴더에는 asmdef를 새로 만들지 않는다.
+  - `Dev/BuyBidBlow.Dev.asmdef`: 런타임 코드(`Sandbox`·`Debug` 등). `UNITY_EDITOR`에서만 컴파일된다.
+  - `Dev/Editor/BuyBidBlow.Dev.Editor.asmdef`: `UnityEditor`를 쓰는 코드. 에디터 전용이다.
+  - `Dev/Tests/EditMode`·`Dev/Tests/PlayMode`의 asmdef: 테스트 전용이다.
+- asmdef 아래에서는 Unity의 `Editor` 폴더 규칙이 작동하지 않는다. `UnityEditor`를 쓰는 코드는 반드시 `Dev/Editor` 아래에 둔다.
+- `Dev` 아래에 `Resources` 폴더를 만들지 않는다. 안의 에셋이 참조 여부와 무관하게 빌드에 포함된다.
+- 새 패키지 참조가 필요하면 asmdef 관리자에게 요청한다.
 
 ## 현재 전환 범위
 
-게임 코드 어셈블리는 `BuyBidBlow.Systems`(참조 없음)와 `BuyBidBlow.Game`(→ Systems, Mirror) 두 개다. 다른 패키지 참조는 코드에서 필요해질 때 Game asmdef에 추가한다. CueAudio·데모·테스트는 각자의 전용 asmdef를 쓴다.
+게임 코드 어셈블리는 `BuyBidBlow.Systems`(참조 없음)와 `BuyBidBlow.Game`(→ Systems, Mirror) 두 개다. 다른 패키지 참조는 코드에서 필요해질 때 Game asmdef에 추가한다. CueAudio는 전용 asmdef를, 데모·도구·테스트는 `Dev`의 역할별 asmdef를 쓴다.
 서버·클라이언트 빌드 제외 설정, 플러그인 플랫폼 제한은 아직 적용하지 않았다.
 
 ## CueAudio 사용
 
 - `Tools > CueAudio > Open Demo`로 샘플 씬을 열고 Play 모드에서 시험한다.
 - 큐 편집·연결 조회는 `Cue Browser`, 실행 중 재생 추적은 `Runtime Monitor`에서 한다.
-- 엔진과 에디터는 `Assets/CueAudio`, 샘플 데이터는 `Audio`, 데모와 테스트는 `Dev`에 있다. CueAudio 및 데모·테스트 전용 asmdef를 추가했다.
+- 엔진과 에디터는 `Assets/CueAudio`, 샘플 데이터는 `Audio`, 데모와 테스트는 `Dev`에 있다. 데모·테스트는 `Dev`의 역할별 asmdef에 포함된다.
 - 자세한 사용법과 현재 범위는 [CueAudio README](../CueAudio/README.md)를 참고한다.
