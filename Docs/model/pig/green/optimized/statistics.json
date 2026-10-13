@@ -1,0 +1,31 @@
+[
+  {
+    "variant": "original",
+    "vertices": 961369,
+    "triangles": 1922729,
+    "uv_layers": 1,
+    "materials": 1
+  },
+  {
+    "variant": "100k",
+    "vertices": 50004,
+    "triangles": 99999,
+    "uv_layers": 1,
+    "materials": 1,
+    "files": {
+      "fbx": 6403212,
+      "glb": 6894884
+    }
+  },
+  {
+    "variant": "50k",
+    "vertices": 25004,
+    "triangles": 49999,
+    "uv_layers": 1,
+    "materials": 1,
+    "files": {
+      "fbx": 4810924,
+      "glb": 5728988
+    }
+  }
+]
