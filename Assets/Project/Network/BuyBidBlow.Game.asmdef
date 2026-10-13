@@ -4,7 +4,8 @@
     "references": [
         "BuyBidBlow.Systems",
         "Mirror",
-        "Unity.InputSystem"
+        "Unity.InputSystem",
+        "Unity.TextMeshPro"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

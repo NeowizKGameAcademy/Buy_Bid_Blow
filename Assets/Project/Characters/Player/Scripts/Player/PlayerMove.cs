@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace BuyBidBlow
 {
@@ -17,13 +16,11 @@ namespace BuyBidBlow
         [SerializeField] private float jumpForce = 5f;
 
         [Header("Rotate")]
-        [SerializeField] private GameObject Head;
         [SerializeField] private float rotateSpeed = 0.1f;
         [SerializeField] private float upperLimit = 60f;
         [SerializeField] private float lowerLimit = 40f;
 
         private Vector2 curMoveInput;
-        private Vector2 mouseDelta;
 
         private bool isGround;
         private bool isJumpHeld;
@@ -37,77 +34,56 @@ namespace BuyBidBlow
 
             if (playerCamera == null)
                 TryGetComponent(out playerCamera);
-        }
 
-        private void Update()
-        {
-            Rotate();
+            playerRb.constraints |= RigidbodyConstraints.FreezeRotation;
         }
 
         private void FixedUpdate()
         {
             Move();
-            LockRotation();
         }
 
-        public void OnMove(InputAction.CallbackContext context)
+        public void SetMoveInput(Vector2 input)
         {
-            curMoveInput = context.ReadValue<Vector2>();
+            curMoveInput = input;
         }
 
-        public void OnRotate(InputAction.CallbackContext context)
+        public void Rotate(Vector2 mouseDelta)
         {
-            mouseDelta = context.ReadValue<Vector2>();
+            if (playerCamera == null)
+                return;
+
+            float mouseX = mouseDelta.x * rotateSpeed;
+            transform.Rotate(Vector3.up * mouseX);
+
+            float mouseY = mouseDelta.y * rotateSpeed;
+
+            currentY -= mouseY;
+            currentY = Mathf.Clamp(currentY, -lowerLimit, upperLimit);
+
+            playerCamera.CameraTransform.localRotation =
+                Quaternion.Euler(currentY, 0f, 0f);
         }
 
-        public void OnJump(InputAction.CallbackContext context)
+        public void SetJumpHeld(bool isHeld)
         {
-            if (context.started)
-            {
-                isJumpHeld = true;
+            isJumpHeld = isHeld;
 
-                if (isGround)
-                    Jump();
-            }
-            else if (context.canceled)
-            {
-                isJumpHeld = false;
-            }
+            if (isJumpHeld && isGround)
+                Jump();
         }
 
         private void Move()
         {
-            Vector3 direction = transform.forward * curMoveInput.y + transform.right * curMoveInput.x;
+            Vector3 direction =
+                transform.forward * curMoveInput.y +
+                transform.right * curMoveInput.x;
 
             direction *= moveSpeed;
 
             direction.y = playerRb.linearVelocity.y;
 
             playerRb.linearVelocity = direction;
-        }
-
-        private void Rotate()
-        {
-            if (playerCamera == null)
-                return;
-
-            float mouseX = mouseDelta.x * rotateSpeed / 100;
-            transform.Rotate(Vector3.up * mouseX);
-
-            float mouseY = mouseDelta.y * rotateSpeed / 100;
-
-            currentY -= mouseY;
-            currentY = Mathf.Clamp(currentY, -upperLimit, lowerLimit);
-
-            playerCamera.CameraTransform.localRotation = Quaternion.Euler(currentY, 0f, 0f);
-            Head.transform.localRotation = Quaternion.Euler(currentY, 0f, 0f);
-        }
-
-        private void LockRotation()
-        {
-            Vector3 rotation = playerRb.rotation.eulerAngles;
-
-            playerRb.MoveRotation(Quaternion.Euler(0f, rotation.y, 0f));
         }
 
         private void OnCollisionEnter(Collision collision)
@@ -144,7 +120,10 @@ namespace BuyBidBlow
                 playerRb.linearVelocity.z
             );
 
-            playerRb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            playerRb.AddForce(
+                Vector3.up * jumpForce,
+                ForceMode.Impulse
+            );
         }
     }
 }

@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace BuyBidBlow
 {
-    public class InteractionController : MonoBehaviour
+    public class PlayerInteraction : MonoBehaviour
     {
-        private DetectObject detect;
+        public void Interact()
+        {
+
+        }
     }
 }
