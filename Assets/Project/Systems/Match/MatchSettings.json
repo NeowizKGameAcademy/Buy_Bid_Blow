@@ -19,8 +19,9 @@
         ],
         "RiseChances": [0.5, 0.6, 0.7]
     },
-    "AuctionSlots": [
-        { "StartsAtSeconds": 20, "DurationSeconds": 15 },
-        { "StartsAtSeconds": 55, "DurationSeconds": 15 }
-    ]
+    "Auction": {
+        "DurationSeconds": 15,
+        "CountPerRound": { "Min": 1, "Max": 5 },
+        "MinGapSeconds": 5
+    }
 }

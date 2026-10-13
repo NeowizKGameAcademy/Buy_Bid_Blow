@@ -19,7 +19,7 @@ namespace BuyBidBlow.Systems.Match
         public int MinPrice;
 
         public PriceChangeSettings PriceChange;
-        public AuctionSlot[] AuctionSlots;
+        public AuctionSettings Auction;
 
         // Indexed by Company. Same Random as the rest of the match so one seed replays it.
         public int[] RollStartingPrices(Random random)
@@ -48,10 +48,11 @@ namespace BuyBidBlow.Systems.Match
                 throw new FormatException($"PriceChange.RiseChances needs {companyCount} entries in Company order.");
             foreach (float chance in PriceChange.RiseChances)
                 if (chance < 0f || chance > 1f) throw new FormatException("PriceChange.RiseChances must be between 0 and 1.");
-            if (AuctionSlots == null) throw new FormatException("AuctionSlots is required.");
-            foreach (AuctionSlot slot in AuctionSlots)
-                if (slot.StartsAtSeconds < 0 || slot.DurationSeconds <= 0 || slot.StartsAtSeconds + slot.DurationSeconds > RoundSeconds)
-                    throw new FormatException("Each auction slot must fit inside the round.");
+            if (Auction == null) throw new FormatException("Auction is required.");
+            if (Auction.CountPerRound == null || !Auction.CountPerRound.IsValid)
+                throw new FormatException("Auction.CountPerRound needs Min <= Max.");
+            if (Auction.DurationSeconds <= 0 || Auction.DurationSeconds > RoundSeconds)
+                throw new FormatException("Auction.DurationSeconds must fit inside the round.");
         }
 
         private static void ValidateOffsets(IntRange[] offsets, int companyCount, string name)
@@ -64,10 +65,10 @@ namespace BuyBidBlow.Systems.Match
     }
 
     [Serializable]
-    public sealed class AuctionSlot
+    public sealed class AuctionSettings
     {
-        // Elapsed seconds from round start.
-        public int StartsAtSeconds;
         public int DurationSeconds;
+        public IntRange CountPerRound;
+        public int MinGapSeconds;
     }
 }

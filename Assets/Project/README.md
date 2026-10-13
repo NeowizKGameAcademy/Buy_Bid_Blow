@@ -6,12 +6,12 @@ BuyBidBlow의 게임 코드와 콘텐츠를 관리한다. 독립 오디오 엔�
 
 | 폴더 | 책임 |
 |---|---|
-| `Systems` | 게임 규칙·상태. 순수 C#(`BuyBidBlow.Systems.asmdef`, `noEngineReferences`). 기능별 폴더 `Auction`·`Market`·`Intel`·`Portfolio`·`Round`·`Room` |
+| `Systems` | 게임 규칙·상태. 순수 C#(`BuyBidBlow.Systems.asmdef`, `noEngineReferences`). 기능별 폴더 `Auction`·`Market`·`Lot`·`Portfolio`·`Round`·`Room` |
 | `Systems/Types` | 식별자·값 타입, 요청·이벤트 struct, enum. Command 인자와 동기화 값으로도 그대로 쓴다 |
 | `Network` | Mirror 연결. NetworkManager, Match를 소유하고 Tick을 구동하는 `MatchHost`, NetworkBehaviour(`*Net`). `BuyBidBlow.Game.asmdef`가 여기 있다 |
 | `Characters` | 행위자. 내 캐릭터(입력·카메라·이동), 다른 플레이어 아바타, 입찰 팻말 |
 | `Props` | 씬에 놓이는 소품. 거래 창구·시세 전광판·시계·알림판·종·회사 배너 등. 상호작용 여부로 폴더를 나누지 않는다 |
-| `UI` | 화면별 UI. `Menu`·`Lobby`·`HUD`·`Auction`·`Market`·`Portfolio`·`Intel`·`Result` |
+| `UI` | 화면별 UI. `Menu`·`Lobby`·`HUD`·`Auction`·`Market`·`Portfolio`·`Lot`·`Result` |
 | `Common` | 여러 오브젝트가 함께 쓰는 컴포넌트·인터페이스 (예: `IInteractable`, 동기화 값 표시) |
 | `Content` | 여러 곳에서 함께 쓰는 에셋. 레벨(`Content/Levels`)·공용 모델·머티리얼, 게임 설정 데이터 |
 | `Audio/Clips`, `Audio/Cues` | 게임용 오디오 파일·JSON 큐 정의 |
@@ -41,7 +41,7 @@ Props/TradeCounter/
   - 게임 상태 변경은 서버에서 `Match.Handle`·`Match.Tick`을 통해서만 한다. `Match`와 `MatchHost`는 서버에서만 생성한다(`OnStartServer`).
   - Client 코드는 `*Net`의 SyncVar·hook·Rpc로 받은 값만 읽는다. `Match`·`MatchHost`를 직접 참조하지 않는다.
   - 서버 전용 메서드에는 `[Server]`, 클라이언트 전용 메서드에는 `[Client]`를 붙인다.
-  - 비공개 값(현금·보유 주식·예약금·획득 정보)은 플레이어 오브젝트의 Owner 동기화로만 보낸다.
+  - 비공개 값(현금·보유 주식·예약금·낙찰 Lot)은 플레이어 오브젝트의 Owner 동기화로만 보낸다.
 - 호스트 모드는 동기화 누락을 숨긴다. 원격 클라이언트(에디터 + 빌드 등)로 주기적으로 확인한다.
 - 경계 실수가 잦아지면 Server·Client 어셈블리를 분리한다. Systems 경계가 유지되면 분리 비용이 작다.
 - CueAudio는 게임 폴더 경로와 게임 규칙에 의존하지 않는다. 게임 쪽에서 큐 데이터를 제공한다.
@@ -61,9 +61,10 @@ Props/TradeCounter/
 | `Host` (방장) | Room 설정·시작 권한을 가진 Player. 서버 호스트가 아니다 |
 | `Company` (회사) | 주식 종목. Straw·Timber·Brick |
 | `Trade` (거래) | 거래 창구에서 주식을 사고파는 행위. `Buy`(매수)·`Sell`(매도) |
-| `Auction` (경매) | 정보 하나를 파는 경매. 방식은 `Open`·`Secret`·`Dutch` |
+| `Auction` (경매) | Lot을 파는 경매. 한 경매에 Lot이 여러 개일 수 있다. 방식은 `Open`·`Secret`·`Dutch` |
 | `Bid` (입찰) | 경매에 금액을 제시하는 행위. 낙찰자는 `Winner`, 낙찰가는 `FinalPrice` |
-| `Intel` (정보) | 경매 상품. `AnalystReport`(변동폭)·`InsiderMemo`(방향) |
+| `Lot` (경매 상품) | 경매에 오르는 물건. 종류별로 나뉘며 `Intel`이 그중 하나다 |
+| `Intel` (정보) | Lot 종류. 숨겨진 주가 변동을 알려준다. `AnalystReport`(변동폭)·`InsiderMemo`(방향) |
 | `Portfolio` (자산) | Player의 현금과 보유 주식. 본인에게만 공개한다 |
 | `Price` / `Change` | 현재 주가 / Closing Bell에 적용되는 주가 변동 |
 
@@ -72,7 +73,7 @@ Props/TradeCounter/
 
 ## 네이밍 규칙
 
-**폴더 이름**: 최상위 폴더는 내용의 용도로 짓는다. `Scripts`·`Prefabs`처럼 파일 종류로 짓지 않는다. Systems와 UI에서 같은 기능은 같은 폴더 이름을 쓴다. 인게임 기능은 `Auction`·`Market`(주가·거래)·`Intel`·`Portfolio`·`Round`다.
+**폴더 이름**: 최상위 폴더는 내용의 용도로 짓는다. `Scripts`·`Prefabs`처럼 파일 종류로 짓지 않는다. Systems와 UI에서 같은 기능은 같은 폴더 이름을 쓴다. 인게임 기능은 `Auction`·`Market`(주가·거래)·`Lot`·`Portfolio`·`Round`다.
 
 **네임스페이스**: 폴더 경로를 따른다. `BuyBidBlow.Systems.{기능}`(예: `BuyBidBlow.Systems.Auction`), `BuyBidBlow.Network`, `BuyBidBlow.Characters`, `BuyBidBlow.Props`, `BuyBidBlow.UI.{화면}`, `BuyBidBlow.Common`이다. 개발 도구는 `BuyBidBlow.Dev`, 오디오 엔진은 `CueAudio`를 쓴다.
 
