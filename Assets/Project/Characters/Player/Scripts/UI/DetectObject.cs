@@ -14,6 +14,7 @@ namespace BuyBidBlow
 
         public bool isDetected { get; private set; }
         public LayerMask detectingLayer { get; private set; }
+        public Collider DetectedCollider { get; private set; }
 
         private void Update()
         {
@@ -22,19 +23,16 @@ namespace BuyBidBlow
 
             Debug.DrawRay(ray.origin, ray.direction * detectDistance, Color.red);
 
-            for (int i = 0; i < detectLayer.Length; i++)
-            {
-                if (Physics.Raycast(ray, out hit, detectDistance, detectLayer[i]))
-                {
-                    isDetected = true;
-                    detectingLayer = detectLayer[i];
-                }
-                else
-                {
-                    isDetected = false;
-                    detectingLayer = 0;
-                }
-            }
+            int mask = 0;
+            foreach (LayerMask layer in detectLayer)
+                mask |= layer.value;
+
+            // 벽 너머의 NPC는 감지하지 않습니다.
+            isDetected = Physics.Raycast(ray, out hit, detectDistance,
+                Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore)
+                && (mask & (1 << hit.collider.gameObject.layer)) != 0;
+            DetectedCollider = isDetected ? hit.collider : null;
+            detectingLayer = isDetected ? hit.collider.gameObject.layer : 0;
 
             ChangeCursor(isDetected);
         }
