@@ -1,0 +1,10 @@
+URP materials: 5
+Mesh renderers: 44
+Colliders: 28
+Floor/mezzanine/stair raycasts: 5 passed
+Footprint nominal: 28 x 35 m
+Ceiling nominal: 16 m
+Play: RMB capture, WASD move, Shift run, Esc release.
+Static doors; restroom interiors not modeled.
+
+2026-10-13 relocation: Unity compile, mesh/material/texture references, scene scripts and camera, preview build exclusion passed.
