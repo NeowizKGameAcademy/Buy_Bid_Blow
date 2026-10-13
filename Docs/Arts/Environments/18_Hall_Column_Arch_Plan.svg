@@ -1,0 +1,132 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1250" viewBox="0 0 1600 1250"><defs><clipPath id="plan"><rect x="70" y="165" width="680" height="755"/></clipPath></defs><rect width="1600" height="1250" fill="white"/><text x="45" y="48" font-family="Malgun Gothic" font-size="25" text-anchor="start" fill="#111">경매장 · 거래소 | 벽면 기둥–천장 목재 아치 연결 계획</text><text x="45" y="78" font-family="Malgun Gothic" font-size="13" text-anchor="start" fill="#111">A–11 · 게임 공간 모델링용 · 단위 m · 기존 A–10 평면 유지 / 신규 부재 치수는 제안값</text><path d="M45 98H1555" fill="none" stroke="#222" stroke-width="1" stroke-dasharray=""/><text x="385" y="135" font-family="Malgun Gothic" font-size="19" text-anchor="middle" fill="#111">01 평면도 — 벽기둥 및 천장 아치 투영</text><g clip-path="url(#plan)"><rect width="1600" height="1250" fill="white" />
+  <g font-family="Malgun Gothic,sans-serif" fill="#111">
+    <text x="45" y="48" font-size="25" font-weight="bold">경매장 · 거래소 | 계단 간섭 조정 / 화장실 문 / 기둥 배치</text>
+    <text x="45" y="78" font-size="13">A–10 · 공간 계획 검토용 · 단위 m · 기둥 위치는 배치 제안이며 구조 검토 전</text>
+    <path d="M45 98H1555" stroke="#111" />
+    <text x="385" y="133" text-anchor="middle" font-size="19">01 평면도 — 1·2층 중첩</text>
+    <rect x="98" y="172" width="574" height="714" fill="none" stroke="#111" rx="247" stroke-width="2" />
+    <rect x="105" y="179" width="560" height="700" fill="none" stroke="#111" rx="240" stroke-width="2" />
+    <path d="M105 419 A240 240 0 0 1 345 179 H425 A240 240 0 0 1 665 419 H455 C455 494 315 494 315 419 Z" fill="#eee" stroke="#111" stroke-width="2" />
+    <text x="385" y="265" text-anchor="middle" font-size="23">2F 경매장</text>
+    <text x="385" y="293" text-anchor="middle" font-size="14">+4.00</text>
+    <text x="385" y="446" text-anchor="middle" font-size="13">돌출 바닥</text>
+    <rect x="141" y="423" width="140" height="32" fill="white" stroke="#111" />
+    <line x1="146.83333333333334" y1="423" x2="146.83333333333334" y2="455" stroke="#111" stroke-width=".6" />
+    <line x1="152.66666666666666" y1="423" x2="152.66666666666666" y2="455" stroke="#111" stroke-width=".6" />
+    <line x1="158.5" y1="423" x2="158.5" y2="455" stroke="#111" stroke-width=".6" />
+    <line x1="164.33333333333334" y1="423" x2="164.33333333333334" y2="455" stroke="#111" stroke-width=".6" />
+    <line x1="170.16666666666666" y1="423" x2="170.16666666666666" y2="455" stroke="#111" stroke-width=".6" />
+    <line x1="176" y1="423" x2="176" y2="455" stroke="#111" stroke-width=".6" />
+    <line x1="181.83333333333334" y1="423" x2="181.83333333333334" y2="455" stroke="#111" stroke-width=".6" />
+    <line x1="187.66666666666666" y1="423" x2="187.66666666666666" y2="455" stroke="#111" stroke-width=".6" />
+    <line x1="193.5" y1="423" x2="193.5" y2="455" stroke="#111" stroke-width=".6" />
+    <line x1="199.33333333333334" y1="423" x2="199.33333333333334" y2="455" stroke="#111" stroke-width=".6" />
+    <line x1="205.16666666666669" y1="423" x2="205.16666666666669" y2="455" stroke="#111" stroke-width=".6" />
+    <line x1="211" y1="423" x2="211" y2="455" stroke="#111" stroke-width=".6" />
+    <line x1="216.83333333333331" y1="423" x2="216.83333333333331" y2="455" stroke="#111" stroke-width=".6" />
+    <line x1="222.66666666666669" y1="423" x2="222.66666666666669" y2="455" stroke="#111" stroke-width=".6" />
+    <line x1="228.5" y1="423" x2="228.5" y2="455" stroke="#111" stroke-width=".6" />
+    <line x1="234.33333333333331" y1="423" x2="234.33333333333331" y2="455" stroke="#111" stroke-width=".6" />
+    <line x1="240.16666666666669" y1="423" x2="240.16666666666669" y2="455" stroke="#111" stroke-width=".6" />
+    <line x1="246" y1="423" x2="246" y2="455" stroke="#111" stroke-width=".6" />
+    <line x1="251.83333333333331" y1="423" x2="251.83333333333331" y2="455" stroke="#111" stroke-width=".6" />
+    <line x1="257.6666666666667" y1="423" x2="257.6666666666667" y2="455" stroke="#111" stroke-width=".6" />
+    <line x1="263.5" y1="423" x2="263.5" y2="455" stroke="#111" stroke-width=".6" />
+    <line x1="269.33333333333337" y1="423" x2="269.33333333333337" y2="455" stroke="#111" stroke-width=".6" />
+    <line x1="275.16666666666663" y1="423" x2="275.16666666666663" y2="455" stroke="#111" stroke-width=".6" />
+    <line x1="272" y1="439" x2="150" y2="439" stroke="#111" stroke-width="6" style="stroke:white" />
+    <line x1="272" y1="439" x2="150" y2="439" stroke="#111" marker-end="url(#a)" />
+    <text x="211" y="477" text-anchor="middle" font-size="12">← UP</text>
+    <rect x="489" y="423" width="140" height="32" fill="white" stroke="#111" />
+    <line x1="494.8333333333333" y1="423" x2="494.8333333333333" y2="455" stroke="#111" stroke-width=".6" />
+    <line x1="500.6666666666667" y1="423" x2="500.6666666666667" y2="455" stroke="#111" stroke-width=".6" />
+    <line x1="506.5" y1="423" x2="506.5" y2="455" stroke="#111" stroke-width=".6" />
+    <line x1="512.3333333333334" y1="423" x2="512.3333333333334" y2="455" stroke="#111" stroke-width=".6" />
+    <line x1="518.1666666666666" y1="423" x2="518.1666666666666" y2="455" stroke="#111" stroke-width=".6" />
+    <line x1="524" y1="423" x2="524" y2="455" stroke="#111" stroke-width=".6" />
+    <line x1="529.8333333333334" y1="423" x2="529.8333333333334" y2="455" stroke="#111" stroke-width=".6" />
+    <line x1="535.6666666666666" y1="423" x2="535.6666666666666" y2="455" stroke="#111" stroke-width=".6" />
+    <line x1="541.5" y1="423" x2="541.5" y2="455" stroke="#111" stroke-width=".6" />
+    <line x1="547.3333333333334" y1="423" x2="547.3333333333334" y2="455" stroke="#111" stroke-width=".6" />
+    <line x1="553.1666666666666" y1="423" x2="553.1666666666666" y2="455" stroke="#111" stroke-width=".6" />
+    <line x1="559" y1="423" x2="559" y2="455" stroke="#111" stroke-width=".6" />
+    <line x1="564.8333333333334" y1="423" x2="564.8333333333334" y2="455" stroke="#111" stroke-width=".6" />
+    <line x1="570.6666666666666" y1="423" x2="570.6666666666666" y2="455" stroke="#111" stroke-width=".6" />
+    <line x1="576.5" y1="423" x2="576.5" y2="455" stroke="#111" stroke-width=".6" />
+    <line x1="582.3333333333334" y1="423" x2="582.3333333333334" y2="455" stroke="#111" stroke-width=".6" />
+    <line x1="588.1666666666666" y1="423" x2="588.1666666666666" y2="455" stroke="#111" stroke-width=".6" />
+    <line x1="594" y1="423" x2="594" y2="455" stroke="#111" stroke-width=".6" />
+    <line x1="599.8333333333334" y1="423" x2="599.8333333333334" y2="455" stroke="#111" stroke-width=".6" />
+    <line x1="605.6666666666666" y1="423" x2="605.6666666666666" y2="455" stroke="#111" stroke-width=".6" />
+    <line x1="611.5" y1="423" x2="611.5" y2="455" stroke="#111" stroke-width=".6" />
+    <line x1="617.3333333333334" y1="423" x2="617.3333333333334" y2="455" stroke="#111" stroke-width=".6" />
+    <line x1="623.1666666666666" y1="423" x2="623.1666666666666" y2="455" stroke="#111" stroke-width=".6" />
+    <line x1="498" y1="439" x2="620" y2="439" stroke="#111" stroke-width="6" style="stroke:white" />
+    <line x1="498" y1="439" x2="620" y2="439" stroke="#111" marker-end="url(#a)" />
+    <text x="559" y="477" text-anchor="middle" font-size="12">UP →</text>
+    <path d="M141 423H106V455H141 M629 423H664V455H629 M123 439V402H145 M646 439V402H624" fill="none" stroke="#111" />
+    <line x1="281" y1="500" x2="315" y2="500" stroke="#111" />
+    <line x1="455" y1="500" x2="489" y2="500" stroke="#111" />
+    <text x="298" y="520" text-anchor="middle" font-size="11">1.70</text>
+    <text x="472" y="520" text-anchor="middle" font-size="11">1.70</text>
+    <text x="385" y="554" text-anchor="middle" font-size="12">돌출 폭 7.00 / 최대 깊이 약 2.80</text>
+    <text x="385" y="644" text-anchor="middle" font-size="24">1F 거래소</text>
+    <text x="385" y="673" text-anchor="middle" font-size="14">±0.00 / 상부 개방</text>
+    <text x="385" y="914" text-anchor="middle" font-size="12">화장실 내부는 이번 도면 범위에 포함하지 않음</text>
+    <rect x="230" y="318" width="10" height="10" fill="#555" stroke="#111" />
+    <text x="235" y="309" text-anchor="middle" font-size="12">C4</text>
+    <rect x="530" y="318" width="10" height="10" fill="#555" stroke="#111" />
+    <text x="535" y="309" text-anchor="middle" font-size="12">C6</text>
+    <text x="385" y="353" text-anchor="middle" font-size="11">■ 중층 지지 기둥 (하부 위치를 중첩 표시)</text>
+    <line x1="105" y1="157" x2="665" y2="157" stroke="#111" />
+    <text x="385" y="151" text-anchor="middle" font-size="12">28.00</text>
+    <line x1="77" y1="179" x2="77" y2="879" stroke="#111" />
+    <text x="61" y="529" font-size="12" text-anchor="middle" transform="rotate(-90 61 529)">35.00</text>
+    <text x="1170" y="135" text-anchor="middle" font-size="19">02 정면도 — 거래소에서 경매장 방향</text>
+    <path d="M840 456V316 Q840 176 1170 176 Q1500 176 1500 316V456Z" fill="#fafafa" stroke="#111" stroke-width="2" />
+    <rect x="840" y="370" width="660" height="7" fill="#ddd" stroke="#111" />
+    <rect x="989" y="377" width="8" height="79" fill="none" stroke="#111" stroke-dasharray="4 3" />
+    <text x="993" y="482" text-anchor="middle" font-size="12">C4 (뒤쪽)</text>
+    <line x1="993" y1="343" x2="993" y2="460" stroke="#aaa" stroke-dasharray="4 4" />
+    <rect x="1343" y="377" width="8" height="79" fill="none" stroke="#111" stroke-dasharray="4 3" />
+    <text x="1347" y="482" text-anchor="middle" font-size="12">C6 (뒤쪽)</text>
+    <line x1="1347" y1="343" x2="1347" y2="460" stroke="#aaa" stroke-dasharray="4 4" />
+    <path d="M889 370L1030 456 M1310 456L1451 370" fill="none" stroke="#111" stroke-width="2" />
+    <text x="1170" y="164" text-anchor="middle" font-size="13">최고점 +16.00</text>
+    <text x="1170" y="360" text-anchor="middle" font-size="12">중층 +4.00</text>
+    <text x="1170" y="512" text-anchor="middle" font-size="12">계단 쪽 앞줄 기둥 제거 · 뒤쪽 C4·C6만 투영 표시</text>
+    <text x="1170" y="574" text-anchor="middle" font-size="19">03 옆면 단면 — 기둥 위치 투영</text>
+    <path d="M850 914V756.5 Q850 634 1175 634 Q1500 634 1500 756.5V914Z" fill="#fafafa" stroke="#111" stroke-width="2" />
+    <rect x="1225" y="844" width="275" height="7" fill="#ddd" stroke="#111" />
+    <rect x="1363" y="851" width="8" height="63" fill="#666" stroke="#111" />
+    <line x1="1367" y1="813" x2="1367" y2="925" stroke="#111" stroke-dasharray="4 4" />
+    <text x="1367" y="948" text-anchor="middle" font-size="11">C4 · C6</text>
+    <text x="1120" y="893" text-anchor="middle" font-size="15">거래소</text>
+    <text x="1385" y="831" text-anchor="middle" font-size="13">경매장 +4.00</text>
+    <text x="1175" y="622" text-anchor="middle" font-size="13">천장 최고점 +16.00</text>
+    <text x="1175" y="978" text-anchor="middle" font-size="12">C4·C6은 옆면 투영에서 겹침 · 실제 위치는 평면도 참조</text>
+    <path d="M45 1015H1555" stroke="#111" />
+    <text x="55" y="1052" font-size="18" font-weight="bold">배치 및 수정 사항</text>
+    <text x="55" y="1086" font-size="15">① 돌출부 폭을 7.00m로 줄이고, 좌우 계단 끝과 각각 1.70m 이격해 평면상 겹침 제거.</text>
+    <text x="55" y="1117" font-size="15">② 문 3개를 직전 위치에서 계단 쪽으로 3.00m 추가 이동 (최초 대비 총 4.20m). 문 사이 간격 유지.</text>
+    <text x="55" y="1148" font-size="15">③ 앞줄 C1·C2·C3과 뒤쪽 중앙 C5 제거. 양쪽 기둥 C4·C6 두 개만 유지.</text>
+    <text x="55" y="1186" font-size="13">검토용: 기둥 단면 0.50 × 0.50m 가정. 기둥 간격·보·돌출부 지지 방식은 구조 검토 후 확정.</text>
+    <text x="1530" y="1218" text-anchor="end" font-size="24">A–10</text>
+  </g>
+  <g font-family="Malgun Gothic,sans-serif">
+  </g>
+  <g fill="none" stroke="#111" stroke-width="2">
+    <path xmlns="http://www.w3.org/2000/svg" d="M665 571V643 M672 571V643 M105 551V587 M98 551V587 M105 621V657 M98 621V657" />
+  </g>
+  <g transform="translate(0,-84)">
+    <rect x="659" y="571" width="20" height="72" fill="white" />
+    <path d="M665 571H629 M665 643H629 M665 571A36 36 0 0 0 629 607 M665 643A36 36 0 0 1 629 607" stroke="#111" fill="none" />
+    <text x="720" y="603" text-anchor="middle" font-size="14">출입구</text>
+    <rect xmlns="http://www.w3.org/2000/svg" x="92" y="551" width="20" height="36" fill="white" />
+    <path xmlns="http://www.w3.org/2000/svg" d="M105 551H141 M105 587A36 36 0 0 0 141 551" stroke="#111" fill="none" />
+    <text xmlns="http://www.w3.org/2000/svg" x="155" y="576" font-size="13">남자 화장실</text>
+    <rect xmlns="http://www.w3.org/2000/svg" x="92" y="621" width="20" height="36" fill="white" />
+    <path xmlns="http://www.w3.org/2000/svg" d="M105 621H141 M105 657A36 36 0 0 0 141 621" stroke="#111" fill="none" />
+    <text xmlns="http://www.w3.org/2000/svg" x="155" y="646" font-size="13">여자 화장실</text>
+  </g>
+</g><path d="M136.57975146353942 300H633.4202485364606" fill="none" stroke="#222" stroke-width="1.5" stroke-dasharray="8 5"/><rect x="136.57975146353942" y="295" width="10" height="10" fill="#333" stroke="#222"/><rect x="623.4202485364606" y="295" width="10" height="10" fill="#333" stroke="#222"/><text x="385" y="320" font-family="Malgun Gothic" font-size="11" text-anchor="middle" fill="#111">R1</text><path d="M108.18994953760935 380H661.8100504623907" fill="none" stroke="#222" stroke-width="1.5" stroke-dasharray="8 5"/><rect x="108.18994953760935" y="375" width="10" height="10" fill="#333" stroke="#222"/><rect x="651.8100504623907" y="375" width="10" height="10" fill="#333" stroke="#222"/><text x="385" y="371" font-family="Malgun Gothic" font-size="11" text-anchor="middle" fill="#111">R2</text><path d="M105.0 600H665.0" fill="none" stroke="#222" stroke-width="1.5" stroke-dasharray="8 5"/><rect x="105.0" y="595" width="10" height="10" fill="#333" stroke="#222"/><rect x="655.0" y="595" width="10" height="10" fill="#333" stroke="#222"/><text x="385" y="591" font-family="Malgun Gothic" font-size="11" text-anchor="middle" fill="#111">R3</text><path d="M112.88149578286524 700H657.1185042171347" fill="none" stroke="#222" stroke-width="1.5" stroke-dasharray="8 5"/><rect x="112.88149578286524" y="695" width="10" height="10" fill="#333" stroke="#222"/><rect x="647.1185042171347" y="695" width="10" height="10" fill="#333" stroke="#222"/><text x="385" y="691" font-family="Malgun Gothic" font-size="11" text-anchor="middle" fill="#111">R4</text><path d="M167.01404549796632 800H602.9859545020337" fill="none" stroke="#222" stroke-width="1.5" stroke-dasharray="8 5"/><rect x="167.01404549796632" y="795" width="10" height="10" fill="#333" stroke="#222"/><rect x="592.9859545020337" y="795" width="10" height="10" fill="#333" stroke="#222"/><text x="385" y="791" font-family="Malgun Gothic" font-size="11" text-anchor="middle" fill="#111">R5</text><text x="385" y="950" font-family="Malgun Gothic" font-size="13" text-anchor="middle" fill="#111">■ 벽 부착 기둥 제안   ┄ 천장 목재 아치 투영</text><text x="385" y="977" font-family="Malgun Gothic" font-size="13" text-anchor="middle" fill="#111">R3 기준 단면 → / 기존 문·계단·C4·C6 위치 유지</text><text x="1160" y="135" font-family="Malgun Gothic" font-size="19" text-anchor="middle" fill="#111">02 횡단면 — R3 / 기둥에서 아치로 연속</text><path d="M850 540V342 C850 256.95 987.9 188 1158 188 C1328.1 188 1466 256.95 1466 342V540Z" fill="#fafafa" stroke="#222" stroke-width="2" stroke-dasharray=""/><path d="M850 540V342 C850 256.95 987.9 188 1158 188 C1328.1 188 1466 256.95 1466 342V540 H1452.8 V342 C1452.8 264 1321 201.2 1158 201.2 C995 201.2 863.2 264 863.2 342 V540Z" fill="#bbb" stroke="#222" stroke-width="1.5" stroke-dasharray=""/><path d="M850 342H1466" fill="none" stroke="#222" stroke-width="1" stroke-dasharray="5 5"/><text x="1160" y="331" font-family="Malgun Gothic" font-size="13" text-anchor="middle" fill="#111">아치 시작 +9.00</text><text x="1158" y="176" font-family="Malgun Gothic" font-size="13" text-anchor="middle" fill="#111">천장 최고점 +16.00</text><path d="M850 452H1466" fill="none" stroke="#222" stroke-width="1" stroke-dasharray="4 5"/><text x="1160" y="444" font-family="Malgun Gothic" font-size="12" text-anchor="middle" fill="#111">중층 기준 +4.00 (뒤쪽 투영)</text><text x="1160" y="562" font-family="Malgun Gothic" font-size="13" text-anchor="middle" fill="#111">바닥 ±0.00</text><path d="M850 583H1466 M850 576V590 M1466 576V590" fill="none" stroke="#222" stroke-width="1" stroke-dasharray=""/><text x="1158" y="603" font-family="Malgun Gothic" font-size="13" text-anchor="middle" fill="#111">28.00</text><rect x="846" y="338" width="21" height="8" fill="#ddd" stroke="#222"/><rect x="1449" y="338" width="21" height="8" fill="#ddd" stroke="#222"/><text x="1160" y="632" font-family="Malgun Gothic" font-size="13" text-anchor="middle" fill="#111">벽기둥과 곡선 아치의 안쪽 선을 접선으로 연결</text><text x="1000" y="680" font-family="Malgun Gothic" font-size="18" text-anchor="middle" fill="#111">03 연결부 확대 — 측면</text><path d="M867 948V833 C867 773 916 724 995 714 L998 738 C932 746 893 783 893 833V948Z" fill="#ddd" stroke="#222" stroke-width="2" stroke-dasharray=""/><rect x="862" y="827" width="37" height="12" fill="#aaa" stroke="#222"/><path d="M867 833H825 M893 833H930" fill="none" stroke="#222" stroke-width="1" stroke-dasharray="4 3"/><text x="935" y="838" font-family="Malgun Gothic" font-size="12" text-anchor="start" fill="#111">+9.00 접합</text><path d="M995 714L1052 714V734" fill="none" stroke="#222" stroke-width="1" stroke-dasharray=""/><text x="1052" y="750" font-family="Malgun Gothic" font-size="12" text-anchor="middle" fill="#111">천장 곡면을 따라 연장</text><path d="M867 905H893 M867 897V913 M893 897V913" fill="none" stroke="#222" stroke-width="1" stroke-dasharray=""/><text x="930" y="908" font-family="Malgun Gothic" font-size="12" text-anchor="start" fill="#111">돌출 0.60</text><text x="1000" y="981" font-family="Malgun Gothic" font-size="12" text-anchor="middle" fill="#111">연결 띠: 높이 0.20 / 돌출 0.08</text><text x="1340" y="680" font-family="Malgun Gothic" font-size="18" text-anchor="middle" fill="#111">04 기둥 정면 · 단면</text><rect x="1225" y="723" width="30" height="225" fill="#ddd" stroke="#222"/><rect x="1221" y="746" width="38" height="10" fill="#aaa" stroke="#222"/><rect x="1220" y="936" width="40" height="12" fill="#ddd" stroke="#222"/><path d="M1225 962H1255 M1225 956V968 M1255 956V968" fill="none" stroke="#222" stroke-width="1" stroke-dasharray=""/><text x="1240" y="984" font-family="Malgun Gothic" font-size="12" text-anchor="middle" fill="#111">폭 0.50</text><rect x="1340" y="777" width="55" height="66" fill="#ddd" stroke="#222"/><path d="M1330 777V843 M1324 777H1336 M1324 843H1336" fill="none" stroke="#222" stroke-width="1" stroke-dasharray=""/><text x="1420" y="817" font-family="Malgun Gothic" font-size="12" text-anchor="start" fill="#111">0.60</text><path d="M1340 860H1395 M1340 854V866 M1395 854V866" fill="none" stroke="#222" stroke-width="1" stroke-dasharray=""/><text x="1367" y="885" font-family="Malgun Gothic" font-size="12" text-anchor="middle" fill="#111">0.50</text><text x="1370" y="922" font-family="Malgun Gothic" font-size="12" text-anchor="middle" fill="#111">직사각 단면</text><path d="M45 1015H1555" fill="none" stroke="#222" stroke-width="1" stroke-dasharray=""/><text x="55" y="1052" font-family="Malgun Gothic" font-size="18" text-anchor="start" fill="#111">배치 및 모델링 기준</text><text x="55" y="1086" font-family="Malgun Gothic" font-size="15" text-anchor="start" fill="#111">① 벽면 기둥이 +9.00에서 곡선 아치로 이어지며, 기둥과 아치 사이에 빈틈을 두지 않음.</text><text x="55" y="1117" font-family="Malgun Gothic" font-size="15" text-anchor="start" fill="#111">② 부재 제안: 폭 0.50 × 벽에서 돌출 0.60 / 접합 띠 높이 0.20. 천장 아치는 같은 단면으로 연결.</text><text x="55" y="1148" font-family="Malgun Gothic" font-size="15" text-anchor="start" fill="#111">③ R1–R5는 배치 제안. 곡면 끝부분은 현장 모델의 천장 높이·곡률에 맞춤. 문과 계단을 피해서 배치.</text><text x="55" y="1182" font-family="Malgun Gothic" font-size="13" text-anchor="start" fill="#111">기존 A–10의 문 위치 표기를 참조한 계획도. 새 대문 상세와 실제 부재 간섭은 Blender 적용 시 조정.</text><text x="55" y="1207" font-family="Malgun Gothic" font-size="13" text-anchor="start" fill="#111">실물 시공용 구조도면이 아닌 게임 모델링용 계획도이며, 이번 작업은 도면 작성 범위입니다.</text><text x="1530" y="1218" font-family="Malgun Gothic" font-size="24" text-anchor="end" fill="#111">A–11</text><g font-family="Malgun Gothic" fill="#111" font-size="12"><path d="M105 157H665" stroke="#111"/><text x="385" y="151" text-anchor="middle">28.00</text><text x="61" y="529" text-anchor="middle" transform="rotate(-90 61 529)">35.00</text></g></svg>
