@@ -1,0 +1,2 @@
+PASS: 3 renderers, 3 URP materials, 6 textures, valid meshes, no missing scripts, hinge rotation, leaf colliders, preview excluded from build.
+Bounds: (5.08, 5.99, 1.19)

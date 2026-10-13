@@ -1,0 +1,102 @@
+[
+  {
+    "file": "Pig_Green_100k.fbx",
+    "vertices": 50004,
+    "triangles": 99999,
+    "uv_layers": [
+      1
+    ],
+    "textures": [
+      {
+        "name": "low-poly+pig+3d+model_basecolor.jpg",
+        "width": 4096,
+        "height": 4096,
+        "loaded": true
+      },
+      {
+        "name": "low-poly+pig+3d+model_normal.png",
+        "width": 4096,
+        "height": 4096,
+        "loaded": true
+      }
+    ]
+  },
+  {
+    "file": "Pig_Green_100k.glb",
+    "vertices": 56673,
+    "triangles": 99999,
+    "uv_layers": [
+      1
+    ],
+    "textures": [
+      {
+        "name": "low-poly+pig+3d+model_basecolor",
+        "width": 4096,
+        "height": 4096,
+        "loaded": true
+      },
+      {
+        "name": "low-poly+pig+3d+model_normal",
+        "width": 4096,
+        "height": 4096,
+        "loaded": true
+      },
+      {
+        "name": "low-poly+pig+3d+model_rm",
+        "width": 4096,
+        "height": 4096,
+        "loaded": true
+      }
+    ]
+  },
+  {
+    "file": "Pig_Green_50k.fbx",
+    "vertices": 25004,
+    "triangles": 49999,
+    "uv_layers": [
+      1
+    ],
+    "textures": [
+      {
+        "name": "low-poly+pig+3d+model_basecolor.jpg",
+        "width": 4096,
+        "height": 4096,
+        "loaded": true
+      },
+      {
+        "name": "low-poly+pig+3d+model_normal.png",
+        "width": 4096,
+        "height": 4096,
+        "loaded": true
+      }
+    ]
+  },
+  {
+    "file": "Pig_Green_50k.glb",
+    "vertices": 29614,
+    "triangles": 49999,
+    "uv_layers": [
+      1
+    ],
+    "textures": [
+      {
+        "name": "low-poly+pig+3d+model_basecolor",
+        "width": 4096,
+        "height": 4096,
+        "loaded": true
+      },
+      {
+        "name": "low-poly+pig+3d+model_normal",
+        "width": 4096,
+        "height": 4096,
+        "loaded": true
+      },
+      {
+        "name": "low-poly+pig+3d+model_rm",
+        "width": 4096,
+        "height": 4096,
+        "loaded": true
+      }
+    ]
+  }
+]

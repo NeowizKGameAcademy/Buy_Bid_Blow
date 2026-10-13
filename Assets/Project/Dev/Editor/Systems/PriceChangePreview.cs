@@ -21,7 +21,7 @@ namespace BuyBidBlow.Dev.Editor
 
             int seed = Environment.TickCount;
             var random = new System.Random(seed);
-            int[] prices = (int[])settings.StartingPrices.Clone();
+            int[] prices = settings.RollStartingPrices(random);
 
             var log = new StringBuilder($"Price changes (seed {seed})\nStart: {string.Join(" / ", prices)}\n");
             for (int round = 1; round <= settings.RoundCount; round++)
