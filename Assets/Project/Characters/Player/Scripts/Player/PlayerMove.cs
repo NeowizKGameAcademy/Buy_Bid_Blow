@@ -16,6 +16,7 @@ namespace BuyBidBlow
         [SerializeField] private float jumpForce = 5f;
 
         [Header("Rotate")]
+        [SerializeField] private GameObject Head;
         [SerializeField] private float rotateSpeed = 0.1f;
         [SerializeField] private float upperLimit = 60f;
         [SerializeField] private float lowerLimit = 40f;
@@ -53,16 +54,16 @@ namespace BuyBidBlow
             if (playerCamera == null)
                 return;
 
-            float mouseX = mouseDelta.x * rotateSpeed;
+            float mouseX = mouseDelta.x * rotateSpeed / 100;
             transform.Rotate(Vector3.up * mouseX);
 
-            float mouseY = mouseDelta.y * rotateSpeed;
+            float mouseY = mouseDelta.y * rotateSpeed / 100;
 
             currentY -= mouseY;
-            currentY = Mathf.Clamp(currentY, -lowerLimit, upperLimit);
+            currentY = Mathf.Clamp(currentY, -upperLimit, lowerLimit);
 
-            playerCamera.CameraTransform.localRotation =
-                Quaternion.Euler(currentY, 0f, 0f);
+            playerCamera.CameraTransform.localRotation = Quaternion.Euler(currentY, 0f, 0f);
+            Head.transform.localRotation = Quaternion.Euler(currentY, 0f, 0f);
         }
 
         public void SetJumpHeld(bool isHeld)

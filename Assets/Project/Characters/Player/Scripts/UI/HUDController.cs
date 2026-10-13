@@ -6,7 +6,7 @@ using TMPro;
 
 namespace BuyBidBlow
 {
-    public class InteractionHUDController : MonoBehaviour
+    public class HUDController : MonoBehaviour
     {
         [Header("Components")]
         [SerializeField] private DetectObject detect;
