@@ -1,0 +1,102 @@
+[
+  {
+    "file": "Pig_Red_100k.fbx",
+    "vertices": 50000,
+    "triangles": 100000,
+    "uv_layers": [
+      1
+    ],
+    "textures": [
+      {
+        "name": "pig+character+3d+model_basecolor.jpg",
+        "width": 2048,
+        "height": 2048,
+        "loaded": true
+      },
+      {
+        "name": "pig+character+3d+model_normal.png",
+        "width": 2048,
+        "height": 2048,
+        "loaded": true
+      }
+    ]
+  },
+  {
+    "file": "Pig_Red_100k.glb",
+    "vertices": 57622,
+    "triangles": 100000,
+    "uv_layers": [
+      1
+    ],
+    "textures": [
+      {
+        "name": "pig+character+3d+model_basecolor",
+        "width": 2048,
+        "height": 2048,
+        "loaded": true
+      },
+      {
+        "name": "pig+character+3d+model_normal",
+        "width": 2048,
+        "height": 2048,
+        "loaded": true
+      },
+      {
+        "name": "pig+character+3d+model_rm",
+        "width": 2048,
+        "height": 2048,
+        "loaded": true
+      }
+    ]
+  },
+  {
+    "file": "Pig_Red_50k.fbx",
+    "vertices": 25000,
+    "triangles": 50000,
+    "uv_layers": [
+      1
+    ],
+    "textures": [
+      {
+        "name": "pig+character+3d+model_basecolor.jpg",
+        "width": 2048,
+        "height": 2048,
+        "loaded": true
+      },
+      {
+        "name": "pig+character+3d+model_normal.png",
+        "width": 2048,
+        "height": 2048,
+        "loaded": true
+      }
+    ]
+  },
+  {
+    "file": "Pig_Red_50k.glb",
+    "vertices": 30297,
+    "triangles": 50000,
+    "uv_layers": [
+      1
+    ],
+    "textures": [
+      {
+        "name": "pig+character+3d+model_basecolor",
+        "width": 2048,
+        "height": 2048,
+        "loaded": true
+      },
+      {
+        "name": "pig+character+3d+model_normal",
+        "width": 2048,
+        "height": 2048,
+        "loaded": true
+      },
+      {
+        "name": "pig+character+3d+model_rm",
+        "width": 2048,
+        "height": 2048,
+        "loaded": true
+      }
+    ]
+  }
+]
