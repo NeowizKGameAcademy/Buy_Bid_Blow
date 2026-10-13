@@ -1,5 +1,5 @@
 {
   "name": "BuyBidBlow.Dev",
-  "references": ["BuyBidBlow.Game", "BuyBidBlow.Systems", "CueAudio.Runtime"],
+  "references": ["BuyBidBlow.Game", "BuyBidBlow.Systems", "CueAudio.Runtime", "Unity.InputSystem"],
   "defineConstraints": ["UNITY_EDITOR"]
 }
