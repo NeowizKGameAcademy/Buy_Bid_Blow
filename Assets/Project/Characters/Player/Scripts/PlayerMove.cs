@@ -17,6 +17,7 @@ namespace BuyBidBlow
         [SerializeField] private float jumpForce = 5f;
 
         [Header("Rotate")]
+        [SerializeField] private GameObject Head;
         [SerializeField] private float rotateSpeed = 0.1f;
         [SerializeField] private float upperLimit = 60f;
         [SerializeField] private float lowerLimit = 40f;
@@ -76,9 +77,7 @@ namespace BuyBidBlow
 
         private void Move()
         {
-            Vector3 direction =
-                transform.forward * curMoveInput.y +
-                transform.right * curMoveInput.x;
+            Vector3 direction = transform.forward * curMoveInput.y + transform.right * curMoveInput.x;
 
             direction *= moveSpeed;
 
@@ -101,6 +100,7 @@ namespace BuyBidBlow
             currentY = Mathf.Clamp(currentY, -upperLimit, lowerLimit);
 
             playerCamera.CameraTransform.localRotation = Quaternion.Euler(currentY, 0f, 0f);
+            Head.transform.localRotation = Quaternion.Euler(currentY, 0f, 0f);
         }
 
         private void LockRotation()
