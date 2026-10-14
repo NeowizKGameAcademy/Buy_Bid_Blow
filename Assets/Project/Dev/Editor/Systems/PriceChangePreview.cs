@@ -24,6 +24,7 @@ namespace BuyBidBlow.Dev.Editor
             int[] prices = settings.RollStartingPrices(random);
 
             var log = new StringBuilder($"Price changes (seed {seed})\nStart: {string.Join(" / ", prices)}\n");
+
             for (int round = 1; round <= settings.RoundCount; round++)
             {
                 var changes = PriceChangeGenerator.Generate(settings.PriceChange, random);

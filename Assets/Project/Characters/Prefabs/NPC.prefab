@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3843298603012290068}
   - component: {fileID: 5979843609324242140}
   - component: {fileID: 497230722114695083}
+  - component: {fileID: 8979883282840838091}
   m_Layer: 7
   m_Name: NPC
   m_TagString: Untagged
@@ -113,3 +114,16 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &8979883282840838091
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5309724916948947722}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd39b0aebbcb43f44b3a063bfc1a03b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.NPCInfo
+  company: 0

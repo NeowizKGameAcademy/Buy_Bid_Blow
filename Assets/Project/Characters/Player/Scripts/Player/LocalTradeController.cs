@@ -1,4 +1,5 @@
 using UnityEngine;
+using BuyBidBlow.Systems.Types;
 
 namespace BuyBidBlow
 {
@@ -7,44 +8,55 @@ namespace BuyBidBlow
     {
         [SerializeField] private TradePanelController tradePanel;
         [SerializeField] private PlayerWallet wallet;
+        [SerializeField] private MatchManager matchManager;
 
-        [Header("Test Item")]
-        [SerializeField] private int itemId = 1;
-        [SerializeField] private string itemName = "BRICK";
-        [SerializeField, Min(1)] private int unitPrice = 20;
-        [SerializeField, Min(0)] private int stock = 100;
-        [SerializeField, Min(0)] private int ownedQuantity;
+        // [SerializeField] private int stock = 100;
+        [SerializeField] private int ownedQuantity;
+
+        private Company selectedCompany;
+        private bool hasSelectedCompany;
 
         public int OwnedQuantity => ownedQuantity;
-        public int Stock => stock;
+        //public int Stock => stock;
 
         private void OnEnable()
         {
             tradePanel.BuyRequested += Buy;
             tradePanel.SellRequested += Sell;
+            ResolveMatchManager();
+            if (matchManager != null)
+                matchManager.RoundAdvanced += OnRoundAdvanced;
         }
 
         private void OnDisable()
         {
             tradePanel.BuyRequested -= Buy;
             tradePanel.SellRequested -= Sell;
+            if (matchManager != null)
+                matchManager.RoundAdvanced -= OnRoundAdvanced;
         }
 
-        public void OpenPanel()
+        public void OpenPanel(Company company)
         {
-            tradePanel.Open(itemId, itemName, unitPrice);
+            if (!ResolveMatchManager())
+                return;
+
+            selectedCompany = company;
+            hasSelectedCompany = true;
+            tradePanel.Open((int)company, GetDisplayName(company), matchManager.GetPrice(company));
             ShowResult("거래할 수량을 선택하세요.");
         }
 
         private bool Validate(int requestedItemId, int quantity, out int total)
         {
             total = 0;
-            if (!tradePanel.IsOpen || requestedItemId != itemId || quantity <= 0 || unitPrice <= 0)
+            if (!tradePanel.IsOpen || !hasSelectedCompany || requestedItemId != (int)selectedCompany || quantity <= 0 || !ResolveMatchManager())
             {
                 ShowResult("잘못된 거래 요청입니다.");
                 return false;
             }
 
+            int unitPrice = matchManager.GetPrice(selectedCompany);
             long price = (long)unitPrice * quantity;
             if (price > int.MaxValue)
             {
@@ -59,11 +71,11 @@ namespace BuyBidBlow
         private void Buy(int requestedItemId, int quantity)
         {
             if (!Validate(requestedItemId, quantity, out int total)) return;
-            if (quantity > stock)
-            {
-                ShowResult("NPC 재고가 부족합니다.");
-                return;
-            }
+            //if (quantity > stock)
+            //{
+            //    ShowResult("NPC 재고가 부족합니다.");
+            //    return;
+            //}
             if ((long)ownedQuantity + quantity > int.MaxValue)
             {
                 ShowResult("보유 수량 한도를 초과합니다.");
@@ -76,7 +88,7 @@ namespace BuyBidBlow
             }
 
             ownedQuantity += quantity;
-            stock -= quantity;
+            //stock -= quantity;
             ShowResult($"구매 완료: {quantity:N0}개 / $ {total:N0}");
         }
 
@@ -88,21 +100,44 @@ namespace BuyBidBlow
                 ShowResult("보유 수량이 부족합니다.");
                 return;
             }
-            if ((long)wallet.Money + total > int.MaxValue || (long)stock + quantity > int.MaxValue)
-            {
-                ShowResult("거래 한도를 초과합니다.");
-                return;
-            }
+            //if ((long)wallet.Money + total > int.MaxValue || (long)stock + quantity > int.MaxValue)
+            //{
+            //    ShowResult("거래 한도를 초과합니다.");
+            //    return;
+            //}
 
             ownedQuantity -= quantity;
-            stock += quantity;
+            //stock += quantity;
             wallet.AddMoney(total);
             ShowResult($"판매 완료: {quantity:N0}개 / $ {total:N0}");
         }
 
         private void ShowResult(string message)
         {
-            tradePanel.SetLog($"{message}\n보유: {ownedQuantity:N0}개 / 재고: {stock:N0}개");
+            tradePanel.SetLog($"{message}\n보유: {ownedQuantity:N0}개");
+        }
+
+        private bool ResolveMatchManager()
+        {
+            if (matchManager == null)
+                matchManager = MatchManager.instance;
+
+            if (matchManager != null)
+                return true;
+
+            Debug.LogError("LocalTradeController needs a MatchManager.", this);
+            return false;
+        }
+
+        private void OnRoundAdvanced(int _, System.Collections.Generic.IReadOnlyList<PriceChange> __)
+        {
+            if (hasSelectedCompany && tradePanel.IsOpen)
+                tradePanel.SetItemDetails(GetDisplayName(selectedCompany), matchManager.GetPrice(selectedCompany));
+        }
+
+        private static string GetDisplayName(Company company)
+        {
+            return company.ToString().ToUpperInvariant();
         }
     }
 }

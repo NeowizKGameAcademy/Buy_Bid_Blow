@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace BuyBidBlow
@@ -15,8 +13,12 @@ namespace BuyBidBlow
             if (detect == null || tradePanel == null || localTrade == null || tradePanel.IsOpen)
                 return;
 
-            if (detect.isDetected && detect.DetectedCollider != null)
-                localTrade.OpenPanel();
+            if (!detect.isDetected || detect.DetectedCollider == null)
+                return;
+
+            NPCInfo npcInfo = detect.DetectedCollider.GetComponentInParent<NPCInfo>();
+            if (npcInfo != null)
+                localTrade.OpenPanel(npcInfo.Company);
         }
     }
 }

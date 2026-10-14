@@ -42,6 +42,12 @@ namespace BuyBidBlow
         public void Open(int itemId, string itemName, int unitPrice)
         {
             Open(itemId);
+            SetItemDetails(itemName, unitPrice);
+        }
+
+        // Can be called while the panel remains open after a round price change.
+        public void SetItemDetails(string itemName, int unitPrice)
+        {
             itemNameText.text = itemName;
             unitPriceText.text = $"$ {Mathf.Max(0, unitPrice):N0}";
         }
