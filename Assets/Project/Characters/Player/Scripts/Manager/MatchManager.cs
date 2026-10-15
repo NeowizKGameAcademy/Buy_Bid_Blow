@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using BuyBidBlow.Systems.Market;
 using BuyBidBlow.Systems.Match;
+using BuyBidBlow.Systems;
 using BuyBidBlow.Systems.Types;
 using UnityEngine;
 
@@ -19,6 +20,7 @@ namespace BuyBidBlow
 
         public int CurrentRound { get; private set; }
         public bool IsMatchComplete => settings != null && CurrentRound >= settings.RoundCount;
+        public ITradeService TradeService { get; private set; }
 
         public event Action<int, IReadOnlyList<PriceChange>> RoundAdvanced;
 
@@ -111,6 +113,7 @@ namespace BuyBidBlow
 
             CurrentRound = 0;
             ApplyPrices(scheduledPrices[CurrentRound]);
+            TradeService = new LocalTradeService(GetPrice, settings.StartingCash, settings.StartingShares);
         }
 
         private void ApplyPrices(int[] roundPrices)
