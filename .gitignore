@@ -107,3 +107,7 @@ InitTestScene*.unity*
 
 # Presentation decks are shared outside the repository
 *.pptx
+
+# Local design documents, source models, references, and intermediate exports.
+# Unity-ready assets belong in Assets/.
+/Docs/

@@ -13,7 +13,7 @@
 #
 # 작업 트리의 줄바꿈은 건드리지 않는다.
 # eol= 을 쓰지 않으므로 체크아웃된 파일은 각자의 core.autocrlf 를 따르고,
-# LFS 대상의 기존 파일은 재등록 시 포인터로 저장하며 작업 파일은 원본을 유지한다.
+# 이미지와 모델은 LFS 없이 원본 바이너리로 저장한다.
 
 * text=auto
 
@@ -95,20 +95,20 @@
 # 바이너리 — 줄바꿈 변환도 텍스트 diff 도 하지 않는다
 # ─────────────────────────────────────────────────────────────
 
-# 이미지 — Git LFS
-*.png filter=lfs diff=lfs merge=lfs -text
-*.jpg filter=lfs diff=lfs merge=lfs -text
-*.jpeg filter=lfs diff=lfs merge=lfs -text
-*.gif filter=lfs diff=lfs merge=lfs -text
-*.bmp filter=lfs diff=lfs merge=lfs -text
-*.tga filter=lfs diff=lfs merge=lfs -text
-*.tif filter=lfs diff=lfs merge=lfs -text
-*.tiff filter=lfs diff=lfs merge=lfs -text
-*.psd filter=lfs diff=lfs merge=lfs -text
-*.exr filter=lfs diff=lfs merge=lfs -text
-*.hdr filter=lfs diff=lfs merge=lfs -text
-*.iff filter=lfs diff=lfs merge=lfs -text
-*.pict filter=lfs diff=lfs merge=lfs -text
+# 이미지 — 일반 Git 바이너리
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.bmp binary
+*.tga binary
+*.tif binary
+*.tiff binary
+*.psd binary
+*.exr binary
+*.hdr binary
+*.iff binary
+*.pict binary
 
 # 오디오
 *.wav              binary
@@ -124,16 +124,16 @@
 *.woff2            binary
 *.eot              binary
 
-# 3D 모델 — Git LFS
-*.fbx filter=lfs diff=lfs merge=lfs -text
-*.glb filter=lfs diff=lfs merge=lfs -text
-*.webp filter=lfs diff=lfs merge=lfs -text
-*.blend            filter=lfs diff=lfs merge=lfs -text
-*.dae filter=lfs diff=lfs merge=lfs -text
-*.3ds filter=lfs diff=lfs merge=lfs -text
-*.max filter=lfs diff=lfs merge=lfs -text
-*.ma filter=lfs diff=lfs merge=lfs -text
-*.mb filter=lfs diff=lfs merge=lfs -text
+# 3D 모델 — 일반 Git 바이너리
+*.fbx binary
+*.glb binary
+*.webp binary
+*.blend            binary
+*.dae binary
+*.3ds binary
+*.max binary
+*.ma binary
+*.mb binary
 
 # 라이브러리 · 실행 파일
 *.dll              binary

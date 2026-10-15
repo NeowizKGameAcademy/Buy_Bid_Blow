@@ -154,6 +154,7 @@ namespace BuyBidBlow.Dev.Editor
                 var image = new Texture2D(1000, 1000, TextureFormat.RGB24, false);
                 image.ReadPixels(new Rect(0, 0, 1000, 1000), 0, 0);
                 image.Apply();
+                Directory.CreateDirectory("Docs/Arts/Props/Models");
                 File.WriteAllBytes("Docs/Arts/Props/Models/GrandEntrance_Unity_" + name + ".png", image.EncodeToPNG());
                 UnityEngine.Object.DestroyImmediate(image);
             }
