@@ -1,0 +1,1424 @@
+{
+  "sampleCountPerScenario": 500,
+  "summaries": [
+    {
+      "regime": "balanced",
+      "players": 3,
+      "cash": 100,
+      "supply": 3,
+      "meanFinalWealth": 330.146,
+      "medianFinalWealth": 288,
+      "meanStockProfit": 170.96533333333332,
+      "meanBetProfit": 83.43266666666666,
+      "meanAuctionSpend": 24.252,
+      "meanAuctionPrice": 9.478374153204793,
+      "auctionSellRate": 0.9595,
+      "rejectedBuyRate": 0.10776075135936727,
+      "companySoldOutRate": 0.14992156862745099,
+      "averageCashFraction": 0.31290886683136704,
+      "tradesPerPlayer": 10.266,
+      "betsPerPlayer": 2.473333333333333
+    },
+    {
+      "regime": "balanced",
+      "players": 3,
+      "cash": 200,
+      "supply": 3,
+      "meanFinalWealth": 522.4993333333333,
+      "medianFinalWealth": 490.5,
+      "meanStockProfit": 258.582,
+      "meanBetProfit": 103.398,
+      "meanAuctionSpend": 39.480666666666664,
+      "meanAuctionPrice": 15.442242503259452,
+      "auctionSellRate": 0.95875,
+      "rejectedBuyRate": 0.15783254557731263,
+      "companySoldOutRate": 0.33909803921568626,
+      "averageCashFraction": 0.29933843138983107,
+      "tradesPerPlayer": 11.470666666666666,
+      "betsPerPlayer": 3.001333333333333
+    },
+    {
+      "regime": "balanced",
+      "players": 3,
+      "cash": 200,
+      "supply": 4,
+      "meanFinalWealth": 551.81,
+      "medianFinalWealth": 529,
+      "meanStockProfit": 289.3186666666667,
+      "meanBetProfit": 100.89066666666666,
+      "meanAuctionSpend": 38.39933333333333,
+      "meanAuctionPrice": 15.086170770036668,
+      "auctionSellRate": 0.9545,
+      "rejectedBuyRate": 0.133859649122807,
+      "companySoldOutRate": 0.2024313725490196,
+      "averageCashFraction": 0.2840128042779303,
+      "tradesPerPlayer": 11.400666666666666,
+      "betsPerPlayer": 2.978
+    },
+    {
+      "regime": "balanced",
+      "players": 3,
+      "cash": 200,
+      "supply": 5,
+      "meanFinalWealth": 575.9693333333333,
+      "medianFinalWealth": 547,
+      "meanStockProfit": 313.662,
+      "meanBetProfit": 101.276,
+      "meanAuctionSpend": 38.968666666666664,
+      "meanAuctionPrice": 15.269853709508881,
+      "auctionSellRate": 0.957,
+      "rejectedBuyRate": 0.11211328583025165,
+      "companySoldOutRate": 0.13286274509803922,
+      "averageCashFraction": 0.2766438459023161,
+      "tradesPerPlayer": 11.448,
+      "betsPerPlayer": 2.964
+    },
+    {
+      "regime": "balanced",
+      "players": 3,
+      "cash": 200,
+      "supply": 6,
+      "meanFinalWealth": 601.9033333333333,
+      "medianFinalWealth": 563,
+      "meanStockProfit": 337.15,
+      "meanBetProfit": 103.66266666666667,
+      "meanAuctionSpend": 38.909333333333336,
+      "meanAuctionPrice": 15.167359667359667,
+      "auctionSellRate": 0.962,
+      "rejectedBuyRate": 0.09625468164794007,
+      "companySoldOutRate": 0.10474509803921568,
+      "averageCashFraction": 0.2694596507021662,
+      "tradesPerPlayer": 11.232666666666667,
+      "betsPerPlayer": 2.9466666666666668
+    },
+    {
+      "regime": "balanced",
+      "players": 6,
+      "cash": 100,
+      "supply": 3,
+      "meanFinalWealth": 275.3186666666667,
+      "medianFinalWealth": 237,
+      "meanStockProfit": 147.13,
+      "meanBetProfit": 43.293,
+      "meanAuctionSpend": 15.104333333333333,
+      "meanAuctionPrice": 11.342428035043804,
+      "auctionSellRate": 0.99875,
+      "rejectedBuyRate": 0.16947063536081838,
+      "companySoldOutRate": 0.11529411764705882,
+      "averageCashFraction": 0.29429925671712104,
+      "tradesPerPlayer": 7.660666666666667,
+      "betsPerPlayer": 1.4656666666666667
+    },
+    {
+      "regime": "balanced",
+      "players": 6,
+      "cash": 200,
+      "supply": 3,
+      "meanFinalWealth": 455.312,
+      "medianFinalWealth": 431.5,
+      "meanStockProfit": 227.81733333333332,
+      "meanBetProfit": 51.922666666666665,
+      "meanAuctionSpend": 24.428,
+      "meanAuctionPrice": 18.357715430861724,
+      "auctionSellRate": 0.998,
+      "rejectedBuyRate": 0.2534221235664077,
+      "companySoldOutRate": 0.26415686274509803,
+      "averageCashFraction": 0.28082063345434516,
+      "tradesPerPlayer": 8.285,
+      "betsPerPlayer": 1.813
+    },
+    {
+      "regime": "balanced",
+      "players": 6,
+      "cash": 200,
+      "supply": 4,
+      "meanFinalWealth": 486.33,
+      "medianFinalWealth": 457,
+      "meanStockProfit": 258.031,
+      "meanBetProfit": 52.595333333333336,
+      "meanAuctionSpend": 24.296333333333333,
+      "meanAuctionPrice": 18.2541948409717,
+      "auctionSellRate": 0.99825,
+      "rejectedBuyRate": 0.20318237454100369,
+      "companySoldOutRate": 0.16890196078431371,
+      "averageCashFraction": 0.2668663580458649,
+      "tradesPerPlayer": 8.447666666666667,
+      "betsPerPlayer": 1.8203333333333334
+    },
+    {
+      "regime": "balanced",
+      "players": 6,
+      "cash": 200,
+      "supply": 5,
+      "meanFinalWealth": 506.537,
+      "medianFinalWealth": 473,
+      "meanStockProfit": 279.13966666666664,
+      "meanBetProfit": 51.349,
+      "meanAuctionSpend": 23.951666666666668,
+      "meanAuctionPrice": 18.004259584064144,
+      "auctionSellRate": 0.99775,
+      "rejectedBuyRate": 0.17346173807738885,
+      "companySoldOutRate": 0.11792156862745098,
+      "averageCashFraction": 0.25872549300924264,
+      "tradesPerPlayer": 8.521666666666667,
+      "betsPerPlayer": 1.824
+    },
+    {
+      "regime": "balanced",
+      "players": 6,
+      "cash": 200,
+      "supply": 6,
+      "meanFinalWealth": 523.272,
+      "medianFinalWealth": 487,
+      "meanStockProfit": 295.939,
+      "meanBetProfit": 51.405,
+      "meanAuctionSpend": 24.072,
+      "meanAuctionPrice": 18.07207207207207,
+      "auctionSellRate": 0.999,
+      "rejectedBuyRate": 0.1533839901042587,
+      "companySoldOutRate": 0.08937254901960784,
+      "averageCashFraction": 0.2539700984468174,
+      "tradesPerPlayer": 8.559333333333333,
+      "betsPerPlayer": 1.8266666666666667
+    },
+    {
+      "regime": "infoFocused",
+      "players": 3,
+      "cash": 100,
+      "supply": 3,
+      "meanFinalWealth": 251.27733333333333,
+      "medianFinalWealth": 210,
+      "meanStockProfit": 127.138,
+      "meanBetProfit": 77.394,
+      "meanAuctionSpend": 53.254666666666665,
+      "meanAuctionPrice": 19.985489116837627,
+      "auctionSellRate": 0.99925,
+      "rejectedBuyRate": 0.09499665167894385,
+      "companySoldOutRate": 0.08388235294117648,
+      "averageCashFraction": 0.47374522365444466,
+      "tradesPerPlayer": 11.875333333333334,
+      "betsPerPlayer": 3.2053333333333334
+    },
+    {
+      "regime": "infoFocused",
+      "players": 3,
+      "cash": 200,
+      "supply": 3,
+      "meanFinalWealth": 433.39866666666666,
+      "medianFinalWealth": 423,
+      "meanStockProfit": 202.57066666666665,
+      "meanBetProfit": 100.21333333333334,
+      "meanAuctionSpend": 69.38533333333334,
+      "meanAuctionPrice": 26.045545545545547,
+      "auctionSellRate": 0.999,
+      "rejectedBuyRate": 0.1513635226419815,
+      "companySoldOutRate": 0.17815686274509804,
+      "averageCashFraction": 0.434889735974307,
+      "tradesPerPlayer": 12.751333333333333,
+      "betsPerPlayer": 3.974
+    },
+    {
+      "regime": "infoFocused",
+      "players": 3,
+      "cash": 200,
+      "supply": 4,
+      "meanFinalWealth": 460.39666666666665,
+      "medianFinalWealth": 440,
+      "meanStockProfit": 228.21066666666667,
+      "meanBetProfit": 101.79533333333333,
+      "meanAuctionSpend": 69.60933333333334,
+      "meanAuctionPrice": 26.12962962962963,
+      "auctionSellRate": 0.999,
+      "rejectedBuyRate": 0.12163102069205356,
+      "companySoldOutRate": 0.11784313725490196,
+      "averageCashFraction": 0.42310599331749377,
+      "tradesPerPlayer": 12.829333333333333,
+      "betsPerPlayer": 3.9753333333333334
+    },
+    {
+      "regime": "infoFocused",
+      "players": 3,
+      "cash": 200,
+      "supply": 5,
+      "meanFinalWealth": 476.18666666666667,
+      "medianFinalWealth": 451,
+      "meanStockProfit": 245.25333333333333,
+      "meanBetProfit": 100.662,
+      "meanAuctionSpend": 69.72866666666667,
+      "meanAuctionPrice": 26.194089656899575,
+      "auctionSellRate": 0.99825,
+      "rejectedBuyRate": 0.09811560065229208,
+      "companySoldOutRate": 0.08184313725490196,
+      "averageCashFraction": 0.4147755796932115,
+      "tradesPerPlayer": 12.707333333333333,
+      "betsPerPlayer": 3.96
+    },
+    {
+      "regime": "infoFocused",
+      "players": 3,
+      "cash": 200,
+      "supply": 6,
+      "meanFinalWealth": 497.786,
+      "medianFinalWealth": 474,
+      "meanStockProfit": 265.538,
+      "meanBetProfit": 101.988,
+      "meanAuctionSpend": 69.74,
+      "meanAuctionPrice": 26.17867867867868,
+      "auctionSellRate": 0.999,
+      "rejectedBuyRate": 0.07753716278216187,
+      "companySoldOutRate": 0.06211764705882353,
+      "averageCashFraction": 0.40847749254092125,
+      "tradesPerPlayer": 12.891333333333334,
+      "betsPerPlayer": 3.9846666666666666
+    },
+    {
+      "regime": "infoFocused",
+      "players": 6,
+      "cash": 100,
+      "supply": 3,
+      "meanFinalWealth": 218.99466666666666,
+      "medianFinalWealth": 190,
+      "meanStockProfit": 112.386,
+      "meanBetProfit": 36.83866666666667,
+      "meanAuctionSpend": 30.23,
+      "meanAuctionPrice": 22.6725,
+      "auctionSellRate": 1,
+      "rejectedBuyRate": 0.16545425582753678,
+      "companySoldOutRate": 0.07537254901960784,
+      "averageCashFraction": 0.45953371334978604,
+      "tradesPerPlayer": 9.959,
+      "betsPerPlayer": 2.267
+    },
+    {
+      "regime": "infoFocused",
+      "players": 6,
+      "cash": 200,
+      "supply": 3,
+      "meanFinalWealth": 389.243,
+      "medianFinalWealth": 373,
+      "meanStockProfit": 183.16733333333335,
+      "meanBetProfit": 46.24133333333333,
+      "meanAuctionSpend": 40.16566666666667,
+      "meanAuctionPrice": 30.12425,
+      "auctionSellRate": 1,
+      "rejectedBuyRate": 0.2365947242206235,
+      "companySoldOutRate": 0.15266666666666667,
+      "averageCashFraction": 0.42049429055217197,
+      "tradesPerPlayer": 10.344333333333333,
+      "betsPerPlayer": 2.739
+    },
+    {
+      "regime": "infoFocused",
+      "players": 6,
+      "cash": 200,
+      "supply": 4,
+      "meanFinalWealth": 407.67466666666667,
+      "medianFinalWealth": 390,
+      "meanStockProfit": 201.30466666666666,
+      "meanBetProfit": 46.37833333333333,
+      "meanAuctionSpend": 40.00833333333333,
+      "meanAuctionPrice": 30.00625,
+      "auctionSellRate": 1,
+      "rejectedBuyRate": 0.19295675020210185,
+      "companySoldOutRate": 0.09796078431372549,
+      "averageCashFraction": 0.4086815008019941,
+      "tradesPerPlayer": 10.459333333333333,
+      "betsPerPlayer": 2.7413333333333334
+    },
+    {
+      "regime": "infoFocused",
+      "players": 6,
+      "cash": 200,
+      "supply": 5,
+      "meanFinalWealth": 424.1186666666667,
+      "medianFinalWealth": 402,
+      "meanStockProfit": 218.47533333333334,
+      "meanBetProfit": 45.548,
+      "meanAuctionSpend": 39.904666666666664,
+      "meanAuctionPrice": 29.9285,
+      "auctionSellRate": 1,
+      "rejectedBuyRate": 0.16583070479342263,
+      "companySoldOutRate": 0.07345098039215686,
+      "averageCashFraction": 0.4013295934863511,
+      "tradesPerPlayer": 10.594666666666667,
+      "betsPerPlayer": 2.739
+    },
+    {
+      "regime": "infoFocused",
+      "players": 6,
+      "cash": 200,
+      "supply": 6,
+      "meanFinalWealth": 439.18733333333336,
+      "medianFinalWealth": 414,
+      "meanStockProfit": 233.24733333333333,
+      "meanBetProfit": 45.944,
+      "meanAuctionSpend": 40.004,
+      "meanAuctionPrice": 30.003,
+      "auctionSellRate": 1,
+      "rejectedBuyRate": 0.14357803038351216,
+      "companySoldOutRate": 0.05615686274509804,
+      "averageCashFraction": 0.39443573744876664,
+      "tradesPerPlayer": 10.638333333333334,
+      "betsPerPlayer": 2.7663333333333333
+    }
+  ],
+  "representative": {
+    "seed": 39,
+    "count": 3,
+    "initialCash": 200,
+    "supplyFactor": 4,
+    "regimeName": "balanced",
+    "results": [
+      {
+        "id": 1,
+        "wealth": 287,
+        "cash": 55,
+        "shares": [
+          2,
+          4,
+          1
+        ],
+        "stockProfit": 102,
+        "betProfit": -15,
+        "auctionSpend": 0,
+        "wins": 0
+      },
+      {
+        "id": 2,
+        "wealth": 610,
+        "cash": 147,
+        "shares": [
+          3,
+          5,
+          4
+        ],
+        "stockProfit": 246,
+        "betProfit": 222,
+        "auctionSpend": 58,
+        "wins": 4
+      },
+      {
+        "id": 3,
+        "wealth": 771,
+        "cash": 197,
+        "shares": [
+          7,
+          0,
+          0
+        ],
+        "stockProfit": 546,
+        "betProfit": 59,
+        "auctionSpend": 34,
+        "wins": 2
+      }
+    ],
+    "metrics": {
+      "buyRequests": 20,
+      "rejectedBuys": 2,
+      "trades": 31,
+      "volume": 86,
+      "auctionSold": 6,
+      "auctionSum": 92,
+      "bets": 11,
+      "winningBets": 9,
+      "cancelledBets": 0,
+      "checkpoints": 17,
+      "soldOutCells": 19,
+      "cashFractionSum": 4.64590822800625
+    },
+    "events": [
+      {
+        "round": 2,
+        "type": "Open",
+        "winner": 3,
+        "price": 1,
+        "targets": [
+          {
+            "round": 5,
+            "company": 2
+          },
+          {
+            "round": 5,
+            "company": 1
+          },
+          {
+            "round": 4,
+            "company": 0
+          },
+          {
+            "round": 4,
+            "company": 1
+          }
+        ]
+      },
+      {
+        "round": 6,
+        "type": "Open",
+        "winner": 2,
+        "price": 1,
+        "targets": [
+          {
+            "round": 8,
+            "company": 1
+          },
+          {
+            "round": 8,
+            "company": 2
+          },
+          {
+            "round": 7,
+            "company": 1
+          },
+          {
+            "round": 7,
+            "company": 0
+          }
+        ]
+      },
+      {
+        "round": 10,
+        "type": "Open",
+        "winner": 2,
+        "price": 1,
+        "targets": [
+          {
+            "round": 13,
+            "company": 1
+          },
+          {
+            "round": 13,
+            "company": 2
+          },
+          {
+            "round": 10,
+            "company": 2
+          },
+          {
+            "round": 10,
+            "company": 1
+          }
+        ]
+      },
+      {
+        "round": 10,
+        "type": "Secret",
+        "winner": 2,
+        "price": 18,
+        "targets": [
+          {
+            "round": 12,
+            "company": 0
+          },
+          {
+            "round": 12,
+            "company": 1
+          },
+          {
+            "round": 11,
+            "company": 2
+          },
+          {
+            "round": 11,
+            "company": 0
+          }
+        ]
+      },
+      {
+        "round": 14,
+        "type": "Open",
+        "winner": 2,
+        "price": 38,
+        "targets": [
+          {
+            "round": 16,
+            "company": 1
+          },
+          {
+            "round": 16,
+            "company": 0
+          },
+          {
+            "round": 15,
+            "company": 0
+          },
+          {
+            "round": 15,
+            "company": 1
+          }
+        ]
+      },
+      {
+        "round": 14,
+        "type": "Secret",
+        "winner": 3,
+        "price": 33,
+        "targets": [
+          {
+            "round": 17,
+            "company": 1
+          },
+          {
+            "round": 17,
+            "company": 2
+          },
+          {
+            "round": 14,
+            "company": 1
+          },
+          {
+            "round": 14,
+            "company": 0
+          }
+        ]
+      }
+    ],
+    "timeline": [
+      {
+        "round": 1,
+        "prices": [
+          8,
+          16,
+          38
+        ],
+        "inventory": [
+          0,
+          5,
+          12
+        ],
+        "averageCash": 95,
+        "averageWealth": 164.33333333333334,
+        "totalFees": 0,
+        "players": [
+          {
+            "id": 1,
+            "cash": 172,
+            "shares": [
+              2,
+              0,
+              0
+            ],
+            "wealth": 188
+          },
+          {
+            "id": 2,
+            "cash": 53,
+            "shares": [
+              0,
+              7,
+              0
+            ],
+            "wealth": 165
+          },
+          {
+            "id": 3,
+            "cash": 60,
+            "shares": [
+              10,
+              0,
+              0
+            ],
+            "wealth": 140
+          }
+        ]
+      },
+      {
+        "round": 2,
+        "prices": [
+          15,
+          10,
+          41
+        ],
+        "inventory": [
+          0,
+          0,
+          11
+        ],
+        "averageCash": 52.666666666666664,
+        "averageWealth": 166.33333333333334,
+        "totalFees": 1,
+        "players": [
+          {
+            "id": 1,
+            "cash": 70,
+            "shares": [
+              2,
+              4,
+              1
+            ],
+            "wealth": 181
+          },
+          {
+            "id": 2,
+            "cash": 45,
+            "shares": [
+              0,
+              7,
+              0
+            ],
+            "wealth": 115
+          },
+          {
+            "id": 3,
+            "cash": 43,
+            "shares": [
+              10,
+              1,
+              0
+            ],
+            "wealth": 203
+          }
+        ]
+      },
+      {
+        "round": 3,
+        "prices": [
+          24,
+          17,
+          37
+        ],
+        "inventory": [
+          0,
+          0,
+          11
+        ],
+        "averageCash": 47.666666666666664,
+        "averageWealth": 224,
+        "totalFees": 1,
+        "players": [
+          {
+            "id": 1,
+            "cash": 55,
+            "shares": [
+              2,
+              4,
+              1
+            ],
+            "wealth": 208
+          },
+          {
+            "id": 2,
+            "cash": 45,
+            "shares": [
+              0,
+              7,
+              0
+            ],
+            "wealth": 164
+          },
+          {
+            "id": 3,
+            "cash": 43,
+            "shares": [
+              10,
+              1,
+              0
+            ],
+            "wealth": 300
+          }
+        ]
+      },
+      {
+        "round": 4,
+        "prices": [
+          34,
+          22,
+          38
+        ],
+        "inventory": [
+          1,
+          0,
+          11
+        ],
+        "averageCash": 55.666666666666664,
+        "averageWealth": 281,
+        "totalFees": 1,
+        "players": [
+          {
+            "id": 1,
+            "cash": 55,
+            "shares": [
+              2,
+              4,
+              1
+            ],
+            "wealth": 249
+          },
+          {
+            "id": 2,
+            "cash": 45,
+            "shares": [
+              0,
+              7,
+              0
+            ],
+            "wealth": 199
+          },
+          {
+            "id": 3,
+            "cash": 67,
+            "shares": [
+              9,
+              1,
+              0
+            ],
+            "wealth": 395
+          }
+        ]
+      },
+      {
+        "round": 5,
+        "prices": [
+          42,
+          25,
+          33
+        ],
+        "inventory": [
+          2,
+          0,
+          11
+        ],
+        "averageCash": 79.66666666666667,
+        "averageWealth": 330.6666666666667,
+        "totalFees": 1,
+        "players": [
+          {
+            "id": 1,
+            "cash": 55,
+            "shares": [
+              2,
+              4,
+              1
+            ],
+            "wealth": 272
+          },
+          {
+            "id": 2,
+            "cash": 45,
+            "shares": [
+              0,
+              7,
+              0
+            ],
+            "wealth": 220
+          },
+          {
+            "id": 3,
+            "cash": 139,
+            "shares": [
+              8,
+              1,
+              0
+            ],
+            "wealth": 500
+          }
+        ]
+      },
+      {
+        "round": 6,
+        "prices": [
+          50,
+          28,
+          35
+        ],
+        "inventory": [
+          2,
+          0,
+          11
+        ],
+        "averageCash": 79.33333333333333,
+        "averageWealth": 369.6666666666667,
+        "totalFees": 2,
+        "players": [
+          {
+            "id": 1,
+            "cash": 55,
+            "shares": [
+              2,
+              4,
+              1
+            ],
+            "wealth": 302
+          },
+          {
+            "id": 2,
+            "cash": 44,
+            "shares": [
+              0,
+              7,
+              0
+            ],
+            "wealth": 240
+          },
+          {
+            "id": 3,
+            "cash": 139,
+            "shares": [
+              8,
+              1,
+              0
+            ],
+            "wealth": 567
+          }
+        ]
+      },
+      {
+        "round": 7,
+        "prices": [
+          43,
+          31,
+          40
+        ],
+        "inventory": [
+          2,
+          0,
+          11
+        ],
+        "averageCash": 79.33333333333333,
+        "averageWealth": 360,
+        "totalFees": 2,
+        "players": [
+          {
+            "id": 1,
+            "cash": 55,
+            "shares": [
+              2,
+              4,
+              1
+            ],
+            "wealth": 305
+          },
+          {
+            "id": 2,
+            "cash": 44,
+            "shares": [
+              0,
+              7,
+              0
+            ],
+            "wealth": 261
+          },
+          {
+            "id": 3,
+            "cash": 139,
+            "shares": [
+              8,
+              1,
+              0
+            ],
+            "wealth": 514
+          }
+        ]
+      },
+      {
+        "round": 8,
+        "prices": [
+          51,
+          28,
+          37
+        ],
+        "inventory": [
+          0,
+          7,
+          11
+        ],
+        "averageCash": 136.33333333333334,
+        "averageWealth": 399.3333333333333,
+        "totalFees": 2,
+        "players": [
+          {
+            "id": 1,
+            "cash": 55,
+            "shares": [
+              2,
+              4,
+              1
+            ],
+            "wealth": 306
+          },
+          {
+            "id": 2,
+            "cash": 215,
+            "shares": [
+              2,
+              0,
+              0
+            ],
+            "wealth": 317
+          },
+          {
+            "id": 3,
+            "cash": 139,
+            "shares": [
+              8,
+              1,
+              0
+            ],
+            "wealth": 575
+          }
+        ]
+      },
+      {
+        "round": 9,
+        "prices": [
+          57,
+          23,
+          40
+        ],
+        "inventory": [
+          0,
+          3,
+          11
+        ],
+        "averageCash": 99,
+        "averageWealth": 409.3333333333333,
+        "totalFees": 2,
+        "players": [
+          {
+            "id": 1,
+            "cash": 55,
+            "shares": [
+              2,
+              4,
+              1
+            ],
+            "wealth": 301
+          },
+          {
+            "id": 2,
+            "cash": 103,
+            "shares": [
+              2,
+              4,
+              0
+            ],
+            "wealth": 309
+          },
+          {
+            "id": 3,
+            "cash": 139,
+            "shares": [
+              8,
+              1,
+              0
+            ],
+            "wealth": 618
+          }
+        ]
+      },
+      {
+        "round": 10,
+        "prices": [
+          67,
+          30,
+          35
+        ],
+        "inventory": [
+          3,
+          0,
+          10
+        ],
+        "averageCash": 126.66666666666667,
+        "averageWealth": 471,
+        "totalFees": 21,
+        "players": [
+          {
+            "id": 1,
+            "cash": 55,
+            "shares": [
+              2,
+              4,
+              1
+            ],
+            "wealth": 344
+          },
+          {
+            "id": 2,
+            "cash": 169,
+            "shares": [
+              0,
+              7,
+              0
+            ],
+            "wealth": 379
+          },
+          {
+            "id": 3,
+            "cash": 156,
+            "shares": [
+              7,
+              1,
+              1
+            ],
+            "wealth": 690
+          }
+        ]
+      },
+      {
+        "round": 11,
+        "prices": [
+          58,
+          33,
+          38
+        ],
+        "inventory": [
+          3,
+          0,
+          10
+        ],
+        "averageCash": 149,
+        "averageWealth": 480.3333333333333,
+        "totalFees": 21,
+        "players": [
+          {
+            "id": 1,
+            "cash": 55,
+            "shares": [
+              2,
+              4,
+              1
+            ],
+            "wealth": 341
+          },
+          {
+            "id": 2,
+            "cash": 236,
+            "shares": [
+              0,
+              7,
+              0
+            ],
+            "wealth": 467
+          },
+          {
+            "id": 3,
+            "cash": 156,
+            "shares": [
+              7,
+              1,
+              1
+            ],
+            "wealth": 633
+          }
+        ]
+      },
+      {
+        "round": 12,
+        "prices": [
+          65,
+          28,
+          34
+        ],
+        "inventory": [
+          0,
+          7,
+          7
+        ],
+        "averageCash": 141,
+        "averageWealth": 504.3333333333333,
+        "totalFees": 21,
+        "players": [
+          {
+            "id": 1,
+            "cash": 55,
+            "shares": [
+              2,
+              4,
+              1
+            ],
+            "wealth": 331
+          },
+          {
+            "id": 2,
+            "cash": 212,
+            "shares": [
+              3,
+              0,
+              3
+            ],
+            "wealth": 509
+          },
+          {
+            "id": 3,
+            "cash": 156,
+            "shares": [
+              7,
+              1,
+              1
+            ],
+            "wealth": 673
+          }
+        ]
+      },
+      {
+        "round": 13,
+        "prices": [
+          57,
+          21,
+          37
+        ],
+        "inventory": [
+          0,
+          7,
+          6
+        ],
+        "averageCash": 139,
+        "averageWealth": 476,
+        "totalFees": 21,
+        "players": [
+          {
+            "id": 1,
+            "cash": 55,
+            "shares": [
+              2,
+              4,
+              1
+            ],
+            "wealth": 290
+          },
+          {
+            "id": 2,
+            "cash": 206,
+            "shares": [
+              3,
+              0,
+              4
+            ],
+            "wealth": 525
+          },
+          {
+            "id": 3,
+            "cash": 156,
+            "shares": [
+              7,
+              1,
+              1
+            ],
+            "wealth": 613
+          }
+        ]
+      },
+      {
+        "round": 14,
+        "prices": [
+          66,
+          15,
+          36
+        ],
+        "inventory": [
+          0,
+          5,
+          6
+        ],
+        "averageCash": 108.33333333333333,
+        "averageWealth": 479.3333333333333,
+        "totalFees": 92,
+        "players": [
+          {
+            "id": 1,
+            "cash": 55,
+            "shares": [
+              2,
+              4,
+              1
+            ],
+            "wealth": 283
+          },
+          {
+            "id": 2,
+            "cash": 105,
+            "shares": [
+              3,
+              3,
+              4
+            ],
+            "wealth": 492
+          },
+          {
+            "id": 3,
+            "cash": 165,
+            "shares": [
+              7,
+              0,
+              1
+            ],
+            "wealth": 663
+          }
+        ]
+      },
+      {
+        "round": 15,
+        "prices": [
+          71,
+          7,
+          40
+        ],
+        "inventory": [
+          0,
+          8,
+          6
+        ],
+        "averageCash": 128.33333333333334,
+        "averageWealth": 501.6666666666667,
+        "totalFees": 92,
+        "players": [
+          {
+            "id": 1,
+            "cash": 55,
+            "shares": [
+              2,
+              4,
+              1
+            ],
+            "wealth": 265
+          },
+          {
+            "id": 2,
+            "cash": 165,
+            "shares": [
+              3,
+              0,
+              4
+            ],
+            "wealth": 538
+          },
+          {
+            "id": 3,
+            "cash": 165,
+            "shares": [
+              7,
+              0,
+              1
+            ],
+            "wealth": 702
+          }
+        ]
+      },
+      {
+        "round": 16,
+        "prices": [
+          77,
+          5,
+          44
+        ],
+        "inventory": [
+          0,
+          4,
+          7
+        ],
+        "averageCash": 134.66666666666666,
+        "averageWealth": 529.3333333333334,
+        "totalFees": 92,
+        "players": [
+          {
+            "id": 1,
+            "cash": 55,
+            "shares": [
+              2,
+              4,
+              1
+            ],
+            "wealth": 273
+          },
+          {
+            "id": 2,
+            "cash": 172,
+            "shares": [
+              3,
+              0,
+              4
+            ],
+            "wealth": 579
+          },
+          {
+            "id": 3,
+            "cash": 177,
+            "shares": [
+              7,
+              4,
+              0
+            ],
+            "wealth": 736
+          }
+        ]
+      },
+      {
+        "round": 17,
+        "prices": [
+          82,
+          5,
+          48
+        ],
+        "inventory": [
+          0,
+          3,
+          7
+        ],
+        "averageCash": 133,
+        "averageWealth": 556,
+        "totalFees": 92,
+        "players": [
+          {
+            "id": 1,
+            "cash": 55,
+            "shares": [
+              2,
+              4,
+              1
+            ],
+            "wealth": 287
+          },
+          {
+            "id": 2,
+            "cash": 147,
+            "shares": [
+              3,
+              5,
+              4
+            ],
+            "wealth": 610
+          },
+          {
+            "id": 3,
+            "cash": 197,
+            "shares": [
+              7,
+              0,
+              0
+            ],
+            "wealth": 771
+          }
+        ]
+      }
+    ]
+  },
+  "sensitivity": [
+    {
+      "players": 3,
+      "cash": 100,
+      "supply": 3,
+      "min": 27,
+      "max": 1056
+    },
+    {
+      "players": 3,
+      "cash": 200,
+      "supply": 4,
+      "min": 87,
+      "max": 1507
+    },
+    {
+      "players": 6,
+      "cash": 100,
+      "supply": 3,
+      "min": 16,
+      "max": 1135
+    },
+    {
+      "players": 6,
+      "cash": 200,
+      "supply": 4,
+      "min": 82,
+      "max": 1645
+    }
+  ]
+}

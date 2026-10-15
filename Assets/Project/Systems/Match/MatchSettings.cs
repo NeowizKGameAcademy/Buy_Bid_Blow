@@ -8,8 +8,15 @@ namespace BuyBidBlow.Systems.Match
     [Serializable]
     public sealed class MatchSettings
     {
+        public int MinPlayerCount;
+        public int DefaultPlayerCount;
+        public int MaxPlayerCount;
+        public int SharesPerCompanyPerPlayer;
         public int RoundCount;
         public int RoundSeconds;
+        public int[] AuctionRounds;
+        public int AuctionRoundSeconds;
+        public int AuctionDurationSeconds;
         public int StartingCash;
         public int StartingShares;
 
@@ -20,6 +27,25 @@ namespace BuyBidBlow.Systems.Match
 
         public PriceChangeSettings PriceChange;
         public AuctionSlot[] AuctionSlots;
+
+        // Initial finite supply, fixed using the participant count at match start.
+        public int GetInitialCompanySupply(int playerCount)
+        {
+            if (playerCount < MinPlayerCount || playerCount > MaxPlayerCount)
+                throw new ArgumentOutOfRangeException(nameof(playerCount));
+            return checked(playerCount * SharesPerCompanyPerPlayer);
+        }
+
+        public bool IsAuctionRound(int round)
+        {
+            return AuctionRounds != null && Array.IndexOf(AuctionRounds, round) >= 0;
+        }
+
+        public int GetRoundSeconds(int round)
+        {
+            if (round < 1 || round > RoundCount) throw new ArgumentOutOfRangeException(nameof(round));
+            return IsAuctionRound(round) ? AuctionRoundSeconds : RoundSeconds;
+        }
 
         // Indexed by Company. Same Random as the rest of the match so one seed replays it.
         public int[] RollStartingPrices(Random random)
@@ -34,8 +60,21 @@ namespace BuyBidBlow.Systems.Match
         public void Validate()
         {
             int companyCount = Enum.GetValues(typeof(Company)).Length;
+            if (MinPlayerCount < 1 || DefaultPlayerCount < MinPlayerCount || MaxPlayerCount < DefaultPlayerCount)
+                throw new FormatException("Player counts must satisfy 1 <= minimum <= default <= maximum.");
+            if (SharesPerCompanyPerPlayer <= 0)
+                throw new FormatException("SharesPerCompanyPerPlayer must be positive.");
             if (RoundCount <= 0) throw new FormatException("RoundCount must be positive.");
             if (RoundSeconds <= 0) throw new FormatException("RoundSeconds must be positive.");
+            if (AuctionRounds == null) throw new FormatException("AuctionRounds is required.");
+            if (AuctionRoundSeconds <= 0 || AuctionDurationSeconds <= 0)
+                throw new FormatException("Auction round and auction durations must be positive.");
+            if ((long)AuctionDurationSeconds * 2 > AuctionRoundSeconds)
+                throw new FormatException("Both auctions must fit inside an auction round.");
+            for (int i = 0; i < AuctionRounds.Length; i++)
+                if (AuctionRounds[i] < 1 || AuctionRounds[i] > RoundCount ||
+                    Array.IndexOf(AuctionRounds, AuctionRounds[i]) != i)
+                    throw new FormatException("AuctionRounds must contain unique round numbers inside the match.");
             if (StartingCash < 0 || StartingShares < 0) throw new FormatException("Starting cash and shares cannot be negative.");
             if (MinPrice <= 0) throw new FormatException("MinPrice must be positive.");
             if (StartingPrice == null || !StartingPrice.IsValid) throw new FormatException("StartingPrice needs Min <= Max.");
@@ -49,9 +88,11 @@ namespace BuyBidBlow.Systems.Match
             foreach (float chance in PriceChange.RiseChances)
                 if (chance < 0f || chance > 1f) throw new FormatException("PriceChange.RiseChances must be between 0 and 1.");
             if (AuctionSlots == null) throw new FormatException("AuctionSlots is required.");
+            // In order: public, then secret. Relative to each auction round's start.
             foreach (AuctionSlot slot in AuctionSlots)
-                if (slot.StartsAtSeconds < 0 || slot.DurationSeconds <= 0 || slot.StartsAtSeconds + slot.DurationSeconds > RoundSeconds)
-                    throw new FormatException("Each auction slot must fit inside the round.");
+                if (slot == null || slot.StartsAtSeconds < 0 || slot.DurationSeconds != AuctionDurationSeconds ||
+                    (long)slot.StartsAtSeconds + slot.DurationSeconds > AuctionRoundSeconds)
+                    throw new FormatException("Each auction slot must fit inside an auction round and use AuctionDurationSeconds.");
         }
 
         private static void ValidateOffsets(IntRange[] offsets, int companyCount, string name)
