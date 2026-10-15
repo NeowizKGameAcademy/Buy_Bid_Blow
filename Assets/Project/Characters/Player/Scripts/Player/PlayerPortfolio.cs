@@ -1,12 +1,14 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using BuyBidBlow.Systems.Types;
 
 namespace BuyBidBlow
 {
-    public class PlayerPortfolio : MonoBehaviour
+    public class PlayerPortfolio : MonoBehaviour, IPortfolio
     {
-        [SerializeField] private int[] ownedQuantity = new int[CompanyCount];
+        [SerializeField] private Dictionary<Company, int> ownedQuantity = new Dictionary<Company, int>();
 
         private static int CompanyCount => Enum.GetValues(typeof(Company)).Length;
 
@@ -23,7 +25,8 @@ namespace BuyBidBlow
         public int GetOwnedQuantity(Company company)
         {
             EnsureStorage();
-            return IsValidCompany(company) ? ownedQuantity[(int)company] : 0;
+
+            return IsValidCompany(company) ? ownedQuantity[company] : 0;
         }
 
         public void AddStock(Company company, int quantity)
@@ -35,25 +38,29 @@ namespace BuyBidBlow
             if (!IsValidCompany(company))
                 return;
 
-            ownedQuantity[(int)company] += quantity;
+            ownedQuantity[company] += quantity;
         }
 
         public bool TryRemoveStock(Company company, int quantity)
         {
             EnsureStorage();
-            if (!IsValidCompany(company) || quantity <= 0 || quantity > ownedQuantity[(int)company])
+            if (!IsValidCompany(company) || quantity <= 0 || quantity > ownedQuantity[company])
                 return false;
 
-            ownedQuantity[(int)company] -= quantity;
+            ownedQuantity[company] -= quantity;
             return true;
         }
 
         private void EnsureStorage()
         {
             if (ownedQuantity == null)
-                ownedQuantity = new int[CompanyCount];
-            else if (ownedQuantity.Length != CompanyCount)
-                Array.Resize(ref ownedQuantity, CompanyCount);
+                ownedQuantity = new Dictionary<Company, int>();
+
+            foreach (Company company in Enum.GetValues(typeof(Company)))
+            {
+                if (!ownedQuantity.ContainsKey(company))
+                    ownedQuantity.Add(company, 0);
+            }
         }
 
         private static bool IsValidCompany(Company company)

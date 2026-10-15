@@ -72,7 +72,7 @@ namespace BuyBidBlow
         {
             if (controlsBlocked) return;
             if (context.performed)
-                playerInteraction.Interact();
+                playerInteraction.Interact_OpenTradePanel();
         }
     }
 }
