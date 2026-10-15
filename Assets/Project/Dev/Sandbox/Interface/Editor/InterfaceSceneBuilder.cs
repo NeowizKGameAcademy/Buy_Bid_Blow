@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 namespace BuyBidBlow.Interface.Editor
 {
-    public static class InterfaceSceneBuilder
+    public static partial class InterfaceSceneBuilder
     {
         public const string Root="Assets/Project/Dev/Sandbox/Interface";
         public const string ScenePath=Root+"/SC_InGameInterface.unity";
@@ -154,10 +154,10 @@ namespace BuyBidBlow.Interface.Editor
                 if(animator)animator.enabled=false;wolf.transform.position=poses[i];wolf.transform.rotation=Quaternion.Euler(0,i==0?155:0,0);
             }
         }
-        static void Capture(Camera camera,Canvas canvas)
+        static void Capture(Camera camera,Canvas canvas,string filename="InterfacePreview.png")
         {
             var target=new RenderTexture(1920,1080,24);var image=new Texture2D(1920,1080,TextureFormat.RGB24,false);
-            try{camera.targetTexture=target;camera.aspect=16f/9f;canvas.renderMode=RenderMode.ScreenSpaceCamera;canvas.worldCamera=camera;canvas.planeDistance=.4f;Canvas.ForceUpdateCanvases();camera.Render();RenderTexture.active=target;image.ReadPixels(new Rect(0,0,1920,1080),0,0);image.Apply();File.WriteAllBytes(Root+"/InterfacePreview.png",image.EncodeToPNG());}
+            try{camera.targetTexture=target;camera.aspect=16f/9f;canvas.renderMode=RenderMode.ScreenSpaceCamera;canvas.worldCamera=camera;canvas.planeDistance=.4f;Canvas.ForceUpdateCanvases();camera.Render();RenderTexture.active=target;image.ReadPixels(new Rect(0,0,1920,1080),0,0);image.Apply();File.WriteAllBytes(Root+"/"+filename,image.EncodeToPNG());}
             finally{RenderTexture.active=null;camera.targetTexture=null;canvas.renderMode=RenderMode.ScreenSpaceOverlay;canvas.worldCamera=null;UnityEngine.Object.DestroyImmediate(image);UnityEngine.Object.DestroyImmediate(target);Canvas.ForceUpdateCanvases();}
         }
         [MenuItem("Tools/BuyBidBlow/Interface/Create Editable Example")]
@@ -187,6 +187,57 @@ namespace BuyBidBlow.Interface.Editor
                 File.WriteAllText(Root+"/Verification.txt","PASS: saved scene and HUD prefab; 1920x1080 render; editable Text/Image/RectTransform; no gameplay component on HUD; screen anchors TL/TR/center/BC; 6 sprite assets. All values static examples.");
             }finally{if(previous.IsValid())SceneManager.SetActiveScene(previous);EditorSceneManager.CloseScene(scene,true);}
             AssetDatabase.Refresh();
+        }
+        static void RoundedDim(Transform parent,Sprite sprite,float w,float h,float x,float y,float alpha)
+        {
+            var previous=parent.Find("Background - opacity editable");
+            if(previous)UnityEngine.Object.DestroyImmediate(previous.gameObject);
+            var image=Image("Background - opacity editable",parent,sprite,w,h,x,y,new Color(.025f,.065f,.06f,alpha));
+            image.preserveAspect=false;image.type=UnityEngine.UI.Image.Type.Sliced;image.transform.SetAsFirstSibling();
+        }
+        static void ApplyRoundedDims(Transform hud,Sprite sprite)
+        {
+            RoundedDim(hud.Find("Assets - Top Left"),sprite,440,156,0,-10,.24f);
+            RoundedDim(hud.Find("Assets - Top Left/Downside Bet"),sprite,430,50,-10,-4,.22f);
+            RoundedDim(hud.Find("Round Timer - Top Right"),sprite,269,186,-12,-8,.24f);
+            RoundedDim(hud.Find("Interaction Hint - Bottom Center"),sprite,370,68,-10,-6,.22f);
+        }
+        public static void UpdateRoundedDims()
+        {
+            if(EditorApplication.isPlayingOrWillChangePlaymode)throw new Exception("Exit Play mode first.");
+            string path=Root+"/Sprites/BG_RoundedDim.png";
+            var texture=new Texture2D(64,64,TextureFormat.RGBA32,false);
+            for(int y=0;y<64;y++)for(int x=0;x<64;x++) {
+                var q=new Vector2(Mathf.Abs(x-31.5f)-15.5f,Mathf.Abs(y-31.5f)-15.5f);
+                float distance=new Vector2(Mathf.Max(q.x,0),Mathf.Max(q.y,0)).magnitude+Mathf.Min(Mathf.Max(q.x,q.y),0)-16;
+                texture.SetPixel(x,y,new Color(1,1,1,Mathf.Clamp01(.5f-distance)));
+            }
+            texture.Apply();File.WriteAllBytes(path,texture.EncodeToPNG());UnityEngine.Object.DestroyImmediate(texture);
+            AssetDatabase.ImportAsset(path,ImportAssetOptions.ForceSynchronousImport);
+            var importer=(TextureImporter)AssetImporter.GetAtPath(path);importer.textureType=TextureImporterType.Sprite;importer.spriteImportMode=SpriteImportMode.Single;
+            importer.spriteBorder=new Vector4(20,20,20,20);importer.spritePixelsPerUnit=100;importer.alphaIsTransparency=true;importer.mipmapEnabled=false;
+            importer.textureCompression=TextureImporterCompression.Uncompressed;importer.wrapMode=TextureWrapMode.Clamp;importer.SaveAndReimport();
+            var sprite=AssetDatabase.LoadAssetAtPath<Sprite>(path);
+            string prefabPath=Root+"/PF_InGameHUD_Example.prefab";
+            var prefab=PrefabUtility.LoadPrefabContents(prefabPath);
+            try {ApplyRoundedDims(prefab.transform,sprite);PrefabUtility.SaveAsPrefabAsset(prefab,prefabPath);}finally{PrefabUtility.UnloadPrefabContents(prefab);}
+            var scene=SceneManager.GetSceneByPath(ScenePath);bool opened=!scene.isLoaded;
+            if(opened)scene=EditorSceneManager.OpenScene(ScenePath,OpenSceneMode.Additive);
+            try {
+                var hud=scene.GetRootGameObjects().Single(g=>g.name=="HUD - Static Editable Example");ApplyRoundedDims(hud.transform,sprite);
+                if(hud.GetComponentsInChildren<Text>(true).Length!=13)throw new Exception("Editable text count changed.");
+                var backgrounds=hud.GetComponentsInChildren<Image>(true).Where(i=>i.name=="Background - opacity editable").ToArray();
+                if(backgrounds.Length!=4||backgrounds.Any(i=>i.type!=UnityEngine.UI.Image.Type.Sliced||i.raycastTarget))throw new Exception("Invalid rounded dim setup.");
+                EditorSceneManager.SaveScene(scene);AssetDatabase.SaveAssets();
+                Capture(scene.GetRootGameObjects().SelectMany(g=>g.GetComponentsInChildren<Camera>()).First(),hud.GetComponent<Canvas>());
+                File.WriteAllText(Root+"/Verification.txt","PASS: scene + prefab updated; 4 rounded nine-slice dim Images; alpha 0.22–0.24; 13 editable Text components retained; anchors preserved; no runtime binding. Preview rendered at 1920x1080.");
+            }finally{if(opened)EditorSceneManager.CloseScene(scene,true);}
+            AssetDatabase.Refresh();
+        }
+        [InitializeOnLoadMethod] static void RoundedDimRequest()
+        {
+            if(!File.Exists("Library/InterfaceRoundedDim.request"))return;
+            EditorApplication.delayCall+=()=>{File.Delete("Library/InterfaceRoundedDim.request");try{UpdateRoundedDims();File.WriteAllText("Library/InterfaceRoundedDim.result","PASS");}catch(Exception ex){File.WriteAllText("Library/InterfaceRoundedDim.result",ex.ToString());Debug.LogException(ex);}};
         }
         [InitializeOnLoadMethod] static void Request()
         {
