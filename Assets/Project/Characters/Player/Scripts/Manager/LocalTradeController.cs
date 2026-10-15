@@ -36,7 +36,11 @@ namespace BuyBidBlow
             {
                 matchManager.RoundAdvanced += OnRoundAdvanced;
                 if (matchManager.TradeService != null)
+                {
+                    // Local only: the lobby will register participants when networking is in.
+                    matchManager.AddPlayer(CurrentPlayerId);
                     assets.ApplyServerState(matchManager.TradeService.GetSnapshot(CurrentPlayerId));
+                }
             }
         }
 

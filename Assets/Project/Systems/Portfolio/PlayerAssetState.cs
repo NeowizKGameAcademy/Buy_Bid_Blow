@@ -18,6 +18,13 @@ namespace BuyBidBlow.Systems
 
         public int Cash { get; private set; }
 
+        // Cash held by auction bids (Open high bid, Secret submission). Still part of Cash,
+        // but nothing else may spend it until the auction releases or charges it.
+        public int Reserved { get; private set; }
+
+        // Cash - Reserved. Buying stock, bets and new bids are limited to this.
+        public int Available => Cash - Reserved;
+
         public int GetShares(Company company)
         {
             return shares.TryGetValue(company, out int quantity) ? quantity : 0;
@@ -25,7 +32,37 @@ namespace BuyBidBlow.Systems
 
         public PlayerAssetSnapshot CreateSnapshot()
         {
-            return new PlayerAssetSnapshot(Cash, shares);
+            return new PlayerAssetSnapshot(Cash, Reserved, shares);
+        }
+
+        // Auction bid or Secret submission. False (and no change) when Available is short.
+        public bool TryReserve(int amount)
+        {
+            if (amount <= 0 || Available < amount)
+                return false;
+
+            Reserved += amount;
+            return true;
+        }
+
+        // Returns reserved cash to Available: outbid, lost, cancelled or no sale.
+        public void Release(int amount)
+        {
+            if (amount <= 0)
+                return;
+
+            Reserved -= Math.Min(amount, Reserved);
+        }
+
+        // Winning bid: the reservation turns into an actual payment.
+        public void SpendReserved(int amount)
+        {
+            if (amount <= 0)
+                return;
+
+            amount = Math.Min(amount, Reserved);
+            Reserved -= amount;
+            Cash -= amount;
         }
 
         public TradeResult TryBuy(Company company, int quantity, int unitPrice)
@@ -33,8 +70,9 @@ namespace BuyBidBlow.Systems
             if (!TryGetTotal(company, quantity, unitPrice, out int total, out string error))
                 return Failed(error, company);
 
-            if (Cash < total)
-                return Failed("돈이 부족합니다.", company);
+            // Reserved cash is excluded, so buying stock while a bid is live can't overspend.
+            if (Available < total)
+                return Failed(Reserved > 0 ? "입찰 예약금을 제외한 돈이 부족합니다." : "돈이 부족합니다.", company);
 
             if ((long)GetShares(company) + quantity > int.MaxValue)
                 return Failed("보유 수량 한도를 초과합니다.", company);

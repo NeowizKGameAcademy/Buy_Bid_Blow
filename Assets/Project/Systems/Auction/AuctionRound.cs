@@ -14,7 +14,7 @@ namespace BuyBidBlow.Systems.Auction
         private readonly double roundStart;
         private readonly IReadOnlyList<AuctionSlot> slots;
         private readonly int minBid;
-        private readonly IReadOnlyDictionary<int, IWallet> wallets;
+        private readonly IReadOnlyDictionary<PlayerId, PlayerAssetState> players;
         private bool openClosed;
         private bool secretClosed;
 
@@ -33,7 +33,7 @@ namespace BuyBidBlow.Systems.Auction
 
         // slots[0] = Open, slots[1] = Secret, in seconds from roundStart.
         public AuctionRound(Lot firstLot, Lot secondLot, double roundStart, IReadOnlyList<AuctionSlot> slots,
-            int minBid, IReadOnlyDictionary<int, IWallet> wallets)
+            int minBid, IReadOnlyDictionary<PlayerId, PlayerAssetState> players)
         {
             if (slots == null || slots.Count != 2)
                 throw new ArgumentException("An auction round needs exactly two slots: Open, then Secret.", nameof(slots));
@@ -43,7 +43,7 @@ namespace BuyBidBlow.Systems.Auction
             this.roundStart = roundStart;
             this.slots = slots;
             this.minBid = minBid;
-            this.wallets = wallets;
+            this.players = players;
         }
 
         // Safe to call every frame. Handles big time jumps by running every step that is due, in order.
@@ -51,7 +51,7 @@ namespace BuyBidBlow.Systems.Auction
         {
             if (Open == null && now >= SlotStart(0))
             {
-                Open = new OpenAuction(firstLot, SlotEnd(0), minBid, wallets);
+                Open = new OpenAuction(firstLot, SlotEnd(0), minBid, players);
                 OpenStarted?.Invoke(Open);
             }
 
@@ -63,7 +63,7 @@ namespace BuyBidBlow.Systems.Auction
 
             if (Secret == null && now >= SlotStart(1))
             {
-                Secret = new SecretAuction(secondLot, SlotEnd(1), minBid, wallets);
+                Secret = new SecretAuction(secondLot, SlotEnd(1), minBid, players);
                 SecretStarted?.Invoke(Secret);
             }
 
@@ -74,13 +74,13 @@ namespace BuyBidBlow.Systems.Auction
             }
         }
 
-        public AuctionError PlaceOpenBid(int player, int amount, double now)
+        public AuctionError PlaceOpenBid(PlayerId player, int amount, double now)
             => Open == null || openClosed ? AuctionError.NotOpen : Open.PlaceBid(player, amount, now);
 
-        public AuctionError SubmitSecret(int player, int amount, double now)
+        public AuctionError SubmitSecret(PlayerId player, int amount, double now)
             => Secret == null || secretClosed ? AuctionError.NotOpen : Secret.Submit(player, amount, now);
 
-        public AuctionError CancelSecret(int player, double now)
+        public AuctionError CancelSecret(PlayerId player, double now)
             => Secret == null || secretClosed ? AuctionError.NotOpen : Secret.Cancel(player, now);
 
         private double SlotStart(int i) => roundStart + slots[i].StartsAtSeconds;

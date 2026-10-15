@@ -17,8 +17,14 @@ namespace BuyBidBlow
         private readonly Dictionary<Company, int> prices = new Dictionary<Company, int>();
         private readonly List<PriceChange[]> scheduledPriceChanges = new List<PriceChange[]>();
         private readonly List<int[]> scheduledPrices = new List<int[]>();
+        // Every participant's cash, reservations and shares. Trading and auctions share these same
+        // objects, so a bid's reserved cash can't be spent on stock. Moves into Match on the server later.
+        private readonly Dictionary<PlayerId, PlayerAssetState> playerAssets = new Dictionary<PlayerId, PlayerAssetState>();
         private MatchSettings settings;
         private LotGenerator lotGenerator;
+
+        // Minimum bid is still undecided in the rules; $1 until it is.
+        private const int MinBid = 1;
 
         public int CurrentRound { get; private set; }
         public bool IsMatchComplete => settings != null && CurrentRound >= settings.RoundCount;
@@ -67,8 +73,31 @@ namespace BuyBidBlow
             return scheduledPriceChanges[round - 1];
         }
 
+        // Registers a participant with the starting assets. Calling again for the same player keeps their assets.
+        // Locally the player's own controller calls this; later the lobby does it when the match starts.
+        public void AddPlayer(PlayerId playerId)
+        {
+            if (settings == null)
+                throw new InvalidOperationException("MatchManager is not initialized.");
+
+            if (!playerAssets.ContainsKey(playerId))
+                playerAssets.Add(playerId, new PlayerAssetState(settings.StartingCash, settings.StartingShares));
+        }
+
         // Lots come out in auction order: 1st (Open) then 2nd (Secret) of each auction round.
         public Lot NextLot() => lotGenerator.Next();
+
+        // Call at the start of an auction round, then feed it Tick(now) and player requests.
+        // Bids reserve cash on the same PlayerAssetState objects that trading uses.
+        public AuctionRound CreateAuctionRound(double roundStart)
+        {
+            if (settings == null)
+                throw new InvalidOperationException("MatchManager is not initialized.");
+
+            Lot first = NextLot();
+            Lot second = NextLot();
+            return new AuctionRound(first, second, roundStart, settings.AuctionSlots, MinBid, playerAssets);
+        }
 
         public void AdvanceRound()
         {
@@ -120,7 +149,8 @@ namespace BuyBidBlow
 
             CurrentRound = 0;
             ApplyPrices(scheduledPrices[CurrentRound]);
-            TradeService = new LocalTradeService(GetPrice, settings.StartingCash, settings.StartingShares);
+            playerAssets.Clear();
+            TradeService = new LocalTradeService(playerAssets, GetPrice);
         }
 
         private void ApplyPrices(int[] roundPrices)

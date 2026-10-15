@@ -13,7 +13,12 @@ namespace BuyBidBlow
 
         private readonly Dictionary<Company, int> shares = new Dictionary<Company, int>();
 
+        // Cash held by auction bids; Cash - Reserved is what this player can spend.
+        private int reserved;
+
         public int Cash => cash;
+        public int Reserved => reserved;
+        public int Available => cash - reserved;
 
         private void Awake()
         {
@@ -37,6 +42,7 @@ namespace BuyBidBlow
         {
             EnsureCompanies();
             cash = Mathf.Max(0, snapshot.Cash);
+            reserved = Mathf.Max(0, snapshot.Reserved);
 
             foreach (Company company in Enum.GetValues(typeof(Company)))
                 shares[company] = Mathf.Max(0, snapshot.GetShares(company));

@@ -7,8 +7,8 @@ namespace BuyBidBlow.Systems.Auction
     // Each player only learns whether they won; nothing else is public.
     public sealed class SecretAuction
     {
-        private readonly IReadOnlyDictionary<int, IWallet> wallets;
-        private readonly Dictionary<int, Submission> submissions = new Dictionary<int, Submission>();
+        private readonly IReadOnlyDictionary<PlayerId, PlayerAssetState> players;
+        private readonly Dictionary<PlayerId, Submission> submissions = new Dictionary<PlayerId, Submission>();
         private long nextOrder;
         private bool closed;
 
@@ -16,21 +16,21 @@ namespace BuyBidBlow.Systems.Auction
         public double Deadline { get; }
         public int MinBid { get; }
 
-        public SecretAuction(Lot lot, double deadline, int minBid, IReadOnlyDictionary<int, IWallet> wallets)
+        public SecretAuction(Lot lot, double deadline, int minBid, IReadOnlyDictionary<PlayerId, PlayerAssetState> players)
         {
             Lot = lot;
             Deadline = deadline;
             MinBid = minBid;
-            this.wallets = wallets;
+            this.players = players;
         }
 
         // 0 when the player has nothing submitted. Only for that player's own screen.
-        public int GetSubmitted(int player) => submissions.TryGetValue(player, out Submission s) ? s.Amount : 0;
+        public int GetSubmitted(PlayerId player) => submissions.TryGetValue(player, out Submission s) ? s.Amount : 0;
 
-        public AuctionError Submit(int player, int amount, double now)
+        public AuctionError Submit(PlayerId player, int amount, double now)
         {
             if (closed || now >= Deadline) return AuctionError.Closed;
-            if (!wallets.TryGetValue(player, out IWallet wallet)) return AuctionError.UnknownPlayer;
+            if (!players.TryGetValue(player, out PlayerAssetState assets)) return AuctionError.UnknownPlayer;
             if (amount < MinBid) return AuctionError.TooLow;
 
             int previous = GetSubmitted(player);
@@ -39,11 +39,11 @@ namespace BuyBidBlow.Systems.Auction
             // Only the difference moves, so the old reservation counts toward the new amount.
             if (amount > previous)
             {
-                if (!wallet.TryReserve(amount - previous)) return AuctionError.NotEnoughCash;
+                if (!assets.TryReserve(amount - previous)) return AuctionError.NotEnoughCash;
             }
             else
             {
-                wallet.Release(previous - amount);
+                assets.Release(previous - amount);
             }
 
             // A changed amount goes to the back of the tie order, like a fresh submission.
@@ -51,12 +51,12 @@ namespace BuyBidBlow.Systems.Auction
             return AuctionError.None;
         }
 
-        public AuctionError Cancel(int player, double now)
+        public AuctionError Cancel(PlayerId player, double now)
         {
             if (closed || now >= Deadline) return AuctionError.Closed;
             if (!submissions.TryGetValue(player, out Submission submission)) return AuctionError.NoSubmission;
 
-            wallets[player].Release(submission.Amount);
+            players[player].Release(submission.Amount);
             submissions.Remove(player);
             return AuctionError.None;
         }
@@ -65,34 +65,35 @@ namespace BuyBidBlow.Systems.Auction
         // Charges the winner and releases everyone else. Players = everyone who had a submission.
         public SecretResult Close()
         {
-            int winner = OpenAuction.NoBidder;
+            bool sold = false;
+            PlayerId winner = default;
             Submission best = default;
 
-            foreach (KeyValuePair<int, Submission> pair in submissions)
+            foreach (KeyValuePair<PlayerId, Submission> pair in submissions)
             {
                 Submission s = pair.Value;
-                if (winner == OpenAuction.NoBidder || s.Amount > best.Amount ||
-                    (s.Amount == best.Amount && s.Order < best.Order))
+                if (!sold || s.Amount > best.Amount || (s.Amount == best.Amount && s.Order < best.Order))
                 {
+                    sold = true;
                     winner = pair.Key;
                     best = s;
                 }
             }
 
-            var players = new List<int>(submissions.Keys);
+            var bidders = new List<PlayerId>(submissions.Keys);
             if (!closed)
             {
                 closed = true;
-                foreach (KeyValuePair<int, Submission> pair in submissions)
+                foreach (KeyValuePair<PlayerId, Submission> pair in submissions)
                 {
-                    if (pair.Key == winner)
-                        wallets[pair.Key].SpendReserved(pair.Value.Amount);
+                    if (pair.Key.Equals(winner))
+                        players[pair.Key].SpendReserved(pair.Value.Amount);
                     else
-                        wallets[pair.Key].Release(pair.Value.Amount);
+                        players[pair.Key].Release(pair.Value.Amount);
                 }
             }
 
-            return new SecretResult(new AuctionResult(Lot, winner, best.Amount), players);
+            return new SecretResult(new AuctionResult(Lot, sold, winner, best.Amount), bidders);
         }
 
         private readonly struct Submission
@@ -114,9 +115,9 @@ namespace BuyBidBlow.Systems.Auction
         public readonly AuctionResult Result;
 
         // Everyone who had a submission at the deadline; each is told only won or lost.
-        public readonly IReadOnlyList<int> Players;
+        public readonly IReadOnlyList<PlayerId> Players;
 
-        public SecretResult(AuctionResult result, IReadOnlyList<int> players)
+        public SecretResult(AuctionResult result, IReadOnlyList<PlayerId> players)
         {
             Result = result;
             Players = players;

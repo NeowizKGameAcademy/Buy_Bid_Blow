@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using BuyBidBlow.Systems;
 using BuyBidBlow.Systems.Auction;
 using BuyBidBlow.Systems.Match;
 using BuyBidBlow.Systems.Types;
@@ -9,17 +10,17 @@ namespace BuyBidBlow.Dev.Tests.EditMode.Auction
 {
     public sealed class AuctionTests
     {
-        private const int A = 1, B = 2, C = 3;
+        private static readonly PlayerId A = new PlayerId("a"), B = new PlayerId("b"), C = new PlayerId("c");
         private static readonly Lot AnyLot = new Lot(
             new Info(2, Company.Straw, Direction.Rise, Company.Timber, Direction.Flat),
             new Info(4, Company.Timber, Direction.Fall, Company.Brick, Direction.Rise));
 
-        private Dictionary<int, IWallet> wallets;
+        private Dictionary<PlayerId, PlayerAssetState> players;
 
         [SetUp]
         public void SetUp()
         {
-            wallets = new Dictionary<int, IWallet> { [A] = new FakeWallet(100), [B] = new FakeWallet(100), [C] = new FakeWallet(30) };
+            players = new Dictionary<PlayerId, PlayerAssetState> { [A] = new PlayerAssetState(100, 0), [B] = new PlayerAssetState(100, 0), [C] = new PlayerAssetState(30, 0) };
         }
 
         // ---------- Open ----------
@@ -54,18 +55,18 @@ namespace BuyBidBlow.Dev.Tests.EditMode.Auction
         {
             var open = NewOpen();
             open.PlaceBid(A, 10, 0);
-            Assert.AreEqual(10, wallets[A].Reserved);
+            Assert.AreEqual(10, players[A].Reserved);
 
             open.PlaceBid(B, 15, 0);
-            Assert.AreEqual(0, wallets[A].Reserved);
-            Assert.AreEqual(15, wallets[B].Reserved);
+            Assert.AreEqual(0, players[A].Reserved);
+            Assert.AreEqual(15, players[B].Reserved);
         }
 
         [Test]
-        public void OpenBidLimitedByAvailableNotMoney()
+        public void OpenBidLimitedByAvailableNotCash()
         {
             var open = NewOpen();
-            wallets[C].TryReserve(25);  // e.g. held by something else
+            players[C].TryReserve(25);  // e.g. held by something else
             Assert.AreEqual(AuctionError.NotEnoughCash, open.PlaceBid(C, 10, 0));
             Assert.AreEqual(AuctionError.None, open.PlaceBid(C, 5, 0));
         }
@@ -78,8 +79,8 @@ namespace BuyBidBlow.Dev.Tests.EditMode.Auction
             open.PlaceBid(C, 40, 0);  // C only has 30
 
             Assert.AreEqual(A, open.HighestBidder);
-            Assert.AreEqual(10, wallets[A].Reserved);
-            Assert.AreEqual(0, wallets[C].Reserved);
+            Assert.AreEqual(10, players[A].Reserved);
+            Assert.AreEqual(0, players[C].Reserved);
         }
 
         [Test]
@@ -101,9 +102,9 @@ namespace BuyBidBlow.Dev.Tests.EditMode.Auction
             Assert.IsTrue(result.Sold);
             Assert.AreEqual(B, result.Winner);
             Assert.AreEqual(12, result.Price);
-            Assert.AreEqual(88, wallets[B].Money);
-            Assert.AreEqual(0, wallets[B].Reserved);
-            Assert.AreEqual(100, wallets[A].Money);
+            Assert.AreEqual(88, players[B].Cash);
+            Assert.AreEqual(0, players[B].Reserved);
+            Assert.AreEqual(100, players[A].Cash);
         }
 
         [Test]
@@ -119,7 +120,7 @@ namespace BuyBidBlow.Dev.Tests.EditMode.Auction
             open.PlaceBid(A, 10, 0);
             open.Close();
             open.Close();
-            Assert.AreEqual(90, wallets[A].Money);
+            Assert.AreEqual(90, players[A].Cash);
         }
 
         // ---------- Secret ----------
@@ -129,14 +130,14 @@ namespace BuyBidBlow.Dev.Tests.EditMode.Auction
         {
             var secret = NewSecret();
             secret.Submit(C, 20, 0);
-            Assert.AreEqual(20, wallets[C].Reserved);
+            Assert.AreEqual(20, players[C].Reserved);
 
             // 30 total is fine because the old 20 counts toward it.
             Assert.AreEqual(AuctionError.None, secret.Submit(C, 30, 0));
-            Assert.AreEqual(30, wallets[C].Reserved);
+            Assert.AreEqual(30, players[C].Reserved);
 
             secret.Submit(C, 5, 0);
-            Assert.AreEqual(5, wallets[C].Reserved);
+            Assert.AreEqual(5, players[C].Reserved);
         }
 
         [Test]
@@ -145,7 +146,7 @@ namespace BuyBidBlow.Dev.Tests.EditMode.Auction
             var secret = NewSecret();
             secret.Submit(A, 20, 0);
             Assert.AreEqual(AuctionError.None, secret.Cancel(A, 0));
-            Assert.AreEqual(0, wallets[A].Reserved);
+            Assert.AreEqual(0, players[A].Reserved);
             Assert.AreEqual(AuctionError.NoSubmission, secret.Cancel(A, 0));
             Assert.AreEqual(AuctionError.None, secret.Submit(A, 10, 0));
         }
@@ -191,9 +192,9 @@ namespace BuyBidBlow.Dev.Tests.EditMode.Auction
             Assert.AreEqual(B, result.Result.Winner);
             Assert.AreEqual(25, result.Result.Price);
             CollectionAssert.AreEquivalent(new[] { A, B, C }, result.Players);
-            Assert.AreEqual(75, wallets[B].Money);
-            Assert.AreEqual(0, wallets[A].Reserved + wallets[B].Reserved + wallets[C].Reserved);
-            Assert.AreEqual(100, wallets[A].Money);
+            Assert.AreEqual(75, players[B].Cash);
+            Assert.AreEqual(0, players[A].Reserved + players[B].Reserved + players[C].Reserved);
+            Assert.AreEqual(100, players[A].Cash);
         }
 
         [Test]
@@ -228,8 +229,8 @@ namespace BuyBidBlow.Dev.Tests.EditMode.Auction
             round.Tick(1120);
             Assert.IsTrue(round.IsFinished);
             CollectionAssert.AreEqual(new[] { "open", "open closed", "secret", "secret closed" }, log);
-            Assert.AreEqual(90, wallets[A].Money);
-            Assert.AreEqual(90, wallets[B].Money);
+            Assert.AreEqual(90, players[A].Cash);
+            Assert.AreEqual(90, players[B].Cash);
         }
 
         [Test]
@@ -254,13 +255,13 @@ namespace BuyBidBlow.Dev.Tests.EditMode.Auction
             round.Tick(0);
             round.PlaceOpenBid(C, 25, 1);
 
-            Assert.IsFalse(wallets[C].TrySpendMoney(10));  // only 5 available
+            Assert.IsFalse(players[C].TryBuy(Company.Straw, 1, 10).Succeeded);  // only 5 available
             round.PlaceOpenBid(A, 26, 2);                  // C outbid
-            Assert.IsTrue(wallets[C].TrySpendMoney(10));
+            Assert.IsTrue(players[C].TryBuy(Company.Straw, 1, 10).Succeeded);
         }
 
-        private OpenAuction NewOpen(double deadline = 60) => new OpenAuction(AnyLot, deadline, 1, wallets);
-        private SecretAuction NewSecret(double deadline = 120) => new SecretAuction(AnyLot, deadline, 1, wallets);
+        private OpenAuction NewOpen(double deadline = 60) => new OpenAuction(AnyLot, deadline, 1, players);
+        private SecretAuction NewSecret(double deadline = 120) => new SecretAuction(AnyLot, deadline, 1, players);
 
         private AuctionRound NewRound(double start)
         {
@@ -269,42 +270,7 @@ namespace BuyBidBlow.Dev.Tests.EditMode.Auction
                 new AuctionSlot { StartsAtSeconds = 0, DurationSeconds = 60 },
                 new AuctionSlot { StartsAtSeconds = 60, DurationSeconds = 60 }
             };
-            return new AuctionRound(AnyLot, AnyLot, start, slots, 1, wallets);
-        }
-
-        private sealed class FakeWallet : IWallet
-        {
-            public FakeWallet(int money) => Money = money;
-
-            public int Money { get; private set; }
-            public int Reserved { get; private set; }
-            public int Available => Money - Reserved;
-
-            public bool CanAfford(int amount) => Available >= amount;
-            public void AddMoney(int amount) => Money += Math.Max(0, amount);
-
-            public bool TrySpendMoney(int amount)
-            {
-                if (amount <= 0 || !CanAfford(amount)) return false;
-                Money -= amount;
-                return true;
-            }
-
-            public bool TryReserve(int amount)
-            {
-                if (amount <= 0 || !CanAfford(amount)) return false;
-                Reserved += amount;
-                return true;
-            }
-
-            public void Release(int amount) => Reserved -= Math.Min(Math.Max(0, amount), Reserved);
-
-            public void SpendReserved(int amount)
-            {
-                amount = Math.Min(Math.Max(0, amount), Reserved);
-                Reserved -= amount;
-                Money -= amount;
-            }
+            return new AuctionRound(AnyLot, AnyLot, start, slots, 1, players);
         }
     }
 }
