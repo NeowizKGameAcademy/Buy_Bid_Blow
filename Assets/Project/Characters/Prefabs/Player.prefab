@@ -685,11 +685,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6977136502816287637}
+  - component: {fileID: 8358769945865745420}
   - component: {fileID: 1481915011384989204}
   - component: {fileID: 1036824155380712009}
   - component: {fileID: 7354108853173758634}
   - component: {fileID: 6510818251506074364}
-  - component: {fileID: 2913635935324831919}
   - component: {fileID: 3717152575517130686}
   - component: {fileID: 7286338178993061132}
   - component: {fileID: 315909428996704078}
@@ -720,6 +720,22 @@ Transform:
   - {fileID: 8823544095426472191}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8358769945865745420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 503205627045978709}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6c03dcaf65461341839e561c2534818, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.PlayerInfo
+  playerId: local-player
+  displayName: Player
+  tieColor: 0
+  isReady: 0
 --- !u!114 &1481915011384989204
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -782,22 +798,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 503205627045978709}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b95641ab9f272f40ab31d23d0add359, type: 3}
+  m_Script: {fileID: 11500000, guid: 3e3d89a2b7c24d1d8af6c2b9e4f0a617, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.PlayerWallet
-  money: 100
---- !u!114 &2913635935324831919
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 503205627045978709}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c49cbabf54046a40b6a1a1bd55da8cf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.PlayerPortfolio
+  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.PlayerAssetStatus
+  cash: 100
 --- !u!114 &3717152575517130686
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2714,7 +2718,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.InteractionController
   detect: {fileID: 6159449157466375691}
-  wallet: {fileID: 6510818251506074364}
+  assets: {fileID: 6510818251506074364}
   tradePanel: {fileID: 177640964560407971}
   cursorImage: {fileID: 2807834294416427934}
   Prompt: {fileID: 2851243055590119091}
