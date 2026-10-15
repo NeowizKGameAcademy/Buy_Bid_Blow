@@ -108,6 +108,9 @@ InitTestScene*.unity*
 # Presentation decks are shared outside the repository
 *.pptx
 
-# Local design documents, source models, references, and intermediate exports.
-# Unity-ready assets belong in Assets/.
-/Docs/
+# Heavy model sources under Docs are not used by the game; keep them local only.
+# Concept images (PNG etc.), scripts and notes in Docs stay tracked.
+/Docs/**/*.blend
+/Docs/**/*.zip
+/Docs/**/*.fbx
+/Docs/**/*.glb

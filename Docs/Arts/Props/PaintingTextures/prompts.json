@@ -1,0 +1,66 @@
+{
+  "tool": "built-in image_gen",
+  "base": "Create a finished standalone artwork suitable as a framed painting texture in an elegant stylized 3D auction-house game. OUTPUT ONLY THE ART ITSELF, full-bleed flat rectangular image scanned straight-on. Absolutely NO picture frame, no mat, no room, no wall, no furniture, no perspective tilt, no cast shadow, no watermark or signature. Rich professional painterly detail that reads clearly at medium distance, cohesive old-world collector aesthetic, harmonious with teal walls, walnut furniture, brass accents. Not a photograph of artwork. ",
+  "subjects": [
+    [
+      "01_River",
+      "Landscape oil painting, broad winding river, distant old European city and stone bridge, luminous cloudy afternoon, small sailing boats. Wide horizontal composition."
+    ],
+    [
+      "02_Mountain",
+      "Landscape oil painting, alpine lake with majestic mountains, pine woods and soft morning mist, cool teal water and warm golden sky. Wide horizontal composition."
+    ],
+    [
+      "03_Forest",
+      "Romantic landscape oil painting, ancient woodland with a small deer beside a quiet stream, shafts of warm light, textured green foliage. Wide horizontal composition."
+    ],
+    [
+      "04_Palace",
+      "Architectural oil painting of a fictional grand French baroque palace seen across its formal garden and reflecting pool, symmetrical monumental facade, small distant figures. Wide horizontal composition."
+    ],
+    [
+      "05_Garden",
+      "Oil painting of a formal European palace garden, clipped hedges, fountain, marble statues, flowers and distant orangery in late afternoon. Wide horizontal composition."
+    ],
+    [
+      "06_Harbor",
+      "Old master style maritime oil painting, historic sailboats in a sheltered harbor beside a coastal town at sunset, amber reflections. Wide horizontal composition."
+    ],
+    [
+      "07_Wolf_Portrait",
+      "Dignified fictional anthropomorphic WHITE WOLF aristocrat in dark teal velvet coat, ivory shirt and muted gold cravat, half-length 18th century court portrait, gentle clever expression, dark painterly background. Vertical composition. Character portrait for a stylish animal auction game, not a human with wolf mask."
+    ],
+    [
+      "08_Fox_Portrait",
+      "Fictional anthropomorphic RED FOX noblewoman wearing elegant burgundy and ivory 18th century dress and a modest pearl necklace, half-length aristocratic oil portrait, poised expression, deep olive painterly background. Vertical composition. Animal head, tasteful game-world portrait."
+    ],
+    [
+      "09_Owl_Portrait",
+      "Fictional anthropomorphic OWL scholar in dark walnut and emerald robes, seated holding a closed antique book, half-length old master portrait, warm library shadows. Vertical composition, charming dignified animal scholar."
+    ],
+    [
+      "10_Horse",
+      "Equestrian animal oil painting, elegant chestnut horse standing in profile in a countryside paddock, pale dramatic sky, distant trees. Horizontal composition. No rider."
+    ],
+    [
+      "11_Stag",
+      "Wildlife oil painting, majestic stag with antlers in a misty woodland clearing, mossy ground, warm autumn trees, rich naturalistic brushwork. Vertical composition."
+    ],
+    [
+      "12_Botanical",
+      "Antique botanical illustration plate on warm ivory paper: flowering magnolia branch, two large blossoms and buds, precise leaves, smaller seed pod and petal studies below. Elegant fine ink and watercolor, restrained aged paper. Vertical composition. No text, no border."
+    ],
+    [
+      "13_Butterflies",
+      "Antique natural-history illustration plate on warm ivory paper: nine distinct butterflies and moths in an orderly 3 by 3 specimen arrangement, exquisite teal, ochre, rust and cream wings, delicate engraving and watercolor. Vertical composition. No text, no pins, no border."
+    ],
+    [
+      "14_Constellations",
+      "Antique celestial atlas artwork, circular northern star chart centered on deep midnight navy background, fine muted gold stars and delicate constellation linework with subtle mythological animal figures, elegant engraved scientific aesthetic. Square composition. No readable text, no frame, no border."
+    ],
+    [
+      "15_Fossils",
+      "Antique natural-history study plate, ammonite fossils, a nautilus shell cross section, fern fossil and small mineral specimens carefully arranged on ivory paper, meticulous sepia engraving with muted watercolor. Vertical composition. No text, no border."
+    ]
+  ]
+}

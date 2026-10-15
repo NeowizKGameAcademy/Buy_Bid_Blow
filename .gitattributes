@@ -13,7 +13,7 @@
 #
 # 작업 트리의 줄바꿈은 건드리지 않는다.
 # eol= 을 쓰지 않으므로 체크아웃된 파일은 각자의 core.autocrlf 를 따르고,
-# 이미지와 모델은 LFS 없이 원본 바이너리로 저장한다.
+# Git LFS는 쓰지 않는다(Codex와 함께 쓰면 오류가 난다). 바이너리는 일반 Git 파일로 저장한다.
 
 * text=auto
 
@@ -95,7 +95,7 @@
 # 바이너리 — 줄바꿈 변환도 텍스트 diff 도 하지 않는다
 # ─────────────────────────────────────────────────────────────
 
-# 이미지 — 일반 Git 바이너리
+# 이미지 — 일반 바이너리 (LFS 사용 안 함)
 *.png binary
 *.jpg binary
 *.jpeg binary
@@ -124,11 +124,11 @@
 *.woff2            binary
 *.eot              binary
 
-# 3D 모델 — 일반 Git 바이너리
+# 3D 모델 — 일반 바이너리 (LFS 사용 안 함). 게임에 안 쓰는 Docs 모델 원본은 .gitignore로 제외
 *.fbx binary
 *.glb binary
 *.webp binary
-*.blend            binary
+*.blend binary
 *.dae binary
 *.3ds binary
 *.max binary

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Serialization;
 using TMPro;
 
 namespace BuyBidBlow
@@ -10,7 +11,8 @@ namespace BuyBidBlow
     {
         [Header("Components")]
         [SerializeField] private DetectObject detect;
-        [SerializeField] private PlayerWallet wallet;
+        [FormerlySerializedAs("wallet")]
+        [SerializeField] private PlayerAssetStatus assets;
         [SerializeField] private TradePanelController tradePanel;
 
         [Header("UI")]
@@ -39,7 +41,8 @@ namespace BuyBidBlow
         private void Update()
         {
             RefreshInteractionUI(tradePanel != null && tradePanel.IsOpen);
-            PlayerMoney.text = string.Format("$ {0:N0}", wallet.Money);
+            if (assets != null)
+                PlayerMoney.text = string.Format("$ {0:N0}", assets.Cash);
         }
 
         private void RefreshInteractionUI(bool isTradeOpen)

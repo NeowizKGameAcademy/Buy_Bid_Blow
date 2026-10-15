@@ -1,0 +1,87 @@
+{
+  "bounds": [
+    [
+      -3.935279130935669,
+      3.935279130935669
+    ],
+    [
+      10.300000190734863,
+      17.381999969482422
+    ],
+    [
+      4.007998943328857,
+      6.607999801635742
+    ]
+  ],
+  "dimensions": [
+    7.870558261871338,
+    7.081999778747559,
+    2.6000008583068848
+  ],
+  "chairs": 6,
+  "rear_wall_objects": 0,
+  "stair_connections": [
+    {
+      "flight": "Lower_-1",
+      "point": "entry",
+      "expected_z": 4.008,
+      "actual_z": 4.0,
+      "pass": true
+    },
+    {
+      "flight": "Lower_-1",
+      "point": "exit",
+      "expected_z": 4.6905,
+      "actual_z": 4.690500259399414,
+      "pass": true
+    },
+    {
+      "flight": "Upper_-1",
+      "point": "entry",
+      "expected_z": 4.6905,
+      "actual_z": 4.690499782562256,
+      "pass": true
+    },
+    {
+      "flight": "Upper_-1",
+      "point": "exit",
+      "expected_z": 5.373,
+      "actual_z": 5.373000144958496,
+      "pass": true
+    },
+    {
+      "flight": "Lower_1",
+      "point": "entry",
+      "expected_z": 4.008,
+      "actual_z": 4.0,
+      "pass": true
+    },
+    {
+      "flight": "Lower_1",
+      "point": "exit",
+      "expected_z": 4.6905,
+      "actual_z": 4.690500259399414,
+      "pass": true
+    },
+    {
+      "flight": "Upper_1",
+      "point": "entry",
+      "expected_z": 4.6905,
+      "actual_z": 4.690499305725098,
+      "pass": true
+    },
+    {
+      "flight": "Upper_1",
+      "point": "exit",
+      "expected_z": 5.373,
+      "actual_z": 5.373000144958496,
+      "pass": true
+    }
+  ],
+  "rear_contact_overlap_m": 0.002,
+  "front_limit_y": 10.3,
+  "source_unchanged_level_props": [
+    "A34_Auction_Rostrum",
+    "A36_Lot_Pedestal"
+  ]
+}
