@@ -1,0 +1,1 @@
+PASS: scene + prefab, four SpriteSwap menu buttons (Normal/Focused/Pressed/Disabled), editable Text, explicit keyboard navigation, lobby scene link, modal close actions, volume slider; rendered 1920x1080. Manual full player build remains untested.

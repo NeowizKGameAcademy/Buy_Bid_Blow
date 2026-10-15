@@ -1,1 +1,1 @@
-PASS: saved editable scene + independent HUD prefab; 13 Text values; 6 transparent sprite assets; only built-in UI behaviours on HUD; no gameplay bindings; 1920x1080 render checked.
+PASS: scene + prefab updated; 4 rounded nine-slice dim Images; alpha 0.22–0.24; 13 editable Text components retained; anchors preserved; no runtime binding. Preview rendered at 1920x1080.

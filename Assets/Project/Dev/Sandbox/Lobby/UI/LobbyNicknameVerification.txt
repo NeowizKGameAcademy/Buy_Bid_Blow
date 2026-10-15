@@ -1,0 +1,2 @@
+PASS: layout saved; blank, length, Korean, rich-text and newline validation checked. Host test pending.
+PASS: Play mode blank-name guard; Korean host nickname submitted through owned Command + server SyncVar; HUD name; ready command; stop/reconnect with a different name. Remote second-client and physical Korean IME entry not exercised.PASS: focused InputField and current Input System BaseInput bridge verified before host tests.

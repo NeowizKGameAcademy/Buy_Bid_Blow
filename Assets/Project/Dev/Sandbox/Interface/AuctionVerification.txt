@@ -1,0 +1,1 @@
+PASS: scene + prefab contain inactive Auction - Hidden Example; two rendered 1920x1080 variants; standard editable Text/Image/RectTransform; no runtime bindings; public high bid excluded from sealed preview; private directions hidden during auction.

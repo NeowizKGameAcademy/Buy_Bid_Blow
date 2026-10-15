@@ -10,6 +10,12 @@ namespace BuyBidBlow.LobbySandbox
         [SyncVar] public int top;
         [SyncVar] public int bottom;
         [SyncVar] public int tie;
+        [SyncVar] public string nickname;
+        public override void OnStartLocalPlayer()
+        {
+            base.OnStartLocalPlayer();
+            if(NetworkManager.singleton is LobbyRoom room)room.NotifyLocalPlayerReady();
+        }
         public static readonly Color[] Colors = {new Color(.6f,.12f,.2f), new Color(.1f,.5f,.7f), new Color(.8f,.6f,.12f), new Color(.2f,.65f,.35f), new Color(.55f,.3f,.7f), Color.black};
         BBBWolfAppearance appearance;
         public static Vector3 SeatPosition(int index)=>new Vector3((2.5f-index)*2.1f,.04f,-10.1f);

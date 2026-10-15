@@ -27,7 +27,7 @@ Canvas: Screen Space Overlay. CanvasScaler: Scale With Screen Size, 기준 1920�
 - Holdings: (326,-38), 100×104. 회사별 아이콘과 수량을 세 행으로 구성했습니다.
 - Downside Bet: (18,-151), 410×42. 아래 화살표·회사 아이콘·대상 라운드·참가금/보상을 분리했습니다.
 
-`Background - opacity editable`의 Image Color A를 조절하면 배경 불투명도가 바뀝니다. 현재 자산 0.17, 타이머 0.13, 안내 0.15이며 소프트 페이드 스프라이트 자체가 가장자리로 갈수록 투명해집니다. 바깥 테두리는 없습니다. 키캡에만 네 개의 얇은 Image로 테두리를 구성했습니다. Text의 Shadow 컴포넌트도 직접 조절할 수 있습니다.
+`Background - opacity editable`의 Image Color A를 조절하면 배경 불투명도가 바뀝니다. 현재 자산·타이머 0.24, 하락 베팅·안내 0.22입니다. BG_RoundedDim 스프라이트를 Sliced 방식으로 사용하여 모서리 반경 약 16px를 유지합니다. 자산과 하락 베팅의 배경은 별도 Image입니다. 바깥 테두리는 없습니다. 키캡에만 네 개의 얇은 Image로 테두리를 구성했습니다. Text의 Shadow 컴포넌트도 직접 조절할 수 있습니다.
 
 ## 자산
 
@@ -44,3 +44,7 @@ Canvas: Screen Space Overlay. CanvasScaler: Scale With Screen Size, 기준 1920�
 Unity 배치 모드에서 씬·프리팹 저장, 텍스트 13개, 스프라이트 6개, HUD의 기본 UI 컴포넌트 구성, 1920×1080 렌더를 확인했습니다. 결과는 `Verification.txt`에 있습니다.
 
 생성 도구는 `Editor/InterfaceSceneBuilder.cs`에만 있으며 HUD에 붙어 있지 않습니다. 생성 메뉴는 기존 씬이 있으면 덮어쓰지 않아 수동 편집을 보호합니다.
+
+## Rounded Dim 업데이트
+
+씬과 독립 프리팹의 4개 HUD 배경에 테두리 없는 둥근 딤을 적용했습니다. 각 Image의 Color A로 농도를, RectTransform으로 크기를 편집할 수 있습니다. 기존 텍스트·아이콘 위치와 앵커를 유지합니다. BG_RoundedDim.png는 64×64, Border 20px인 9-slice 스프라이트입니다.
