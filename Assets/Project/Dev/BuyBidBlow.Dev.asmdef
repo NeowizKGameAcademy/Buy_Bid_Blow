@@ -1,5 +1,21 @@
 {
-  "name": "BuyBidBlow.Dev",
-  "references": ["BuyBidBlow.Game", "BuyBidBlow.Systems", "CueAudio.Runtime", "Unity.InputSystem"],
-  "defineConstraints": ["UNITY_EDITOR"]
+    "name": "BuyBidBlow.Dev",
+    "rootNamespace": "",
+    "references": [
+        "BuyBidBlow.Game",
+        "BuyBidBlow.Systems",
+        "CueAudio.Runtime",
+        "Unity.InputSystem"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "UNITY_EDITOR"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
 }
