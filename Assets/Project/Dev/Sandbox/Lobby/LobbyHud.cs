@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
+using UnityEngine.InputSystem.LowLevel;
 
 namespace BuyBidBlow.LobbySandbox
 {
@@ -16,6 +17,7 @@ namespace BuyBidBlow.LobbySandbox
         public Camera view;
         public LobbyRoom room;
         public LobbySpriteLibrary library;
+        [SerializeField] ConnectionController session;
         [SerializeField] RectTransform canvasRect, selector, leftArrow, rightArrow;
         [SerializeField] RectTransform[] seats;
         [SerializeField] Text[] names, statuses, categories;
@@ -24,13 +26,20 @@ namespace BuyBidBlow.LobbySandbox
         [SerializeField] Button ready, options, exit, previous, next;
         [SerializeField] Text readyText, count, notice, optionRows;
         [SerializeField] GameObject connection, optionPanel;
-        [SerializeField] InputField address;
+        [SerializeField] InputField address, nickname, port;
+        [SerializeField] Text connectionStatus;
         public Transform selectionRing;
         static readonly Vector2 C=Vector2.one*.5f;
         static readonly Color Cream=new Color(1,.94f,.77f);
         static readonly string[] CategoryNames={"상의","하의","넥타이"};
         int category,focus,optionRow;
+        int connectionFocus=-1;
         bool typing;
+        bool composing;
+        Keyboard imeKeyboard;
+        void OnEnable(){imeKeyboard=Keyboard.current;if(imeKeyboard!=null)imeKeyboard.onIMECompositionChange+=CompositionChanged;}
+        void OnDisable(){if(imeKeyboard!=null)imeKeyboard.onIMECompositionChange-=CompositionChanged;imeKeyboard=null;composing=false;heldKeys.Clear();}
+        void CompositionChanged(IMECompositionString value){composing=value.ToString().Length>0;}
         Button pressed;
         float pressedUntil;
         public int SelectedCategory=>category;
@@ -39,14 +48,20 @@ namespace BuyBidBlow.LobbySandbox
         {
             var preview=GameObject.Find("Lobby Art Preview - Editor Only");if(preview)Destroy(preview);
             if(!canvasRect)BuildLayout();
+            if(!nickname||!port)UpgradeConnectionPanel();
+            if(!session){session=room.GetComponent<ConnectionController>();if(!session)session=room.gameObject.AddComponent<ConnectionController>();}
+            nickname.text=PlayerPrefs.GetString(LobbyNickname.PreferenceKey,"");
+            address.text=DirectConnectionSettings.LastAddress;port.text=DirectConnectionSettings.LastPort;
             if(!FindFirstObjectByType<EventSystem>()) {
                 var go=new GameObject("Lobby UI EventSystem",typeof(EventSystem),typeof(InputSystemUIInputModule));go.transform.SetParent(transform);
                 var module=go.GetComponent<InputSystemUIInputModule>();module.AssignDefaultActions();module.move=null;module.submit=null;module.cancel=null;
             }
+            EnsureTextInput();
             ready.onClick.AddListener(ToggleReady);options.onClick.AddListener(ToggleOptions);exit.onClick.AddListener(Leave);
             previous.onClick.AddListener(()=>ChangeVariant(-1));next.onClick.AddListener(()=>ChangeVariant(1));
             connection.transform.Find("Host").GetComponent<Button>().onClick.AddListener(StartHost);
             connection.transform.Find("Join").GetComponent<Button>().onClick.AddListener(Join);
+            connection.transform.Find("Cancel").GetComponent<Button>().onClick.AddListener(()=>session.Cancel());
             optionPanel.SetActive(false);
         }
         LobbyPlayer Local()=>FindObjectsByType<LobbyPlayer>(FindObjectsSortMode.None).FirstOrDefault(p=>p.isLocalPlayer);
@@ -71,14 +86,21 @@ namespace BuyBidBlow.LobbySandbox
                 if(enter){if(optionRow==1)Screen.fullScreen=!Screen.fullScreen;else if(optionRow==2)ToggleOptions();}
                 RefreshOptions();e.Use();return;
             }
-            if(typing) {
-                if(key==KeyCode.Escape){typing=false;address.DeactivateInputField();e.Use();}
-                else if(enter){Join();e.Use();}return;
+            if(session.IsBusy) {if(key==KeyCode.Escape){session.Cancel();e.Use();}return;}
+            if(typing||nickname.isFocused||address.isFocused||port.isFocused) {
+                // Let the input field finish Korean IME composition before submitting.
+                if(enter&&composing)return;
+                if(key==KeyCode.Escape){StopTyping();e.Use();}
+                else if(key==KeyCode.Tab){FocusConnection(((nickname.isFocused?0:address.isFocused?1:2)+(e.shift?4:1))%5);e.Use();}
+                else if(enter){if(nickname.isFocused)FocusInput(address);else if(address.isFocused)FocusInput(port);else Join();e.Use();}return;
             }
             if(key==KeyCode.O){ToggleOptions();e.Use();return;}
-            if(!NetworkClient.active&&!NetworkServer.active) {
+            if(session.CanConnect) {
                 if(key==KeyCode.H){StartHost();e.Use();}
-                if(key==KeyCode.J){typing=true;address.ActivateInputField();e.Use();}return;
+                if(key==KeyCode.J){FocusInput(address);e.Use();}
+                if(key==KeyCode.N){FocusInput(nickname);e.Use();}
+                if(key==KeyCode.Tab){FocusConnection((connectionFocus+(e.shift?4:1)+5)%5);e.Use();}
+                if(enter){if(connectionFocus==3)StartHost();else if(connectionFocus==4)Join();else FocusInput(nickname);e.Use();}return;
             }
             if(key==KeyCode.Escape){Leave();e.Use();return;}
             if(key==KeyCode.Tab){focus=(focus+1)%3;e.Use();return;}
@@ -88,7 +110,13 @@ namespace BuyBidBlow.LobbySandbox
             if(key==KeyCode.LeftArrow){ChangeVariant(-1);e.Use();}
             if(key==KeyCode.RightArrow){ChangeVariant(1);e.Use();}
         }
-        void LateUpdate()=>Refresh(false);
+        static void EnsureTextInput()
+        {
+            var eventSystem=EventSystem.current;if(!eventSystem)return;
+            var textInput=eventSystem.GetComponent<LobbyTextInputBridge>();if(!textInput)textInput=eventSystem.gameObject.AddComponent<LobbyTextInputBridge>();
+            foreach(var module in eventSystem.GetComponents<BaseInputModule>())if(module.inputOverride!=textInput)module.inputOverride=textInput;
+        }
+        void LateUpdate(){EnsureTextInput();Refresh(false);}
         public void SelectCategory(int d){category=(category+d+3)%3;focus=0;}
         public void ChangeVariant(int d)
         {
@@ -103,9 +131,27 @@ namespace BuyBidBlow.LobbySandbox
             var rows=new[]{"음량  "+Mathf.RoundToInt(AudioListener.volume*100)+"%   ← →","전체화면  "+(Screen.fullScreen?"켜짐":"꺼짐")+"   Enter","닫기   Esc"};
             optionRows.text=string.Join("\n\n",rows.Select((r,i)=>(i==optionRow?"▶  ":"    ")+r));
         }
-        public void StartHost(){if(!NetworkClient.active&&!NetworkServer.active){typing=false;address.DeactivateInputField();room.StartHost();}}
-        void Join(){if(!NetworkClient.active&&!NetworkServer.active){room.networkAddress=string.IsNullOrWhiteSpace(address.text)?"localhost":address.text.Trim();typing=false;address.DeactivateInputField();room.StartClient();}}
-        public void Leave(){if(NetworkServer.active)room.StopHost();else if(NetworkClient.active)room.StopClient();}
+        void FocusInput(InputField field)
+        {
+            connectionFocus=field==nickname?0:field==address?1:2;
+            nickname.DeactivateInputField();address.DeactivateInputField();port.DeactivateInputField();typing=true;
+            if(EventSystem.current)EventSystem.current.SetSelectedGameObject(field.gameObject);
+            field.ActivateInputField();
+        }
+        void FocusConnection(int index)
+        {
+            if(index<3){FocusInput(index==0?nickname:index==1?address:port);return;}
+            StopTyping();connectionFocus=index;
+            if(EventSystem.current)EventSystem.current.SetSelectedGameObject(connection.transform.Find(index==3?"Host":"Join").gameObject);
+        }
+        void StopTyping()
+        {
+            typing=false;nickname.DeactivateInputField();address.DeactivateInputField();port.DeactivateInputField();
+            if(EventSystem.current)EventSystem.current.SetSelectedGameObject(null);
+        }
+        public void StartHost(){if(session.Host(nickname.text,port.text))StopTyping();}
+        public void Join(){if(session.Join(nickname.text,address.text,port.text))StopTyping();}
+        public void Leave()=>session.Leave();
         void Pulse(Button b){pressed=b;pressedUntil=Time.unscaledTime+.15f;}
         Sprite S(string id)=>library.Find(id);
         void State(Button b,string id,bool enabled,bool selected)
@@ -125,7 +171,8 @@ namespace BuyBidBlow.LobbySandbox
                 var p=players.FirstOrDefault(p=>p.seat==i);bool occupied=preview?i<4:p;bool done=preview?i==2:p&&p.ready;bool mine=i==localSeat;
                 var head=Project(LobbyPlayer.SeatPosition(i)+Vector3.up*3f);
                 seats[i].anchoredPosition=head+new Vector2(0,mine?136:24);
-                names[i].text=occupied?"WOLF "+(i+1).ToString("00"):"참가 대기";
+                names[i].text=occupied?(p&&!string.IsNullOrEmpty(p.nickname)?p.nickname:"WOLF "+(i+1).ToString("00")):"참가 대기";
+                names[i].supportRichText=false;names[i].resizeTextForBestFit=true;names[i].resizeTextMinSize=13;names[i].resizeTextMaxSize=21;
                 names[i].transform.parent.GetComponent<Image>().sprite=S(occupied?"08_Nameplate":"20_VacantNameplate");
                 statuses[i].text=occupied?(done?"준비 완료":"꾸미는 중"):"";
                 plates[i].transform.Find("Ready Check").gameObject.SetActive(done);
@@ -145,10 +192,19 @@ namespace BuyBidBlow.LobbySandbox
             bool enabled=preview||local;
             readyText.text=local&&local.ready?"준비 취소":"준비 완료";
             State(ready,"24_ReadyButtonStates",enabled,focus==0);State(options,"04_SmallButtonStates",true,focus==1||optionPanel.activeSelf);
-            State(exit,"04_SmallButtonStates",preview||NetworkClient.active||NetworkServer.active,focus==2);
+            State(exit,"04_SmallButtonStates",preview||(session&&session.State==ConnectionState.InRoom),focus==2);
             State(previous,"18_RoundButtonStates",enabled,false);State(next,"18_RoundButtonStates",enabled,false);
-            connection.SetActive(!preview&&!NetworkClient.active&&!NetworkServer.active&&!optionPanel.activeSelf);
-            notice.text=preview?"":NetworkClient.active&&!local?"접속 중…  Esc 취소":players.Length>=3&&players.All(p=>p.ready)?"전원 준비 완료 · 매치 전환 연결 예정":"";
+            bool showConnection=!preview&&(!session||session.State!=ConnectionState.InRoom)&&!optionPanel.activeSelf;
+            connection.SetActive(showConnection);
+            if(session) {
+                bool canEdit=session.CanConnect;nickname.interactable=canEdit;address.interactable=canEdit;port.interactable=canEdit;
+                connection.transform.Find("Host").GetComponent<Button>().interactable=canEdit;
+                connection.transform.Find("Join").GetComponent<Button>().interactable=canEdit;
+                var cancel=connection.transform.Find("Cancel");cancel.gameObject.SetActive(session.IsBusy);cancel.GetComponent<Button>().interactable=session.State!=ConnectionState.Stopping;
+                connection.transform.Find("Help").gameObject.SetActive(!session.IsBusy);
+                connectionStatus.text=session.State==ConnectionState.Idle?session.Message:session.State==ConnectionState.Failed?session.Message:session.IsBusy?session.Message:"";
+            }
+            notice.text=preview?"":session&&session.IsBusy?session.Message:players.Length>=3&&players.All(p=>p.ready)?"전원 준비 완료 · 매치 전환 연결 예정":session&&session.State==ConnectionState.InRoom?session.EndpointHint:"";
         }
         RectTransform Node(string name,Transform parent,Vector2 size,Vector2 pos,Vector2 anchor)
         {
@@ -215,7 +271,61 @@ namespace BuyBidBlow.LobbySandbox
             var field=Image("Host Address",panel.transform,"14_CategoryHighlight",new Vector2(360,42),new Vector2(0,20),C,true);field.raycastTarget=true;address=field.gameObject.AddComponent<InputField>();address.targetGraphic=field;address.textComponent=Text("Address",field.transform,"localhost",21,new Vector2(332,36),Vector2.zero,C);address.text="localhost";address.characterLimit=128;
             Button("Host",panel.transform,"04_SmallButtonStates","H  방 만들기",new Vector2(220,48),new Vector2(-125,-42),C);Button("Join",panel.transform,"04_SmallButtonStates","J  접속",new Vector2(220,48),new Vector2(125,-42),C);Text("Help",panel.transform,"J: 주소 입력 → Enter 접속   ·   H: 호스트",17,new Vector2(550,30),new Vector2(0,-89),C);
             var dialog=Image("Options Dialog",root.transform,"08_Nameplate",new Vector2(520,340),Vector2.zero,C,true);optionPanel=dialog.gameObject;Text("Title",dialog.transform,"옵션",32,new Vector2(460,50),new Vector2(0,112),C);optionRows=Text("Rows",dialog.transform,"",23,new Vector2(460,210),new Vector2(0,-20),C);RefreshOptions();optionPanel.SetActive(false);
+            UpgradeConnectionPanel();
             Canvas.ForceUpdateCanvases();Refresh(!Application.isPlaying);
+        }
+        public void UpgradeConnectionPanel()
+        {
+            if(!connection)return;
+            connection.GetComponent<RectTransform>().sizeDelta=new Vector2(620,330);
+            connection.transform.Find("Title").GetComponent<RectTransform>().anchoredPosition=new Vector2(0,118);
+            address.GetComponent<RectTransform>().anchoredPosition=new Vector2(66,-8);
+            address.GetComponent<RectTransform>().sizeDelta=new Vector2(360,42);
+            address.lineType=InputField.LineType.SingleLine;
+            var label=connection.transform.Find("Address Label");
+            if(!label)Text("Address Label",connection.transform,"접속 주소",20,new Vector2(110,42),new Vector2(-180,-8),C);
+            var existing=connection.transform.Find("Nickname");
+            if(existing)nickname=existing.GetComponent<InputField>();
+            else {
+                var image=Image("Nickname",connection.transform,"14_CategoryHighlight",new Vector2(360,42),new Vector2(66,52),C,true);image.raycastTarget=true;
+                nickname=image.gameObject.AddComponent<InputField>();nickname.targetGraphic=image;
+                nickname.textComponent=Text("Value",image.transform,"",22,new Vector2(332,36),Vector2.zero,C);nickname.textComponent.supportRichText=false;
+                var hint=Text("Placeholder",image.transform,"닉네임 입력 (1~12글자)",19,new Vector2(332,36),Vector2.zero,C);hint.color=new Color(Cream.r,Cream.g,Cream.b,.5f);nickname.placeholder=hint;
+                nickname.lineType=InputField.LineType.SingleLine;nickname.characterLimit=96;
+            }
+            if(!connection.transform.Find("Nickname Label"))Text("Nickname Label",connection.transform,"닉네임",20,new Vector2(110,42),new Vector2(-180,52),C);
+            connection.transform.Find("Host").GetComponent<RectTransform>().anchoredPosition=new Vector2(-125,-69);
+            connection.transform.Find("Join").GetComponent<RectTransform>().anchoredPosition=new Vector2(125,-69);
+            var help=connection.transform.Find("Help").GetComponent<Text>();help.text="Tab: 항목 이동  ·  Enter: 선택  ·  H: 방 만들기  ·  J: 주소";help.fontSize=15;help.rectTransform.anchoredPosition=new Vector2(0,-118);
+            var status=connection.transform.Find("Validation");connectionStatus=status?status.GetComponent<Text>():Text("Validation",connection.transform,"",16,new Vector2(570,30),new Vector2(0,-149),C);
+            connectionStatus.color=new Color(1,.63f,.42f);
+            nickname.navigation=new Navigation{mode=Navigation.Mode.None};address.navigation=new Navigation{mode=Navigation.Mode.None};
+            UpgradeDirectConnectionPanel();
+        }
+        public void UpgradeDirectConnectionPanel()
+        {
+            if(!connection)return;
+            connection.GetComponent<RectTransform>().sizeDelta=new Vector2(700,410);
+            connection.transform.Find("Title").GetComponent<RectTransform>().anchoredPosition=new Vector2(0,156);
+            nickname.GetComponent<RectTransform>().anchoredPosition=new Vector2(66,96);
+            connection.transform.Find("Nickname Label").GetComponent<RectTransform>().anchoredPosition=new Vector2(-180,96);
+            address.GetComponent<RectTransform>().anchoredPosition=new Vector2(66,36);
+            connection.transform.Find("Address Label").GetComponent<RectTransform>().anchoredPosition=new Vector2(-180,36);
+            var existing=connection.transform.Find("Port");
+            if(existing)port=existing.GetComponent<InputField>();
+            else {
+                var image=Image("Port",connection.transform,"14_CategoryHighlight",new Vector2(360,42),new Vector2(66,-24),C,true);image.raycastTarget=true;
+                port=image.gameObject.AddComponent<InputField>();port.targetGraphic=image;port.textComponent=Text("Value",image.transform,"7777",22,new Vector2(332,36),Vector2.zero,C);
+                port.text="7777";port.contentType=InputField.ContentType.IntegerNumber;port.characterLimit=5;port.lineType=InputField.LineType.SingleLine;
+            }
+            if(!connection.transform.Find("Port Label"))Text("Port Label",connection.transform,"포트",20,new Vector2(110,42),new Vector2(-180,-24),C);
+            connection.transform.Find("Host").GetComponent<RectTransform>().anchoredPosition=new Vector2(-125,-89);
+            connection.transform.Find("Join").GetComponent<RectTransform>().anchoredPosition=new Vector2(125,-89);
+            if(!connection.transform.Find("Cancel"))Button("Cancel",connection.transform,"04_SmallButtonStates","Esc  접속 취소",new Vector2(220,42),new Vector2(0,-142),C);
+            connection.transform.Find("Cancel").gameObject.SetActive(false);
+            var help=connection.transform.Find("Help").GetComponent<Text>();help.text="Tab: 항목 이동 · Enter: 선택 · H: 방 만들기 · J: 주소";help.rectTransform.anchoredPosition=new Vector2(0,-141);
+            connectionStatus.rectTransform.anchoredPosition=new Vector2(0,-177);connectionStatus.rectTransform.sizeDelta=new Vector2(660,42);connectionStatus.fontSize=15;
+            port.navigation=new Navigation{mode=Navigation.Mode.None};
         }
     }
 }
