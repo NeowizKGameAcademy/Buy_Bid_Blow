@@ -15,7 +15,7 @@ namespace BuyBidBlow.Dev.Editor
         public const string CatalogPath = "Assets/Project/Audio/Cues/CueAudioDemoCatalog.asset";
         private const string ClipPath = "Assets/Project/Audio/Clips/CueAudioDemo";
         private const string JsonPath = "Assets/Project/Audio/Cues/CueAudioDemo.json";
-        private const string PrefabPath = "Assets/Project/Content/Prefabs/Audio/CueAudioHost.prefab";
+        private const string PrefabPath = "Assets/Project/Audio/CueAudioHost.prefab";
 
         [MenuItem("Tools/CueAudio/Open Demo")]
         public static void OpenDemo()

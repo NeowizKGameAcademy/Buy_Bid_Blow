@@ -10,7 +10,7 @@ namespace BuyBidBlow.Dev.Editor
 {
     public static class GrandEntranceBuilder
     {
-        private const string Root = "Assets/Project/Props/GrandEntrance";
+        private const string Root = "Assets/Project/Content/Props/GrandEntrance";
         private const string Preview = "Assets/Project/Dev/Sandbox/GrandEntrance";
         private static readonly string[] Names = { "Wood", "Teal", "Brass" };
 

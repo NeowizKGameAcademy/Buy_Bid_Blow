@@ -1,0 +1,22 @@
+{
+  "tool": "built-in image_gen",
+  "base": "Create one professional 3D game prop concept design sheet with EXACTLY TWO distinct complete variants side by side, left A and right B, large and equally readable with ample separation. Plain warm light gray studio background, soft contact shadows, no environment. Consistent 3/4 view, entire objects uncropped, no inset views. Stylized polished low-poly aesthetic, beveled readable shapes, moderate detail suitable for modeling in Blender for a luxurious auction house with teal walls, warm walnut and antique brass. No photoreal clutter. Small simple labels 'A' and 'B' below respective objects, no other text. This is a paired design comparison sheet, not a room scene. ",
+  "pairs": [
+    [
+      "15_Picture_Frame",
+      "Two empty picture frames without paintings, viewed almost frontally with slight 3/4 depth. A: rectangular portrait frame of dark walnut with layered moldings, delicate brass inner bead and brass corner ornaments. B: opulent oval antique-gold frame with restrained acanthus ornaments and crown-like top flourish. Open centers show plain studio background, no glass glare, no pictures."
+    ],
+    [
+      "16_Information_Board",
+      "Two freestanding information boards for a luxury auction house. A: upright portrait teal information panel in walnut and brass frame supported by two walnut posts on a stable footed base. B: brass single-pedestal museum information stand with tilted ivory rectangular reading panel and heavy circular base. Panels use only elegant horizontal placeholder rules and a small gold ornamental emblem, no readable text."
+    ],
+    [
+      "17_Direction_Sign",
+      "Two indoor directional signs. A: freestanding walnut post topped with brass finial and three elegant teal arrow-shaped boards pointing alternately left and right, brass outlines, heavy stable square foot. B: suspended wall-bracket direction sign with ornate brass bracket and two burgundy horizontal arrow plaques, entire mount visible floating alone against background. Use clear arrow silhouettes and simple pictograms of stairs and gallery frame, no readable words."
+    ],
+    [
+      "18_Table_Lamp",
+      "Two small luxury table lamps, fully visible including base. A: classic banker's lamp with deep emerald green curved glass shade, adjustable brass arm, heavy brass oval base and small pull chain. B: warm ivory pleated fabric shade on turned walnut stem with brass accents and a broad round brass-trimmed walnut base. Warm subtle glow, restrained style, no surrounding furniture."
+    ]
+  ]
+}

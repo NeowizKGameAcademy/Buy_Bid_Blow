@@ -93,7 +93,6 @@ namespace BuyBidBlow
             quantityText.text = selectedQuantity.ToString();
         }
 
-        // 거래 처리 담당이 성공/실패 메시지를 전달할 때 호출합니다.
         public void SetLog(string message)
         {
             logText.text = message;
