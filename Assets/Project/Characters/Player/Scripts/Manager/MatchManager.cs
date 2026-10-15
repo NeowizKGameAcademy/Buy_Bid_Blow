@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using BuyBidBlow.Systems.Auction;
 using BuyBidBlow.Systems.Market;
 using BuyBidBlow.Systems.Match;
 using BuyBidBlow.Systems.Types;
@@ -16,6 +17,7 @@ namespace BuyBidBlow
         private readonly List<PriceChange[]> scheduledPriceChanges = new List<PriceChange[]>();
         private readonly List<int[]> scheduledPrices = new List<int[]>();
         private MatchSettings settings;
+        private LotGenerator lotGenerator;
 
         public int CurrentRound { get; private set; }
         public bool IsMatchComplete => settings != null && CurrentRound >= settings.RoundCount;
@@ -63,6 +65,9 @@ namespace BuyBidBlow
             return scheduledPriceChanges[round - 1];
         }
 
+        // Lots come out in auction order: 1st (Open) then 2nd (Secret) of each auction round.
+        public Lot NextLot() => lotGenerator.Next();
+
         public void AdvanceRound()
         {
             if (settings == null || IsMatchComplete)
@@ -108,6 +113,8 @@ namespace BuyBidBlow
 
                 scheduledPrices.Add((int[])nextPrices.Clone());
             }
+
+            lotGenerator = new LotGenerator(settings.AuctionRounds, scheduledPrices, random);
 
             CurrentRound = 0;
             ApplyPrices(scheduledPrices[CurrentRound]);

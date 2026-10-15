@@ -1,0 +1,92 @@
+{
+  "source_level": "BBB_Hall_A36_WideRostrum_LotPedestal.blend",
+  "placement": "65% uniform scale; rear-most y=16.8; base top z=4.008",
+  "seats": {
+    "front": 6,
+    "rear": 4
+  },
+  "trial_bounds": [
+    [
+      -6.275749683380127,
+      6.275749683380127
+    ],
+    [
+      6.607999801635742,
+      16.799999237060547
+    ],
+    [
+      3.8585000038146973,
+      7.142624855041504
+    ]
+  ],
+  "rear_gaps": [
+    {
+      "x": 0,
+      "seating_back_y": 16.799999237060547,
+      "hall_hit_y": 17.3799991607666,
+      "gap": 0.5799999237060547,
+      "hit": "A18_Walls_Ellipse_DoorOpenings"
+    },
+    {
+      "x": 3,
+      "seating_back_y": 16.189064025878906,
+      "hall_hit_y": 17.33763313293457,
+      "gap": 1.148569107055664,
+      "hit": "A18_Walls_Ellipse_DoorOpenings"
+    },
+    {
+      "x": 5.5,
+      "seating_back_y": 14.81769847869873,
+      "hall_hit_y": 16.852394104003906,
+      "gap": 2.034695625305176,
+      "hit": "A18_Walls_Ellipse_DoorOpenings"
+    }
+  ],
+  "rows": [
+    {
+      "row": "Front",
+      "bounds": [
+        [
+          -4.90907621383667,
+          4.90907621383667
+        ],
+        [
+          6.614499568939209,
+          8.476822853088379
+        ],
+        [
+          5.3404998779296875,
+          5.444499969482422
+        ]
+      ]
+    },
+    {
+      "row": "Rear",
+      "bounds": [
+        [
+          -3.780207395553589,
+          3.7802066802978516
+        ],
+        [
+          11.275650024414062,
+          13.101863861083984
+        ],
+        [
+          6.0229997634887695,
+          6.126999855041504
+        ]
+      ]
+    }
+  ],
+  "recommended_depth_m": [
+    8.5,
+    9.0
+  ],
+  "issues": [
+    "Front desktop is almost tangent to the rostrum in plan.",
+    "Lot pedestal lies behind front seats and its lower part overlaps the raised floor.",
+    "Rear enclosure curve does not match the level wall.",
+    "Scaled steps have 0.114 m rises; rebuild stair flights.",
+    "Foundation overlaps the existing mezzanine slab."
+  ]
+}

@@ -1,0 +1,125 @@
+using System.Collections.Generic;
+using BuyBidBlow.Systems.Types;
+
+namespace BuyBidBlow.Systems.Auction
+{
+    // 2nd lot: sealed bids. Players may change or cancel until the deadline.
+    // Each player only learns whether they won; nothing else is public.
+    public sealed class SecretAuction
+    {
+        private readonly IReadOnlyDictionary<int, IWallet> wallets;
+        private readonly Dictionary<int, Submission> submissions = new Dictionary<int, Submission>();
+        private long nextOrder;
+        private bool closed;
+
+        public Lot Lot { get; }
+        public double Deadline { get; }
+        public int MinBid { get; }
+
+        public SecretAuction(Lot lot, double deadline, int minBid, IReadOnlyDictionary<int, IWallet> wallets)
+        {
+            Lot = lot;
+            Deadline = deadline;
+            MinBid = minBid;
+            this.wallets = wallets;
+        }
+
+        // 0 when the player has nothing submitted. Only for that player's own screen.
+        public int GetSubmitted(int player) => submissions.TryGetValue(player, out Submission s) ? s.Amount : 0;
+
+        public AuctionError Submit(int player, int amount, double now)
+        {
+            if (closed || now >= Deadline) return AuctionError.Closed;
+            if (!wallets.TryGetValue(player, out IWallet wallet)) return AuctionError.UnknownPlayer;
+            if (amount < MinBid) return AuctionError.TooLow;
+
+            int previous = GetSubmitted(player);
+            if (amount == previous) return AuctionError.None;  // Same amount keeps its tie priority.
+
+            // Only the difference moves, so the old reservation counts toward the new amount.
+            if (amount > previous)
+            {
+                if (!wallet.TryReserve(amount - previous)) return AuctionError.NotEnoughCash;
+            }
+            else
+            {
+                wallet.Release(previous - amount);
+            }
+
+            // A changed amount goes to the back of the tie order, like a fresh submission.
+            submissions[player] = new Submission(amount, nextOrder++);
+            return AuctionError.None;
+        }
+
+        public AuctionError Cancel(int player, double now)
+        {
+            if (closed || now >= Deadline) return AuctionError.Closed;
+            if (!submissions.TryGetValue(player, out Submission submission)) return AuctionError.NoSubmission;
+
+            wallets[player].Release(submission.Amount);
+            submissions.Remove(player);
+            return AuctionError.None;
+        }
+
+        // Highest amount wins; ties go to whoever submitted that amount first.
+        // Charges the winner and releases everyone else. Players = everyone who had a submission.
+        public SecretResult Close()
+        {
+            int winner = OpenAuction.NoBidder;
+            Submission best = default;
+
+            foreach (KeyValuePair<int, Submission> pair in submissions)
+            {
+                Submission s = pair.Value;
+                if (winner == OpenAuction.NoBidder || s.Amount > best.Amount ||
+                    (s.Amount == best.Amount && s.Order < best.Order))
+                {
+                    winner = pair.Key;
+                    best = s;
+                }
+            }
+
+            var players = new List<int>(submissions.Keys);
+            if (!closed)
+            {
+                closed = true;
+                foreach (KeyValuePair<int, Submission> pair in submissions)
+                {
+                    if (pair.Key == winner)
+                        wallets[pair.Key].SpendReserved(pair.Value.Amount);
+                    else
+                        wallets[pair.Key].Release(pair.Value.Amount);
+                }
+            }
+
+            return new SecretResult(new AuctionResult(Lot, winner, best.Amount), players);
+        }
+
+        private readonly struct Submission
+        {
+            public readonly int Amount;
+            public readonly long Order;  // Server processing order; lower submitted first.
+
+            public Submission(int amount, long order)
+            {
+                Amount = amount;
+                Order = order;
+            }
+        }
+    }
+
+    public readonly struct SecretResult
+    {
+        // Server-side only: winner and price are never broadcast.
+        public readonly AuctionResult Result;
+
+        // Everyone who had a submission at the deadline; each is told only won or lost.
+        public readonly IReadOnlyList<int> Players;
+
+        public SecretResult(AuctionResult result, IReadOnlyList<int> players)
+        {
+            Result = result;
+            Players = players;
+        }
+    }
+}

@@ -1,0 +1,121 @@
+{
+  "wolf_prefab_scale": 1.8,
+  "wolf_measured_dimensions_m": [
+    0.7995477855205536,
+    1.0140712916851045,
+    1.728279504342936
+  ],
+  "chairs": [
+    {
+      "row": "Front",
+      "index": 1,
+      "center": [
+        -1.95,
+        12.0982757406744,
+        4.6905
+      ],
+      "angle_degrees": 27.27393914838515
+    },
+    {
+      "row": "Front",
+      "index": 2,
+      "center": [
+        -0.65,
+        11.754639353408265,
+        4.6905
+      ],
+      "angle_degrees": 10.704220387051562
+    },
+    {
+      "row": "Front",
+      "index": 3,
+      "center": [
+        0.65,
+        11.754639353408265,
+        4.6905
+      ],
+      "angle_degrees": -10.704220387051562
+    },
+    {
+      "row": "Front",
+      "index": 4,
+      "center": [
+        1.95,
+        12.0982757406744,
+        4.6905
+      ],
+      "angle_degrees": -27.27393914838515
+    },
+    {
+      "row": "Rear",
+      "index": 1,
+      "center": [
+        -1.35,
+        15.428985926778664,
+        5.373
+      ],
+      "angle_degrees": 10.746559022169178
+    },
+    {
+      "row": "Rear",
+      "index": 2,
+      "center": [
+        0,
+        15.114324804999999,
+        5.373
+      ],
+      "angle_degrees": 0.0
+    },
+    {
+      "row": "Rear",
+      "index": 3,
+      "center": [
+        1.35,
+        15.428985926778664,
+        5.373
+      ],
+      "angle_degrees": -10.746559022169178
+    }
+  ],
+  "front_center_pitch_m": 1.3,
+  "rear_center_pitch_m": 1.35,
+  "clearance_checks": [
+    {
+      "seat": "A41_Front_Seat_1",
+      "clearance_envelope_supported": true,
+      "minimum_forward_desk_clearance_m": 1.3790419838643688
+    },
+    {
+      "seat": "A41_Front_Seat_2",
+      "clearance_envelope_supported": true,
+      "minimum_forward_desk_clearance_m": 1.1899364206791163
+    },
+    {
+      "seat": "A41_Front_Seat_3",
+      "clearance_envelope_supported": true,
+      "minimum_forward_desk_clearance_m": 1.1899364206791163
+    },
+    {
+      "seat": "A41_Front_Seat_4",
+      "clearance_envelope_supported": true,
+      "minimum_forward_desk_clearance_m": 1.3790419298371468
+    },
+    {
+      "seat": "A41_Rear_Seat_1",
+      "clearance_envelope_supported": true,
+      "minimum_forward_desk_clearance_m": 1.1527650353992636
+    },
+    {
+      "seat": "A41_Rear_Seat_2",
+      "clearance_envelope_supported": true,
+      "minimum_forward_desk_clearance_m": 1.2199611514581927
+    },
+    {
+      "seat": "A41_Rear_Seat_3",
+      "clearance_envelope_supported": true,
+      "minimum_forward_desk_clearance_m": 1.1527650353992636
+    }
+  ],
+  "overlapping_character_envelopes": [],
+  "ceiling_and_arches_visible": true
+}
