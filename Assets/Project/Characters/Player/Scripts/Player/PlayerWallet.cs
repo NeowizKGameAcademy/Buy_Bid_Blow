@@ -32,15 +32,5 @@ namespace BuyBidBlow
             money -= amount;
             return true;
         }
-
-        public bool TryBuy(int price)
-        {
-            return TrySpendMoney(price);
-        }
-
-        public void Sell(int price)
-        {
-            AddMoney(price);
-        }
     }
 }

@@ -3,27 +3,34 @@ using BuyBidBlow.Systems.Types;
 
 namespace BuyBidBlow
 {
-    // 임시 로컬 거래: 보유 수량과 NPC 재고는 실행 중에만 유지됩니다.
     public class LocalTradeController : MonoBehaviour
     {
+        [Header("Components")]
         [SerializeField] private TradePanelController tradePanel;
         [SerializeField] private PlayerWallet wallet;
+        [SerializeField] private PlayerPortfolio portfolio;
         [SerializeField] private MatchManager matchManager;
-
-        // [SerializeField] private int stock = 100;
-        [SerializeField] private int ownedQuantity;
 
         private Company selectedCompany;
         private bool hasSelectedCompany;
 
-        public int OwnedQuantity => ownedQuantity;
-        //public int Stock => stock;
-
         private void OnEnable()
         {
+            if (portfolio == null)
+                portfolio = GetComponent<PlayerPortfolio>();
+
+            if (portfolio == null)
+            {
+                Debug.LogError("LocalTradeController needs a PlayerPortfolio.", this);
+                enabled = false;
+                return;
+            }
+
             tradePanel.BuyRequested += Buy;
             tradePanel.SellRequested += Sell;
+
             ResolveMatchManager();
+
             if (matchManager != null)
                 matchManager.RoundAdvanced += OnRoundAdvanced;
         }
@@ -32,6 +39,7 @@ namespace BuyBidBlow
         {
             tradePanel.BuyRequested -= Buy;
             tradePanel.SellRequested -= Sell;
+
             if (matchManager != null)
                 matchManager.RoundAdvanced -= OnRoundAdvanced;
         }
@@ -43,14 +51,17 @@ namespace BuyBidBlow
 
             selectedCompany = company;
             hasSelectedCompany = true;
-            tradePanel.Open((int)company, GetDisplayName(company), matchManager.GetPrice(company));
+
+            tradePanel.Open(company, GetDisplayName(company), matchManager.GetPrice(company));
+
             ShowResult("거래할 수량을 선택하세요.");
         }
 
-        private bool Validate(int requestedItemId, int quantity, out int total)
+        private bool Validate(Company requestedCompany, int quantity, out int total)
         {
             total = 0;
-            if (!tradePanel.IsOpen || !hasSelectedCompany || requestedItemId != (int)selectedCompany || quantity <= 0 || !ResolveMatchManager())
+
+            if (!tradePanel.IsOpen || !hasSelectedCompany || requestedCompany != selectedCompany || quantity <= 0 || !ResolveMatchManager())
             {
                 ShowResult("잘못된 거래 요청입니다.");
                 return false;
@@ -68,53 +79,44 @@ namespace BuyBidBlow
             return true;
         }
 
-        private void Buy(int requestedItemId, int quantity)
+        private void Buy(Company requestedCompany, int quantity)
         {
-            if (!Validate(requestedItemId, quantity, out int total)) return;
-            //if (quantity > stock)
-            //{
-            //    ShowResult("NPC 재고가 부족합니다.");
-            //    return;
-            //}
-            if ((long)ownedQuantity + quantity > int.MaxValue)
+            if (!Validate(requestedCompany, quantity, out int total)) return;
+
+            if ((long)portfolio.GetOwnedQuantity(requestedCompany) + quantity > int.MaxValue)
             {
                 ShowResult("보유 수량 한도를 초과합니다.");
                 return;
             }
+
             if (!wallet.TrySpendMoney(total))
             {
                 ShowResult("돈이 부족합니다.");
                 return;
             }
 
-            ownedQuantity += quantity;
-            //stock -= quantity;
+            portfolio.AddStock(requestedCompany, quantity);
+
             ShowResult($"구매 완료: {quantity:N0}개 / $ {total:N0}");
         }
 
-        private void Sell(int requestedItemId, int quantity)
+        private void Sell(Company requestedCompany, int quantity)
         {
-            if (!Validate(requestedItemId, quantity, out int total)) return;
-            if (quantity > ownedQuantity)
+            if (!Validate(requestedCompany, quantity, out int total)) return;
+
+            if (!portfolio.TryRemoveStock(requestedCompany, quantity))
             {
                 ShowResult("보유 수량이 부족합니다.");
                 return;
             }
-            //if ((long)wallet.Money + total > int.MaxValue || (long)stock + quantity > int.MaxValue)
-            //{
-            //    ShowResult("거래 한도를 초과합니다.");
-            //    return;
-            //}
 
-            ownedQuantity -= quantity;
-            //stock += quantity;
             wallet.AddMoney(total);
             ShowResult($"판매 완료: {quantity:N0}개 / $ {total:N0}");
         }
 
         private void ShowResult(string message)
         {
-            tradePanel.SetLog($"{message}\n보유: {ownedQuantity:N0}개");
+            tradePanel.SetLog($"{message}\n보유: {portfolio.GetOwnedQuantity(selectedCompany):N0}개");
         }
 
         private bool ResolveMatchManager()

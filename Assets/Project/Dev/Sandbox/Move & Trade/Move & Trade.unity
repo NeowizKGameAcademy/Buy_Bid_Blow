@@ -143,12 +143,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 65835378}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -960, y: -540, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1606464022}
+  m_Father: {fileID: 926639400}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &166887256
 GameObject:
@@ -1340,7 +1340,6 @@ GameObject:
   - component: {fileID: 926639397}
   - component: {fileID: 926639401}
   - component: {fileID: 1180201635}
-  - component: {fileID: 1180201636}
   m_Layer: 5
   m_Name: Player HUD
   m_TagString: Untagged
@@ -1427,6 +1426,7 @@ RectTransform:
   - {fileID: 928882826}
   - {fileID: 1180201632}
   - {fileID: 2122978662}
+  - {fileID: 65835379}
   m_Father: {fileID: 1606464022}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -2198,7 +2198,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1180201632
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2281,22 +2281,6 @@ MonoBehaviour:
   unitPriceText: {fileID: 941639367}
   quantityText: {fileID: 293896968}
   logText: {fileID: 452599669}
---- !u!114 &1180201636
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 926639396}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7b9d010e4e34a0fa64b021c91e7c512, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.LocalTradeController
-  tradePanel: {fileID: 1180201635}
-  wallet: {fileID: 1606464024}
-  matchManager: {fileID: 1656554795}
-  ownedQuantity: 0
 --- !u!1001 &1254100920
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2950,10 +2934,12 @@ GameObject:
   - component: {fileID: 1606464025}
   - component: {fileID: 1606464029}
   - component: {fileID: 1606464024}
+  - component: {fileID: 1606464032}
   - component: {fileID: 1606464027}
   - component: {fileID: 1606464023}
   - component: {fileID: 1606464026}
   - component: {fileID: 1606464028}
+  - component: {fileID: 1606464031}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -2976,7 +2962,6 @@ Transform:
   m_Children:
   - {fileID: 843404391}
   - {fileID: 6165186761418503670}
-  - {fileID: 65835379}
   - {fileID: 926639400}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3188,7 +3173,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.PlayerInteraction
   detect: {fileID: 843404394}
   tradePanel: {fileID: 1180201635}
-  localTrade: {fileID: 1180201636}
+  localTrade: {fileID: 1656554796}
 --- !u!114 &1606464030
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3204,6 +3189,41 @@ MonoBehaviour:
   playerMove: {fileID: 0}
   playerInteraction: {fileID: 0}
   tradePanel: {fileID: 1180201635}
+--- !u!95 &1606464031
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1606464021}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1606464032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1606464021}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c49cbabf54046a40b6a1a1bd55da8cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.PlayerPortfolio
+  ownedQuantity: 000000000000000000000000
 --- !u!1 &1641094707
 GameObject:
   m_ObjectHideFlags: 0
@@ -3347,6 +3367,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1656554794}
   - component: {fileID: 1656554795}
+  - component: {fileID: 1656554796}
   m_Layer: 0
   m_Name: MatchManager
   m_TagString: Untagged
@@ -3383,6 +3404,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.MatchManager
   matchSettingsFile: {fileID: 4900000, guid: d501cfe0b4b4b944dbdd6eddb9288512, type: 3}
   randomSeed: 0
+--- !u!114 &1656554796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1656554793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7b9d010e4e34a0fa64b021c91e7c512, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.LocalTradeController
+  tradePanel: {fileID: 1180201635}
+  wallet: {fileID: 1606464024}
+  portfolio: {fileID: 1606464032}
+  matchManager: {fileID: 1656554795}
 --- !u!1 &1665525858
 GameObject:
   m_ObjectHideFlags: 0
@@ -4083,9 +4120,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 926639400}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 1}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -130, y: -40}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 130, y: -40}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2122978663
@@ -4142,7 +4179,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 1
-  m_HorizontalAlignment: 4
+  m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0

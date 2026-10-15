@@ -69,6 +69,7 @@ namespace BuyBidBlow
                 return;
 
             CurrentRound++;
+
             PriceChange[] changes = scheduledPriceChanges[CurrentRound - 1];
             ApplyPrices(scheduledPrices[CurrentRound]);
             RoundAdvanced?.Invoke(CurrentRound, changes);

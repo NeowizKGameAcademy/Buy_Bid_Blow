@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using TMPro;
+using BuyBidBlow.Systems.Types;
 
 namespace BuyBidBlow
 {
@@ -12,12 +13,12 @@ namespace BuyBidBlow
         [SerializeField] private TextMeshProUGUI quantityText;
         [SerializeField] private TextMeshProUGUI logText;
 
-        // int는 가격이 아니라 아이템 ID
-        public event Action<int, int> BuyRequested;
-        public event Action<int, int> SellRequested;
+        public event Action<Company, int> BuyRequested;
+        public event Action<Company, int> SellRequested;
         public event Action<bool> OpenStateChanged;
 
-        private int selectedItemId = -1;
+        private Company selectedCompany;
+        private bool hasSelectedCompany;
         private int selectedQuantity = 1;
 
         public bool IsOpen => tradePanel.activeSelf;
@@ -27,9 +28,10 @@ namespace BuyBidBlow
             Close();
         }
 
-        public void Open(int itemId)
+        public void Open(Company company)
         {
-            selectedItemId = itemId;
+            selectedCompany = company;
+            hasSelectedCompany = true;
             selectedQuantity = 1;
             RefreshQuantity();
             SetLog(string.Empty);
@@ -39,9 +41,9 @@ namespace BuyBidBlow
         }
 
         // 외부 거래 대상에서 아이템 이름과 단가를 전달받습니다.
-        public void Open(int itemId, string itemName, int unitPrice)
+        public void Open(Company company, string itemName, int unitPrice)
         {
-            Open(itemId);
+            Open(company);
             SetItemDetails(itemName, unitPrice);
         }
 
@@ -55,13 +57,14 @@ namespace BuyBidBlow
         public void Close()
         {
             tradePanel.SetActive(false);
-            selectedItemId = -1;
+            hasSelectedCompany = false;
             OpenStateChanged?.Invoke(false);
         }
 
-        public void SelectItem(int itemId)
+        public void SelectItem(Company company)
         {
-            selectedItemId = itemId;
+            selectedCompany = company;
+            hasSelectedCompany = true;
             selectedQuantity = 1;
             RefreshQuantity();
             SetLog(string.Empty);
@@ -98,18 +101,18 @@ namespace BuyBidBlow
 
         public void RequestBuy()
         {
-            if (!IsOpen || selectedItemId < 0)
+            if (!IsOpen || !hasSelectedCompany)
                 return;
 
-            BuyRequested?.Invoke(selectedItemId, selectedQuantity);
+            BuyRequested?.Invoke(selectedCompany, selectedQuantity);
         }
 
         public void RequestSell()
         {
-            if (!IsOpen || selectedItemId < 0)
+            if (!IsOpen || !hasSelectedCompany)
                 return;
 
-            SellRequested?.Invoke(selectedItemId, selectedQuantity);
+            SellRequested?.Invoke(selectedCompany, selectedQuantity);
         }
     }
 }

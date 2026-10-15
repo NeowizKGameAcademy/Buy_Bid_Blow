@@ -11,8 +11,5 @@ namespace BuyBidBlow
 
         void AddMoney(int amount);
         bool TrySpendMoney(int amount);
-
-        bool TryBuy(int price);
-        void Sell(int price);
     }
 }
