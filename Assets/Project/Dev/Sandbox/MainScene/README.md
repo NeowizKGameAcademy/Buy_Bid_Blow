@@ -32,3 +32,6 @@ All six PNG corner alpha values are 0. Imported sprite rects trim transparent ma
 - BTN_MainStates_v3: built-in image_gen edit of v2. Normal/Pressed use dark aged brass; Focused alone uses bright gold. Disabled remains desaturated. Previous artwork retained.
 - Logo dimensions remain 660×460 at (0,245).
 - Preview shows GameStart selected; labels and icons stay bright because dim layers are behind UI.
+
+## 2026-10-16 image recovery
+MainScene PNGs were Git LFS pointer text (130–132 bytes) although current .gitattributes uses ordinary PNG binary storage without an LFS filter. Restored all 13 MainScene PNGs from the local LFS object store, verifying SHA-256 against each pointer before copying. Reimported in the running editor without replacing the user's dirty scene. Scene image references resolve again; prefab has 17 sprite-backed Images. Confirmed restored Game view visually. Keep the restored binary files in the next commit under the existing non-LFS PNG policy.
