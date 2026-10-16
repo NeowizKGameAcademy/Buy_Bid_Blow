@@ -1,0 +1,3 @@
+Wolf_Mixamo_Idle: 8.33s, 30fps, 175 transform curves mapped, 16 moving bones, loop=True, legacy=False
+Wolf_Mixamo_JoyfulJump: 1.87s, 30fps, 175 transform curves mapped, 28 moving bones, loop=False, legacy=False
+PASS: standalone non-Legacy clips, all transform paths resolved on Wolf_Model; preview controller and prefab saved. Existing gameplay controller unchanged.
