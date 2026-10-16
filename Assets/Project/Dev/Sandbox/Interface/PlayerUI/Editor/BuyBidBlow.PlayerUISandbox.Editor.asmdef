@@ -1,0 +1,1 @@
+{"name":"BuyBidBlow.PlayerUISandbox.Editor","references":["BuyBidBlow.PlayerUISandbox","BuyBidBlow.Game","UnityEngine.UI","Unity.InputSystem"],"includePlatforms":["Editor"]}

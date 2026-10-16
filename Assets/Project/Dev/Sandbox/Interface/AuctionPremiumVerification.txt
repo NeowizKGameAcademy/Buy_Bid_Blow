@@ -1,0 +1,1 @@
+PASS: 11 generated transparent PNGs / 14 sprite subassets; editable Text count preserved (25); four panel backgrounds, cash/company icons, keycaps, 4-state SpriteSwap bid button. Scene and prefab saved; isolated 1920x1080 render. Central product panel remains inactive. No gameplay binding added.
