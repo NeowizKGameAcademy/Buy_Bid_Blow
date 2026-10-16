@@ -9,6 +9,7 @@ namespace BuyBidBlow
     {
         [SerializeField] private PlayerMove playerMove;
         [SerializeField] private PlayerInteraction playerInteraction;
+        [SerializeField] private Animator playerAnimation;
         [SerializeField] private TradePanelController tradePanel;
         private bool controlsBlocked;
 
@@ -19,6 +20,9 @@ namespace BuyBidBlow
 
             if (playerInteraction == null)
                 TryGetComponent(out playerInteraction);
+
+            if (playerAnimation == null)
+                playerAnimation = GetComponentInChildren<Animator>();
         }
 
         private void OnEnable()
@@ -46,9 +50,11 @@ namespace BuyBidBlow
         public void OnMove(InputAction.CallbackContext context)
         {
             if (controlsBlocked) return;
-            playerMove.SetMoveInput(
-                context.ReadValue<Vector2>()
-            );
+
+            Vector2 moveInput = context.ReadValue<Vector2>();
+
+            playerMove.SetMoveInput(moveInput);
+            playerAnimation.SetBool("isWalking", moveInput != Vector2.zero);
         }
 
         public void OnRotate(InputAction.CallbackContext context)
