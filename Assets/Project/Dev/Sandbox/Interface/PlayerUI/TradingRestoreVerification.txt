@@ -1,0 +1,1 @@
+PASS: original five PNG assets restored from hash-verified local LFS objects; three company prefab instances linked; inactive by default; timer 350x104; trade panels below timer. Display-only quantity/payment calculation; actual transactions not connected.

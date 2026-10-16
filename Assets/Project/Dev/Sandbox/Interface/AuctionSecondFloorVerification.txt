@@ -1,0 +1,1 @@
+PASS: 1920x1080 HUD render, four custom shaped panels, editable native Text/Image/RectTransform, TL/TC/TR/BC anchors, private direction omitted, first-person camera over participant rail; placeholder pedestal. No input or auction gameplay binding. Original HUD preserved inactive. Central world-space product label deferred.

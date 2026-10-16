@@ -1,0 +1,1 @@
+PASS: thin cream body, triangle flap, 8-sided plain seal, editable TextMeshPro 3D rounds, prefab placed above pedestal. Rotation 20 degrees/sec (18 sec/revolution), Play only. No auction/network logic.

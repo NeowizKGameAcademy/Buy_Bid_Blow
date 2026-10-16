@@ -1,0 +1,1 @@
+PASS: separate scene, local preview rig, existing PlayerMove/PlayerCamera/DetectObject, copied crosshair sprites; constant assets/timer, trade/auction modes, stationary-world envelope retained. Display/test input only, actual transactions not connected.
