@@ -11,7 +11,10 @@ namespace BuyBidBlow
         [SerializeField] private PlayerInteraction playerInteraction;
         [SerializeField] private Animator playerAnimation;
         [SerializeField] private TradePanelController tradePanel;
+        [SerializeField] private RadialMenuController radialMenu;
         private bool controlsBlocked;
+
+        private static readonly int JumpTrigger = Animator.StringToHash("Jump");
 
         private void Awake()
         {
@@ -23,10 +26,18 @@ namespace BuyBidBlow
 
             if (playerAnimation == null)
                 playerAnimation = GetComponentInChildren<Animator>();
+
+            if (radialMenu == null)
+                radialMenu = GetComponentInChildren<RadialMenuController>(true);
+
+            playerAnimation.SetBool("isGroud", playerMove.IsGrounded);
         }
 
         private void OnEnable()
         {
+            playerMove.GroundedChanged += SetGroundedAnimation;
+            playerMove.Jumped += PlayJumpAnimation;
+
             if (tradePanel != null)
             {
                 tradePanel.OpenStateChanged += SetControlsBlocked;
@@ -36,6 +47,9 @@ namespace BuyBidBlow
 
         private void OnDisable()
         {
+            playerMove.GroundedChanged -= SetGroundedAnimation;
+            playerMove.Jumped -= PlayJumpAnimation;
+
             if (tradePanel != null)
                 tradePanel.OpenStateChanged -= SetControlsBlocked;
         }
@@ -49,7 +63,7 @@ namespace BuyBidBlow
 
         public void OnMove(InputAction.CallbackContext context)
         {
-            if (controlsBlocked) return;
+            if (controlsBlocked || (radialMenu != null && radialMenu.IsOpen)) return;
 
             Vector2 moveInput = context.ReadValue<Vector2>();
 
@@ -59,7 +73,7 @@ namespace BuyBidBlow
 
         public void OnRotate(InputAction.CallbackContext context)
         {
-            if (controlsBlocked) return;
+            if (controlsBlocked || (radialMenu != null && radialMenu.IsOpen)) return;
             playerMove.Rotate(
                 context.ReadValue<Vector2>()
             );
@@ -68,17 +82,49 @@ namespace BuyBidBlow
         public void OnJump(InputAction.CallbackContext context)
         {
             if (controlsBlocked) return;
+
             if (context.started)
                 playerMove.SetJumpHeld(true);
             else if (context.canceled)
                 playerMove.SetJumpHeld(false);
         }
 
+        private void SetGroundedAnimation(bool isGrounded)
+        {
+            playerAnimation.SetBool("isGroud", isGrounded);
+        }
+
+        private void PlayJumpAnimation()
+        {
+            playerAnimation.ResetTrigger(JumpTrigger);
+            playerAnimation.SetTrigger(JumpTrigger);
+        }
+
         public void OnInteract(InputAction.CallbackContext context)
         {
             if (controlsBlocked) return;
+
+            // Shift shares the existing Interction action with E. Inspect the
+            // triggering control so E keeps its existing trade behaviour.
+            if (IsShiftControl(context))
+            {
+                if (context.started)
+                    radialMenu?.BeginSelection();
+                else if (context.canceled)
+                    radialMenu?.EndSelection(true);
+
+                return;
+            }
+
             if (context.performed)
                 playerInteraction.Interact_OpenTradePanel();
+        }
+
+        private static bool IsShiftControl(InputAction.CallbackContext context)
+        {
+            var controlPath = context.control?.path;
+            return !string.IsNullOrEmpty(controlPath)
+                && controlPath.ToLowerInvariant().Contains("shift");
         }
     }
 }
