@@ -1,5 +1,19 @@
 {
-  "name": "BuyBidBlow.Game",
-  "rootNamespace": "BuyBidBlow",
-  "references": ["BuyBidBlow.Systems", "Mirror"]
+    "name": "BuyBidBlow.Game",
+    "rootNamespace": "BuyBidBlow",
+    "references": [
+        "BuyBidBlow.Systems",
+        "Mirror",
+        "Unity.InputSystem",
+        "Unity.TextMeshPro"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

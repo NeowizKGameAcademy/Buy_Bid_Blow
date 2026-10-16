@@ -1,0 +1,23 @@
+{
+  "01_Curved_Desk": {
+    "parts": 28,
+    "dimensions": [
+      3.764,
+      1.008,
+      0.92
+    ],
+    "vertices": 1376,
+    "non_manifold_parts": [],
+    "curve_direction": "-Y"
+  },
+  "02_Chair": {
+    "parts": 21,
+    "dimensions": [
+      0.51,
+      0.564,
+      1.136
+    ],
+    "vertices": 324,
+    "non_manifold_parts": []
+  }
+}

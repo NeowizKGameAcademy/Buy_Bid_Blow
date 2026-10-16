@@ -1,0 +1,27 @@
+{
+  "tool": "Built-in image_gen",
+  "icons": [
+    {
+      "name": "IC_Cash",
+      "requirement": "A compact gold wallet / clasp purse icon with a simple rectangular body, small arch handle and one tiny clasp. Front facing, minimal legible silhouette. Warm muted golden brass, subtle highlights, no currency symbol or writing.",
+      "prompt": "Production isolated HUD sprite for BUY BID BLOW, stylized low-poly wood auction hall party game. One single centered icon on genuinely transparent PNG canvas. Consistent simple cream/gold/green/red UI icon aesthetic, subtle tactile volume with upper-left light, restrained shading, no gems, no ornate frame, no text, no numbers, no background or grid. Clear shapes readable at32pixels. Leave generous transparent padding. A compact gold wallet / clasp purse icon with a simple rectangular body, small arch handle and one tiny clasp. Front facing, minimal legible silhouette. Warm muted golden brass, subtle highlights, no currency symbol or writing."
+    },
+    {
+      "name": "IC_Straw",
+      "requirement": "A compact golden straw sheaf icon, several tapered wheat/straw stems tied together at bottom, fanned upward, bold clean silhouette, warm golden yellow. No panel or text.",
+      "prompt": "Production isolated HUD sprite for BUY BID BLOW, stylized low-poly wood auction hall party game. One single centered icon on genuinely transparent PNG canvas. Consistent simple cream/gold/green/red UI icon aesthetic, subtle tactile volume with upper-left light, restrained shading, no gems, no ornate frame, no text, no numbers, no background or grid. Clear shapes readable at32pixels. Leave generous transparent padding. A compact golden straw sheaf icon, several tapered wheat/straw stems tied together at bottom, fanned upward, bold clean silhouette, warm golden yellow. No panel or text. Absolutely NO glow halo, NO particles, NO shadow cloud. Icon fills70percent of square canvas with crisp transparent edges."
+    },
+    {
+      "name": "IC_Timber",
+      "requirement": "A compact green timber log icon, one short cylindrical cut wooden log at slight isometric angle, visible circular growth rings on cut face, green company color, bold clean silhouette. No panel or text.",
+      "prompt": "Production isolated HUD sprite for BUY BID BLOW, stylized low-poly wood auction hall party game. One single centered icon on genuinely transparent PNG canvas. Consistent simple cream/gold/green/red UI icon aesthetic, subtle tactile volume with upper-left light, restrained shading, no gems, no ornate frame, no text, no numbers, no background or grid. Clear shapes readable at32pixels. Leave generous transparent padding. A compact green timber log icon, one short cylindrical cut wooden log at slight isometric angle, visible circular growth rings on cut face, green company color, bold clean silhouette. No panel or text. Absolutely NO glow halo, NO particles, NO shadow cloud. Icon fills70percent of square canvas with crisp transparent edges."
+    },
+    {
+      "name": "IC_Brick",
+      "requirement": "A compact muted brick red icon, stack of three or four rectangular clay bricks with clear simple seams, slight isometric angle, bold readable silhouette. No panel or text.",
+      "prompt": "Production isolated HUD sprite for BUY BID BLOW, stylized low-poly wood auction hall party game. One single centered icon on genuinely transparent PNG canvas. Consistent simple cream/gold/green/red UI icon aesthetic, subtle tactile volume with upper-left light, restrained shading, no gems, no ornate frame, no text, no numbers, no background or grid. Clear shapes readable at32pixels. Leave generous transparent padding. A compact muted brick red icon, stack of three or four rectangular clay bricks with clear simple seams, slight isometric angle, bold readable silhouette. No panel or text. Absolutely NO glow halo, NO particles, NO shadow cloud. Icon fills70percent of square canvas with crisp transparent edges."
+    }
+  ],
+  "reused": "IC_Direction copied from existing generated 17_KeyboardArrow; rotate180 for downside",
+  "background": "New borderless soft-fade gradient generated as a simple native UI asset; alpha controlled by Image.color"
+}

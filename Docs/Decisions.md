@@ -1,6 +1,9 @@
 # Buy Bid Blow 개발 결정사항
 
-기준일: 2026-10-08(폴더·계층 구조는 2026-10-10 개정). 구현 완료 여부와 별개인 설계 결정이다.
+> 2026-10-13 게임 규칙 개정: 현재 규칙은 [GameRules.md](GameRules.md)를 따른다.
+> 아래 과거 규칙 중 Secret 결과 공개·입찰 수정·정보 종류·경매 일정 등은 최신 규칙으로 대체한다.
+
+기준일: 2026-10-08(폴더·계층 구조는 2026-10-10, 소품 폴더는 2026-10-12, 네트워크 컴포넌트 배치는 2026-10-15 개정). 구현 완료 여부와 별개인 설계 결정이다.
 
 - **네트워크:** Mirror를 사용하고 별도 전용 서버가 게임 상태와 판정을 관리한다. 클라이언트는 요청을 보내고 서버가 검증·확정한다.
 - **참가 방식:** 방 생성·입장 방식으로 진행한다. 방장은 플레이어 권한이며 서버 호스트가 아니다.
@@ -9,25 +12,25 @@
 - **영속 저장:** MySQL은 서버만 접근한다. 경기 요약·최종 결과를 저장하고, 계정·누적 전적은 해당 기능 도입 시 저장한다. DB 접속 비밀정보는 서버 외부 설정으로 관리한다.
 - **트랜잭션:** 경기 중 매매·낙찰은 서버 메모리에서 관련 상태를 함께 확정한다. 최종 결과와 전적 갱신은 DB 트랜잭션으로 처리하며 경기 ID로 중복 저장을 방지한다. Mirror는 통신을 담당한다.
   - **메모리 원자성:** Match는 한 번에 한 스레드에서만 처리되므로 락을 쓰지 않는다. Systems 메서드는 모든 검증을 먼저 끝내고, 실패하면 상태를 바꾸지 않고 반환하며, 성공하면 실패할 수 없는 변경만 마지막에 한꺼번에 적용한다.
-  - **네트워크 반영:** SyncVar 갱신과 Rpc 전송은 Systems가 성공을 반환한 뒤 `MatchHost`가 수행한다. 처리 중간 상태는 클라이언트에 보내지 않는다.
+  - **네트워크 반영:** SyncVar 갱신과 Rpc 전송은 Systems가 성공을 반환한 뒤 해당 오브젝트의 `*Net` 컴포넌트가 수행한다. Tick으로 발생한 결과는 `GameNetworkManager`가 해당 컴포넌트에 전달한다. 처리 중간 상태는 클라이언트에 보내지 않는다.
   - **입찰금 예약:** 입찰 시 금액을 예약하고 낙찰 시 차감한다. 예약 금액은 거래·다른 입찰에 쓸 수 없으며(사용 가능 현금 = 현금 − 예약), 상위 입찰에 밀리거나 유찰·패찰되면 즉시 해제한다. 예약 금액은 본인에게만 공개한다.
   - **DB 중복 방지:** `match_id`에 UNIQUE 제약을 둔다. 재시도 중 중복 키 오류는 이미 저장된 것으로 보고 성공 처리한다.
   - **DB 범위:** 경기 요약·참가자별 결과·전적 갱신을 한 트랜잭션으로 묶는다.
   - **DB 실패:** 플레이어에게 보내는 경기 결과는 DB 저장을 기다리지 않는다. 저장은 몇 차례 재시도하고, 끝내 실패하면 결과 데이터를 로그 또는 파일로 남긴다.
 - **초기 복구 범위:** 클라이언트 재접속을 지원한다. 서버 장애 시 진행 중 경기는 중단 처리하며, 서버 재시작 후 경기 복원은 초기 범위에서 제외한다.
 - **오디오:** Sandguard 구현을 그대로 도입하지 않는다. 자체 엔진과 JSON 큐 데이터를 분리한다. 엔진 이름은 **CueAudio**이며 `Assets/CueAudio`, 게임용 클립과 큐 JSON은 `Assets/Project/Audio`에 둔다.
-- **폴더 책임:** 최상위 폴더는 파일 종류가 아니라 용도로 짓는다. 게임 규칙·상태와 공용 타입은 `Systems`(순수 C#, asmdef의 `noEngineReferences`로 Unity·Mirror 의존을 막음), Mirror 연결은 `Network`에 둔다. 시스템을 이용하기만 하는 오브젝트는 `Characters`(행위자)·`World`(상호작용 지점)·`UI`(화면)에 오브젝트별 폴더로 두고, 그 오브젝트만 쓰는 스크립트·프리팹·에셋을 함께 둔다. 여러 오브젝트가 쓰는 코드는 `Common`, 여러 곳에서 쓰는 에셋은 `Content`에 둔다. 어셈블리는 `Systems`와 `Game` 두 개이며, Game은 `Network`의 asmdef와 나머지 코드 폴더의 asmref로 구성한다. Application·Integrations 계층, Shared/Protocol 별도 타입, 클라이언트 Model·Gateway·Fake는 두지 않는다. 씬은 `Scenes`, 개발 도구는 `Dev`에 둔다.
-- **서버·클라이언트 경계:** 같은 Game 어셈블리에 두고 규칙으로 지킨다. 게임 상태는 서버에서 `Match`를 통해서만 바꾸고, `Match`·`MatchHost`는 서버에서만 생성하며, 클라이언트 코드는 동기화된 값만 읽는다. 보안 전제상 규칙 코드가 클라이언트 빌드에 포함되어도 문제 삼지 않는다. 경계 실수가 잦아지면 Server·Client 어셈블리로 분리한다.
+- **폴더 책임:** 최상위 폴더는 파일 종류가 아니라 용도로 짓는다. 게임 규칙·상태와 공용 타입은 `Systems`(순수 C#, asmdef의 `noEngineReferences`로 Unity·Mirror 의존을 막음), `Network`의 코드 파일은 `GameNetworkManager.cs` 하나만 둔다(기존 Game asmdef는 유지). 접속·종료, 플레이어 생성, Systems의 경기 생성·관리 기능 호출과 서버 Tick 구동을 담당한다. 시스템을 이용하기만 하는 오브젝트는 `Characters`(행위자)·`Content/Props`(씬에 놓이는 소품, 상호작용 여부와 무관)·`UI`(화면)에 오브젝트별 폴더로 두고, 그 오브젝트만 쓰는 스크립트·프리팹·에셋을 함께 둔다. `PlayerNet` 같은 오브젝트별 네트워크 컴포넌트도 해당 오브젝트 폴더에 둔다. 여러 오브젝트가 쓰는 코드는 `Common`, 게임 콘텐츠는 `Content`에 두며, `Content/Props`에는 소품별 동작 코드·프리팹·에셋을 함께 둔다. 어셈블리는 `Systems`와 `Game` 두 개이며, Game은 `Network`의 asmdef와 나머지 코드 폴더의 asmref로 구성한다. Application·Integrations 계층, Shared/Protocol 별도 타입, 클라이언트 Model·Gateway·Fake는 두지 않는다. 씬은 `Scenes`, 개발 도구는 `Dev`에 둔다.
+- **서버·클라이언트 경계:** 같은 Game 어셈블리에 두고 규칙으로 지킨다. 게임 상태는 서버에서 Systems의 기능별 메서드를 통해서만 바꾸고, 경기와 시스템 인스턴스는 서버에서만 생성하며, 클라이언트 코드는 동기화된 값만 읽는다. 보안 전제상 규칙 코드가 클라이언트 빌드에 포함되어도 문제 삼지 않는다. 경계 실수가 잦아지면 Server·Client 어셈블리로 분리한다.
 - **운영 설정:** 방화벽 설정은 서버 배포 도구로 관리한다. 일반 클라이언트에는 방화벽 변경 기능을 넣지 않는다.
 - **용어:** Room은 참가자·준비 상태를 가진 방, Match는 방에서 시작된 게임 세션 하나다. 한 Room에서 Match를 여러 번 진행할 수 있다. Mirror `NetworkMatch`는 Net에서 Room ID에 대응한다.
-- **서버 실행 구조:** Match는 정적 상태 없는 인스턴스로 만들어 한 프로세스에서 여러 개를 운영한다. 초기에는 메인 스레드 단일 스레드로 처리하고, 필요하면 워커 스레드나 프로세스로 확장한다. 이를 위해 Match는 `Handle(request, now)`·`Tick(now)`로만 입력받고 결과 이벤트를 반환하며, 난수는 Match별 `System.Random`을 쓴다.
-- **시간:** 서버 틱 드라이버만 `Time.unscaledTimeAsDouble`을 읽어 `now`로 주입한다. Systems는 시간을 직접 읽지 않고 마감을 서버 절대 시각으로 보관한다. 클라이언트는 `NetworkTime.time`으로 남은 시간을 표시한다.
+- **서버 실행 구조:** Match는 정적 상태 없는 인스턴스로 만들어 한 프로세스에서 여러 개를 운영한다. 초기에는 메인 스레드 단일 스레드로 처리하고, 필요하면 워커 스레드나 프로세스로 확장한다. 플레이어 행동은 서버 측 Command에서 `Auction.Bid` 같은 기능별 메서드를 직접 호출하고, 시간에 따른 처리는 `Match.Tick(now)`으로 진행한다. 별도 `MatchHost`나 통합 `GameRequest`·`Match.Handle` 진입점은 두지 않는다. 시스템은 처리 결과나 필요한 이벤트를 반환하며, 난수는 Match별 `System.Random`을 쓴다.
+- **시간:** `GameNetworkManager`가 서버에서 경기별 `Tick(now)`를 호출한다. Tick과 Command 처리 시 서버 측 연결 코드가 같은 시간 기준인 `Time.unscaledTimeAsDouble`을 읽어 `now`로 주입한다. Systems는 시간을 직접 읽지 않고 마감을 서버 절대 시각으로 보관한다. 클라이언트는 `NetworkTime.time`으로 남은 시간을 표시한다.
 - **DB 처리:** DB 입출력은 메인 스레드 밖에서 수행하고, 저장 데이터는 불변 DTO로 복사해 넘긴다.
 - **보안 전제:** 클라이언트 조작은 없다고 가정한다. 서버 검증은 게임 규칙 판정용이며 치트 방지를 목표로 하지 않는다.
-- **통신:** 로비·방·경기 모두 Mirror 기본 기능을 쓴다. 요청은 `[Command]`, 요청 실패 등 본인 응답은 `[TargetRpc]`, 공개 이벤트는 `[ClientRpc]`, 상태는 `SyncVar`·`SyncList`로 동기화하며 비공개 상태는 플레이어 오브젝트의 `syncMode = Owner`로 본인에게만 보낸다. 별도 Snapshot 메시지는 두지 않는다. NetworkBehaviour(`*Net`)는 `Network`에 두고, Command 본문은 요청 struct를 만들어 `MatchHost`에 넘긴다. `MatchHost`는 `Match.Handle` 결과를 SyncVar·Rpc에 반영한다. Command 인자·동기화 값은 `Systems/Types`의 타입과 enum을 그대로 쓴다.
+- **통신:** 로비·방·경기 모두 Mirror 기본 기능을 쓴다. 요청은 `[Command]`, 요청 실패 등 본인 응답은 `[TargetRpc]`, 공개 이벤트는 `[ClientRpc]`, 상태는 `SyncVar`·`SyncList`로 동기화하며 비공개 상태는 플레이어 오브젝트의 `syncMode = Owner`로 본인에게만 보낸다. 별도 Snapshot 메시지는 두지 않는다. 오브젝트별 NetworkBehaviour(`*Net`)는 해당 `Characters`·`Content/Props`·`UI`의 오브젝트 폴더에 둔다(예: `PlayerNet`은 `Characters/Player` 아래). `Network`에는 `GameNetworkManager`만 두며, 각 컴포넌트의 Command 본문은 서버의 해당 시스템 메서드를 직접 호출한다. 처리 결과는 해당 `*Net` 컴포넌트가 SyncVar·Rpc에 반영한다. Command 인자·동기화 값은 `Systems/Types`의 타입과 enum을 그대로 쓴다.
 - **플레이어 오브젝트:** 접속 즉시 생성해 로비·방·경기 동안 유지한다. 가시성은 `NetworkMatch` ID를 로비 또는 Room ID로 바꿔 전환한다.
 - **씬:** 거래소 레벨은 네트워크 오브젝트가 없는 일반 씬으로 클라이언트에서만 로드한다. 네트워크 오브젝트는 런타임에 생성하며, 여러 Match는 같은 좌표 공간에 두고 가시성으로 분리한다. 서버 측 물리 판정이 필요해지면 Match별 additive 씬으로 전환한다.
-- **빌드 분리:** Dedicated Server 빌드(`UNITY_SERVER`)로 서버를 빌드한다. MySQL DLL과 Persistence 구현은 저장 기능 도입 시 별도 asmdef(`defineConstraints: UNITY_SERVER`)로 만들어 서버에서만 컴파일하고, `MatchHost`는 저장 인터페이스에만 의존한다.
+- **빌드 분리:** Dedicated Server 빌드(`UNITY_SERVER`)로 서버를 빌드한다. MySQL DLL과 Persistence 구현은 저장 기능 도입 시 별도 asmdef(`defineConstraints: UNITY_SERVER`)로 만들어 서버에서만 컴파일하고, 저장을 호출하는 코드는 저장 인터페이스에만 의존한다.
 - **경매 규칙:**
   - **Open:** 입찰자 신원을 공개한다. 입찰하면 해당 캐릭터가 팻말을 드는 모습으로 표시한다. 최고 입찰자가 바뀌면 이전 최고 입찰자의 예약을 해제한다.
   - **Secret:** 금액 조절은 확정 버튼을 누르기 전까지 클라이언트에서만 하며 서버에 보내지 않는다. 확정하면 그 금액으로 한 번 제출되고 이후 수정할 수 없다. 패스할 수 있다. 플레이어별 확정 여부는 공개하고, 금액은 마감 후 동시에 공개한다.

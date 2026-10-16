@@ -1,0 +1,126 @@
+{
+  "method": "Actual FBX at prefab scale 1.8, manually posed static sitting fit test, not Unity sit animation playback.",
+  "front_seat_checks": [
+    {
+      "seat": 1,
+      "parts": {
+        "Wolf_Head": {
+          "desk_intersecting_faces": 0,
+          "desk_min_vertex_distance_m": 0.671,
+          "chair_intersecting_faces": 0
+        },
+        "Wolf_Lower_Long": {
+          "desk_intersecting_faces": 0,
+          "desk_min_vertex_distance_m": 0.394,
+          "chair_intersecting_faces": 307
+        },
+        "Wolf_Tail": {
+          "desk_intersecting_faces": 0,
+          "desk_min_vertex_distance_m": 0.863,
+          "chair_intersecting_faces": 42
+        },
+        "Wolf_Tie": {
+          "desk_intersecting_faces": 0,
+          "desk_min_vertex_distance_m": 0.644,
+          "chair_intersecting_faces": 0
+        },
+        "Wolf_Upper_Suit": {
+          "desk_intersecting_faces": 0,
+          "desk_min_vertex_distance_m": 0.406,
+          "chair_intersecting_faces": 0
+        }
+      }
+    },
+    {
+      "seat": 2,
+      "parts": {
+        "Wolf_Head": {
+          "desk_intersecting_faces": 0,
+          "desk_min_vertex_distance_m": 0.737,
+          "chair_intersecting_faces": 0
+        },
+        "Wolf_Lower_Long": {
+          "desk_intersecting_faces": 0,
+          "desk_min_vertex_distance_m": 0.48,
+          "chair_intersecting_faces": 307
+        },
+        "Wolf_Tail": {
+          "desk_intersecting_faces": 0,
+          "desk_min_vertex_distance_m": 0.953,
+          "chair_intersecting_faces": 42
+        },
+        "Wolf_Tie": {
+          "desk_intersecting_faces": 0,
+          "desk_min_vertex_distance_m": 0.734,
+          "chair_intersecting_faces": 0
+        },
+        "Wolf_Upper_Suit": {
+          "desk_intersecting_faces": 0,
+          "desk_min_vertex_distance_m": 0.502,
+          "chair_intersecting_faces": 0
+        }
+      }
+    },
+    {
+      "seat": 3,
+      "parts": {
+        "Wolf_Head": {
+          "desk_intersecting_faces": 0,
+          "desk_min_vertex_distance_m": 0.737,
+          "chair_intersecting_faces": 0
+        },
+        "Wolf_Lower_Long": {
+          "desk_intersecting_faces": 0,
+          "desk_min_vertex_distance_m": 0.482,
+          "chair_intersecting_faces": 307
+        },
+        "Wolf_Tail": {
+          "desk_intersecting_faces": 0,
+          "desk_min_vertex_distance_m": 0.953,
+          "chair_intersecting_faces": 42
+        },
+        "Wolf_Tie": {
+          "desk_intersecting_faces": 0,
+          "desk_min_vertex_distance_m": 0.734,
+          "chair_intersecting_faces": 0
+        },
+        "Wolf_Upper_Suit": {
+          "desk_intersecting_faces": 0,
+          "desk_min_vertex_distance_m": 0.509,
+          "chair_intersecting_faces": 0
+        }
+      }
+    },
+    {
+      "seat": 4,
+      "parts": {
+        "Wolf_Head": {
+          "desk_intersecting_faces": 0,
+          "desk_min_vertex_distance_m": 0.671,
+          "chair_intersecting_faces": 0
+        },
+        "Wolf_Lower_Long": {
+          "desk_intersecting_faces": 0,
+          "desk_min_vertex_distance_m": 0.396,
+          "chair_intersecting_faces": 307
+        },
+        "Wolf_Tail": {
+          "desk_intersecting_faces": 0,
+          "desk_min_vertex_distance_m": 0.863,
+          "chair_intersecting_faces": 42
+        },
+        "Wolf_Tie": {
+          "desk_intersecting_faces": 0,
+          "desk_min_vertex_distance_m": 0.644,
+          "chair_intersecting_faces": 0
+        },
+        "Wolf_Upper_Suit": {
+          "desk_intersecting_faces": 0,
+          "desk_min_vertex_distance_m": 0.413,
+          "chair_intersecting_faces": 0
+        }
+      }
+    }
+  ],
+  "foot_floor_gap_m": 0.1615
+}

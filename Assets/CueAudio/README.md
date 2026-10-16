@@ -76,6 +76,6 @@ public sealed class BidAudio : MonoBehaviour
 
 ## 검증
 
-Unity Test Runner에서 `CueAudio.EditMode.Tests`, `CueAudio.PlayMode.Tests`를 실행한다. 검증 항목은 JSON 오류, 쿨다운, 동시 재생 제한, 비반복 선택, 풀 재사용, 오래된 핸들, 페이드, 크로스페이드 실패, 호출 기록, 사용처 탐색, 실제 프레임 진행 중 자연 종료와 호스트/emitter 수명이다.
+Unity Test Runner에서 `BuyBidBlow.Dev.Tests.EditMode`, `BuyBidBlow.Dev.Tests.PlayMode`의 CueAudio 테스트를 실행한다. 검증 항목은 JSON 오류, 쿨다운, 동시 재생 제한, 비반복 선택, 풀 재사용, 오래된 핸들, 페이드, 크로스페이드 실패, 호출 기록, 사용처 탐색, 실제 프레임 진행 중 자연 종료와 호스트/emitter 수명이다.
 
 정밀 음악 박자 동기화, 스트리밍/Addressables 로딩, follow-target, 실시간 JSON hot reload는 현재 범위에 포함하지 않는다. `IAudioClipResolver`는 검증/클립 해석 경계를 정의하며 현재 엔진은 `CueCatalog`의 직접 참조 바인딩을 사용한다.

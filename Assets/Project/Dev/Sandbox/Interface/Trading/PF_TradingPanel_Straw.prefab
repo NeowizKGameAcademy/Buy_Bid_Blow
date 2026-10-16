@@ -1,0 +1,131 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &3724858137573088134
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3901411437154777, guid: 16da808c57d7cbe4880606fcfc261aa9, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 3931761244469805941, guid: fb36e7faf52ccf74c96d3192b76de0e9, type: 3}
+    - target: {fileID: 461729129573041676, guid: 16da808c57d7cbe4880606fcfc261aa9, type: 3}
+      propertyPath: m_Text
+      value: $102
+      objectReference: {fileID: 0}
+    - target: {fileID: 2000485426569545363, guid: 16da808c57d7cbe4880606fcfc261aa9, type: 3}
+      propertyPath: m_Text
+      value: "2\uC8FC"
+      objectReference: {fileID: 0}
+    - target: {fileID: 2525958152829642581, guid: 16da808c57d7cbe4880606fcfc261aa9, type: 3}
+      propertyPath: m_Text
+      value: +$5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3924074156745640826, guid: 16da808c57d7cbe4880606fcfc261aa9, type: 3}
+      propertyPath: m_Name
+      value: PF_TradingPanel_Straw
+      objectReference: {fileID: 0}
+    - target: {fileID: 4100014588269320563, guid: 16da808c57d7cbe4880606fcfc261aa9, type: 3}
+      propertyPath: m_Text
+      value: $24
+      objectReference: {fileID: 0}
+    - target: {fileID: 4782404088807325386, guid: 16da808c57d7cbe4880606fcfc261aa9, type: 3}
+      propertyPath: m_Text
+      value: $48
+      objectReference: {fileID: 0}
+    - target: {fileID: 7894529617708446029, guid: 16da808c57d7cbe4880606fcfc261aa9, type: 3}
+      propertyPath: m_Pivot.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7894529617708446029, guid: 16da808c57d7cbe4880606fcfc261aa9, type: 3}
+      propertyPath: m_Pivot.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7894529617708446029, guid: 16da808c57d7cbe4880606fcfc261aa9, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7894529617708446029, guid: 16da808c57d7cbe4880606fcfc261aa9, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7894529617708446029, guid: 16da808c57d7cbe4880606fcfc261aa9, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7894529617708446029, guid: 16da808c57d7cbe4880606fcfc261aa9, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7894529617708446029, guid: 16da808c57d7cbe4880606fcfc261aa9, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 860
+      objectReference: {fileID: 0}
+    - target: {fileID: 7894529617708446029, guid: 16da808c57d7cbe4880606fcfc261aa9, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 850
+      objectReference: {fileID: 0}
+    - target: {fileID: 7894529617708446029, guid: 16da808c57d7cbe4880606fcfc261aa9, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7894529617708446029, guid: 16da808c57d7cbe4880606fcfc261aa9, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7894529617708446029, guid: 16da808c57d7cbe4880606fcfc261aa9, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7894529617708446029, guid: 16da808c57d7cbe4880606fcfc261aa9, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7894529617708446029, guid: 16da808c57d7cbe4880606fcfc261aa9, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7894529617708446029, guid: 16da808c57d7cbe4880606fcfc261aa9, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7894529617708446029, guid: 16da808c57d7cbe4880606fcfc261aa9, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7894529617708446029, guid: 16da808c57d7cbe4880606fcfc261aa9, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -64
+      objectReference: {fileID: 0}
+    - target: {fileID: 7894529617708446029, guid: 16da808c57d7cbe4880606fcfc261aa9, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -190
+      objectReference: {fileID: 0}
+    - target: {fileID: 7894529617708446029, guid: 16da808c57d7cbe4880606fcfc261aa9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7894529617708446029, guid: 16da808c57d7cbe4880606fcfc261aa9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7894529617708446029, guid: 16da808c57d7cbe4880606fcfc261aa9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8060034712135703962, guid: 16da808c57d7cbe4880606fcfc261aa9, type: 3}
+      propertyPath: m_Text
+      value: Straw
+      objectReference: {fileID: 0}
+    - target: {fileID: 9177862283430982322, guid: 16da808c57d7cbe4880606fcfc261aa9, type: 3}
+      propertyPath: m_Text
+      value: "6\uC8FC"
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 16da808c57d7cbe4880606fcfc261aa9, type: 3}

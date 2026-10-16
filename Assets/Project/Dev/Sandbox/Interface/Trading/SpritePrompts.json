@@ -1,0 +1,13 @@
+{
+  "generator": "Built-in image_gen",
+  "transparent_background": true,
+  "shared_prefix": "Use case: ui-mockup. Asset production for Unity game BUY BID BLOW. ",
+  "shared_suffix": " Deliver exactly one isolated bitmap asset. Never include reference sheet, checkerboard, color swatches, watermark or external annotation.",
+  "assets": {
+    "BG_TradingGlass": "ONE single tall rectangular game trading panel background only, width:height about 1:1.02. Dark smoky petrol teal translucent glass with extremely faint fine leather micrograin, very quiet interior. Softly rounded corners, top right small stepped shoulder and bottom corners gently chamfered, slim subdued teal edge no gold ornamental frame. No subdivisions, no labels, no icons, no text. Fill center visually semi-transparent dark teal, outside genuinely transparent. Front-facing flat UI texture, evenly lit, not perspective, no cast shadow into exterior.",
+    "BG_CompanyPlaque": "ONE single wide horizontal blank walnut wooden company nameplate, width:height 4:1. Reference-like warm walnut wood grain, thin inset antique brass edge and two small rivets on RIGHT corners, left side plain because circular medallion will overlap it. Right corners clipped/chamfered. Blank spacious wood center for editable company name, NO text no symbols no emblem. True transparent outside, orthographic frontal UI sprite. Restrained beveled depth.",
+    "BG_CompanyMedallion": "ONE single perfect circular antique brass medallion UI frame, front facing, outer bronze ring with narrow golden rim and restrained bevel, deep black-teal flat center blank for separate company icon. No wheat no log no brick no text no designs in center. Circle centered, transparent exterior, no perspective, no background. Cohesive warm wooden banking game style.",
+    "BTN_QuantityKey": "ONE single square keyboard keycap UI button, front facing orthographic. Layered dark walnut wooden base with chamfered corners, ivory cream inset top face, shallow bevel, subtle shadow underneath inside asset. Blank top face no arrow no letters no symbols. Single key centered with true transparent outside, warm wood-and-brass banking game, clean polished stylized low-poly material.",
+    "BTN_ConfirmBrass": "ONE single wide horizontal blank matte antique brass confirmation UI button, width:height about 4.2:1. Rounded and softly chamfered corners, narrow highlighted beveled rim, subtle brushed metal grain, warm champagne gold center, thin dark bronze bottom edge shallow depth. Absolutely no letters no text no key symbol no icon no inset element. True transparent outside, orthographic front-facing game UI sprite, coherent with walnut and teal banking hall, not glowing neon."
+  }
+}

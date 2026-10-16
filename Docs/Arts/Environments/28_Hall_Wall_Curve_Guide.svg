@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1050" viewBox="0 0 1600 1050"><rect width="1600" height="1050" fill="white"/><style>text{font-family:Malgun Gothic;fill:#24333c} .g{fill:none;stroke:#66a2bf;stroke-width:2;stroke-dasharray:9 7}</style>
+<text x="65" y="65" font-size="30">하단 벽 곡률 가이드 — 좌우 대칭 타원</text><text x="65" y="105" font-size="19">짧은 연결 곡선 대신 하단 전체 재설계 · 가로 반경 12m / 세로 반경 9m</text>
+<ellipse cx="720" cy="470" rx="480" ry="360" class="g"/><ellipse cx="880" cy="470" rx="480" ry="360" class="g"/>
+<path d="M240 230V470 A480 360 0 0 0 720 830 H880 A480 360 0 0 0 1360 470 V230" fill="none" stroke="#20282e" stroke-width="6"/>
+<path d="M160 470H1440 M800 170V895 M720 470V830 M880 470V830 M180 830H1420" class="g"/>
+<g fill="#df8232"><circle cx="240" cy="470" r="8"/><circle cx="1360" cy="470" r="8"/><circle cx="720" cy="830" r="8"/><circle cx="880" cy="830" r="8"/></g>
+<g fill="#66a2bf"><circle cx="720" cy="470" r="5"/><circle cx="880" cy="470" r="5"/></g>
+<g font-size="20"><text x="265" y="445">수직 접선 연결</text><text x="1130" y="445">수직 접선 연결</text><text x="605" y="875">수평 접선 연결 · 하단 직선 4m</text><text x="450" y="505">12m</text><text x="1060" y="505">12m</text><text x="905" y="660">9m</text><text x="815" y="210">대칭축</text><text x="65" y="950">검정: 최종 벽선　파랑 점선: 타원·접선 가이드　주황: 곡선 연결점</text><text x="65" y="990">전체 폭 28m · 전체 길이 35m 유지 / 도면 수정안, Blender 미적용</text></g></svg>

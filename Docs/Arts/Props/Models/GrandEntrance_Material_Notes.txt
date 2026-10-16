@@ -1,0 +1,24 @@
+Grand Entrance materials - 2026-10-13
+
+Deliverable: BBB_Grand_Entrance_Textured.blend
+The original geometry-only blend is retained. All 231 mesh objects have UVs and one of exactly three materials. Door pivots are preserved. Textures are packed in the blend and also saved in GrandEntrance_Textures (1024x1024 PNG).
+
+Sources (BlenderKit, Royalty Free; free and downloadable when checked):
+Wood Smooth Walnut: 43dde512-6578-4084-b9a2-d7751cfbf855
+White Painted Wood: 6f2f7909-f892-4afc-b77c-83f4942fc134
+Brass: 2df7112c-f41b-4001-8e75-9ab44c341684
+
+The source color textures were recolored and contrast-reduced for the concept palette. Source normal maps were attenuated and saved. Blender-only procedural, AO and displacement nodes are not used in the final three materials.
+
+Unity project: URP 17.2.0. Use Universal Render Pipeline/Lit, Opaque, white Base Color multiplier. Assign *_BaseColor.png to Base Map (sRGB enabled). Import *_Normal.png as Normal Map and use normal strength 1; weakening is already encoded in the texture. Repeat wrapping, mipmaps enabled.
+BBB_Door_Wood: Metallic 0; Smoothness 0.52.
+BBB_Door_Teal: Metallic 0; Smoothness 0.51.
+BBB_Door_Brass: Metallic 1; Smoothness 0.62.
+Smoothness is 1 minus Blender roughness. Lighting and tone mapping influence the final appearance.
+
+License check:
+https://www.blendkit.com/docs/licenses/
+https://www.blendkit.com/docs/licenses/licensing-faq/
+The official FAQ permits selling games using models and materials, provided the assets are not directly extractable in the distribution. Do not distribute source material/texture files as a standalone asset library. This source folder is for development, not raw inclusion in a public game download.
+
+Validation: front and reverse Blender material previews inspected; all door meshes have UVs and assigned materials; six external PNGs plus packed copies. Unity import/render has not been tested. This is the editable source model, with separate detail meshes; mesh consolidation and a Unity prefab are not included in this material pass.

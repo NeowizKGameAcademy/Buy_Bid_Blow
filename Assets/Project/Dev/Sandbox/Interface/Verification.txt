@@ -1,0 +1,1 @@
+PASS: scene + prefab updated; 4 rounded nine-slice dim Images; alpha 0.22–0.24; 13 editable Text components retained; anchors preserved; no runtime binding. Preview rendered at 1920x1080.

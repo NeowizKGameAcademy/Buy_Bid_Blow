@@ -1,0 +1,1 @@
+{"name":"BuyBidBlow.LobbySandbox.Editor","references":["BuyBidBlow.LobbySandbox","BuyBidBlow.Game","BuyBidBlow.Dev","Mirror","Mirror.Transports","kcp2k","UnityEngine.UI","Unity.InputSystem"],"includePlatforms":["Editor"]}

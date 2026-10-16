@@ -1,0 +1,92 @@
+[
+  {
+    "asset": "01_Employee_Monitor",
+    "root": "01_Employee_Monitor_ROOT",
+    "mesh_parts": 32
+  },
+  {
+    "asset": "02_Keyboard",
+    "root": "02_Keyboard_ROOT",
+    "mesh_parts": 70
+  },
+  {
+    "asset": "03_Mouse",
+    "root": "03_Mouse_ROOT",
+    "mesh_parts": 6
+  },
+  {
+    "asset": "04_Receipt_Printer",
+    "root": "04_Receipt_Printer_ROOT",
+    "mesh_parts": 13
+  },
+  {
+    "asset": "05_Staff_Chair",
+    "root": "05_Staff_Chair_ROOT",
+    "mesh_parts": 32
+  },
+  {
+    "asset": "06_Document_Trays",
+    "root": "06_Document_Trays_ROOT",
+    "mesh_parts": 34
+  },
+  {
+    "asset": "07_Bound_Ledger",
+    "root": "07_Bound_Ledger_ROOT",
+    "mesh_parts": 18
+  },
+  {
+    "asset": "08_Order_Mat_Clipboard",
+    "root": "08_Order_Mat_Clipboard_ROOT",
+    "mesh_parts": 14
+  },
+  {
+    "asset": "09_Pen_Cup",
+    "root": "09_Pen_Cup_ROOT",
+    "mesh_parts": 7
+  },
+  {
+    "asset": "10_Pen",
+    "root": "10_Pen_ROOT",
+    "mesh_parts": 2
+  },
+  {
+    "asset": "11_Stamp_InkPad",
+    "root": "11_Stamp_InkPad_ROOT",
+    "mesh_parts": 5
+  },
+  {
+    "asset": "12_Service_Bell",
+    "root": "12_Service_Bell_ROOT",
+    "mesh_parts": 3
+  },
+  {
+    "asset": "13_Sign_STRAW",
+    "root": "13_Sign_STRAW_ROOT",
+    "mesh_parts": 8
+  },
+  {
+    "asset": "13_Sign_WOOD",
+    "root": "13_Sign_WOOD_ROOT",
+    "mesh_parts": 8
+  },
+  {
+    "asset": "13_Sign_BRICK",
+    "root": "13_Sign_BRICK_ROOT",
+    "mesh_parts": 8
+  },
+  {
+    "asset": "14_Emblem_Straw",
+    "root": "14_Emblem_Straw_ROOT",
+    "mesh_parts": 29
+  },
+  {
+    "asset": "15_Emblem_Wood",
+    "root": "15_Emblem_Wood_ROOT",
+    "mesh_parts": 12
+  },
+  {
+    "asset": "16_Emblem_Brick",
+    "root": "16_Emblem_Brick_ROOT",
+    "mesh_parts": 6
+  }
+]

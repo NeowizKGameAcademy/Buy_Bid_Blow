@@ -1,0 +1,21 @@
+{
+  "tool": "built-in image_gen",
+  "base": "Create a standalone carpet albedo artwork texture for an elegant auction house game, inspired by luxurious palace, museum, hotel and library interiors. Orthographic TOP DOWN exactly, flat and undistorted, pattern aligned square to image edges. Carpet only, absolutely no room, floor, furniture, frame, perspective, folded edges, cast shadows or lighting gradients. Full rectangular carpets fill canvas edge to edge; oval and round carpets only have transparent exterior. Fine woven textile fibers and subtle antique wear but sharp readable decorative motifs, rich harmonious subdued colors, no text or watermark. This is a rug TEXTURE not a photograph of a rug in a room. ",
+  "styles": [
+    "01_Burgundy_Medallion|Rectangular 3:2 Persian rug, deep burgundy field, elaborate muted gold central medallion, navy and ivory floral borders, dense traditional vines.",
+    "02_Teal_Floral|Rectangular 3:2 grand hotel rug, deep teal field, warm ivory scrolling floral motifs, muted gold double border, elegant balanced rosettes.",
+    "03_Ivory_Museum|Rectangular 3:2 museum rug, warm ivory and pale stone field, subtle taupe botanical pattern, thin beige ornamental borders, understated and refined.",
+    "04_Royal_Runner|Long narrow 1:3 palace runner, crimson velvet field, repeating gold acanthus medallions along center axis, elaborate gold borders, regal ceremonial pattern.",
+    "05_Library_Persian|Rectangular 3:2 collector library rug, dark rust burgundy navy and ochre palette, dense small Persian botanical and geometric motifs, layered intricate border.",
+    "06_Oval_Auction|Oval rug viewed straight down, burgundy field, ornate gold floral rim and elegant central medallion, suitable under auction display island. Entire oval visible with transparent exterior.",
+    "07_Palace_Lilies|Rectangular 3:2 French palace carpet, rich wine red, large symmetrical gold botanical crest in middle, repeated fleur-de-lis ornaments and wide gold acanthus border.",
+    "08_Teal_Runner|Long narrow 1:3 teal hallway runner, repeated stylized muted gold leaf medallions, double cream and gold edges, luxurious hotel corridor pattern.",
+    "09_Ivory_Burgundy|Rectangular 3:2 luxury lounge rug, creamy ivory center with softly faded burgundy and dusty teal floral arabesques, broad burgundy border with cream flowers.",
+    "10_Green_Study|Rectangular 3:2 study rug, dark forest green central field, small gold and ivory rosettes, rust and navy Persian border, richly detailed subdued traditional pattern.",
+    "11_Round_Salon|Perfectly circular palace salon rug, burgundy red with an intricate radial gold rosette and concentric floral borders, full circle visible with transparent exterior.",
+    "12_Stone_Geometric|Rectangular 3:2 decorative arts gallery rug, pale limestone taupe and ivory, fine diamond lattice central field and layered classical Greek key borders, subtle aged textile.",
+    "13_Navy_Celestial|Rectangular 3:2 collector rug, deep midnight navy field with restrained golden star motifs, botanical gold border, balanced central eight-point ornamental medallion, not a star chart.",
+    "14_Rust_Garden|Rectangular 3:2 antique carpet, warm rust terracotta field with sage green ivory and ochre scrolling palmettes, delicate blue-black border, softly worn rich woven detail.",
+    "15_Burgundy_SimpleRunner|Long narrow 1:3 auction aisle runner, mostly quiet dark burgundy central field with sparse tiny gold rosettes, strong thin gold inner border and intricate navy-gold floral outer border."
+  ]
+}

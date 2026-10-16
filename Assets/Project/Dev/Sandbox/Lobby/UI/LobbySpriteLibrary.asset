@@ -1,0 +1,81 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ebff72caa390764bba2ede4b8ffc722, type: 3}
+  m_Name: LobbySpriteLibrary
+  m_EditorClassIdentifier: 
+  entries:
+  - id: 01_LogoPlate
+    sprite: {fileID: 21300000, guid: 10570be23fa6333439fcf283944ba4bb, type: 3}
+  - id: 02_Gavel
+    sprite: {fileID: 21300000, guid: 6063e2dd6880e664da2fd0833285981b, type: 3}
+  - id: 03_SubtitlePlate
+    sprite: {fileID: 21300000, guid: d861ce6a14ae6c1449828a1244c79c56, type: 3}
+  - id: 04_SmallButtonStates_Normal
+    sprite: {fileID: 21300000, guid: 9bebe39804f6b07479d848df1d9f0059, type: 3}
+  - id: 04_SmallButtonStates_Focused
+    sprite: {fileID: 21300002, guid: 9bebe39804f6b07479d848df1d9f0059, type: 3}
+  - id: 04_SmallButtonStates_Pressed
+    sprite: {fileID: 21300004, guid: 9bebe39804f6b07479d848df1d9f0059, type: 3}
+  - id: 04_SmallButtonStates_Disabled
+    sprite: {fileID: 21300006, guid: 9bebe39804f6b07479d848df1d9f0059, type: 3}
+  - id: 05_Person
+    sprite: {fileID: 21300000, guid: 3d73c2d7a472a9849a0ea641971bd15d, type: 3}
+  - id: 06_Options
+    sprite: {fileID: 21300000, guid: 2762c577fe2dad54aa401d03aed21b9f, type: 3}
+  - id: 07_Exit
+    sprite: {fileID: 21300000, guid: d5f463865b899554091f11584d50520f, type: 3}
+  - id: 08_Nameplate
+    sprite: {fileID: 21300000, guid: c3a9295c4ae783543a983eeb7e5934b9, type: 3}
+  - id: 09_HostCrown
+    sprite: {fileID: 21300000, guid: 6a21440a277ebe842a4bf0a748846444, type: 3}
+  - id: 10_LocalBadge
+    sprite: {fileID: 21300000, guid: fce20158448bb5040ba359689876f579, type: 3}
+  - id: 11_StatusBadge
+    sprite: {fileID: 21300000, guid: 878f95dd6808bd2499cdedb90969ee52, type: 3}
+  - id: 12_Check
+    sprite: {fileID: 21300000, guid: 6abb70d476624be41a55a15ece065fba, type: 3}
+  - id: 13_StatusDot
+    sprite: {fileID: 21300000, guid: 02ccf3c1372bec34cbfbb70f44e00fc6, type: 3}
+  - id: 14_CategoryHighlight
+    sprite: {fileID: 21300000, guid: a628a00e6175e2f44baaaadf322be990, type: 3}
+  - id: 15_CategoryChevron
+    sprite: {fileID: 21300000, guid: a731a48ea5b25054ea0a5f8464d4992a, type: 3}
+  - id: 16_Keycap
+    sprite: {fileID: 21300000, guid: 8287f494af8c6d64693e92641fdc2e69, type: 3}
+  - id: 17_KeyboardArrow
+    sprite: {fileID: 21300000, guid: 2334fa4937a9c044f9ccf526f27b5b36, type: 3}
+  - id: 18_RoundButtonStates_Normal
+    sprite: {fileID: 21300000, guid: 8d981662f39f5ef449be93ac0ec3fdcd, type: 3}
+  - id: 18_RoundButtonStates_Focused
+    sprite: {fileID: 21300002, guid: 8d981662f39f5ef449be93ac0ec3fdcd, type: 3}
+  - id: 18_RoundButtonStates_Pressed
+    sprite: {fileID: 21300004, guid: 8d981662f39f5ef449be93ac0ec3fdcd, type: 3}
+  - id: 18_RoundButtonStates_Disabled
+    sprite: {fileID: 21300006, guid: 8d981662f39f5ef449be93ac0ec3fdcd, type: 3}
+  - id: 19_SideChevron
+    sprite: {fileID: 21300000, guid: 1053030bac32fce439d7e4d4f6cb67c3, type: 3}
+  - id: 20_VacantNameplate
+    sprite: {fileID: 21300000, guid: 011f248eaf738814db4f96b59fa45ae8, type: 3}
+  - id: 21_VacantCircle
+    sprite: {fileID: 21300000, guid: 575a6bb75738fd54b822c134a3aa91f8, type: 3}
+  - id: 22_VacantPlus
+    sprite: {fileID: 21300000, guid: 1f4e3092fc4116744b40352ed6b21b1c, type: 3}
+  - id: 23_PlayerRing
+    sprite: {fileID: 21300000, guid: e2f7e61d6ee3c3e44a684bd9893d22d8, type: 3}
+  - id: 24_ReadyButtonStates_Normal
+    sprite: {fileID: 21300000, guid: 44f23db08953826478621fb2e34f6647, type: 3}
+  - id: 24_ReadyButtonStates_Focused
+    sprite: {fileID: 21300002, guid: 44f23db08953826478621fb2e34f6647, type: 3}
+  - id: 24_ReadyButtonStates_Pressed
+    sprite: {fileID: 21300004, guid: 44f23db08953826478621fb2e34f6647, type: 3}
+  - id: 24_ReadyButtonStates_Disabled
+    sprite: {fileID: 21300006, guid: 44f23db08953826478621fb2e34f6647, type: 3}
