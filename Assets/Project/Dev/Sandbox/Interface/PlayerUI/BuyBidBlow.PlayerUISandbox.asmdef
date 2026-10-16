@@ -1,1 +1,1 @@
-{"name":"BuyBidBlow.PlayerUISandbox","references":["BuyBidBlow.Game","Unity.InputSystem","UnityEngine.UI"]}
+{"name":"BuyBidBlow.PlayerUISandbox","references":["BuyBidBlow.Game","BuyBidBlow.Systems","BuyBidBlow.AuctionDisplay","Unity.InputSystem","UnityEngine.UI"]}

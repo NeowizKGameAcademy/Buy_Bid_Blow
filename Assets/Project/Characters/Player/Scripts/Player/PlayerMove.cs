@@ -21,6 +21,13 @@ namespace BuyBidBlow
         [SerializeField] private float upperLimit = 60f;
         [SerializeField] private float lowerLimit = 40f;
 
+        [Header("Optional stable sandbox controls")]
+        [SerializeField] private bool stableControls;
+        [SerializeField] private float groundAcceleration=35f;
+        [SerializeField] private float airAcceleration=10f;
+        private readonly RaycastHit[] groundHits=new RaycastHit[12];
+        private float queuedJumpUntil=-1,lastGroundTime=-10,pendingYaw;
+        private CapsuleCollider capsule;
         private Vector2 curMoveInput;
 
         private bool isGround;
@@ -36,11 +43,13 @@ namespace BuyBidBlow
             if (playerCamera == null)
                 TryGetComponent(out playerCamera);
 
+            capsule=GetComponent<CapsuleCollider>();
             playerRb.constraints |= RigidbodyConstraints.FreezeRotation;
         }
 
         private void FixedUpdate()
         {
+            if(stableControls){StableMove();return;}
             Move();
         }
 
@@ -55,7 +64,7 @@ namespace BuyBidBlow
                 return;
 
             float mouseX = mouseDelta.x * rotateSpeed / 100;
-            transform.Rotate(Vector3.up * mouseX);
+            if(stableControls)pendingYaw+=mouseX;else transform.Rotate(Vector3.up * mouseX);
 
             float mouseY = mouseDelta.y * rotateSpeed / 100;
 
@@ -68,12 +77,25 @@ namespace BuyBidBlow
 
         public void SetJumpHeld(bool isHeld)
         {
+            if(stableControls){if(isHeld&&!isJumpHeld)queuedJumpUntil=Time.time+.12f;isJumpHeld=isHeld;return;}
             isJumpHeld = isHeld;
 
             if (isJumpHeld && isGround)
                 Jump();
         }
 
+        private void StableMove()
+        {
+            if(playerRb.isKinematic)return;
+            if(pendingYaw!=0){playerRb.MoveRotation(playerRb.rotation*Quaternion.Euler(0,pendingYaw,0));pendingYaw=0;}
+            bool grounded=false;
+            if(capsule&&playerRb.linearVelocity.y<=.15f){var bounds=capsule.bounds;float radius=Mathf.Min(bounds.extents.x,bounds.extents.z)*.9f;var origin=new Vector3(bounds.center.x,bounds.min.y+radius+.06f,bounds.center.z);int count=Physics.SphereCastNonAlloc(origin,radius,Vector3.down,groundHits,.16f,groundLayer,QueryTriggerInteraction.Ignore);for(int i=0;i<count;i++)if(groundHits[i].collider.attachedRigidbody!=playerRb&&groundHits[i].normal.y>=.65f){grounded=true;break;}}
+            if(grounded)lastGroundTime=Time.time;
+            Vector2 input=Vector2.ClampMagnitude(curMoveInput,1);Vector3 desired=(transform.forward*input.y+transform.right*input.x)*moveSpeed;var velocity=playerRb.linearVelocity;var planar=Vector3.MoveTowards(new Vector3(velocity.x,0,velocity.z),desired,(grounded?groundAcceleration:airAcceleration)*Time.fixedDeltaTime);velocity.x=planar.x;velocity.z=planar.z;
+            if(queuedJumpUntil>=Time.time&&Time.time-lastGroundTime<=.10f){velocity.y=jumpForce;queuedJumpUntil=-1;lastGroundTime=-10;}
+            playerRb.linearVelocity=velocity;
+        }
+        private void OnDisable(){curMoveInput=Vector2.zero;isJumpHeld=false;queuedJumpUntil=-1;pendingYaw=0;lastGroundTime=-10;}
         private void Move()
         {
             Vector3 direction =
@@ -89,6 +111,7 @@ namespace BuyBidBlow
 
         private void OnCollisionEnter(Collision collision)
         {
+            if(stableControls)return;
             if (!IsGroundLayer(collision.gameObject.layer))
                 return;
 
@@ -100,6 +123,7 @@ namespace BuyBidBlow
 
         private void OnCollisionExit(Collision collision)
         {
+            if(stableControls)return;
             if (!IsGroundLayer(collision.gameObject.layer))
                 return;
 

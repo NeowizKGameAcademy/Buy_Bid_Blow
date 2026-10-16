@@ -8,8 +8,8 @@ namespace BuyBidBlow.AuctionDisplay {
   public int firstRound=6,secondRound=9;
   void Start(){RefreshLabel();}
   void Update(){if(rotatingModel)rotatingModel.Rotate(Vector3.up,degreesPerSecond*Time.unscaledDeltaTime,Space.Self);}
-  public void SetRounds(int first,int second){firstRound=first;secondRound=second;RefreshLabel();}
-  public void RefreshLabel(){if(roundLabel)roundLabel.text=$"{firstRound}R · {secondRound}R";}
+  public void SetRounds(int first,int second){if(firstRound==first&&secondRound==second)return;firstRound=first;secondRound=second;RefreshLabel();}
+  public void RefreshLabel(){if(roundLabel){roundLabel.text=$"{firstRound}R · {secondRound}R";roundLabel.ForceMeshUpdate(true);}}
  }
 }
 

@@ -1,0 +1,1 @@
+PASS: buy/sell finite supply, whole rejection, bet refund/re-entry/settlement, deadline equality, public reserve/release/settlement, secret modification tie order, all 17 closes and standings. Local authority; no networking or AI.
