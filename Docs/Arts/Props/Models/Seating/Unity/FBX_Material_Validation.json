@@ -1,0 +1,80 @@
+[
+  {
+    "asset": "Bench_A",
+    "triangles": 15295,
+    "meshes": 3,
+    "materials": [
+      "BBB_Seating_Walnut.001",
+      "BBB_Seating_BurgundyVelvet.001",
+      "BBB_Seating_Brass.001"
+    ],
+    "UV_present": true,
+    "referenced_images": 4,
+    "passed": true
+  },
+  {
+    "asset": "Bench_B",
+    "triangles": 7999,
+    "meshes": 3,
+    "materials": [
+      "BBB_Seating_TealVelvet.001",
+      "BBB_Seating_Brass.002",
+      "BBB_Seating_Walnut.002"
+    ],
+    "UV_present": true,
+    "referenced_images": 4,
+    "passed": true
+  },
+  {
+    "asset": "Chair_A",
+    "triangles": 12167,
+    "meshes": 3,
+    "materials": [
+      "BBB_Seating_Brass.003",
+      "BBB_Seating_BurgundyVelvet.002",
+      "BBB_Seating_Walnut.003"
+    ],
+    "UV_present": true,
+    "referenced_images": 4,
+    "passed": true
+  },
+  {
+    "asset": "Chair_B",
+    "triangles": 12796,
+    "meshes": 3,
+    "materials": [
+      "BBB_Seating_TealVelvet.002",
+      "BBB_Seating_Brass.004",
+      "BBB_Seating_Walnut.004"
+    ],
+    "UV_present": true,
+    "referenced_images": 4,
+    "passed": true
+  },
+  {
+    "asset": "Sofa_A",
+    "triangles": 17874,
+    "meshes": 3,
+    "materials": [
+      "BBB_Seating_Brass.005",
+      "BBB_Seating_Walnut.005",
+      "BBB_Seating_TealVelvet.003"
+    ],
+    "UV_present": true,
+    "referenced_images": 4,
+    "passed": true
+  },
+  {
+    "asset": "Sofa_B",
+    "triangles": 33985,
+    "meshes": 3,
+    "materials": [
+      "BBB_Seating_Brass.006",
+      "BBB_Seating_Walnut.006",
+      "BBB_Seating_OxbloodLeather.001"
+    ],
+    "UV_present": true,
+    "referenced_images": 5,
+    "passed": true
+  }
+]

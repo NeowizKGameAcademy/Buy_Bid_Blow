@@ -1,0 +1,12 @@
+{
+  "A": {
+    "vertices": 6612,
+    "triangles": 12224,
+    "meshes": 3
+  },
+  "B": {
+    "vertices": 7258,
+    "triangles": 12712,
+    "meshes": 3
+  }
+}

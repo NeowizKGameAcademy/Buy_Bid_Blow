@@ -1,0 +1,189 @@
+[
+  {
+    "id": "P01",
+    "kind": "painting",
+    "status": "A49 existing placement",
+    "position_m": [
+      13.706,
+      6.065,
+      2.35
+    ],
+    "source": "A49_Lower_Painting_0"
+  },
+  {
+    "id": "P02",
+    "kind": "painting",
+    "status": "A49 existing placement",
+    "position_m": [
+      12.093,
+      11.411,
+      2.35
+    ],
+    "source": "A49_Lower_Painting_1"
+  },
+  {
+    "id": "P03",
+    "kind": "painting",
+    "status": "A49 existing placement",
+    "position_m": [
+      8.314,
+      15.33,
+      2.35
+    ],
+    "source": "A49_Lower_Painting_2"
+  },
+  {
+    "id": "P04",
+    "kind": "painting",
+    "status": "A49 existing placement",
+    "position_m": [
+      0.0,
+      17.18,
+      2.35
+    ],
+    "source": "A49_Lower_Painting_3"
+  },
+  {
+    "id": "P05",
+    "kind": "painting",
+    "status": "A49 existing placement",
+    "position_m": [
+      -8.314,
+      15.33,
+      2.35
+    ],
+    "source": "A49_Lower_Painting_4"
+  },
+  {
+    "id": "P06",
+    "kind": "painting",
+    "status": "A49 existing placement",
+    "position_m": [
+      -12.093,
+      11.411,
+      2.35
+    ],
+    "source": "A49_Lower_Painting_5"
+  },
+  {
+    "id": "P07",
+    "kind": "painting",
+    "status": "A49 existing placement",
+    "position_m": [
+      -13.706,
+      6.065,
+      2.35
+    ],
+    "source": "A49_Lower_Painting_6"
+  },
+  {
+    "id": "P08",
+    "kind": "painting",
+    "status": "A49 existing placement",
+    "position_m": [
+      13.629,
+      6.693,
+      7.25
+    ],
+    "source": "A49_Upper_Painting_0"
+  },
+  {
+    "id": "P09",
+    "kind": "painting",
+    "status": "A49 existing placement",
+    "position_m": [
+      5.149,
+      16.716,
+      7.25
+    ],
+    "source": "A49_Upper_Painting_1"
+  },
+  {
+    "id": "P10",
+    "kind": "painting",
+    "status": "A49 existing placement",
+    "position_m": [
+      0.0,
+      17.15,
+      7.25
+    ],
+    "source": "A49_Upper_Painting_2"
+  },
+  {
+    "id": "P11",
+    "kind": "painting",
+    "status": "A49 existing placement",
+    "position_m": [
+      -5.149,
+      16.716,
+      7.25
+    ],
+    "source": "A49_Upper_Painting_3"
+  },
+  {
+    "id": "P12",
+    "kind": "painting",
+    "status": "A49 existing placement",
+    "position_m": [
+      -13.629,
+      6.693,
+      7.25
+    ],
+    "source": "A49_Upper_Painting_4"
+  },
+  {
+    "id": "P13",
+    "kind": "painting",
+    "status": "A49 existing placement",
+    "position_m": [
+      -13.65,
+      -10.0,
+      2.5
+    ],
+    "source": "A49_Lobby_Painting_-13.65"
+  },
+  {
+    "id": "P14",
+    "kind": "painting",
+    "status": "A49 existing placement",
+    "position_m": [
+      13.65,
+      -10.0,
+      2.5
+    ],
+    "source": "A49_Lobby_Painting_13.65"
+  },
+  {
+    "id": "C01",
+    "kind": "curtain",
+    "status": "A49 existing placement",
+    "position_m": [
+      0,
+      17.03,
+      6.55
+    ],
+    "width_m": 4.12
+  },
+  {
+    "id": "C02",
+    "kind": "curtain",
+    "status": "proposal_not_applied",
+    "position_m": [
+      13.65,
+      -5.44,
+      0.15
+    ],
+    "width_m": 6
+  },
+  {
+    "id": "C03",
+    "kind": "curtain",
+    "status": "proposal_not_applied",
+    "position_m": [
+      0,
+      17.03,
+      1.05
+    ],
+    "width_m": 3.2
+  }
+]

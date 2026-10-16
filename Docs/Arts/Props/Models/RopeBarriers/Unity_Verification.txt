@@ -1,0 +1,9 @@
+Unity 6000.2.8f1 — deterministic runtime solver tests, 600 x 0.02s per case
+PASS Barrier_B_Test: spacing=1.20, requested length=1.40, effective=1.400, pin error=0.000000, segment error=0.000029, sag=0.453
+PASS Barrier_B_Test: spacing=1.60, requested length=1.65, effective=1.650, pin error=0.000000, segment error=0.000115, sag=0.407
+PASS Barrier_B_Test: spacing=2.40, requested length=2.80, effective=2.800, pin error=0.000000, segment error=0.000064, sag=0.788
+PASS Barrier_B_Test: spacing=2.40, requested length=1.20, effective=2.181, pin error=0.000000, segment error=0.001763, sag=0.133
+PASS Barrier_A_Test: spacing=1.20, requested length=1.40, effective=1.400, pin error=0.000000, segment error=0.000029, sag=0.453
+PASS Barrier_A_Test: spacing=1.60, requested length=1.65, effective=1.650, pin error=0.000000, segment error=0.000115, sag=0.407
+PASS Barrier_A_Test: spacing=2.40, requested length=2.80, effective=2.800, pin error=0.000000, segment error=0.000064, sag=0.788
+PASS Barrier_A_Test: spacing=2.40, requested length=1.20, effective=2.181, pin error=0.000000, segment error=0.001763, sag=0.133
