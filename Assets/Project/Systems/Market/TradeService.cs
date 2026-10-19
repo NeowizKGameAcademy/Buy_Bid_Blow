@@ -11,11 +11,14 @@ namespace BuyBidBlow.Systems.Market
     {
         private readonly IReadOnlyDictionary<PlayerId, PlayerPortfolio> playerAssets;
         private readonly Func<Company, int> getPrice;
+        private readonly IDictionary<Company,int> inventory;
 
-        public TradeService(IReadOnlyDictionary<PlayerId, PlayerPortfolio> playerAssets, Func<Company, int> getPrice)
+        // inventory: shared market stock per company (finite supply); null means unlimited.
+        public TradeService(IReadOnlyDictionary<PlayerId, PlayerPortfolio> playerAssets, Func<Company, int> getPrice, IDictionary<Company,int> inventory = null)
         {
             this.playerAssets = playerAssets ?? throw new ArgumentNullException(nameof(playerAssets));
             this.getPrice = getPrice ?? throw new ArgumentNullException(nameof(getPrice));
+            this.inventory = inventory;
         }
 
         public PortfolioSnapshot GetSnapshot(PlayerId playerId)
@@ -28,18 +31,20 @@ namespace BuyBidBlow.Systems.Market
 
         public TradeResult TryBuy(PlayerId playerId, Company company, int quantity)
         {
-            return playerAssets.TryGetValue(playerId, out PlayerPortfolio assets)
-                ? assets.TryBuy(company, quantity, getPrice(company))
-                : NotInMatch(company);
+            if(!playerAssets.TryGetValue(playerId,out var assets)) return NotInMatch(company);
+            if(inventory != null && (!inventory.TryGetValue(company,out int stock) || quantity > stock))
+                return new TradeResult(false,"시장 재고가 부족합니다.",company,assets.Cash,assets.GetShares(company),0);
+            var result=assets.TryBuy(company,quantity,getPrice(company));
+            if(result.Succeeded && inventory != null) inventory[company]-=quantity;
+            return result;
         }
-
         public TradeResult TrySell(PlayerId playerId, Company company, int quantity)
         {
-            return playerAssets.TryGetValue(playerId, out PlayerPortfolio assets)
-                ? assets.TrySell(company, quantity, getPrice(company))
-                : NotInMatch(company);
+            if(!playerAssets.TryGetValue(playerId,out var assets)) return NotInMatch(company);
+            var result=assets.TrySell(company,quantity,getPrice(company));
+            if(result.Succeeded && inventory != null) inventory[company]+=quantity;
+            return result;
         }
-
         private static TradeResult NotInMatch(Company company)
         {
             return new TradeResult(false, "경기에 참가한 플레이어가 아닙니다.", company, 0, 0, 0);

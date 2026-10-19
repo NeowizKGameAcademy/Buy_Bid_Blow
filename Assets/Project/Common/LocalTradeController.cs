@@ -5,6 +5,7 @@ using BuyBidBlow.UI.Market;
 using Mirror;
 using UnityEngine;
 using UnityEngine.Serialization;
+using BuyBidBlow.Systems.Market;
 
 namespace BuyBidBlow.Common
 {

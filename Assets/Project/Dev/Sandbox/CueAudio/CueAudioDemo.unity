@@ -147,7 +147,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3ec530f3c0d04ae0956842a7216955d2, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: BuyBidBlow.AudioDemo::BuyBidBlow.Dev.CueAudioDemo
+  m_EditorClassIdentifier: BuyBidBlow.Dev::BuyBidBlow.Dev.CueAudioDemo
   click:
     catalog: {fileID: 0}
     id: ui.click

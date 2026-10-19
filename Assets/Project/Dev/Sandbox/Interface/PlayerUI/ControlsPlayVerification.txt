@@ -1,0 +1,1 @@
+PASS: actual physics jump, landing while holding Space does not jump again; wall-side contact cannot jump. Diagonal speed and UI restore checked by MatchPlayVerification.
