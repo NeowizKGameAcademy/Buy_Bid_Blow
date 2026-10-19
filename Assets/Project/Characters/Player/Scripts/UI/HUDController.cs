@@ -50,9 +50,26 @@ namespace BuyBidBlow
             if (cursorImage != null)
                 cursorImage.SetActive(!isTradeOpen);
 
-            if (!isTradeOpen && detect.isDetected)
+            var seatedActor = detect != null ? detect.GetComponentInParent<BuyBidBlow.Hall.HallSeatActor>() : null;
+            if (!isTradeOpen && seatedActor != null && seatedActor.IsSeated)
             {
                 Prompt.SetActive(true);
+                keyText.text = "E";
+                InteractionText.text = "Stand up";
+                return;
+            }
+            if (!isTradeOpen && detect != null && detect.isDetected)
+            {
+                Prompt.SetActive(true);
+
+                var hallTarget = detect.DetectedCollider != null
+                    ? detect.DetectedCollider.GetComponentInParent<BuyBidBlow.Hall.HallInteractable>() : null;
+                if (hallTarget != null)
+                {
+                    keyText.text = "E";
+                    InteractionText.text = hallTarget.Prompt;
+                    return;
+                }
 
                 switch (detect.detectingLayer)
                 {

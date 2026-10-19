@@ -50,6 +50,8 @@ namespace BuyBidBlow
 
         private void FixedUpdate()
         {
+            var seatActor = GetComponent<BuyBidBlow.Hall.HallSeatActor>();
+            if (seatActor != null && seatActor.IsSeated) return;
             Move();
         }
 
@@ -68,6 +70,8 @@ namespace BuyBidBlow
 
         public void Rotate(Vector2 mouseDelta)
         {
+            var seatActor = GetComponent<BuyBidBlow.Hall.HallSeatActor>();
+            if (seatActor != null && seatActor.IsSeated) return;
             if (playerCamera == null)
                 return;
 
@@ -85,6 +89,8 @@ namespace BuyBidBlow
 
         public void SetJumpHeld(bool isHeld)
         {
+            var seatActor = GetComponent<BuyBidBlow.Hall.HallSeatActor>();
+            if (seatActor != null && seatActor.IsSeated) { isJumpHeld = false; return; }
             isJumpHeld = isHeld;
 
             if (isJumpHeld && isGround)

@@ -30,7 +30,8 @@ namespace BuyBidBlow
             // 벽 너머의 NPC는 감지하지 않습니다.
             isDetected = Physics.Raycast(ray, out hit, detectDistance,
                 Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore)
-                && (mask & (1 << hit.collider.gameObject.layer)) != 0;
+                && ((mask & (1 << hit.collider.gameObject.layer)) != 0
+                    || hit.collider.GetComponentInParent<BuyBidBlow.Hall.HallInteractable>() != null);
             DetectedCollider = isDetected ? hit.collider : null;
             detectingLayer = isDetected ? hit.collider.gameObject.layer : 0;
 

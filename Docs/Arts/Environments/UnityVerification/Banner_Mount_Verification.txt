@@ -1,0 +1,5 @@
+PASS 12 seconds Play Mode
+Cloth movement 0.4476m
+Pinned drift 0.000001m
+Maximum support penetration 0.000000m
+Both beam colliders retained alongside player capsule.

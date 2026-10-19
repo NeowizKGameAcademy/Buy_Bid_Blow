@@ -1,5 +1,5 @@
 {
   "name": "BuyBidBlow.Dev.Editor",
-  "references": ["BuyBidBlow.Dev", "BuyBidBlow.Game", "BuyBidBlow.Systems", "CueAudio.Runtime", "CueAudio.Editor"],
+  "references": ["BuyBidBlow.Dev", "BuyBidBlow.Game", "BuyBidBlow.HallInteraction", "BuyBidBlow.Systems", "CueAudio.Runtime", "CueAudio.Editor"],
   "includePlatforms": ["Editor"]
 }
