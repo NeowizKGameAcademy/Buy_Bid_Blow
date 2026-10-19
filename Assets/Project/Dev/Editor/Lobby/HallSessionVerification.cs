@@ -13,6 +13,8 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 using Object=UnityEngine.Object;
 
 namespace BuyBidBlow.Dev.Editor
@@ -76,17 +78,24 @@ namespace BuyBidBlow.Dev.Editor
                 if(stage==1)
                 {
                     if(!local||!NetworkClient.ready)return;
-                    local.SetReady(true);peers.Add(new LoopbackLobbyPeer("FlowOne"));peers.Add(new LoopbackLobbyPeer("FlowTwo"));Go(2);return;
+                    local.SetReady(true);for(int i=1;i<6;i++)peers.Add(new LoopbackLobbyPeer("Flow"+i));Go(2);return;
                 }
                 if(stage==2)
                 {
                     var players=Object.FindObjectsByType<PlayerNet>(FindObjectsSortMode.None);
-                    if(players.Length!=3||peers.Any(p=>!p.Accepted)||!local.ready)return;
+                    if(players.Length!=6||peers.Any(p=>!p.Accepted)||!local.ready)return;
                     // The UDP peers exercise admission/spawning; set their server ready
                     // flags here so the real local command can start the match.
                     foreach(var player in players.Where(p=>!p.isLocalPlayer))player.ready=true;
-                    Check(room.CanStartMatch,"Three admitted players cannot start");
-                    report.AppendLine("PASS: host client and two independent UDP KCP peers admitted with unique seats.");
+                    Check(room.CanStartMatch,"Six admitted players cannot start");
+                    Check(players.Select(p=>p.seat).Distinct().Count()==6,"Duplicate waiting slots");
+                    ValidateWaitingArea(players);
+                    // This test uses StartHost directly rather than the client-only Join UI.
+                    // Admission has completed; reflect that state in the lobby presentation.
+                    typeof(ConnectionController).GetMethod("SetState",BindingFlags.Instance|BindingFlags.NonPublic)
+                        .Invoke(room.GetComponent<ConnectionController>(),new object[]{ConnectionState.InRoom,"대기실 입장 완료"});
+                    CaptureLobby();
+                    report.AppendLine("PASS: host client and five independent UDP KCP peers admitted with unique seats.");
                     local.CmdStartMatch();Go(3);return;
                 }
                 if(stage==3)
@@ -131,6 +140,50 @@ namespace BuyBidBlow.Dev.Editor
                 }
             }
             catch(Exception e){File.WriteAllText("Logs/HallSession/verification-error.txt",e.ToString()+"\n"+report);Debug.LogException(e);Finish(1);}
+        }
+        static void ValidateWaitingArea(PlayerNet[] players)
+        {
+            var camera=session.lobbyPresentation.GetComponentInChildren<LobbyHud>().view;
+            Physics.SyncTransforms();
+            foreach(var player in players)
+            {
+                var p=player.transform.position;
+                Check(Mathf.Abs(p.x)<5.6f&&p.z>5.6f&&p.z<13.6f,"Waiting player outside the protected under-mezzanine area");
+                Check(Vector3.Distance(p,PlayerNet.SeatPosition(player.seat))<.02f,"Avatar is not at its waiting slot");
+                Check(!Physics.CheckCapsule(p+Vector3.up*.35f,p+Vector3.up*1.5f,.28f,Physics.DefaultRaycastLayers,QueryTriggerInteraction.Ignore),"Waiting slot intersects furniture: "+player.seat);
+                foreach(float height in new[]{.1f,3f})
+                {
+                    var screen=camera.WorldToViewportPoint(p+Vector3.up*height);
+                    Check(screen.z>0&&screen.x>.02f&&screen.x<.98f&&screen.y>.02f&&screen.y<.98f,"Waiting avatar does not fit in the lobby camera");
+                }
+            }
+            Check(camera.transform.position.z<5.6f&&camera.transform.forward.z>0,"Lobby camera faces the old side of the hall");
+            report.AppendLine("PASS: all six waiting slots lie on the central under-mezzanine area, fit the lobby camera and are clear of furniture colliders.");
+        }
+
+        static void CaptureLobby()
+        {
+            var hud=session.lobbyPresentation.GetComponentInChildren<LobbyHud>();var camera=hud.view;
+            var canvas=hud.GetComponentInChildren<Canvas>();var mode=canvas.renderMode;var previousCamera=canvas.worldCamera;
+            float distance=canvas.planeDistance,aspect=camera.aspect;
+            var target=new RenderTexture(1600,900,24,RenderTextureFormat.ARGB32,RenderTextureReadWrite.sRGB);
+            var image=new Texture2D(1600,900,TextureFormat.RGB24,false);
+            try
+            {
+                camera.targetTexture=target;camera.aspect=16f/9f;
+                canvas.renderMode=RenderMode.ScreenSpaceCamera;canvas.worldCamera=camera;canvas.planeDistance=.5f;
+                Canvas.ForceUpdateCanvases();hud.Refresh(false);Canvas.ForceUpdateCanvases();ShaderUtil.allowAsyncCompilation=false;
+                VolumeManager.instance.Update(camera.transform,camera.GetUniversalAdditionalCameraData().volumeLayerMask);
+                camera.Render();camera.Render();RenderTexture.active=target;
+                image.ReadPixels(new Rect(0,0,1600,900),0,0);image.Apply();
+                File.WriteAllBytes("Docs/Arts/Environments/UnityVerification/MatchingArea_Lobby.png",image.EncodeToPNG());
+            }
+            finally
+            {
+                RenderTexture.active=null;camera.targetTexture=null;camera.aspect=aspect;
+                canvas.renderMode=mode;canvas.worldCamera=previousCamera;canvas.planeDistance=distance;
+                Object.DestroyImmediate(image);Object.DestroyImmediate(target);
+            }
         }
         static void Finish(int code)
         {

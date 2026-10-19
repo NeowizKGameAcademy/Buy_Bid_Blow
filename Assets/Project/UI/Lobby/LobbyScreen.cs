@@ -28,7 +28,7 @@ namespace BuyBidBlow.UI.Lobby
             GUI.Label(new Rect(46,76,1150,28),$"참가자 {players.Length} / 6     최소 3명  ·  외형을 선택하고 준비를 완료하세요",text);
             for(int i=0;i<6;i++) {
                 var p=players.FirstOrDefault(x=>x.seat==i);
-                var pos=view.WorldToViewportPoint(new Vector3((i-2.5f)*2.1f,2.6f,-10.1f));
+                var pos=view.WorldToViewportPoint(PlayerNet.SeatPosition(i)+Vector3.up*2.56f);
                 GUI.Box(new Rect(pos.x*1280-80,(1-pos.y)*720-16,160,54),"");
                 GUI.Label(new Rect(pos.x*1280-80,(1-pos.y)*720-16,160,54),p ? $"PLAYER {i+1}"+(p.isLocalPlayer?" (나)":"")+"\n"+(p.ready?"준비 완료":"외형 선택 중") : "빈 자리\n참가 대기",badge);
             }

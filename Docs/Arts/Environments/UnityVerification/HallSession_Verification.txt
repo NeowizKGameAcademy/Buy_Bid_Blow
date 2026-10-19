@@ -1,4 +1,5 @@
-PASS: host client and two independent UDP KCP peers admitted with unique seats.
+PASS: all six waiting slots lie on the central under-mezzanine area, fit the lobby camera and are clear of furniture colliders.
+PASS: host client and five independent UDP KCP peers admitted with unique seats.
 PASS: lobby -> match -> round 1 with ZERO sceneLoaded events; same hall, furniture collision and lightmap instances.
 PASS: one camera/listener; lobby HUD hidden; local player activated at its own waiting position.
 PASS: player movement works immediately after transition.
