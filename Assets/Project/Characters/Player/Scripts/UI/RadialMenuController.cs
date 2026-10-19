@@ -1,5 +1,5 @@
+using System;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -21,9 +21,6 @@ namespace BuyBidBlow
         [SerializeField, Min(0.01f)] private float hoverDuration = 0.06f;
         [SerializeField, Min(1f)] private float hoverRadiusMultiplier = 1.1f;
         [SerializeField] private AnimationCurve revealCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
-        [SerializeField] private UnityEvent<int> onHoverEntered;
-        [SerializeField] private UnityEvent<int> onHoverExited;
-        [SerializeField] private UnityEvent<int> onSelected;
 
         private RectTransform menuRectTransform;
         private Canvas rootCanvas;
@@ -40,6 +37,8 @@ namespace BuyBidBlow
 
         public bool IsOpen { get; private set; }
         public int SelectedIndex => selectedIndex;
+        /// <summary>Raised when Shift is released over a menu item. Value is 1 through 4.</summary>
+        public event Action<int> SelectionConfirmed;
 
         private void Awake()
         {
@@ -102,10 +101,7 @@ namespace BuyBidBlow
             Cursor.visible = false;
 
             if (confirm && confirmedIndex >= 0)
-            {
-                Debug.Log($"Radial menu selected: {confirmedIndex + 1}", this);
-                onSelected?.Invoke(confirmedIndex);
-            }
+                SelectionConfirmed?.Invoke(confirmedIndex + 1);
         }
 
         private void ResolveMenuReferences()
@@ -177,13 +173,7 @@ namespace BuyBidBlow
             if (hoveredIndex == index)
                 return;
 
-            if (hoveredIndex >= 0)
-                onHoverExited?.Invoke(hoveredIndex);
-
             hoveredIndex = index;
-
-            if (hoveredIndex >= 0)
-                onHoverEntered?.Invoke(hoveredIndex);
         }
 
         private void AnimateRadius()
