@@ -1,0 +1,1 @@
+PASS: 7 editable pages, actual UI screenshots, 6 imported sprite assets, panel prefab and main menu scene saved; page boundary and single-page visibility checked. Keyboard Play check separate.
