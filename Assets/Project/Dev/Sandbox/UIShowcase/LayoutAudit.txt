@@ -1,0 +1,6 @@
+PASS
+Prefabs audited: 17
+Runtime prefabs have no Dev dependencies/missing scripts: True
+Rendered all 21 states: 1920x1080
+Rendered all 21 states: 1366x768
+Rendered all 21 states: 1280x800

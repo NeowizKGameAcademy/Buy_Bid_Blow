@@ -1,0 +1,5 @@
+Production scene/build settings hash check:
+C:\훈련생폴더\3. 유니티\Buy_Bid_Blow\Assets\Project\Scenes\SC_MainMenu.unity unchanged=True
+C:\훈련생폴더\3. 유니티\Buy_Bid_Blow\Assets\Project\Scenes\SC_ExchangeFurnished.unity unchanged=True
+C:\훈련생폴더\3. 유니티\Buy_Bid_Blow\Assets\Project\Scenes\SC_Lobby.unity unchanged=True
+C:\훈련생폴더\3. 유니티\Buy_Bid_Blow\ProjectSettings\EditorBuildSettings.asset unchanged=True
