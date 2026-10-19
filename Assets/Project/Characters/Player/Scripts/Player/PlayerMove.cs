@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace BuyBidBlow
@@ -25,8 +26,13 @@ namespace BuyBidBlow
 
         private bool isGround;
         private bool isJumpHeld;
-
         private float currentY;
+
+        private Quaternion headLocalRotation;
+
+        public bool IsGrounded => isGround;
+        public event Action<bool> GroundedChanged;
+        public event Action Jumped;
 
         private void Awake()
         {
@@ -37,11 +43,22 @@ namespace BuyBidBlow
                 TryGetComponent(out playerCamera);
 
             playerRb.constraints |= RigidbodyConstraints.FreezeRotation;
+
+            if (Head != null)
+                headLocalRotation = Head.transform.localRotation;
         }
 
         private void FixedUpdate()
         {
             Move();
+        }
+
+        // Animator updates bone poses before LateUpdate. Apply the look rotation afterwards
+        // so animation clips cannot overwrite the mouse-controlled head rotation.
+        private void LateUpdate()
+        {
+            if (Head != null)
+                Head.transform.localRotation = headLocalRotation;
         }
 
         public void SetMoveInput(Vector2 input)
@@ -63,7 +80,7 @@ namespace BuyBidBlow
             currentY = Mathf.Clamp(currentY, -upperLimit, lowerLimit);
 
             playerCamera.CameraTransform.localRotation = Quaternion.Euler(currentY, 0f, 0f);
-            Head.transform.localRotation = Quaternion.Euler(currentY, 0f, 0f);
+            headLocalRotation = Quaternion.Euler(currentY, 0f, 0f);
         }
 
         public void SetJumpHeld(bool isHeld)
@@ -92,7 +109,7 @@ namespace BuyBidBlow
             if (!IsGroundLayer(collision.gameObject.layer))
                 return;
 
-            isGround = true;
+            SetGrounded(true);
 
             if (isJumpHeld)
                 Jump();
@@ -103,7 +120,7 @@ namespace BuyBidBlow
             if (!IsGroundLayer(collision.gameObject.layer))
                 return;
 
-            isGround = false;
+            SetGrounded(false);
         }
 
         private bool IsGroundLayer(int targetLayer)
@@ -113,7 +130,7 @@ namespace BuyBidBlow
 
         private void Jump()
         {
-            isGround = false;
+            SetGrounded(false);
 
             playerRb.linearVelocity = new Vector3(
                 playerRb.linearVelocity.x,
@@ -125,6 +142,17 @@ namespace BuyBidBlow
                 Vector3.up * jumpForce,
                 ForceMode.Impulse
             );
+
+            Jumped?.Invoke();
+        }
+
+        private void SetGrounded(bool grounded)
+        {
+            if (isGround == grounded)
+                return;
+
+            isGround = grounded;
+            GroundedChanged?.Invoke(isGround);
         }
     }
 }
