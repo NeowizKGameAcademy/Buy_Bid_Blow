@@ -13,7 +13,7 @@ BuyBidBlow의 게임 코드와 콘텐츠를 관리한다. 독립 오디오 엔�
 | `Content/Props` | 씬에 놓이는 소품. 거래 창구·시세 전광판·시계·알림판·종·회사 배너 등. 상호작용 여부로 폴더를 나누지 않는다 |
 | `UI` | 화면별 UI. `Menu`·`Lobby`·`HUD`·`Auction`·`Market`·`Portfolio`·`Lot`·`Result` |
 | `Common` | 여러 오브젝트가 함께 쓰는 컴포넌트·인터페이스 (예: `IInteractable`, 동기화 값 표시) |
-| `Content` | 게임 콘텐츠. 캐릭터 모델·레벨·소품·공용 에셋을 담으며, `Content/Props`에는 소품별 동작 코드와 프리팹·에셋도 함께 둔다 |
+| `Content` | 게임 콘텐츠. 레벨·소품·공용 에셋을 담으며, `Content/Props`에는 소품별 동작 코드와 프리팹·에셋도 함께 둔다. 캐릭터 모델은 그 모델을 쓰는 `Characters` 폴더에 둔다(늑대 → `Characters/Player/Wolf`, 돼지 → `Characters/NPC/Pig`) |
 | `Audio/Clips`, `Audio/Cues` | 게임용 오디오 파일·JSON 큐 정의 |
 | `Scenes` | 실행 씬 |
 | `Dev` | 에디터 도구·실험·디버그·테스트 |
@@ -83,7 +83,7 @@ Content/Props/TradeCounter/
 |---|---|---|
 | 접미사 없음 | 규칙 개념 그대로 (`Match`, `Auction`, `Portfolio`) | `Systems` |
 | `*Event` | 필요한 시스템 처리 결과 이벤트 | `Systems/Types` |
-| `*Net` | 오브젝트별 Mirror NetworkBehaviour (SyncVar·Command·Rpc) | 해당 오브젝트의 `Characters/*`·`Content/Props/*`·`UI/*` 폴더 (예: `PlayerNet` → `Characters/Player`) |
+| `*Net` | 오브젝트별 Mirror NetworkBehaviour (SyncVar·Command·Rpc) | 해당 오브젝트의 `Characters/*`·`Content/Props/*`·`UI/*` 폴더 (예: `PlayerNet` → `Characters/Player`). 경기 전체 공개 상태(라운드·마감 시각·주가·Closing Bell)는 `Common/MatchNet`이 갖고, 소품·HUD는 이를 읽어 표시한다 |
 | `*View` | UI 컴포넌트. 로직이 커질 때만 `*Presenter`로 분리한다 | `UI/*` |
 | `*Repository` | 저장 인터페이스·구현 (저장 기능 도입 시) | 미정 |
 | `*Tests` | 테스트 클래스. 메서드 이름은 `조건_결과` 형식이다 | `Dev/Tests` |

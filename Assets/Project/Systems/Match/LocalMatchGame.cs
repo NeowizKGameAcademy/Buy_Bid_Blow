@@ -4,15 +4,16 @@ using System.Linq;
 using BuyBidBlow.Systems.Auction;
 using BuyBidBlow.Systems.Market;
 using BuyBidBlow.Systems.Types;
+using BuyBidBlow.Systems.Portfolio;
 namespace BuyBidBlow.Systems.Match {
 // Local authority for the sandbox. UI receives snapshots and submits requests only.
 public sealed class LocalMatchGame {
  public readonly MatchSettings Settings;
- readonly Dictionary<PlayerId,PlayerAssetState> assets=new Dictionary<PlayerId,PlayerAssetState>();
+ readonly Dictionary<PlayerId,PlayerPortfolio> assets=new Dictionary<PlayerId,PlayerPortfolio>();
  readonly Dictionary<Company,int> inventory=new Dictionary<Company,int>();
  readonly Dictionary<PlayerId,Bet> bets=new Dictionary<PlayerId,Bet>();
  readonly List<int[]> prices=new List<int[]>();readonly LotGenerator lots;
- public readonly LocalTradeService Trades;
+ public readonly TradeService Trades;
  public AuctionRound Auction {get;private set;}
  public int Round {get;private set;}=1;
  public double Deadline {get;private set;}
@@ -21,17 +22,17 @@ public sealed class LocalMatchGame {
  public event Action<AuctionResult> InformationAwarded; public event Action<AuctionResult> PublicResolved; public event Action<SecretResult> SecretResolved;
  public LocalMatchGame(MatchSettings settings,int seed,IReadOnlyList<PlayerId> players,double now){
  settings.Validate();Settings=settings;int supply=settings.GetInitialCompanySupply(players.Count);
- foreach(var p in players){if(assets.ContainsKey(p))throw new ArgumentException("Duplicate player");assets.Add(p,new PlayerAssetState(settings.StartingCash,settings.StartingShares));}
+ foreach(var p in players){if(assets.ContainsKey(p))throw new ArgumentException("Duplicate player");assets.Add(p,new PlayerPortfolio(settings.StartingCash,settings.StartingShares));}
  foreach(Company c in Enum.GetValues(typeof(Company)))inventory[c]=supply;
  var rng=new Random(seed);prices.Add(settings.RollStartingPrices(rng));
  for(int i=0;i<settings.RoundCount;i++){var next=(int[])prices[i].Clone();foreach(var change in PriceChangeGenerator.Generate(settings.PriceChange,rng))next[(int)change.Company]=Math.Max(settings.MinPrice,next[(int)change.Company]+change.Amount);prices.Add(next);}
- lots=new LotGenerator(settings.AuctionRounds,prices,rng);Trades=new LocalTradeService(assets,Price,inventory);StartRound(now);
+ lots=new LotGenerator(settings.AuctionRounds,prices,rng);Trades=new TradeService(assets,Price,inventory);StartRound(now);
  }
  int PriceIndex=>Complete?Settings.RoundCount:Round-1;
  public int Price(Company c)=>prices[PriceIndex][(int)c];
  public int LastChange(Company c)=>PriceIndex==0?0:prices[PriceIndex][(int)c]-prices[PriceIndex-1][(int)c];
  public int Stock(Company c)=>inventory[c];
- public PlayerAssetSnapshot Snapshot(PlayerId p)=>Trades.GetSnapshot(p);
+ public PortfolioSnapshot Snapshot(PlayerId p)=>Trades.GetSnapshot(p);
  public bool HasBet(PlayerId p)=>bets.ContainsKey(p);
  public bool HasBet(PlayerId p,Company c)=>bets.TryGetValue(p,out var bet)&&bet.Company==c;
  public int BetStake(PlayerId p)=>bets.TryGetValue(p,out var b)?b.Stake:0;

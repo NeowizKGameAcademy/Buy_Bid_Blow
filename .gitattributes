@@ -38,6 +38,12 @@
 *.meta             text merge=unityyamlmerge
 *.lighting         text merge=unityyamlmerge
 *.physicMaterial   text merge=unityyamlmerge
+
+# 유니티가 항상 바이너리로 저장하는 .asset. 위 *.asset text 규칙을 그대로 받으면
+# 줄바꿈 변환으로 파일이 깨진다(예: LightingData.asset "Invalid serialized file header").
+LightingData.asset binary
+NavMesh.asset      binary
+TerrainData*.asset binary
 *.mask             text merge=unityyamlmerge
 *.playable         text merge=unityyamlmerge
 *.signal           text merge=unityyamlmerge

@@ -11,7 +11,7 @@ namespace BuyBidBlow.Dev.Editor
 {
     public static class CueAudioDemoBuilder
     {
-        public const string ScenePath = "Assets/Project/Dev/Sandbox/CueAudioDemo.unity";
+        public const string ScenePath = "Assets/Project/Dev/Sandbox/CueAudio/CueAudioDemo.unity";
         public const string CatalogPath = "Assets/Project/Audio/Cues/CueAudioDemoCatalog.asset";
         private const string ClipPath = "Assets/Project/Audio/Clips/CueAudioDemo";
         private const string JsonPath = "Assets/Project/Audio/Cues/CueAudioDemo.json";

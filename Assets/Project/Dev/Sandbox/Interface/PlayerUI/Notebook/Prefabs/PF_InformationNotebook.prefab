@@ -8183,7 +8183,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2737aa7cd0afe5d4785582b57e207bed, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: BuyBidBlow.PlayerUISandbox::BuyBidBlow.PlayerUISandbox.InformationNotebookView
+  m_EditorClassIdentifier: BuyBidBlow.Dev::BuyBidBlow.PlayerUISandbox.InformationNotebookView
   owner: {fileID: 0}
   overlay: {fileID: 6149602504300150842}
   pageRange: {fileID: 772439150106022498}

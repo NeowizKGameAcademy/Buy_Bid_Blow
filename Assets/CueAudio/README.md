@@ -9,7 +9,7 @@ Unity 6000.2용 독립 큐 오디오 모듈. 게임 코드는 큐 ID 또는 `Cue
 3. **Tools > CueAudio > Runtime Monitor**에서 활성 재생, 버스 볼륨, 최근 요청 200개와 거절 사유를 확인한다.
 4. **Tools > CueAudio > Cue Browser**에서 `CueAudioDemoCatalog`를 선택한다. 큐를 선택하고 **Find Connections**를 누르면 씬·프리팹·ScriptableObject의 연결과 코드 후보를 확인할 수 있다.
 
-샘플 씬은 `Assets/Project/Dev/Sandbox/CueAudioDemo.unity`에 있으며 빌드 씬 목록에 추가되지 않는다. 데모 음원은 직접 생성한 합성 테스트 톤이다. 실제 게임용 음원으로 교체해 사용한다. 데모 생성기는 기존 파일을 덮어쓰지 않는다.
+샘플 씬은 `Assets/Project/Dev/Sandbox/CueAudio/CueAudioDemo.unity`에 있으며 빌드 씬 목록에 추가되지 않는다. 데모 음원은 직접 생성한 합성 테스트 톤이다. 실제 게임용 음원으로 교체해 사용한다. 데모 생성기는 기존 파일을 덮어쓰지 않는다.
 
 ## 새 큐 만들기
 

@@ -9246,7 +9246,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2737aa7cd0afe5d4785582b57e207bed, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: BuyBidBlow.PlayerUISandbox::BuyBidBlow.PlayerUISandbox.InformationNotebookView
+  m_EditorClassIdentifier: BuyBidBlow.Dev::BuyBidBlow.PlayerUISandbox.InformationNotebookView
   owner: {fileID: 0}
   overlay: {fileID: 5282469352222965746}
   pageRange: {fileID: 1385642331497723803}
@@ -17722,7 +17722,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 49de30408f635d041a7b81a67c749009, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: BuyBidBlow.PlayerUISandbox::BuyBidBlow.PlayerUISandbox.TradingPanelView
+  m_EditorClassIdentifier: BuyBidBlow.Dev::BuyBidBlow.PlayerUISandbox.TradingPanelView
 --- !u!225 &3727932593943786413
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -18623,7 +18623,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 49de30408f635d041a7b81a67c749009, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: BuyBidBlow.PlayerUISandbox::BuyBidBlow.PlayerUISandbox.TradingPanelView
+  m_EditorClassIdentifier: BuyBidBlow.Dev::BuyBidBlow.PlayerUISandbox.TradingPanelView
 --- !u!225 &8624427948580549526
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -19519,7 +19519,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 49de30408f635d041a7b81a67c749009, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: BuyBidBlow.PlayerUISandbox::BuyBidBlow.PlayerUISandbox.TradingPanelView
+  m_EditorClassIdentifier: BuyBidBlow.Dev::BuyBidBlow.PlayerUISandbox.TradingPanelView
 --- !u!225 &4306140441195881700
 CanvasGroup:
   m_ObjectHideFlags: 0

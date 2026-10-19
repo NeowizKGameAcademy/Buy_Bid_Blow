@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using BuyBidBlow.Systems.Match;
+using BuyBidBlow.Systems.Portfolio;
 using BuyBidBlow.Systems.Types;
 
 namespace BuyBidBlow.Systems.Auction
@@ -14,7 +15,7 @@ namespace BuyBidBlow.Systems.Auction
         private readonly double roundStart;
         private readonly IReadOnlyList<AuctionSlot> slots;
         private readonly int minBid;
-        private readonly IReadOnlyDictionary<PlayerId, PlayerAssetState> players;
+        private readonly IReadOnlyDictionary<PlayerId, PlayerPortfolio> players;
         private bool openClosed;
         private bool secretClosed;
 
@@ -33,7 +34,7 @@ namespace BuyBidBlow.Systems.Auction
 
         // slots[0] = Open, slots[1] = Secret, in seconds from roundStart.
         public AuctionRound(Lot firstLot, Lot secondLot, double roundStart, IReadOnlyList<AuctionSlot> slots,
-            int minBid, IReadOnlyDictionary<PlayerId, PlayerAssetState> players)
+            int minBid, IReadOnlyDictionary<PlayerId, PlayerPortfolio> players)
         {
             if (slots == null || slots.Count != 2)
                 throw new ArgumentException("An auction round needs exactly two slots: Open, then Secret.", nameof(slots));

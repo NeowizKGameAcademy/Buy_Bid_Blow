@@ -1,0 +1,23 @@
+Unity imported mesh counts include UV and normal splits.
+LOD0 / LOD1; signs and glass included in both.
+
+InformationBoard_A: LOD0 2314 vertices / 1210 triangles; LOD1 1252 vertices / 606 triangles
+  Size (0.98, 1.71, 0.43) m; bounds centre (0.00, 0.86, 0.00); 5 box colliders; 2/2 renderers
+InformationBoard_B: LOD0 1396 vertices / 1082 triangles; LOD1 701 vertices / 542 triangles
+  Size (0.72, 1.28, 0.60) m; bounds centre (0.00, 0.64, 0.00); 3 box colliders; 3/3 renderers
+ServiceTrolley_A: LOD0 3652 vertices / 2468 triangles; LOD1 2226 vertices / 1234 triangles
+  Size (0.93, 1.00, 0.47) m; bounds centre (0.06, 0.50, 0.00); 3 box colliders; 1/1 renderers
+ServiceTrolley_B: LOD0 4360 vertices / 2680 triangles; LOD1 2403 vertices / 1340 triangles
+  Size (0.75, 0.88, 0.46) m; bounds centre (-0.05, 0.44, 0.00); 4 box colliders; 1/1 renderers
+Table_A: LOD0 1224 vertices / 628 triangles; LOD1 733 vertices / 314 triangles
+  Size (1.14, 0.46, 0.66) m; bounds centre (0.00, 0.23, 0.00); 6 box colliders; 1/1 renderers
+Table_B: LOD0 2736 vertices / 1304 triangles; LOD1 1614 vertices / 652 triangles
+  Size (1.35, 0.78, 0.69) m; bounds centre (0.00, 0.39, 0.02); 5 box colliders; 2/2 renderers
+Bookcase_A: LOD0 6353 vertices / 3964 triangles; LOD1 3693 vertices / 1980 triangles
+  Size (0.97, 1.87, 0.44) m; bounds centre (0.00, 0.94, 0.01); 1 box colliders; 3/3 renderers
+Bookcase_B: LOD0 6037 vertices / 3814 triangles; LOD1 3461 vertices / 1906 triangles
+  Size (1.61, 1.03, 0.47) m; bounds centre (0.00, 0.52, 0.02); 1 box colliders; 4/4 renderers
+Shelf_A: LOD0 2936 vertices / 1888 triangles; LOD1 1344 vertices / 944 triangles
+  Size (0.67, 1.65, 0.35) m; bounds centre (0.00, 0.83, 0.00); 5 box colliders; 1/1 renderers
+Shelf_B: LOD0 2768 vertices / 2004 triangles; LOD1 1792 vertices / 1002 triangles
+  Size (0.95, 1.22, 0.28) m; bounds centre (0.00, 0.64, 0.12); 3 box colliders; 1/1 renderers

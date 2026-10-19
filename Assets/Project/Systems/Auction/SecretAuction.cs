@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using BuyBidBlow.Systems.Portfolio;
 using BuyBidBlow.Systems.Types;
 
 namespace BuyBidBlow.Systems.Auction
@@ -7,7 +8,7 @@ namespace BuyBidBlow.Systems.Auction
     // Each player only learns whether they won; nothing else is public.
     public sealed class SecretAuction
     {
-        private readonly IReadOnlyDictionary<PlayerId, PlayerAssetState> players;
+        private readonly IReadOnlyDictionary<PlayerId, PlayerPortfolio> players;
         private readonly Dictionary<PlayerId, Submission> submissions = new Dictionary<PlayerId, Submission>();
         private long nextOrder;
         private bool closed;
@@ -16,7 +17,7 @@ namespace BuyBidBlow.Systems.Auction
         public double Deadline { get; }
         public int MinBid { get; }
 
-        public SecretAuction(Lot lot, double deadline, int minBid, IReadOnlyDictionary<PlayerId, PlayerAssetState> players)
+        public SecretAuction(Lot lot, double deadline, int minBid, IReadOnlyDictionary<PlayerId, PlayerPortfolio> players)
         {
             Lot = lot;
             Deadline = deadline;
@@ -30,7 +31,7 @@ namespace BuyBidBlow.Systems.Auction
         public AuctionError Submit(PlayerId player, int amount, double now)
         {
             if (closed || now >= Deadline) return AuctionError.Closed;
-            if (!players.TryGetValue(player, out PlayerAssetState assets)) return AuctionError.UnknownPlayer;
+            if (!players.TryGetValue(player, out PlayerPortfolio assets)) return AuctionError.UnknownPlayer;
             if (amount < MinBid) return AuctionError.TooLow;
 
             int previous = GetSubmitted(player);

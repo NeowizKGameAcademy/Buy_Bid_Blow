@@ -738,7 +738,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9ded9043ae32a824bb236ec636baa433, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: BuyBidBlow.AuctionDisplay::BuyBidBlow.AuctionDisplay.AuctionEnvelopeDisplay
+  m_EditorClassIdentifier: BuyBidBlow.Dev::BuyBidBlow.AuctionDisplay.AuctionEnvelopeDisplay
   rotatingModel: {fileID: 1444303158339126793}
   roundLabel: {fileID: 2693665758085891687}
   degreesPerSecond: 20

@@ -3532,7 +3532,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2737aa7cd0afe5d4785582b57e207bed, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: BuyBidBlow.PlayerUISandbox::BuyBidBlow.PlayerUISandbox.InformationNotebookView
+  m_EditorClassIdentifier: BuyBidBlow.Dev::BuyBidBlow.PlayerUISandbox.InformationNotebookView
   owner: {fileID: 871591951728162395}
   overlay: {fileID: 2170358482139641174}
   pageRange: {fileID: 3610258271783732417}
@@ -11343,7 +11343,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 346aa45e72fa2ea49a49d19da49fb189, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.DetectObject
+  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.UI.HUD.DetectObject
   cursor: {fileID: 9121041981102024378}
   cursorImage:
   - {fileID: 21300000, guid: d362668d6ca76dd4f88cc57b48207c60, type: 3}
@@ -14639,7 +14639,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 328ce0178f659be45ac696d507a94a19, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: BuyBidBlow.PlayerUISandbox::BuyBidBlow.PlayerUISandbox.MatchUIBridge
+  m_EditorClassIdentifier: BuyBidBlow.Dev::BuyBidBlow.PlayerUISandbox.MatchUIBridge
   settingsFile: {fileID: 4900000, guid: d501cfe0b4b4b944dbdd6eddb9288512, type: 3}
   controller: {fileID: 871591951728162395}
   lotDetails: {fileID: 888041349728373324}
@@ -16634,7 +16634,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c2e9ec8352b36cc4d990f578c6f6f334, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.PlayerCamera
+  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.Characters.PlayerCamera
   cameraObject: {fileID: 5898206553904504415}
   defaultLocalPosition: {x: 0, y: 1.7, z: 0}
 --- !u!114 &9015050099721643251
@@ -16648,7 +16648,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dc52d5a2710f4b542af68f2027180a1e, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.PlayerMove
+  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.Characters.PlayerMove
   playerRb: {fileID: 6359137222351833047}
   playerCamera: {fileID: 6085029182420822251}
   groundLayer:
@@ -16674,7 +16674,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7cedc43f2c701814387a998cbf719ace, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: BuyBidBlow.PlayerUISandbox::BuyBidBlow.PlayerUISandbox.PlayerUIController
+  m_EditorClassIdentifier: BuyBidBlow.Dev::BuyBidBlow.PlayerUISandbox.PlayerUIController
   movement: {fileID: 9015050099721643251}
   detection: {fileID: 3854125133920519903}
   view: {fileID: 539534330747305995}
@@ -18124,7 +18124,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 49de30408f635d041a7b81a67c749009, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: BuyBidBlow.PlayerUISandbox::BuyBidBlow.PlayerUISandbox.TradingPanelView
+  m_EditorClassIdentifier: BuyBidBlow.Dev::BuyBidBlow.PlayerUISandbox.TradingPanelView
 --- !u!225 &8210685636804990466
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -19020,7 +19020,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 49de30408f635d041a7b81a67c749009, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: BuyBidBlow.PlayerUISandbox::BuyBidBlow.PlayerUISandbox.TradingPanelView
+  m_EditorClassIdentifier: BuyBidBlow.Dev::BuyBidBlow.PlayerUISandbox.TradingPanelView
 --- !u!225 &8942569924204674423
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -19916,7 +19916,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 49de30408f635d041a7b81a67c749009, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: BuyBidBlow.PlayerUISandbox::BuyBidBlow.PlayerUISandbox.TradingPanelView
+  m_EditorClassIdentifier: BuyBidBlow.Dev::BuyBidBlow.PlayerUISandbox.TradingPanelView
 --- !u!225 &4604195133109971756
 CanvasGroup:
   m_ObjectHideFlags: 0

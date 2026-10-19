@@ -1,0 +1,41 @@
+[
+  {
+    "asset": "DisplayCabinet",
+    "lods": {
+      "LOD0": {
+        "vertices": 1238,
+        "triangles": 2002
+      },
+      "LOD1": {
+        "vertices": 668,
+        "triangles": 960
+      }
+    }
+  },
+  {
+    "asset": "LeafletRack",
+    "lods": {
+      "LOD0": {
+        "vertices": 508,
+        "triangles": 870
+      },
+      "LOD1": {
+        "vertices": 281,
+        "triangles": 416
+      }
+    }
+  },
+  {
+    "asset": "UmbrellaStand",
+    "lods": {
+      "LOD0": {
+        "vertices": 1306,
+        "triangles": 2252
+      },
+      "LOD1": {
+        "vertices": 666,
+        "triangles": 1056
+      }
+    }
+  }
+]

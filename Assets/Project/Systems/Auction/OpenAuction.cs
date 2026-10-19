@@ -1,13 +1,14 @@
 using System.Collections.Generic;
+using BuyBidBlow.Systems.Portfolio;
 using BuyBidBlow.Systems.Types;
 
 namespace BuyBidBlow.Systems.Auction
 {
     // 1st lot: public ascending bids. Bidder and amount are public; bids can't be withdrawn.
-    // Bids reserve cash on the match's shared PlayerAssetState, so it can't be spent on stock meanwhile.
+    // Bids reserve cash on the match's shared PlayerPortfolio, so it can't be spent on stock meanwhile.
     public sealed class OpenAuction
     {
-        private readonly IReadOnlyDictionary<PlayerId, PlayerAssetState> players;
+        private readonly IReadOnlyDictionary<PlayerId, PlayerPortfolio> players;
         private bool closed;
 
         public Lot Lot { get; }
@@ -18,7 +19,7 @@ namespace BuyBidBlow.Systems.Auction
         public PlayerId HighestBidder { get; private set; }  // meaningful only when HasBid
         public int HighestBid { get; private set; }
 
-        public OpenAuction(Lot lot, double deadline, int minBid, IReadOnlyDictionary<PlayerId, PlayerAssetState> players)
+        public OpenAuction(Lot lot, double deadline, int minBid, IReadOnlyDictionary<PlayerId, PlayerPortfolio> players)
         {
             Lot = lot;
             Deadline = deadline;
@@ -29,7 +30,7 @@ namespace BuyBidBlow.Systems.Auction
         public AuctionError PlaceBid(PlayerId player, int amount, double now)
         {
             if (closed || now >= Deadline) return AuctionError.Closed;
-            if (!players.TryGetValue(player, out PlayerAssetState assets)) return AuctionError.UnknownPlayer;
+            if (!players.TryGetValue(player, out PlayerPortfolio assets)) return AuctionError.UnknownPlayer;
             if (HasBid && player.Equals(HighestBidder)) return AuctionError.AlreadyHighest;
 
             int minimum = HasBid ? HighestBid + 1 : MinBid;

@@ -1,0 +1,31 @@
+Approved Blender A91 lounge layout, with A92 seated umbrellas.
+A90_InformationBoard_A at (-6.70, 0.00, 6.90), yaw=155
+A90_ServiceTrolley_A at (-10.40, 0.00, 8.40), yaw=90
+A90_Table_A at (-8.65, 0.00, 10.60), yaw=90
+A90_Bookcase_A at (-9.90, 0.00, 13.25), yaw=155
+A90_Shelf_A at (-11.00, 0.00, 12.35), yaw=125
+A90_Table_B at (-2.20, 0.00, 15.85), yaw=180
+A90_Bookcase_B at (3.60, 0.00, 16.70), yaw=189
+A90_Shelf_B at (-2.20, 1.15, 17.32), yaw=180
+A90_DisplayCabinet at (5.20, 0.00, 16.10), yaw=196
+A90_InformationBoard_B at (-0.85, 0.00, 15.35), yaw=180
+A90_ServiceTrolley_B at (10.40, 0.00, 8.40), yaw=270
+A90_LeafletRack at (-3.55, 0.00, 15.45), yaw=168
+A90_UmbrellaStand at (7.00, 0.00, 6.95), yaw=205
+A91_Left_Teal_Sofa at (-10.05, -0.01, 10.60), yaw=-225
+A91_Right_Red_Sofa at (10.05, -0.01, 10.60), yaw=45
+A91_Left_Bench at (-7.20, -0.01, 10.60), yaw=-45
+A91_Right_Bench at (7.20, -0.01, 10.60), yaw=-45
+A91_Right_Coffee_Table at (8.65, 0.00, 10.60), yaw=90
+A91_Rear_Library_Case at (-4.75, 0.00, 16.40), yaw=166
+A91_Right_Library_Case at (9.40, 0.00, 13.40), yaw=216
+A91_Rear_Display_Cabinet at (1.90, 0.00, 16.80), yaw=180
+A91_Information_Desk_Chair at (-2.20, 0.00, 16.60), yaw=-5.008956E-06
+A91_Left_Planter at (-11.30, 0.00, 7.45), yaw=-25
+A91_Right_Planter at (11.30, 0.00, 7.45), yaw=25
+A91_Rear_Planter at (-5.60, 0.00, 14.60), yaw=-15
+A91_Left_Rug at (-8.80, 0.00, 10.60), yaw=0
+A91_Right_Rug at (8.80, 0.00, 10.60), yaw=0
+PASS: 27 linked prefab instances; all materials resolved; matching rectangle x +/-5.9, z 5.6..13.6 remains free of new colliders.
+Umbrella metal tips contact the 0.037 m interior tray. LOD0 and LOD1 regenerated; shared prefab bounds refreshed.
+PASS: all 10 new sitting places accept occupants and allow collision-free standing.

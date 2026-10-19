@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using BuyBidBlow.Systems;
 using BuyBidBlow.Systems.Auction;
 using BuyBidBlow.Systems.Match;
+using BuyBidBlow.Systems.Portfolio;
 using BuyBidBlow.Systems.Types;
 using NUnit.Framework;
 
@@ -15,12 +15,12 @@ namespace BuyBidBlow.Dev.Tests.EditMode.Auction
             new Info(2, Company.Straw, Direction.Rise, Company.Timber, Direction.Flat),
             new Info(4, Company.Timber, Direction.Fall, Company.Brick, Direction.Rise));
 
-        private Dictionary<PlayerId, PlayerAssetState> players;
+        private Dictionary<PlayerId, PlayerPortfolio> players;
 
         [SetUp]
         public void SetUp()
         {
-            players = new Dictionary<PlayerId, PlayerAssetState> { [A] = new PlayerAssetState(100, 0), [B] = new PlayerAssetState(100, 0), [C] = new PlayerAssetState(30, 0) };
+            players = new Dictionary<PlayerId, PlayerPortfolio> { [A] = new PlayerPortfolio(100, 0), [B] = new PlayerPortfolio(100, 0), [C] = new PlayerPortfolio(30, 0) };
         }
 
         // ---------- Open ----------
