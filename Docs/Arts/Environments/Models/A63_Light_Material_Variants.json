@@ -1,0 +1,38 @@
+[
+  {
+    "fixture": "Chandelier",
+    "on": "A63_Chandelier_ON",
+    "off": "A63_Chandelier_OFF",
+    "emission_linear_rgb": [
+      1,
+      0.68,
+      0.32
+    ],
+    "blender_emission_strength": 3.5,
+    "assigned_slots": 36
+  },
+  {
+    "fixture": "Wall_Sconce",
+    "on": "A63_Wall_Sconce_ON",
+    "off": "A63_Wall_Sconce_OFF",
+    "emission_linear_rgb": [
+      1,
+      0.68,
+      0.32
+    ],
+    "blender_emission_strength": 2.5,
+    "assigned_slots": 1
+  },
+  {
+    "fixture": "Table_Lamp",
+    "on": "A63_Table_Lamp_ON",
+    "off": "A63_Table_Lamp_OFF",
+    "emission_linear_rgb": [
+      1,
+      0.68,
+      0.32
+    ],
+    "blender_emission_strength": 1.5,
+    "assigned_slots": 7
+  }
+]

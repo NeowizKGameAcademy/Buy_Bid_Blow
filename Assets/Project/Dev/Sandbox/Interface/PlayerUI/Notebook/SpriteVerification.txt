@@ -1,0 +1,13 @@
+BG_NotebookLeather: 1187x1326; alpha exterior 13.8%; sprite rect 1108x1237
+BG_NotebookPaper: 1199x1312; alpha exterior 13.4%; sprite rect 1127x1224
+DEC_BrassRing: 1536x1024; alpha exterior 80.8%; sprite rect 1178x525
+FR_PencilCell: 2172x724; alpha exterior 94.1%; sprite rect 2017x524
+IC_BrickPencil: 1254x1254; alpha exterior 64.7%; sprite rect 1012x863
+IC_CurrentBookmark: 969x1623; alpha exterior 78.2%; sprite rect 652x991
+IC_StrawPencil: 1254x1254; alpha exterior 47.8%; sprite rect 1149x1205
+IC_TimberPencil: 1254x1254; alpha exterior 46.7%; sprite rect 1220x1122
+MK_CurrentRow: 2172x724; alpha exterior 78.4%; sprite rect 2159x223
+MK_FallBlue: 2171x724; alpha exterior 62.4%; sprite rect 2072x367
+MK_FlatGraphite: 2172x724; alpha exterior 68.6%; sprite rect 2087x366
+MK_RiseRed: 2172x724; alpha exterior 72.1%; sprite rect 2109x283
+PASS: 12 original image_gen PNGs, native trimmed Sprite assets, actual alpha, empty cell center, no baked text.

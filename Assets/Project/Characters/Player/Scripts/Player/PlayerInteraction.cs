@@ -10,6 +10,9 @@ namespace BuyBidBlow
 
         public void Interact_OpenTradePanel()
         {
+            if (tradePanel != null && tradePanel.IsOpen) return;
+            var view = detect != null ? detect.transform : GetComponentInChildren<Camera>()?.transform;
+            if (BuyBidBlow.Hall.HallSeatActor.TryInteract(transform, view)) return;
             if (detect == null || tradePanel == null || localTrade == null || tradePanel.IsOpen)
                 return;
 

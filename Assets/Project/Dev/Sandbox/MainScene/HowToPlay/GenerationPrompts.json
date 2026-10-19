@@ -1,0 +1,25 @@
+{
+  "tool": "built-in image_gen",
+  "assets": [
+    {
+      "id": "BG_DossierFolder",
+      "prompt": "One production Unity UI sprite, horizontal landscape 16:10 dark deep teal file folder backing. Front-on flat orthographic. Stiff cloth/leather document file, thin stitched edge, small restrained aged brass corner protectors at four corners. Plain uniform dark teal center covered later by paper. No rings, no binding, no clip, no tabs, no paper, no words, no icons. Rounded rectangle clean silhouette, suitable 9 slice. Real transparent alpha outside with 3 percent padding. Vintage stock exchange game, premium simple restrained detail."
+    },
+    {
+      "id": "BG_DossierPaper",
+      "prompt": "One production Unity UI sprite, landscape 16:10 stack of 3 off-white cream paper sheets, slightly offset corners but front-facing flat rectangular document writing surface. Subtle aged paper grain, clean bright ivory center for readable dark text. Thin edge and tiny worn corners. NO text, lines, graphics, clip, folder, tape, stains or ornaments. Suitable 9 slice. Actual transparent alpha outside silhouette, 3 percent padding. Large blank horizontal document sheet stack only."
+    },
+    {
+      "id": "DEC_DossierClip",
+      "prompt": "One isolated vintage brass bulldog document clip Unity UI sprite, front-facing orthographic, small rectangular clamp with a single round wire handle rising above it. Aged warm brass highlights, dark subtle underside, simple stylized stock exchange office accessory. Centered single compact silhouette on actual transparent alpha. No document, no folder, no paper, no letters, no glow, no surrounding shadow or props. This clips to upper left of a horizontal guide dossier."
+    },
+    {
+      "id": "TAB_Dossier",
+      "prompt": "One Unity UI sprite: horizontal file folder index tab, 2:1 width height. Dark deep teal leather/stiff cloth surface, subtle thin stitched border, gently rounded right corners, squared left side to tuck behind paper, flat front-on orthographic. Simple modest edge emboss, uniform blank central writing space. No letters, symbols, paper, clip, shadows or other tabs. True transparent alpha outside, 5 percent padding. Suitable nine slice; will be tinted for selected and disabled states."
+    }
+  ],
+  "variants": {
+    "Selected": "Preserve silhouette, stitched border, proportions and transparency. Warm light ivory tan leather with restrained aged brass edging. No text.",
+    "Disabled": "Preserve silhouette, stitched border, proportions and transparency. Desaturated dark gray teal leather, subdued low contrast stitching. No text."
+  }
+}

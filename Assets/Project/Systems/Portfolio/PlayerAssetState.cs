@@ -98,6 +98,9 @@ namespace BuyBidBlow.Systems
             return Succeeded("판매 완료", company, total);
         }
 
+        public bool TrySpendAvailable(int amount) { if(amount <= 0 || Available < amount) return false; Cash -= amount; return true; }
+        public void Credit(int amount) { if(amount < 0) throw new ArgumentOutOfRangeException(nameof(amount)); Cash = checked(Cash + amount); }
+
         private bool TryGetTotal(Company company, int quantity, int unitPrice, out int total, out string error)
         {
             total = 0;

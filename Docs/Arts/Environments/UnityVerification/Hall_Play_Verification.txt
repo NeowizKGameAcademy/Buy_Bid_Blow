@@ -1,0 +1,5 @@
+PASS: Unity 6000.2.8f1, 12 seconds Play Mode.
+Banner free movement: 0.6264 m; pinned drift: 0.000000 m.
+All 16 rope spans finite and pinned.
+CharacterController remains grounded.
+Runtime errors: 0.

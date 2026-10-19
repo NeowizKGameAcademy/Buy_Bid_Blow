@@ -1,0 +1,26 @@
+Championship Banner — Unity Cloth prototype
+
+Source: ChampionshipBanner_Source.blend (standalone Blender scene).
+Unity asset folder: Assets/Project/Content/Props/ChampionshipBanner
+Test scene: Assets/Project/Dev/Sandbox/BannerCloth/SC_BannerCloth.unity
+Rebuild: BuyBidBlow > Banner Cloth > Build Test Scene
+
+6 m wide, 2 m high; 60 x 20 grid cells; 1,281 vertices; 2,400 triangles.
+Single surface with continuous 0–1 UV; no solidify, baked cloth or duplicate back face.
+Unity material renders both sides. Reverse side shows mirrored print like a thin printed fabric.
+Origin is top center. Four vertices in the two top corner patches are pinned.
+Free vertex travel is limited from 0.7 m at the top to 1.5 m at the bottom
+to retain title readability. Adjust Cloth constraints to allow a looser hang.
+Cloth is on a SkinnedMeshRenderer; bones are not needed for this fixed hanging banner.
+Keep the transform scale at 1 for the initial physical test.
+
+Open the test scene and press Play. Capsule automatically passes through the fabric.
+Turn off Automatic capsule contact to move the capsule with arrow keys.
+Wind slider controls acceleration; Unity WindZone is not automatically connected.
+
+The prefab contains cloth and material; scene-specific character colliders must be
+assigned to Cloth > Capsule Colliders or Sphere Colliders in the target scene.
+Unity Cloth receives contact from these explicit colliders; it does not push the
+character back, and arbitrary mesh colliders are not supported by this setup.
+This prototype does not add network synchronization or wire into the real player prefab.
+Blender is used only for mesh/UV authoring; physics is evaluated in Unity Play Mode.
