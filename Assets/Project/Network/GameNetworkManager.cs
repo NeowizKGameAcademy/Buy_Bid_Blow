@@ -18,12 +18,13 @@ using UnityEngine.SceneManagement;
 namespace BuyBidBlow.Network
 {
     public struct LobbyJoinRequest : NetworkMessage {public int protocol;public string nickname;}
-    public struct LobbyJoinResponse : NetworkMessage {public bool accepted;public string reason;}
+    // minPlayers: the server's start threshold (e.g. -minPlayers 1), so clients judge "all ready" the same way.
+    public struct LobbyJoinResponse : NetworkMessage {public bool accepted;public string reason;public int minPlayers;}
     public struct LobbyClosing : NetworkMessage {}
     public struct MatchStarting : NetworkMessage {}
     public sealed class GameNetworkManager : NetworkManager
     {
-        public const int ProtocolVersion=2;
+        public const int ProtocolVersion=3;
         public const string PlayScene="SC_ExchangeFurnished";
         [Header("Match")]
         // Lower this in the Inspector to test with fewer players (e.g. one ParrelSync clone).
@@ -36,7 +37,9 @@ namespace BuyBidBlow.Network
         public event Action<string> AdmissionRejected,ClientError;
         // Captured before connecting; the owned player submits it once after spawning.
         public string LocalNickname {get;set;}=string.Empty;
-        public int MinPlayers=>minPlayers;
+        // Server: its own setting. Client: the value the server sent on admission (falls back to this scene's).
+        public int MinPlayers=>!NetworkServer.active&&serverMinPlayers>0?serverMinPlayers:minPlayers;
+        int serverMinPlayers;
         public bool MatchStarted {get;private set;}
         public bool CanStartMatch
         {
@@ -282,7 +285,7 @@ namespace BuyBidBlow.Network
         }
         public override void OnClientDisconnect()
         {
-            ClientDisconnected?.Invoke();base.OnClientDisconnect();
+            ClientDisconnected?.Invoke();base.OnClientDisconnect();serverMinPlayers=0;
             if(!clientInMatch)return;
             // Lost the server during a match: back to the start screen. The lobby scene brings a fresh manager.
             clientInMatch=false;SceneManager.LoadScene(menuScene);Destroy(gameObject);
@@ -305,11 +308,12 @@ namespace BuyBidBlow.Network
             if(message.protocol!=ProtocolVersion){Reject(conn,"게임 버전이 다릅니다. 같은 버전으로 실행하세요.");return;}
             if(MatchStarted){Reject(conn,"이미 경기가 시작된 방입니다.");return;}
             if(!roster.TryReserve(conn.connectionId,message.nickname,out var error)){Reject(conn,error);return;}
-            conn.Send(new LobbyJoinResponse{accepted=true,reason=""});
+            conn.Send(new LobbyJoinResponse{accepted=true,reason="",minPlayers=minPlayers});
         }
         void ReceiveResponse(LobbyJoinResponse message)
         {
             if(!message.accepted){AdmissionRejected?.Invoke(message.reason);return;}
+            serverMinPlayers=message.minPlayers;
             if(NetworkClient.localPlayer||NetworkClient.ready)return;
             AdmissionApproved?.Invoke();NetworkClient.Ready();NetworkClient.AddPlayer();
         }

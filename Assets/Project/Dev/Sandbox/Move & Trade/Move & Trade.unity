@@ -537,11 +537,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7b9d010e4e34a0fa64b021c91e7c512, type: 3}
   m_Name: 
   m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.Common.LocalTradeController
-  tradePanel: {fileID: 0}
-  assets: {fileID: 0}
-  playerInfo: {fileID: 0}
+  tradePanel: {fileID: 4763498068041449256}
+  assets: {fileID: 4763498068041449255}
+  playerInfo: {fileID: 4763498068041449254}
   localPlayerId: local-player
-  matchManager: {fileID: 1656554795}
 --- !u!1 &1753994142
 GameObject:
   m_ObjectHideFlags: 0
@@ -852,6 +851,39 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5ef04d94f74615740b0af802c3af6229, type: 3}
+--- !u!114 &4763498068041449254 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7280581282348656336, guid: 5ef04d94f74615740b0af802c3af6229, type: 3}
+  m_PrefabInstance: {fileID: 4763498068041449253}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6c03dcaf65461341839e561c2534818, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.Characters.PlayerInfo
+--- !u!114 &4763498068041449255 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2051769963190029571, guid: 5ef04d94f74615740b0af802c3af6229, type: 3}
+  m_PrefabInstance: {fileID: 4763498068041449253}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e3d89a2b7c24d1d8af6c2b9e4f0a617, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.Characters.PlayerAssetStatus
+--- !u!114 &4763498068041449256 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4503746201585617679, guid: 5ef04d94f74615740b0af802c3af6229, type: 3}
+  m_PrefabInstance: {fileID: 4763498068041449253}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a74ef8abbedfb74a9233d3274a490f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.UI.Market.TradePanelController
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

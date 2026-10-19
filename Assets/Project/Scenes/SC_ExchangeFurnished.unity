@@ -33739,7 +33739,7 @@ MonoBehaviour:
   room: {fileID: 104497634}
   lobbyPresentation: {fileID: 1234541784}
   gameplayPresentation: {fileID: 229019511}
-  player: {fileID: 0}
+  player: {fileID: 1700000003}
 --- !u!4 &1267592422
 Transform:
   m_ObjectHideFlags: 0
@@ -48021,6 +48021,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3373021250806142367, guid: 5ef04d94f74615740b0af802c3af6229, type: 3}
   m_PrefabInstance: {fileID: 1700000001}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1700000003 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2187848166270705709, guid: 5ef04d94f74615740b0af802c3af6229, type: 3}
+  m_PrefabInstance: {fileID: 1700000001}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc52d5a2710f4b542af68f2027180a1e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.Characters.PlayerMove
 --- !u!1 &1707972028
 GameObject:
   m_ObjectHideFlags: 0
