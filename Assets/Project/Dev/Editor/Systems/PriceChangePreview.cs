@@ -10,7 +10,7 @@ namespace BuyBidBlow.Dev.Editor
 {
     public sealed class PriceChangePreview : EditorWindow
     {
-        private const string SettingsPath = "Assets/Project/Systems/Match/MatchSettings.json";
+        private const string SettingsPath = "Assets/Project/Content/Match/MatchSettings.json";
         [SerializeField] private int seed = 20261013;
         private MatchSettings settings;
         private MatchPriceSimulation simulation;

@@ -1,0 +1,134 @@
+{
+    "assets": [
+        {
+            "name": "InformationBoard_A",
+            "lod0Vertices": 2314,
+            "lod0Triangles": 1210,
+            "lod1Vertices": 1252,
+            "lod1Triangles": 606,
+            "colliders": 5,
+            "sizeMetres": {
+                "x": 0.984000027179718,
+                "y": 1.7100000381469727,
+                "z": 0.4339999854564667
+            }
+        },
+        {
+            "name": "InformationBoard_B",
+            "lod0Vertices": 1396,
+            "lod0Triangles": 1082,
+            "lod1Vertices": 701,
+            "lod1Triangles": 542,
+            "colliders": 3,
+            "sizeMetres": {
+                "x": 0.7179999947547913,
+                "y": 1.2781683206558228,
+                "z": 0.6000000238418579
+            }
+        },
+        {
+            "name": "ServiceTrolley_A",
+            "lod0Vertices": 3652,
+            "lod0Triangles": 2468,
+            "lod1Vertices": 2226,
+            "lod1Triangles": 1234,
+            "colliders": 3,
+            "sizeMetres": {
+                "x": 0.9319999814033508,
+                "y": 1.0,
+                "z": 0.4659999907016754
+            }
+        },
+        {
+            "name": "ServiceTrolley_B",
+            "lod0Vertices": 4360,
+            "lod0Triangles": 2680,
+            "lod1Vertices": 2403,
+            "lod1Triangles": 1340,
+            "colliders": 4,
+            "sizeMetres": {
+                "x": 0.7490000128746033,
+                "y": 0.8770000338554382,
+                "z": 0.46000000834465029
+            }
+        },
+        {
+            "name": "Table_A",
+            "lod0Vertices": 1224,
+            "lod0Triangles": 628,
+            "lod1Vertices": 733,
+            "lod1Triangles": 314,
+            "colliders": 6,
+            "sizeMetres": {
+                "x": 1.1399999856948853,
+                "y": 0.4620000123977661,
+                "z": 0.6600000262260437
+            }
+        },
+        {
+            "name": "Table_B",
+            "lod0Vertices": 2736,
+            "lod0Triangles": 1304,
+            "lod1Vertices": 1614,
+            "lod1Triangles": 652,
+            "colliders": 5,
+            "sizeMetres": {
+                "x": 1.350000023841858,
+                "y": 0.781000018119812,
+                "z": 0.6909034252166748
+            }
+        },
+        {
+            "name": "Bookcase_A",
+            "lod0Vertices": 6353,
+            "lod0Triangles": 3964,
+            "lod1Vertices": 3693,
+            "lod1Triangles": 1980,
+            "colliders": 1,
+            "sizeMetres": {
+                "x": 0.9649999737739563,
+                "y": 1.874500036239624,
+                "z": 0.4415000081062317
+            }
+        },
+        {
+            "name": "Bookcase_B",
+            "lod0Vertices": 6037,
+            "lod0Triangles": 3814,
+            "lod1Vertices": 3461,
+            "lod1Triangles": 1906,
+            "colliders": 1,
+            "sizeMetres": {
+                "x": 1.6050000190734864,
+                "y": 1.034500002861023,
+                "z": 0.4664999842643738
+            }
+        },
+        {
+            "name": "Shelf_A",
+            "lod0Vertices": 2936,
+            "lod0Triangles": 1888,
+            "lod1Vertices": 1344,
+            "lod1Triangles": 944,
+            "colliders": 5,
+            "sizeMetres": {
+                "x": 0.6700000166893005,
+                "y": 1.649999976158142,
+                "z": 0.3475528359413147
+            }
+        },
+        {
+            "name": "Shelf_B",
+            "lod0Vertices": 2768,
+            "lod0Triangles": 2004,
+            "lod1Vertices": 1792,
+            "lod1Triangles": 1002,
+            "colliders": 3,
+            "sizeMetres": {
+                "x": 0.949999988079071,
+                "y": 1.2200000286102296,
+                "z": 0.28199997544288638
+            }
+        }
+    ]
+}

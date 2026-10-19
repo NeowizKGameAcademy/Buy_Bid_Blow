@@ -1,0 +1,5 @@
+PASS: 14 wall fixtures and all 36 source chandelier bulbs use enabled emission.
+PASS: fixed lights=31; realtime lights=5; realtime shadow casters=1.
+PASS: 1 directional lightmap atlas; 405 probes.
+PASS: gameplay camera HDR, Bloom and SMAA enabled; original gameplay FOV retained.
+Review stack: Bloom=0.28, exposure=0.55.

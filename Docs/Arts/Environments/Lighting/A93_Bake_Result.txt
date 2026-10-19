@@ -1,0 +1,1 @@
+PASS: 1 directional lightmaps; probes=405; elapsed seconds=49.3435247

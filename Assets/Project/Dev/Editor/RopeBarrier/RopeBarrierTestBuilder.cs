@@ -4,7 +4,7 @@ using System.Text;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
-using BuyBidBlow.Dev.RopeBarrier;
+using BuyBidBlow.Props;
 
 namespace BuyBidBlow.Dev.Editor
 {
@@ -21,7 +21,7 @@ namespace BuyBidBlow.Dev.Editor
                 var importer=(ModelImporter)AssetImporter.GetAtPath(path);importer.importAnimation=false;importer.isReadable=true;importer.materialImportMode=ModelImporterMaterialImportMode.None;importer.SaveAndReimport();
                 var go=(GameObject)PrefabUtility.InstantiatePrefab(AssetDatabase.LoadAssetAtPath<GameObject>(path));go.name="Barrier_"+kind+"_Test";go.transform.position=new Vector3(0,0,i*2.5f);
                 foreach(var skin in go.GetComponentsInChildren<SkinnedMeshRenderer>()){skin.updateWhenOffscreen=true;skin.localBounds=new Bounds(Vector3.zero,Vector3.one*10);}
-                go.AddComponent<RopeBarrierDemo>();
+                go.AddComponent<RopeBarrierSimulation>();
             }
             var cam=new GameObject("Test Camera").AddComponent<Camera>();cam.tag="MainCamera";cam.transform.position=new Vector3(4,3.8f,-7);cam.transform.LookAt(new Vector3(0,.6f,1.2f));cam.backgroundColor=new Color(.23f,.25f,.27f);cam.clearFlags=CameraClearFlags.SolidColor;
             var light=new GameObject("Preview Light").AddComponent<Light>();light.type=LightType.Directional;light.intensity=2;light.transform.rotation=Quaternion.Euler(45,-30,0);
@@ -32,7 +32,7 @@ namespace BuyBidBlow.Dev.Editor
         {
             try {
                 Build();var sb=new StringBuilder("Unity "+Application.unityVersion+" — deterministic runtime solver tests, 600 x 0.02s per case\n");
-                foreach(var demo in UnityEngine.Object.FindObjectsByType<RopeBarrierDemo>(FindObjectsSortMode.None)) {
+                foreach(var demo in UnityEngine.Object.FindObjectsByType<RopeBarrierSimulation>(FindObjectsSortMode.None)) {
                     demo.Initialize();
                     foreach(var pair in new[]{new Vector2(1.2f,1.4f),new Vector2(1.6f,1.65f),new Vector2(2.4f,2.8f),new Vector2(2.4f,1.2f)}) {
                         demo.postDistance=pair.x;demo.ropeLength=pair.y;

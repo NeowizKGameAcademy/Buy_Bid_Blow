@@ -3480,7 +3480,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dedea8577e6411043a9129dee798933e, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: BuyBidBlow.Game::BBBWolfAppearance
+  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.Characters.BBBWolfAppearance
   uppers:
   - {fileID: 1277406057606704597}
   - {fileID: 3364258492918923062}

@@ -1,0 +1,608 @@
+{
+  "assets": [
+    {
+      "name": "InformationBoard_A",
+      "colliders": [
+        {
+          "center": [
+            -0.395,
+            0.86,
+            0
+          ],
+          "size": [
+            0.1,
+            1.71,
+            0.12
+          ]
+        },
+        {
+          "center": [
+            -0.395,
+            0.055,
+            0
+          ],
+          "size": [
+            0.2,
+            0.11,
+            0.44
+          ]
+        },
+        {
+          "center": [
+            0.395,
+            0.86,
+            0
+          ],
+          "size": [
+            0.1,
+            1.71,
+            0.12
+          ]
+        },
+        {
+          "center": [
+            0.395,
+            0.055,
+            0
+          ],
+          "size": [
+            0.2,
+            0.11,
+            0.44
+          ]
+        },
+        {
+          "center": [
+            0,
+            0.99,
+            0
+          ],
+          "size": [
+            0.7,
+            1.13,
+            0.1
+          ]
+        }
+      ],
+      "lods": [
+        {
+          "name": "LOD0",
+          "vertices": 660,
+          "triangles": 1210
+        },
+        {
+          "name": "LOD1",
+          "vertices": 358,
+          "triangles": 606
+        }
+      ]
+    },
+    {
+      "name": "InformationBoard_B",
+      "colliders": [
+        {
+          "center": [
+            0,
+            0.045,
+            0
+          ],
+          "size": [
+            0.6,
+            0.09,
+            0.6
+          ]
+        },
+        {
+          "center": [
+            0,
+            0.55,
+            0
+          ],
+          "size": [
+            0.12,
+            1.02,
+            0.12
+          ]
+        },
+        {
+          "center": [
+            0,
+            1.08,
+            0
+          ],
+          "size": [
+            0.72,
+            0.4,
+            0.34
+          ]
+        }
+      ],
+      "lods": [
+        {
+          "name": "LOD0",
+          "vertices": 572,
+          "triangles": 1082
+        },
+        {
+          "name": "LOD1",
+          "vertices": 302,
+          "triangles": 542
+        }
+      ]
+    },
+    {
+      "name": "ServiceTrolley_A",
+      "colliders": [
+        {
+          "center": [
+            0,
+            0.2,
+            0
+          ],
+          "size": [
+            0.78,
+            0.07,
+            0.46
+          ]
+        },
+        {
+          "center": [
+            0,
+            0.73,
+            0
+          ],
+          "size": [
+            0.78,
+            0.07,
+            0.46
+          ]
+        },
+        {
+          "center": [
+            0,
+            0.43,
+            0
+          ],
+          "size": [
+            0.78,
+            0.8,
+            0.46
+          ]
+        }
+      ],
+      "lods": [
+        {
+          "name": "LOD0",
+          "vertices": 1364,
+          "triangles": 2468
+        },
+        {
+          "name": "LOD1",
+          "vertices": 747,
+          "triangles": 1234
+        }
+      ]
+    },
+    {
+      "name": "ServiceTrolley_B",
+      "colliders": [
+        {
+          "center": [
+            0,
+            0.2,
+            0
+          ],
+          "size": [
+            0.62,
+            0.07,
+            0.46
+          ]
+        },
+        {
+          "center": [
+            0,
+            0.48,
+            0
+          ],
+          "size": [
+            0.62,
+            0.07,
+            0.46
+          ]
+        },
+        {
+          "center": [
+            0,
+            0.76,
+            0
+          ],
+          "size": [
+            0.62,
+            0.07,
+            0.46
+          ]
+        },
+        {
+          "center": [
+            0,
+            0.43,
+            0
+          ],
+          "size": [
+            0.62,
+            0.8,
+            0.46
+          ]
+        }
+      ],
+      "lods": [
+        {
+          "name": "LOD0",
+          "vertices": 1494,
+          "triangles": 2680
+        },
+        {
+          "name": "LOD1",
+          "vertices": 824,
+          "triangles": 1340
+        }
+      ]
+    },
+    {
+      "name": "Table_A",
+      "colliders": [
+        {
+          "center": [
+            -0.51,
+            0.21,
+            -0.26
+          ],
+          "size": [
+            0.07,
+            0.42,
+            0.07
+          ]
+        },
+        {
+          "center": [
+            -0.51,
+            0.21,
+            0.26
+          ],
+          "size": [
+            0.07,
+            0.42,
+            0.07
+          ]
+        },
+        {
+          "center": [
+            0.51,
+            0.21,
+            -0.26
+          ],
+          "size": [
+            0.07,
+            0.42,
+            0.07
+          ]
+        },
+        {
+          "center": [
+            0.51,
+            0.21,
+            0.26
+          ],
+          "size": [
+            0.07,
+            0.42,
+            0.07
+          ]
+        },
+        {
+          "center": [
+            0,
+            0.437,
+            0
+          ],
+          "size": [
+            1.14,
+            0.06,
+            0.66
+          ]
+        },
+        {
+          "center": [
+            0,
+            0.12,
+            0
+          ],
+          "size": [
+            1.06,
+            0.025,
+            0.58
+          ]
+        }
+      ],
+      "lods": [
+        {
+          "name": "LOD0",
+          "vertices": 344,
+          "triangles": 628
+        },
+        {
+          "name": "LOD1",
+          "vertices": 187,
+          "triangles": 314
+        }
+      ]
+    },
+    {
+      "name": "Table_B",
+      "colliders": [
+        {
+          "center": [
+            -0.615,
+            0.33,
+            -0.274
+          ],
+          "size": [
+            0.07,
+            0.66,
+            0.07
+          ]
+        },
+        {
+          "center": [
+            -0.615,
+            0.33,
+            0.274
+          ],
+          "size": [
+            0.07,
+            0.66,
+            0.07
+          ]
+        },
+        {
+          "center": [
+            0.615,
+            0.33,
+            -0.274
+          ],
+          "size": [
+            0.07,
+            0.66,
+            0.07
+          ]
+        },
+        {
+          "center": [
+            0.615,
+            0.33,
+            0.274
+          ],
+          "size": [
+            0.07,
+            0.66,
+            0.07
+          ]
+        },
+        {
+          "center": [
+            0,
+            0.706,
+            0
+          ],
+          "size": [
+            1.35,
+            0.15,
+            0.66
+          ]
+        }
+      ],
+      "lods": [
+        {
+          "name": "LOD0",
+          "vertices": 728,
+          "triangles": 1304
+        },
+        {
+          "name": "LOD1",
+          "vertices": 402,
+          "triangles": 652
+        }
+      ]
+    },
+    {
+      "name": "Bookcase_A",
+      "colliders": [
+        {
+          "center": [
+            0,
+            0.93,
+            0
+          ],
+          "size": [
+            0.97,
+            1.8900000000000001,
+            0.43
+          ]
+        }
+      ],
+      "lods": [
+        {
+          "name": "LOD0",
+          "vertices": 2169,
+          "triangles": 3964
+        },
+        {
+          "name": "LOD1",
+          "vertices": 1177,
+          "triangles": 1980
+        }
+      ]
+    },
+    {
+      "name": "Bookcase_B",
+      "colliders": [
+        {
+          "center": [
+            0,
+            0.51,
+            0
+          ],
+          "size": [
+            1.61,
+            1.05,
+            0.44
+          ]
+        }
+      ],
+      "lods": [
+        {
+          "name": "LOD0",
+          "vertices": 2089,
+          "triangles": 3814
+        },
+        {
+          "name": "LOD1",
+          "vertices": 1135,
+          "triangles": 1906
+        }
+      ]
+    },
+    {
+      "name": "Shelf_A",
+      "colliders": [
+        {
+          "center": [
+            0,
+            0.16,
+            0
+          ],
+          "size": [
+            0.66,
+            0.035,
+            0.34
+          ]
+        },
+        {
+          "center": [
+            0,
+            0.53,
+            0
+          ],
+          "size": [
+            0.66,
+            0.035,
+            0.34
+          ]
+        },
+        {
+          "center": [
+            0,
+            0.9,
+            0
+          ],
+          "size": [
+            0.66,
+            0.035,
+            0.34
+          ]
+        },
+        {
+          "center": [
+            0,
+            1.27,
+            0
+          ],
+          "size": [
+            0.66,
+            0.035,
+            0.34
+          ]
+        },
+        {
+          "center": [
+            0,
+            0.8,
+            0
+          ],
+          "size": [
+            0.68,
+            1.6,
+            0.36
+          ]
+        }
+      ],
+      "lods": [
+        {
+          "name": "LOD0",
+          "vertices": 1008,
+          "triangles": 1888
+        },
+        {
+          "name": "LOD1",
+          "vertices": 536,
+          "triangles": 944
+        }
+      ]
+    },
+    {
+      "name": "Shelf_B",
+      "colliders": [
+        {
+          "center": [
+            0,
+            0.25,
+            -0.125
+          ],
+          "size": [
+            0.96,
+            0.035,
+            0.29
+          ]
+        },
+        {
+          "center": [
+            0,
+            0.7,
+            -0.125
+          ],
+          "size": [
+            0.96,
+            0.035,
+            0.29
+          ]
+        },
+        {
+          "center": [
+            0,
+            1.15,
+            -0.125
+          ],
+          "size": [
+            0.96,
+            0.035,
+            0.29
+          ]
+        }
+      ],
+      "lods": [
+        {
+          "name": "LOD0",
+          "vertices": 1068,
+          "triangles": 2004
+        },
+        {
+          "name": "LOD1",
+          "vertices": 567,
+          "triangles": 1002
+        }
+      ]
+    }
+  ],
+  "source_materials": "../LoungeAccessories/Materials/Lounge_BK_Atlas.mat",
+  "notes": "No text/curve objects. SignFace meshes are 4 vertices, artwork is in separate textures."
+}

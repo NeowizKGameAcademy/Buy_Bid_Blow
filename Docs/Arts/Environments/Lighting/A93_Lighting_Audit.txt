@@ -1,0 +1,62 @@
+Hall: renderers=450, meshes=448, verts=2725186, uv2=2
+Other: renderers=96, meshes=62, verts=156924, uv2=1
+Light Soft Fill intensity=0.7 bake=Realtime
+Light Warm chandelier 0 intensity=6 bake=Realtime
+Light Warm chandelier 2 intensity=6 bake=Realtime
+Light Warm chandelier 1 intensity=6 bake=Realtime
+Camera Main Camera post=False
+LightingSettings bakedGI Boolean
+LightingSettings realtimeGI Boolean
+LightingSettings realtimeEnvironmentLighting Boolean
+LightingSettings autoGenerate Boolean
+LightingSettings mixedBakeMode MixedLightingMode
+LightingSettings albedoBoost Single
+LightingSettings indirectScale Single
+LightingSettings lightmapper Lightmapper
+LightingSettings lightmapMaxSize Int32
+LightingSettings lightmapResolution Single
+LightingSettings lightmapPadding Int32
+LightingSettings lightmapCompression LightmapCompression
+LightingSettings compressLightmaps Boolean
+LightingSettings ao Boolean
+LightingSettings aoMaxDistance Single
+LightingSettings aoExponentIndirect Single
+LightingSettings aoExponentDirect Single
+LightingSettings extractAO Boolean
+LightingSettings directionalityMode LightmapsMode
+LightingSettings exportTrainingData Boolean
+LightingSettings trainingDataDestination String
+LightingSettings indirectResolution Single
+LightingSettings finalGather Boolean
+LightingSettings finalGatherRayCount Single
+LightingSettings finalGatherFiltering Boolean
+LightingSettings sampling Sampling
+LightingSettings directSampleCount Int32
+LightingSettings indirectSampleCount Int32
+LightingSettings bounces Int32
+LightingSettings maxBounces Int32
+LightingSettings russianRouletteStartBounce Int32
+LightingSettings minBounces Int32
+LightingSettings prioritizeView Boolean
+LightingSettings filteringMode FilterMode
+LightingSettings denoiserTypeDirect DenoiserType
+LightingSettings denoiserTypeIndirect DenoiserType
+LightingSettings denoiserTypeAO DenoiserType
+LightingSettings filterTypeDirect FilterType
+LightingSettings filterTypeIndirect FilterType
+LightingSettings filterTypeAO FilterType
+LightingSettings filteringGaussianRadiusDirect Single
+LightingSettings filteringGaussianRadiusIndirect Single
+LightingSettings filteringGaussianRadiusAO Single
+LightingSettings filteringAtrousPositionSigmaDirect Single
+LightingSettings filteringAtrousPositionSigmaIndirect Single
+LightingSettings filteringAtrousPositionSigmaAO Single
+LightingSettings environmentImportanceSampling Boolean
+LightingSettings environmentSampleCount Int32
+LightingSettings lightProbeSampleCountMultiplier Single
+LightingSettings respectSceneVisibilityWhenBakingGI Boolean
+LightingSettings filteringGaussRadiusDirect Int32
+LightingSettings filteringGaussRadiusIndirect Int32
+LightingSettings filteringGaussRadiusAO Int32
+LightingSettings name String
+LightingSettings hideFlags HideFlags

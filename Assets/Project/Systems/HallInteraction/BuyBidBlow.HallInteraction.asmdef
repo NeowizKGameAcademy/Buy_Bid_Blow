@@ -1,6 +1,0 @@
-{
-  "name": "BuyBidBlow.HallInteraction",
-  "rootNamespace": "BuyBidBlow.Hall",
-  "references": ["Unity.InputSystem"],
-  "autoReferenced": true
-}

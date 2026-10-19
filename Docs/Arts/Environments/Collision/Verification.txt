@@ -1,0 +1,36 @@
+PASS: Desk_STRAW_ROOT 60 own surface raycasts; 1636 triangles
+PASS: Desk_WOOD_ROOT 60 own surface raycasts; 1852 triangles
+PASS: Desk_BRICK_ROOT 60 own surface raycasts; 1404 triangles
+PASS: End_-1_ROOT 54 own surface raycasts; 212 triangles
+PASS: Staff_Gate_-1_HINGE 24 own surface raycasts; 48 triangles
+PASS: End_1_ROOT 54 own surface raycasts; 196 triangles
+PASS: Staff_Gate_1_HINGE 24 own surface raycasts; 48 triangles
+PASS: 01_Auction_Rostrum_ROOT 108 own surface raycasts; 216 triangles
+PASS: BBB_Areca_Card_Planter_ROOT_Left 6 own surface raycasts; 56 triangles
+PASS: BBB_Areca_Card_Planter_ROOT 6 own surface raycasts; 56 triangles
+PASS: Round_Table_B_ROOT 54 own surface raycasts; 1284 triangles
+PASS: Round_Table_A_ROOT 18 own surface raycasts; 2164 triangles
+PASS: 02_Lot_Pedestal_ROOT 96 own surface raycasts; 324 triangles
+PASS: A86_Direction_Sign_ROOT 24 own surface raycasts; 56 triangles
+Desk_STRAW_ROOT STRAW_FrontCore normal=(-0.32, 0.00, -0.95) remaining=1.685 blocked=True
+Desk_STRAW_ROOT STRAW_FrontCore normal=(-0.32, 0.00, -0.95) remaining=1.685 blocked=True
+Desk_STRAW_ROOT STRAW_FrontCore normal=(0.24, 0.00, 0.97) remaining=0.544 blocked=True
+Desk_STRAW_ROOT STRAW_FrontCore normal=(0.24, 0.00, 0.97) remaining=0.544 blocked=True
+Desk_STRAW_ROOT STRAW_FrontCore normal=(-0.20, 0.00, -0.98) remaining=1.719 blocked=True
+Desk_STRAW_ROOT STRAW_FrontCore normal=(-0.20, 0.00, -0.98) remaining=1.721 blocked=True
+Desk_WOOD_ROOT WOOD_FrontCore normal=(-0.12, 0.00, 0.99) remaining=0.551 blocked=True
+Desk_WOOD_ROOT WOOD_FrontCore normal=(-0.12, 0.00, 0.99) remaining=0.551 blocked=True
+Desk_WOOD_ROOT WOOD_FrontCore normal=(0.05, 0.00, 1.00) remaining=0.552 blocked=True
+Desk_WOOD_ROOT WOOD_FrontCore normal=(0.05, 0.00, 1.00) remaining=0.553 blocked=True
+Desk_WOOD_ROOT WOOD_FrontCore normal=(0.06, 0.00, -1.00) remaining=1.746 blocked=True
+Desk_WOOD_ROOT WOOD_FrontCore normal=(0.06, 0.00, -1.00) remaining=1.746 blocked=True
+Desk_BRICK_ROOT BRICK_FrontCore normal=(-0.38, 0.00, 0.92) remaining=0.533 blocked=True
+Desk_BRICK_ROOT BRICK_FrontCore normal=(-0.38, 0.00, 0.92) remaining=0.534 blocked=True
+Desk_BRICK_ROOT BRICK_FrontCore normal=(0.33, 0.00, -0.94) remaining=2.447 blocked=True
+Desk_BRICK_ROOT BRICK_FrontCore normal=(-0.33, 0.00, 0.94) remaining=0.538 blocked=True
+Desk_BRICK_ROOT BRICK_FrontCore normal=(0.33, 0.00, -0.94) remaining=1.688 blocked=True
+Desk_BRICK_ROOT BRICK_FrontCore normal=(-0.33, 0.00, 0.94) remaining=0.539 blocked=True
+
+PASS: protected matching floor remains clear; 31 seat slots accept occupants and allow standing.
+Existing blocked seats requiring separate review: 
+Colliders: 458; existing doors=6

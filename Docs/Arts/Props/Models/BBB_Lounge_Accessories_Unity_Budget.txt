@@ -1,0 +1,10 @@
+Unity imported mesh counts (UV and normal splits included). Cabinet includes 10 glass triangles in each LOD.
+DisplayCabinet LOD0: 2868 vertices, 2012 triangles, 2 renderers
+DisplayCabinet LOD1: 1523 vertices, 970 triangles, 2 renderers
+  Bounds (metres): (1.22, 1.15, 0.59); floor pivot; one box collider; LOD screen heights .14/.018
+LeafletRack LOD0: 1620 vertices, 870 triangles, 1 renderers
+LeafletRack LOD1: 874 vertices, 416 triangles, 1 renderers
+  Bounds (metres): (0.46, 1.19, 0.58); floor pivot; one box collider; LOD screen heights .14/.018
+UmbrellaStand LOD0: 2906 vertices, 2252 triangles, 1 renderers
+UmbrellaStand LOD1: 2068 vertices, 1056 triangles, 1 renderers
+  Bounds (metres): (0.40, 0.97, 0.32); floor pivot; one box collider; LOD screen heights .14/.018

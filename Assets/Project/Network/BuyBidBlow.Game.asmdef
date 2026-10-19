@@ -3,10 +3,12 @@
     "rootNamespace": "BuyBidBlow",
     "references": [
         "BuyBidBlow.Systems",
-        "BuyBidBlow.HallInteraction",
         "Mirror",
+        "Mirror.Transports",
+        "kcp2k",
         "Unity.InputSystem",
-        "Unity.TextMeshPro"
+        "Unity.TextMeshPro",
+        "UnityEngine.UI"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -1,12 +1,13 @@
 using System.Collections.Generic;
-using BuyBidBlow.Systems;
 using BuyBidBlow.Systems.Auction;
+using BuyBidBlow.Systems.Market;
+using BuyBidBlow.Systems.Portfolio;
 using BuyBidBlow.Systems.Types;
 using NUnit.Framework;
 
 namespace BuyBidBlow.Dev.Tests.EditMode.Auction
 {
-    // Trading and auctions share one PlayerAssetState per player, as MatchManager wires them.
+    // Trading and auctions share one PlayerPortfolio per player, as the server match (GameNetworkManager) wires them.
     public sealed class SharedAssetsTests
     {
         private static readonly PlayerId A = new PlayerId("a");
@@ -17,7 +18,7 @@ namespace BuyBidBlow.Dev.Tests.EditMode.Auction
         [Test]
         public void ReserveReleaseAndSpendKeepCashConsistent()
         {
-            var assets = new PlayerAssetState(100, 0);
+            var assets = new PlayerPortfolio(100, 0);
 
             Assert.IsTrue(assets.TryReserve(30));
             Assert.AreEqual(70, assets.Available);
@@ -35,10 +36,10 @@ namespace BuyBidBlow.Dev.Tests.EditMode.Auction
         [Test]
         public void SnapshotCarriesReserved()
         {
-            var assets = new PlayerAssetState(100, 0);
+            var assets = new PlayerPortfolio(100, 0);
             assets.TryReserve(25);
 
-            PlayerAssetSnapshot snapshot = assets.CreateSnapshot();
+            PortfolioSnapshot snapshot = assets.CreateSnapshot();
             Assert.AreEqual(100, snapshot.Cash);
             Assert.AreEqual(25, snapshot.Reserved);
             Assert.AreEqual(75, snapshot.Available);
@@ -47,8 +48,8 @@ namespace BuyBidBlow.Dev.Tests.EditMode.Auction
         [Test]
         public void TradeServiceSeesAuctionReservation()
         {
-            var players = new Dictionary<PlayerId, PlayerAssetState> { [A] = new PlayerAssetState(100, 0) };
-            var trade = new LocalTradeService(players, _ => 10);
+            var players = new Dictionary<PlayerId, PlayerPortfolio> { [A] = new PlayerPortfolio(100, 0) };
+            var trade = new TradeService(players, _ => 10);
             var open = new OpenAuction(AnyLot, 60, 1, players);
 
             open.PlaceBid(A, 95, 0);
@@ -63,7 +64,7 @@ namespace BuyBidBlow.Dev.Tests.EditMode.Auction
         [Test]
         public void TradeServiceRejectsPlayerNotInMatch()
         {
-            var trade = new LocalTradeService(new Dictionary<PlayerId, PlayerAssetState>(), _ => 10);
+            var trade = new TradeService(new Dictionary<PlayerId, PlayerPortfolio>(), _ => 10);
             Assert.IsFalse(trade.TryBuy(A, Company.Straw, 1).Succeeded);
         }
     }

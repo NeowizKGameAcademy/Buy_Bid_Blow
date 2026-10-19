@@ -1,0 +1,24 @@
+{
+  "description": "Five supplied furniture concepts, A and B variants, ten static game props.",
+  "units": "metres",
+  "prefabs": "Prefabs/",
+  "preview_scene": "Assets/Project/Dev/Sandbox/FurnitureUtilityPack/SC_FurnitureUtilityPack.unity",
+  "blender_source": "Docs/Arts/Props/Models/FurnitureUtilityPack/BBB_Furniture_Utility_AB_GameReady.blend",
+  "budgets": "Docs/Arts/Props/Models/FurnitureUtilityPack/Unity_Budget.json",
+  "lod": {"screen_height_lod0": 0.14, "screen_height_lod1": 0.018},
+  "signage": {
+    "geometry": "Each SignFace has four vertices and two triangles. No text mesh or font object.",
+    "edit": "Replace the Base Map on Materials/InformationBoard_A.mat or InformationBoard_B.mat. Duplicate the material first for independent signage.",
+    "textures": ["Textures/InformationBoard_A_Text.png", "Textures/InformationBoard_B_Text.png"],
+    "blank_templates": ["Textures/InformationBoard_A_Blank.png", "Textures/InformationBoard_B_Blank.png"],
+    "copy": "Sample hall directions. Adjust these textures to the final game layout."
+  },
+  "contents": "Bookcase Contents meshes are separate from Body meshes; remove Contents for empty shelving, updating both LOD levels.",
+  "animation": "Static set dressing. Wheels, doors and drawers are not rigged.",
+  "materials": {
+    "shared": "../LoungeAccessories/Materials/Lounge_BK_Atlas.mat and Lounge_BK_Glass.mat",
+    "blenderkit_sources": "Docs/Arts/Props/MaterialSources/LoungeAccessories/BlenderKit_Sources.json",
+    "marble_source": "Docs/Arts/Props/MaterialSources/FurnitureUtilityPack/source.json",
+    "custom": "Sign artwork, printed book spines, leaf accents and green desktop inset were authored for this pack. The marble patch uses the downloaded BlenderKit Green marble base-color texture."
+  }
+}

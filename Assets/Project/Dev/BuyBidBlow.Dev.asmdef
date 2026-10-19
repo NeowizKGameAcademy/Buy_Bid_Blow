@@ -2,9 +2,13 @@
     "name": "BuyBidBlow.Dev",
     "rootNamespace": "",
     "references": [
-        "BuyBidBlow.Game", "BuyBidBlow.HallInteraction",
+        "BuyBidBlow.Game",
         "BuyBidBlow.Systems",
         "CueAudio.Runtime",
+        "Mirror",
+        "Mirror.Transports",
+        "Unity.TextMeshPro",
+        "UnityEngine.UI",
         "Unity.InputSystem"
     ],
     "includePlatforms": [],

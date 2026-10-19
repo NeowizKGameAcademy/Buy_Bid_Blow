@@ -6,11 +6,11 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Project/Dev/Sandbox/MainScene/SC_MainMenu.unity
+    path: Assets/Project/Scenes/SC_MainMenu.unity
     guid: 560c10b182d498f4daf6233d7f4ddf28
   - enabled: 1
-    path: Assets/Project/Dev/Sandbox/Lobby/SC_Lobby.unity
-    guid: 6b068b6531d71134287341f0c28063fc
+    path: Assets/Project/Scenes/SC_ExchangeFurnished.unity
+    guid: de386e249cdbc094e8c39199f1c168ba
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: f5d1ef5201ac3674f9046cf805ec6ef0, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}

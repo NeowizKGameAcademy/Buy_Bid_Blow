@@ -1,6 +1,6 @@
 Furnished auction hall — Unity 6000.2.8f1
 
-Scene: Assets/Project/Content/Levels/ExchangeFurnished/Scenes/SC_ExchangeFurnished.unity
+Scene: Assets/Project/Scenes/SC_ExchangeFurnished.unity
 Level prefab: Assets/Project/Content/Levels/ExchangeFurnished/AuctionHall_Furnished.prefab
 Open menu: BuyBidBlow > Hall > Open Furnished Hall
 Play: WASD movement, mouse look, E open/close/sit/stand, Esc release cursor.

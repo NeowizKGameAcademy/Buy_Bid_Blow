@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using BuyBidBlow.Characters;
 using UnityEditor;
 using UnityEditor.Animations;
 using UnityEditor.SceneManagement;
@@ -12,7 +13,7 @@ namespace BuyBidBlow.Dev
     // Explicit, reproducible asset setup for the Wolf character.
     public static class WolfAnimatorBuilder
     {
-        private const string Wolf = "Assets/Project/Characters/Wolf";
+        private const string Wolf = "Assets/Project/Characters/Player/Wolf";
         private const string Output = Wolf + "/Animation";
         private const string ControllerPath = Output + "/WolfCharacter.controller";
         private const string PrefabPath = Wolf + "/WolfExpressions/PF_Wolf_Character.prefab";

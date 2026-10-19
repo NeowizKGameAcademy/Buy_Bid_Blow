@@ -320,7 +320,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0a74ef8abbedfb74a9233d3274a490f8, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.TradePanelController
+  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.UI.Market.TradePanelController
 --- !u!1001 &1254100920
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -392,7 +392,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3e3d89a2b7c24d1d8af6c2b9e4f0a617, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.PlayerAssetStatus
+  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.Characters.PlayerAssetStatus
 --- !u!1 &1656554793
 GameObject:
   m_ObjectHideFlags: 0
@@ -437,7 +437,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4a9aa7cdbe6e28f4ebdd1fe50111194b, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.MatchManager
+  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.Common.MatchManager
   matchSettingsFile: {fileID: 4900000, guid: d501cfe0b4b4b944dbdd6eddb9288512, type: 3}
   randomSeed: 0
 --- !u!114 &1656554796
@@ -451,7 +451,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b7b9d010e4e34a0fa64b021c91e7c512, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.LocalTradeController
+  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.Common.LocalTradeController
   tradePanel: {fileID: 1180201635}
   assets: {fileID: 1606464024}
   playerInfo: {fileID: 8156863945612790121}
@@ -1154,7 +1154,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c6c03dcaf65461341839e561c2534818, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.PlayerInfo
+  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.Characters.PlayerInfo
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

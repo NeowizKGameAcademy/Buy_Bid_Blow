@@ -13692,7 +13692,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dc52d5a2710f4b542af68f2027180a1e, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.PlayerMove
+  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.Characters.PlayerMove
   playerRb: {fileID: 1094242339}
   playerCamera: {fileID: 1094242337}
   groundLayer:
@@ -13715,7 +13715,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c2e9ec8352b36cc4d990f578c6f6f334, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.PlayerCamera
+  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.Characters.PlayerCamera
   cameraObject: {fileID: 1869332079}
   defaultLocalPosition: {x: 0, y: 1.7, z: 0}
 --- !u!136 &1094242338
@@ -22724,7 +22724,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 346aa45e72fa2ea49a49d19da49fb189, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.DetectObject
+  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.UI.HUD.DetectObject
   cursor: {fileID: 874638429}
   cursorImage:
   - {fileID: 21300000, guid: d362668d6ca76dd4f88cc57b48207c60, type: 3}
