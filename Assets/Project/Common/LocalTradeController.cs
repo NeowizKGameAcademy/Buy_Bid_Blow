@@ -1,16 +1,14 @@
 using BuyBidBlow.Characters;
-using BuyBidBlow.Network;
 using BuyBidBlow.Systems.Types;
 using BuyBidBlow.UI.Market;
-using Mirror;
 using UnityEngine;
 using UnityEngine.Serialization;
 using BuyBidBlow.Systems.Market;
 
 namespace BuyBidBlow.Common
 {
-    // Calls the match on the server directly, so it only works in the same process as the server.
-    // Remote clients will trade through PlayerNet commands instead.
+    // Offline trading against the Dev sandbox MatchManager (Move & Trade scene, editor only).
+    // Real matches trade through PlayerNet commands on the server instead.
     public class LocalTradeController : MonoBehaviour
     {
         [Header("Components")]
@@ -19,10 +17,11 @@ namespace BuyBidBlow.Common
         [SerializeField] private PlayerAssetStatus assets;
         [SerializeField] private PlayerInfo playerInfo;
         [SerializeField] private string localPlayerId = "local-player";
-        private GameNetworkManager matchManager;
+        private ILocalMatch matchManager;
 
         private Company selectedCompany;
         private bool hasSelectedCompany;
+        private bool joined;
 
         private void OnEnable()
         {
@@ -36,17 +35,8 @@ namespace BuyBidBlow.Common
             tradePanel.BuyRequested += Buy;
             tradePanel.SellRequested += Sell;
 
-            ResolveMatchManager();
-
-            if (matchManager != null)
-            {
-                matchManager.RoundAdvanced += OnRoundAdvanced;
-                if (matchManager.TradeService != null)
-                {
-                    matchManager.AddPlayer(CurrentPlayerId);
-                    assets.ApplyServerState(matchManager.TradeService.GetSnapshot(CurrentPlayerId));
-                }
-            }
+            // The match may start after this component (scene load order); it binds again on first use.
+            ResolveMatchManager(false);
         }
 
         private void OnDisable()
@@ -56,6 +46,8 @@ namespace BuyBidBlow.Common
 
             if (matchManager != null)
                 matchManager.RoundAdvanced -= OnRoundAdvanced;
+            matchManager = null;
+            joined = false;
         }
 
         public void OpenPanel(Company company)
@@ -114,15 +106,27 @@ namespace BuyBidBlow.Common
             tradePanel.SetLog($"{message}\n보유: {assets.GetShares(selectedCompany):N0}개");
         }
 
-        private bool ResolveMatchManager()
+        private bool ResolveMatchManager(bool warn = true)
         {
             if (matchManager == null)
-                matchManager = NetworkManager.singleton as GameNetworkManager;
+            {
+                matchManager = LocalMatch.Current;
+                if (matchManager != null)
+                    matchManager.RoundAdvanced += OnRoundAdvanced;
+            }
 
             if (matchManager != null && matchManager.TradeService != null)
+            {
+                if (!joined)
+                {
+                    matchManager.AddPlayer(CurrentPlayerId);
+                    assets.ApplyServerState(matchManager.TradeService.GetSnapshot(CurrentPlayerId));
+                    joined = true;
+                }
                 return true;
+            }
 
-            Debug.LogWarning("LocalTradeController needs a running match in this process.", this);
+            if (warn) Debug.LogWarning("LocalTradeController needs the sandbox MatchManager in the scene.", this);
             return false;
         }
 

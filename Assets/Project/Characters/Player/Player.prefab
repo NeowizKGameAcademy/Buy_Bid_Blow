@@ -1758,7 +1758,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: BuyBidBlow.MatchManager, BuyBidBlow.Game
+        m_TargetAssemblyTypeName: BuyBidBlow.Dev.MatchManager, BuyBidBlow.Dev
         m_MethodName: AdvanceRound
         m_Mode: 1
         m_Arguments:

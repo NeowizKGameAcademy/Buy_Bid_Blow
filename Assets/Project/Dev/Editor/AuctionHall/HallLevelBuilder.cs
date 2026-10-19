@@ -65,7 +65,9 @@ namespace BuyBidBlow.Dev.Editor
                 if(src.alphaClip){mat.SetFloat("_AlphaClip",1);mat.SetFloat("_Cutoff",.4f);mat.EnableKeyword("_ALPHATEST_ON");mat.renderQueue=2450;}
                 if(src.name.Contains("Frond") || src.name.Contains("Leaf")){mat.SetFloat("_SpecularHighlights",0);mat.SetFloat("_EnvironmentReflections",0);mat.EnableKeyword("_SPECULARHIGHLIGHTS_OFF");mat.EnableKeyword("_ENVIRONMENTREFLECTIONS_OFF");}
                 if(src.emission.Any(x=>x>.01f)){mat.EnableKeyword("_EMISSION");mat.SetColor("_EmissionColor",C(src.emission));}
-                mats[i]=Save(mat,Root+"/Materials/"+src.name+".mat");
+                string materialRoot=src.name.StartsWith("BBB_TV_",StringComparison.Ordinal)?HallTickerBoardSetup.Root:Root;
+                Directory.CreateDirectory(materialRoot+"/Materials");
+                mats[i]=Save(mat,materialRoot+"/Materials/"+src.name+".mat");
             }
             EditorSceneManager.NewScene(NewSceneSetup.EmptyScene,NewSceneMode.Single);
             var hall=new GameObject("AuctionHall_Furnished");
@@ -141,6 +143,7 @@ namespace BuyBidBlow.Dev.Editor
             var colliderMesh=Save(ReadMesh(Data+"/collision.bin",true),Root+"/Meshes/Hall_Structure_Collision.asset");
             var structure=new GameObject("StructuralCollision");structure.transform.SetParent(hall.transform,false);structure.layer=6;structure.AddComponent<MeshCollider>().sharedMesh=colliderMesh;
             HallFurnitureCollision.Attach(hall.transform);
+            HallTickerBoardSetup.ReplaceMergedBoards(hall);
             PrefabUtility.SaveAsPrefabAsset(hall,Root+"/AuctionHall_Furnished.prefab");
             AddLighting();AddPlayer();
             EditorSceneManager.SaveScene(SceneManager.GetActiveScene(),ScenePath);AssetDatabase.SaveAssets();

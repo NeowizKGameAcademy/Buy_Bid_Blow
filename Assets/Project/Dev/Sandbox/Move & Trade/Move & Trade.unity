@@ -522,7 +522,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4a9aa7cdbe6e28f4ebdd1fe50111194b, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.MatchManager
+  m_EditorClassIdentifier: BuyBidBlow.Dev::BuyBidBlow.Dev.MatchManager
   matchSettingsFile: {fileID: 4900000, guid: d501cfe0b4b4b944dbdd6eddb9288512, type: 3}
   randomSeed: 0
 --- !u!114 &1656554796
