@@ -15,6 +15,7 @@ namespace BuyBidBlow
 
         private bool controlsBlocked;
         private bool emotionPlaying;
+        private Vector2 bufferedMoveInput;
 
         private static readonly int JumpTrigger = Animator.StringToHash("Jump");
 
@@ -71,15 +72,10 @@ namespace BuyBidBlow
 
         public void OnMove(InputAction.CallbackContext context)
         {
+            bufferedMoveInput = context.ReadValue<Vector2>();
             if (controlsBlocked || (radialMenu != null && radialMenu.IsOpen)) return;
 
-            Vector2 moveInput = context.ReadValue<Vector2>();
-
-            if (moveInput != Vector2.zero)
-                StopEmotionForInput("Player_Walking");
-
-            playerMove.SetMoveInput(moveInput);
-            playerAnimation.SetBool("isWalking", moveInput != Vector2.zero);
+            ApplyMoveInput(bufferedMoveInput);
         }
 
         public void OnRotate(InputAction.CallbackContext context)
@@ -123,9 +119,19 @@ namespace BuyBidBlow
             if (IsShiftControl(context))
             {
                 if (context.started)
+                {
+                    // Clear the already-applied movement input before opening
+                    // the menu, otherwise the player keeps moving while input
+                    // callbacks are intentionally ignored.
+                    playerMove.SetMoveInput(Vector2.zero);
+                    playerAnimation.SetBool("isWalking", false);
                     radialMenu?.BeginSelection();
+                }
                 else if (context.canceled)
+                {
                     radialMenu?.EndSelection(true);
+                    ApplyMoveInput(bufferedMoveInput);
+                }
 
                 return;
             }
@@ -176,6 +182,15 @@ namespace BuyBidBlow
 
             emotionPlaying = false;
             playerAnimation.Play(nextState, 0, 0f);
+        }
+
+        private void ApplyMoveInput(Vector2 moveInput)
+        {
+            if (moveInput != Vector2.zero)
+                StopEmotionForInput("Player_Walking");
+
+            playerMove.SetMoveInput(moveInput);
+            playerAnimation.SetBool("isWalking", moveInput != Vector2.zero);
         }
     }
 }
