@@ -1,0 +1,5 @@
+{
+  "name": "BuyBidBlow.HallInteraction.Editor",
+  "references": ["BuyBidBlow.HallInteraction"],
+  "includePlatforms": ["Editor"]
+}

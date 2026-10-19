@@ -1,0 +1,7 @@
+PASS Unity 6000.2.8f1, 12 seconds Play Mode
+Vertices: 1281
+Max free vertex displacement: 2.1000 m
+Max pinned vertex displacement: 0.000000 m
+Max difference against no-collider control: 2.6336 m
+Finite/bounded vertices: PASS
+Keyboard interaction remains manual; moving capsule contact is automated.

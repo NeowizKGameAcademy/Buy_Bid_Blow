@@ -1,0 +1,5 @@
+PASS: 6 hinged doors open and close, with linked prefabs.
+PASS: 21 sitting places accept occupants, reject overbooking and allow safe standing.
+PASS: 16 rope spans remain pinned after 12 seconds and respond to capsule contact.
+PASS: banner Cloth has fixed anchors and movable fabric.
+PASS: materials resolved and lobby floor collision exists.

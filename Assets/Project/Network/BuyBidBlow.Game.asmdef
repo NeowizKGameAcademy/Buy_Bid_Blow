@@ -3,6 +3,7 @@
     "rootNamespace": "BuyBidBlow",
     "references": [
         "BuyBidBlow.Systems",
+        "BuyBidBlow.HallInteraction",
         "Mirror",
         "Unity.InputSystem",
         "Unity.TextMeshPro"

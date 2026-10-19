@@ -1,0 +1,82 @@
+{
+  "sources": [
+    {
+      "name": "Red Wine Velvet Fabric",
+      "provider": "BlenderKit",
+      "assetBaseId": "9c84b964-bc17-45f7-9009-7ea14a8be5e8",
+      "license": "royalty_free",
+      "usedFor": [
+        "BurgundyVelvet",
+        "TealVelvet"
+      ]
+    },
+    {
+      "name": "Leather Brown",
+      "provider": "BlenderKit",
+      "assetBaseId": "5cb67f93-463a-4835-8e95-966384827fe6",
+      "license": "royalty_free",
+      "usedFor": [
+        "OxbloodLeather"
+      ]
+    },
+    {
+      "name": "BBB_Furniture_Hall_Walnut / Tables_Satin_Brass",
+      "provider": "Existing project materials",
+      "usedFor": [
+        "Walnut",
+        "Brass"
+      ]
+    }
+  ],
+  "models": [
+    {
+      "model": "Bench_A",
+      "materials": [
+        "BBB_Seating_Brass",
+        "BBB_Seating_BurgundyVelvet",
+        "BBB_Seating_Walnut"
+      ]
+    },
+    {
+      "model": "Bench_B",
+      "materials": [
+        "BBB_Seating_Brass",
+        "BBB_Seating_TealVelvet",
+        "BBB_Seating_Walnut"
+      ]
+    },
+    {
+      "model": "Chair_A",
+      "materials": [
+        "BBB_Seating_Brass",
+        "BBB_Seating_BurgundyVelvet",
+        "BBB_Seating_Walnut"
+      ]
+    },
+    {
+      "model": "Chair_B",
+      "materials": [
+        "BBB_Seating_Brass",
+        "BBB_Seating_TealVelvet",
+        "BBB_Seating_Walnut"
+      ]
+    },
+    {
+      "model": "Sofa_A",
+      "materials": [
+        "BBB_Seating_Brass",
+        "BBB_Seating_TealVelvet",
+        "BBB_Seating_Walnut"
+      ]
+    },
+    {
+      "model": "Sofa_B",
+      "materials": [
+        "BBB_Seating_Brass",
+        "BBB_Seating_OxbloodLeather",
+        "BBB_Seating_Walnut"
+      ]
+    }
+  ],
+  "notes": "Shared tileable PBR maps. Normal maps are tangent-space OpenGL. Metallic=0 for wood/fabric/leather. Unity smoothness = 1 - roughness. Geometry unchanged; UV seams may increase imported vertex count."
+}

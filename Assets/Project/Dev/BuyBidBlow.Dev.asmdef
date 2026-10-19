@@ -2,7 +2,7 @@
     "name": "BuyBidBlow.Dev",
     "rootNamespace": "",
     "references": [
-        "BuyBidBlow.Game",
+        "BuyBidBlow.Game", "BuyBidBlow.HallInteraction",
         "BuyBidBlow.Systems",
         "CueAudio.Runtime",
         "Unity.InputSystem"

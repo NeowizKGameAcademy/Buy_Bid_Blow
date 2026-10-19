@@ -1,0 +1,102 @@
+[
+  {
+    "id": "B01",
+    "type": "banner",
+    "xy_m": [
+      -13.1,
+      -0.4
+    ],
+    "floor": "lower",
+    "status": "proposal; height and clearance pending"
+  },
+  {
+    "id": "B02",
+    "type": "banner",
+    "xy_m": [
+      13.1,
+      -0.4
+    ],
+    "floor": "lower",
+    "status": "proposal; height and clearance pending"
+  },
+  {
+    "id": "B03",
+    "type": "banner",
+    "xy_m": [
+      -6.695,
+      15.5
+    ],
+    "floor": "mezzanine",
+    "status": "proposal; height and clearance pending"
+  },
+  {
+    "id": "B04",
+    "type": "banner",
+    "xy_m": [
+      6.695,
+      15.5
+    ],
+    "floor": "mezzanine",
+    "status": "proposal; height and clearance pending"
+  },
+  {
+    "id": "R01",
+    "type": "barrier group",
+    "endpoints_xy_m": [
+      [
+        -13,
+        -14.9
+      ],
+      [
+        -11.4,
+        -17.1
+      ]
+    ],
+    "status": "schematic candidate; fit to actual gap"
+  },
+  {
+    "id": "R02",
+    "type": "barrier group",
+    "endpoints_xy_m": [
+      [
+        13,
+        -14.9
+      ],
+      [
+        11.4,
+        -17.1
+      ]
+    ],
+    "status": "schematic candidate; fit to actual gap"
+  },
+  {
+    "id": "R03",
+    "type": "barrier group",
+    "endpoints_xy_m": [
+      [
+        -2.8,
+        7
+      ],
+      [
+        -2.8,
+        10.2
+      ]
+    ],
+    "status": "schematic candidate; fit to actual gap"
+  },
+  {
+    "id": "R04",
+    "type": "barrier group",
+    "endpoints_xy_m": [
+      [
+        2.8,
+        7
+      ],
+      [
+        2.8,
+        10.2
+      ]
+    ],
+    "status": "schematic candidate; fit to actual gap"
+  }
+]

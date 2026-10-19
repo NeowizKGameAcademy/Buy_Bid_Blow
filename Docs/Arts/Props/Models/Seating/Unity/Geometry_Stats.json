@@ -1,0 +1,153 @@
+{
+  "units": "meters",
+  "materials_applied": true,
+  "uv_unwrapped": true,
+  "unity_import_tested": false,
+  "assets": [
+    {
+      "asset": "Bench_A_Unity_ROOT",
+      "before_vertices": 33450,
+      "before_triangles": 65460,
+      "before_parts": 105,
+      "vertices": 7965,
+      "triangles": 15295,
+      "mesh_parts": 3,
+      "export_file": "Bench_A.fbx",
+      "bounds_meters_xyz": [
+        [
+          -0.77816,
+          0.77816
+        ],
+        [
+          -0.32907,
+          0.32816
+        ],
+        [
+          0.00766,
+          0.62581
+        ]
+      ]
+    },
+    {
+      "asset": "Bench_B_Unity_ROOT",
+      "before_vertices": 29496,
+      "before_triangles": 58476,
+      "before_parts": 28,
+      "vertices": 4084,
+      "triangles": 7999,
+      "mesh_parts": 3,
+      "export_file": "Bench_B.fbx",
+      "bounds_meters_xyz": [
+        [
+          -0.77818,
+          0.77818
+        ],
+        [
+          -0.33722,
+          0.33722
+        ],
+        [
+          0.00028,
+          0.62342
+        ]
+      ]
+    },
+    {
+      "asset": "Chair_A_Unity_ROOT",
+      "before_vertices": 33506,
+      "before_triangles": 64132,
+      "before_parts": 172,
+      "vertices": 6490,
+      "triangles": 12167,
+      "mesh_parts": 3,
+      "export_file": "Chair_A.fbx",
+      "bounds_meters_xyz": [
+        [
+          -0.32284,
+          0.32286
+        ],
+        [
+          -0.33317,
+          0.33136
+        ],
+        [
+          0.00766,
+          1.47784
+        ]
+      ]
+    },
+    {
+      "asset": "Chair_B_Unity_ROOT",
+      "before_vertices": 41528,
+      "before_triangles": 78664,
+      "before_parts": 253,
+      "vertices": 6995,
+      "triangles": 12796,
+      "mesh_parts": 3,
+      "export_file": "Chair_B.fbx",
+      "bounds_meters_xyz": [
+        [
+          -0.37186,
+          0.37187
+        ],
+        [
+          -0.35238,
+          0.35213
+        ],
+        [
+          0.00766,
+          1.487
+        ]
+      ]
+    },
+    {
+      "asset": "Sofa_A_Unity_ROOT",
+      "before_vertices": 82496,
+      "before_triangles": 164500,
+      "before_parts": 30,
+      "vertices": 9081,
+      "triangles": 17874,
+      "mesh_parts": 3,
+      "export_file": "Sofa_A.fbx",
+      "bounds_meters_xyz": [
+        [
+          -1.15,
+          1.15025
+        ],
+        [
+          -0.481,
+          0.55
+        ],
+        [
+          0.01,
+          1.07809
+        ]
+      ]
+    },
+    {
+      "asset": "Sofa_B_Unity_ROOT",
+      "before_vertices": 133622,
+      "before_triangles": 261120,
+      "before_parts": 299,
+      "vertices": 17692,
+      "triangles": 33985,
+      "mesh_parts": 3,
+      "export_file": "Sofa_B.fbx",
+      "bounds_meters_xyz": [
+        [
+          -1.15897,
+          1.16088
+        ],
+        [
+          -0.50042,
+          0.46002
+        ],
+        [
+          0.01,
+          1.13814
+        ]
+      ]
+    }
+  ],
+  "uv_method": "Metric tiling projection"
+}
