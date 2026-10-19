@@ -1,0 +1,21 @@
+PASS
+All 21 display states open
+Enter submits exactly one action
+Escape selects safe cancel
+Disabled return cannot submit
+Six result rows
+Private result breakdown hidden
+Joint winners shown
+Three result rows
+Secret result contains only own amount
+Secret unsuccessful result exposes no bid amounts
+Settings keyboard adjustment
+Settings discard on Escape
+Settings emits apply data
+Notification overflow queues
+Expired notifications advance queue
+Notification queue bounded
+Round banner expires
+Loading progress supplied by caller
+Disconnect cannot dismiss with Escape
+Inactive previous focus is not restored
