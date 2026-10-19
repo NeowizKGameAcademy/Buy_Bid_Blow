@@ -96,7 +96,7 @@ namespace BuyBidBlow.Dev.Editor
                 {
                     var bounds=LocalBounds(go);var col=go.AddComponent<BoxCollider>();col.center=bounds.center;col.size=bounds.size;
                     if(group.kind=="door")go.AddComponent<Door>().openAngle=group.angle;
-                    else
+                    else if (!group.name.Contains("Staff_Chair"))
                     {
                         var seat=go.AddComponent<Seat>();var forward=V(group.forward).normalized;var right=Vector3.Cross(Vector3.up,forward);
                         float width=Mathf.Abs(right.x)*bounds.size.x+Mathf.Abs(right.z)*bounds.size.z;
