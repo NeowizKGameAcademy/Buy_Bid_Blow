@@ -32,7 +32,10 @@ namespace BuyBidBlow.Characters
         PlayerMove localBody;
         Vector3 lastPosition;
         float walkSpeed;
-        public static Vector3 SeatPosition(int index)=>new Vector3((2.5f-index)*2.1f,.04f,-10.1f);
+        // The furnished hall uses +Z for the under-mezzanine matching carpet.
+        public static readonly Vector3 WaitingCenter = new Vector3(0, .04f, 9.6f);
+        public static Quaternion WaitingRotation => Quaternion.identity;
+        public static Vector3 SeatPosition(int index)=>WaitingCenter+Vector3.right*((index-2.5f)*2.1f);
         void Awake()
         {
             appearance = GetComponentInChildren<BBBWolfAppearance>(true);
@@ -43,7 +46,7 @@ namespace BuyBidBlow.Characters
         void LateUpdate()
         {
             if(inMatch){FollowInMatch();return;}
-            transform.SetPositionAndRotation(SeatPosition(seat), Quaternion.Euler(0,180,0));
+            transform.SetPositionAndRotation(SeatPosition(seat), WaitingRotation);
             transform.localScale=Vector3.one*1.5f;
             if (appearance) { appearance.SetOutfit(top,bottom); appearance.SetTieColor(Colors[Mathf.Clamp(tie,0,Colors.Length-1)]); }
         }

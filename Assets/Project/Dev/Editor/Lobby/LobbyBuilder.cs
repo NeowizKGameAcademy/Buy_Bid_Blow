@@ -42,8 +42,7 @@ namespace BuyBidBlow.Dev.Editor
                 var view=cameraObject.AddComponent<Camera>();cameraObject.AddComponent<AudioListener>();
                 cameraObject.AddComponent(Type.GetType("UnityEngine.Rendering.Universal.UniversalAdditionalCameraData, Unity.RenderPipelines.Universal.Runtime",true));
                 cameraObject.tag="MainCamera";
-                cameraObject.transform.position=new Vector3(0,3.3f,1.4f);
-                cameraObject.transform.LookAt(new Vector3(0,1.35f,-10.1f));view.fieldOfView=48;view.nearClipPlane=.1f;view.farClipPlane=100;
+                HallSessionSetup.PositionLobbyCamera(view);view.nearClipPlane=.1f;view.farClipPlane=100;
                 var key=new GameObject("Lobby Soft Key").AddComponent<Light>();key.type=LightType.Directional;key.intensity=1.2f;key.color=new Color(1,.91f,.8f);key.transform.rotation=Quaternion.Euler(30,180,0);
                 var ui=new GameObject("Lobby Screen").AddComponent<LobbyScreen>();ui.view=view;ui.room=room;
                 ui.font=AssetDatabase.LoadAssetAtPath<Font>("Assets/Font/public/static/alternative/Pretendard-Regular.ttf");

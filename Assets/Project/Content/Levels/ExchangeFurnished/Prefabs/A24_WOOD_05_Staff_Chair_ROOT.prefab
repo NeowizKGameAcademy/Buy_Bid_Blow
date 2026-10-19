@@ -436,7 +436,6 @@ GameObject:
   m_Component:
   - component: {fileID: 999446085045565769}
   - component: {fileID: 8524007794290039038}
-  - component: {fileID: 4143417045529868369}
   m_Layer: 0
   m_Name: A24_WOOD_05_Staff_Chair_ROOT
   m_TagString: Untagged
@@ -495,35 +494,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.5842, y: 1.0293434, z: 0.62761307}
   m_Center: {x: 0, y: 0.5156717, z: 0}
---- !u!114 &4143417045529868369
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6515982529318367290}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e26183ffb678e164988b50764e0308b6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: BuyBidBlow.HallInteraction::BuyBidBlow.Hall.HallSeat
-  sittingPoints:
-  - {fileID: 1703471999874450404}
-  exitPoints:
-  - {fileID: 9161814024709110067}
-  - {fileID: 5013014651661259811}
-  - {fileID: 8922553355522141269}
-  - {fileID: 1089034508468251268}
-  - {fileID: 4492311506491644039}
-  - {fileID: 4531200919535331777}
-  - {fileID: 8970471902764312389}
-  - {fileID: 2450327574144486776}
-  - {fileID: 1955213918161067874}
-  - {fileID: 2804771770821856864}
-  - {fileID: 1750309702515918401}
-  onOccupancyChanged:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &6546831180746823231
 GameObject:
   m_ObjectHideFlags: 0

@@ -31,7 +31,7 @@ namespace BuyBidBlow.Dev.Editor
                 hud.font=old.font;hud.view=old.view;hud.room=old.room;
                 hud.library=AssetDatabase.LoadAssetAtPath<LobbySpriteLibrary>(LobbyBuilder.Root+"/LobbySpriteLibrary.asset");
                 if(!hud.library || hud.library.entries.Length!=33)throw new Exception("Import lobby sprites first.");
-                hud.view.transform.position=new Vector3(0,3.3f,-.4f);hud.view.transform.LookAt(new Vector3(0,1.6f,-10.1f));hud.view.fieldOfView=48;
+                HallSessionSetup.PositionLobbyCamera(hud.view);
                 var preview=GameObject.Find("Lobby Art Preview - Editor Only");if(preview)UnityEngine.Object.DestroyImmediate(preview);
                 preview=new GameObject("Lobby Art Preview - Editor Only");preview.tag="EditorOnly";
                 var original=AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Project/Characters/Player/Wolf/WolfExpressions/PF_Wolf_Character.prefab");
@@ -40,7 +40,7 @@ namespace BuyBidBlow.Dev.Editor
                     var animator=wolf.GetComponentInChildren<Animator>();
                     var clip=animator.runtimeAnimatorController.animationClips.FirstOrDefault(c=>c.name.IndexOf("idle",StringComparison.OrdinalIgnoreCase)>=0);
                     if(clip)clip.SampleAnimation(animator.gameObject,0);
-                    wolf.transform.SetPositionAndRotation(PlayerNet.SeatPosition(i),Quaternion.Euler(0,180,0));wolf.transform.localScale=Vector3.one*1.5f;
+                    wolf.transform.SetPositionAndRotation(PlayerNet.SeatPosition(i),PlayerNet.WaitingRotation);wolf.transform.localScale=Vector3.one*1.5f;
                     var appearance=wolf.GetComponentInChildren<BBBWolfAppearance>();appearance.SetOutfit(i%3,i%2);appearance.SetTieColor(PlayerNet.Colors[(i+3)%6]);
                 }
                 var ring=GameObject.Find("Lobby Selection Ring");if(!ring){ring=GameObject.CreatePrimitive(PrimitiveType.Quad);ring.name="Lobby Selection Ring";UnityEngine.Object.DestroyImmediate(ring.GetComponent<Collider>());}

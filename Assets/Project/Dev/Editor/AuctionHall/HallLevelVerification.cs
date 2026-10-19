@@ -37,7 +37,7 @@ namespace BuyBidBlow.Dev.Editor
                 var seats=UnityEngine.Object.FindObjectsByType<Seat>(FindObjectsSortMode.None);
                 var ropes=UnityEngine.Object.FindObjectsByType<RopeBarrier>(FindObjectsSortMode.None);
                 var cloths=UnityEngine.Object.FindObjectsByType<Cloth>(FindObjectsSortMode.None);
-                Check(doors.Length==6 && seats.Length==15 && ropes.Length==16 && cloths.Length==1,"Unexpected interactive object counts");
+                Check(doors.Length==6 && seats.Length==12 && ropes.Length==16 && cloths.Length==1,"Unexpected interactive object counts");
                 foreach(var door in doors)
                 {
                     var original=door.transform.localRotation;door.SetOpen(true);for(int i=0;i<100;i++)door.Simulate(.02f);

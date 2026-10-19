@@ -70,6 +70,7 @@ namespace BuyBidBlow.Dev.Editor
                 if(!session.room.GetComponent<ConnectionController>())throw new Exception("Missing connection controller.");
                 EditorSceneManager.SaveScene(hall);
             }
+            AlignWaitingArea();
             // Retire the old backdrop scene from the executable routes.
             EditorBuildSettings.scenes=EditorBuildSettings.scenes
                 .Where(s=>s.path!=LobbyBuilder.LegacyScenePath).ToArray();
@@ -77,6 +78,40 @@ namespace BuyBidBlow.Dev.Editor
             GameBuild.UpdateServerScene();
             EditorSceneManager.OpenScene(HallLevelBuilder.ScenePath);
             Validate();
+        }
+
+        public static void PositionLobbyCamera(Camera camera)
+        {
+            // Preserve the original lobby framing, but face the matching carpet in this hall.
+            camera.transform.position=PlayerNet.WaitingCenter+new Vector3(0,3.26f,-9.7f);
+            camera.transform.LookAt(PlayerNet.WaitingCenter+Vector3.up*1.56f);
+            camera.fieldOfView=48;
+        }
+
+        [MenuItem("Tools/BuyBidBlow/Lobby/Align Under Mezzanine Waiting Area")]
+        public static void AlignWaitingArea()
+        {
+            if(!Application.isBatchMode&&!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo())return;
+            Directory.CreateDirectory(Backup);
+            string backup=Backup+"/Before_WaitingArea.unity";
+            if(!File.Exists(backup))File.Copy(HallLevelBuilder.ScenePath,backup);
+            var scene=EditorSceneManager.OpenScene(HallLevelBuilder.ScenePath);
+            var session=Object.FindFirstObjectByType<HallSession>();
+            if(!session)throw new Exception("Missing shared hall session.");
+            var hud=session.lobbyPresentation.GetComponentInChildren<LobbyHud>(true);
+            PositionLobbyCamera(hud.view);
+            hud.selectionRing.position=PlayerNet.SeatPosition(0)+Vector3.up*.02f;
+            // The actual match starts at the admitted player's own seat in BeginMatch.
+            session.player.transform.SetPositionAndRotation(PlayerNet.SeatPosition(0),Quaternion.Euler(0,180,0));
+            PrefabUtility.RecordPrefabInstancePropertyModifications(session.player.transform);
+            EditorSceneManager.MarkSceneDirty(scene);EditorSceneManager.SaveScene(scene);
+            Validate();
+        }
+
+        public static void AlignWaitingAreaAndVerifyBatch()
+        {
+            try { AlignWaitingArea();HallSessionVerification.RunBatch(); }
+            catch(Exception e){Debug.LogException(e);EditorApplication.Exit(1);}
         }
 
         public static void Validate()
