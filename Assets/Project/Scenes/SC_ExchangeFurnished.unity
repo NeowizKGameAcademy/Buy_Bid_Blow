@@ -2251,7 +2251,7 @@ MonoBehaviour:
   disconnectInactiveConnections: 0
   disconnectInactiveTimeout: 60
   authenticator: {fileID: 0}
-  playerPrefab: {fileID: 4306196893772889754, guid: ba07b539d97792e4a91445481a76bd58, type: 3}
+  playerPrefab: {fileID: 3073057968163323700, guid: 5ef04d94f74615740b0af802c3af6229, type: 3}
   autoCreatePlayer: 1
   playerSpawnMethod: 0
   spawnPrefabs: []
@@ -48531,6 +48531,10 @@ PrefabInstance:
     - target: {fileID: 7231064482559967204, guid: 5ef04d94f74615740b0af802c3af6229, type: 3}
       propertyPath: m_RenderPostProcessing
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8252176066854027278, guid: 5ef04d94f74615740b0af802c3af6229, type: 3}
+      propertyPath: sceneId
+      value: 2564632081
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

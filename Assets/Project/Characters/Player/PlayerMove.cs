@@ -36,6 +36,10 @@ namespace BuyBidBlow.Characters
         public bool IsGrounded => isGround;
         public event Action<bool> GroundedChanged;
         public event Action Jumped;
+        public event Action<Vector2> MoveInputChanged;
+        public Vector2 MoveInput => curMoveInput;
+        public float LookPitch => currentY;
+        public float LookYaw => seatedYaw;
 
         private void Awake()
         {
@@ -75,7 +79,10 @@ namespace BuyBidBlow.Characters
 
         public void SetMoveInput(Vector2 input)
         {
+            if (IsSeated) input = Vector2.zero;
+            if (curMoveInput == input) return;
             curMoveInput = input;
+            MoveInputChanged?.Invoke(input);
         }
 
         public void Rotate(Vector2 mouseDelta)
@@ -102,6 +109,16 @@ namespace BuyBidBlow.Characters
             var look = Quaternion.Euler(currentY, seatedYaw, 0f);
             playerCamera.CameraTransform.localRotation = look;
             headLocalRotation = look;
+        }
+
+        public void ApplyNetworkLook(float pitch, float yaw)
+        {
+            currentY = Mathf.Clamp(pitch, -upperLimit, lowerLimit);
+            seatedYaw = Mathf.Clamp(yaw, -seatedYawLimit, seatedYawLimit);
+            var look = Quaternion.Euler(currentY, seatedYaw, 0f);
+            headLocalRotation = look;
+            if (Head != null)
+                Head.transform.localRotation = look;
         }
 
         public void SetJumpHeld(bool isHeld)

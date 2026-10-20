@@ -52,9 +52,14 @@ namespace BuyBidBlow.UI.Lobby
             IsPlaying = true;
             if (EventSystem.current) EventSystem.current.SetSelectedGameObject(null);
             lobbyPresentation.SetActive(false);
+            // The spawned network Player owns the local camera, HUD and input.
+            // The scene's old presentation rig remains disabled.
+            player = local.GetComponent<PlayerMove>();
+            if (!player) { Debug.LogError("Network player is missing PlayerMove.", this); return; }
+            local.SetGameplayActive(true);
             // Start at the avatar's own waiting position, keeping the six players apart.
             player.transform.SetPositionAndRotation(PlayerNet.SeatPosition(local.seat), Quaternion.Euler(0,180,0));
-            gameplayPresentation.SetActive(true);
+            gameplayPresentation.SetActive(false);
             player.SetMoveInput(Vector2.zero);
             if (player.TryGetComponent<Rigidbody>(out var body)) { body.linearVelocity=Vector3.zero; body.angularVelocity=Vector3.zero; }
             var appearance=player.GetComponentInChildren<BBBWolfAppearance>(true);
