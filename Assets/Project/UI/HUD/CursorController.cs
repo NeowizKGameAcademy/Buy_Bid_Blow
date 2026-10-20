@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using BuyBidBlow.Characters;
 using BuyBidBlow.UI.Market;
 using UnityEngine;
@@ -12,14 +10,14 @@ namespace BuyBidBlow.UI.HUD
         [SerializeField] private TradePanelController tradePanel;
         // While seated, Esc stands the player up (SeatController) instead of releasing the cursor.
         [SerializeField] private PlayerSeating seating;
-        private Coroutine lockCursorRoutine;
+        private bool wantLocked = true;
+        private bool busyLastFrame;
 
         private void Start()
         {
-            if (tradePanel != null && tradePanel.IsOpen)
-                UnlockCursor();
-            else
-                LockCursor();
+            wantLocked = !(tradePanel != null && tradePanel.IsOpen);
+            if (wantLocked) LockCursor();
+            else UnlockCursor();
         }
 
         private void OnEnable()
@@ -32,62 +30,40 @@ namespace BuyBidBlow.UI.HUD
         {
             if (tradePanel != null)
                 tradePanel.OpenStateChanged -= OnPanelStateChanged;
-
-            if (lockCursorRoutine != null)
-                StopCoroutine(lockCursorRoutine);
         }
 
         private void OnPanelStateChanged(bool isOpen)
         {
-            if (isOpen)
-            {
-                if (lockCursorRoutine != null)
-                {
-                    StopCoroutine(lockCursorRoutine);
-                    lockCursorRoutine = null;
-                }
-
-                UnlockCursor();
-                return;
-            }
-
-            // ESC can release the lock after this frame's input callbacks. Locking on
-            // the following frame keeps the cursor hidden whether Close came from ESC
-            // or from the panel's close button.
-            if (lockCursorRoutine != null)
-                StopCoroutine(lockCursorRoutine);
-            lockCursorRoutine = StartCoroutine(LockCursorWhenPanelHasClosed());
+            wantLocked = !isOpen;
+            if (isOpen) UnlockCursor();
         }
 
-        private IEnumerator LockCursorWhenPanelHasClosed()
-        {
-            yield return null;
-
-            if (tradePanel != null && !tradePanel.IsOpen)
-                LockCursor();
-
-            lockCursorRoutine = null;
-        }
-
+        // In the Editor, Esc also releases the lock after this frame's input, and a single LockCursor call
+        // then loses to it. So while playing the lock is reasserted every frame until the player asks
+        // for the cursor (Esc with nothing open) or a panel needs it.
         private void Update()
         {
-            if (tradePanel != null && tradePanel.IsOpen)
+            var keyboard = Keyboard.current;
+            bool escape = keyboard != null && keyboard.escapeKey.wasPressedThisFrame;
+            bool panelOpen = tradePanel != null && tradePanel.IsOpen;
+            if (panelOpen)
             {
-                if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
-                    tradePanel.Close();
-                else
-                    UnlockCursor();
+                if (escape) tradePanel.Close();
+                else UnlockCursor();
+                busyLastFrame = true;
                 return;
             }
 
-            if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame && !(seating != null && seating.IsSeated))
-                UnlockCursor();
+            // Esc that closed a panel or stood the player up last frame is not a request for the cursor.
+            bool seated = seating != null && seating.IsSeated;
+            if (escape && !seated && !busyLastFrame)
+                wantLocked = false;
+            if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
+                wantLocked = true;
+            busyLastFrame = seated;
 
-            if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame &&
-                Cursor.lockState != CursorLockMode.Locked)
-            {
-                LockCursor();
-            }
+            if (wantLocked && (Cursor.lockState != CursorLockMode.Locked || Cursor.visible)) LockCursor();
+            else if (!wantLocked && Cursor.lockState == CursorLockMode.Locked) UnlockCursor();
         }
 
         public void LockCursor()
