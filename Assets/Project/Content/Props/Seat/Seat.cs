@@ -18,7 +18,7 @@ namespace BuyBidBlow.Props
         {
             if (!player) return false;
             if (!player.TryGetComponent(out PlayerSeating actor)) actor = player.AddComponent<PlayerSeating>();
-            if (actor.IsSeated || sittingPoints == null) return false;
+            if (actor.IsSeated || sittingPoints == null || sittingPoints.Length == 0) return false;
             Ensure();
             for (int i = 0; i < occupants.Length; i++)
                 if (!occupants[i]) { occupants[i] = actor; actor.Sit(this, i, sittingPoints[i]); onOccupancyChanged.Invoke(true); return true; }

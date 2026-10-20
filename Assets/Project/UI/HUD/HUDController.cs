@@ -57,7 +57,7 @@ namespace BuyBidBlow.UI.HUD
             {
                 Prompt.SetActive(true);
                 keyText.text = "E";
-                InteractionText.text = "Stand up";
+                InteractionText.text = "Release";
                 return;
             }
             if (!isTradeOpen && detect != null && detect.isDetected)
