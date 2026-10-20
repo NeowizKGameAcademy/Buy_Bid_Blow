@@ -66,20 +66,43 @@ namespace BuyBidBlow.Dev.Editor
                 PrefabUtility.SaveAsPrefabAsset(prefab,"Assets/Project/Characters/Player/Player.prefab");
             }
             finally{PrefabUtility.UnloadPrefabContents(prefab);}
-            var path="Assets/Project/Scenes/SC_ExchangeFurnished.unity";var scene=SceneManager.GetSceneByPath(path);bool opened=!scene.IsValid()||!scene.isLoaded;
-            if(opened)scene=EditorSceneManager.OpenScene(path,OpenSceneMode.Additive);
+            InstallSpeaker(catalog);
+            AssetDatabase.SaveAssets();File.WriteAllText("Library/MatchAudioSetup.result","PASS: catalog validated, existing clips bound, hall speaker installed, action hooks prepared without RPC changes.");
+        }
+        const string HallScene="Assets/Project/Scenes/SC_ExchangeFurnished.unity";
+        // The hall PA speaker sits above the middle ticker board, so announcements come from the boards.
+        [MenuItem("Tools/Buy Bid Blow/Audio/Install Hall Speaker")]
+        public static void InstallSpeaker()=>InstallSpeaker(AssetDatabase.LoadAssetAtPath<CueCatalog>(CatalogPath));
+        public static void InstallSpeakerBatch()
+        {
+            try{InstallSpeaker();EditorApplication.Exit(0);}
+            catch(Exception e){Debug.LogException(e);EditorApplication.Exit(1);}
+        }
+        static void InstallSpeaker(CueCatalog catalog)
+        {
+            if(!catalog)throw new Exception("Match audio catalog is missing: "+CatalogPath);
+            var scene=SceneManager.GetSceneByPath(HallScene);bool opened=!scene.IsValid()||!scene.isLoaded;
+            if(opened)scene=EditorSceneManager.OpenScene(HallScene,OpenSceneMode.Additive);
             try
             {
-                MatchAudioClient observer=null;foreach(var root in scene.GetRootGameObjects()){observer=root.GetComponentInChildren<MatchAudioClient>(true);if(observer)break;}
-                if(!observer){var root=new GameObject("Match Audio Client");SceneManager.MoveGameObjectToScene(root,scene);observer=root.AddComponent<MatchAudioClient>();}
-                observer.hostPrefab=AssetDatabase.LoadAssetAtPath<GameObject>(HostPath);
-                observer.roundStart=default;observer.closingBell=new CueReference(catalog,Id("closing_bell"));
-                observer.closingSoon=new CueReference(catalog,Id("closing_soon"));
-                observer.auctionStart=new CueReference(catalog,Id("auction_start"));observer.auctionEnd=new CueReference(catalog,Id("auction_end"));
+                HallSpeaker speaker=null;GameObject board=null;
+                foreach(var root in scene.GetRootGameObjects())
+                {
+                    if(!speaker)speaker=root.GetComponentInChildren<HallSpeaker>(true);
+                    if(!board)foreach(var t in root.GetComponentsInChildren<Transform>(true))if(t.name=="TickerBoard_Center"){board=t.gameObject;break;}
+                }
+                if(!speaker){var go=new GameObject();SceneManager.MoveGameObjectToScene(go,scene);speaker=go.AddComponent<HallSpeaker>();}
+                speaker.gameObject.name="Hall Speaker";
+                if(!board)throw new Exception("TickerBoard_Center not found in "+HallScene);
+                var renderers=board.GetComponentsInChildren<Renderer>(true);var bounds=renderers[0].bounds;foreach(var r in renderers)bounds.Encapsulate(r.bounds);
+                speaker.transform.SetPositionAndRotation(new Vector3(bounds.center.x,bounds.max.y+.5f,bounds.center.z),Quaternion.identity);
+                speaker.roundStart=default;speaker.closingBell=new CueReference(catalog,Id("closing_bell"));
+                speaker.closingSoon=new CueReference(catalog,Id("closing_soon"));
+                speaker.auctionStart=new CueReference(catalog,Id("auction_start"));speaker.auctionEnd=new CueReference(catalog,Id("auction_end"));
                 EditorSceneManager.MarkSceneDirty(scene);EditorSceneManager.SaveScene(scene);
+                Debug.Log($"[Audio] Hall speaker at {speaker.transform.position} above {board.name}");
             }
             finally{if(opened)EditorSceneManager.CloseScene(scene,true);}
-            AssetDatabase.SaveAssets();File.WriteAllText("Library/MatchAudioSetup.result","PASS: catalog validated, existing clips bound, client observer installed, action hooks prepared without RPC changes.");
         }
         static string Id(string key)=>key=="footstep"||key=="jump"?"player."+key:key=="navigate"||key=="confirm"||key=="close"||key=="quantity"||key=="notebook"||key=="page"?"ui."+key:key=="trade"||key=="bet"?"market."+key:"match."+key;
     }

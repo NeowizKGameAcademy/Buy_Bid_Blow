@@ -6,6 +6,7 @@ using BuyBidBlow.Characters;
 using BuyBidBlow.Common;
 using BuyBidBlow.Systems.Match;
 using BuyBidBlow.Systems.Room;
+using BuyBidBlow.Systems.Round;
 using BuyBidBlow.Systems.Types;
 using Mirror;
 using UnityEngine;
@@ -162,6 +163,7 @@ namespace BuyBidBlow.Network
             var go=Instantiate(matchNetPrefab);matchNet=go.GetComponent<MatchNet>();
             matchNet.totalRounds=settings.RoundCount;
             matchNet.phase=MatchNet.Phase.Preparing;matchNet.firstRoundStartsAt=startsAt;matchNet.roundClosesAt=engine.Deadline;
+            go.GetComponent<MatchTimeline>().Publish(MatchSchedule.Build(settings,startsAt-prepareSeconds,startsAt,roundSecondsOverride));
             PublishMarket();PublishAuction(NetworkTime.time);
             NetworkServer.Spawn(go);
             Debug.Log($"[Server] Match prices {string.Join(", ",Companies.Select(c=>c+" $"+engine.Price(c)))} · {players.Count} player(s)");

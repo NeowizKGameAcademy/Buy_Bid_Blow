@@ -20,7 +20,7 @@ namespace BuyBidBlow.Dev.Editor
             var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath);
             if (!prefab)
             {
-                var go = new GameObject("MatchNet", typeof(NetworkIdentity), typeof(MatchNet));
+                var go = new GameObject("MatchNet", typeof(NetworkIdentity), typeof(MatchNet), typeof(MatchTimeline));
                 prefab = PrefabUtility.SaveAsPrefabAsset(go, PrefabPath);
                 Object.DestroyImmediate(go);
             }

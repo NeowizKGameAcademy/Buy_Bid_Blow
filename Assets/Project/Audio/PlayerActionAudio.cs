@@ -10,12 +10,6 @@ namespace BuyBidBlow.Audio
         public void PlayFootstep()=>Play(footstep);
         public void PlayJump()=>Play(jump);
         public void PlayEmotion()=>Play(emotion);
-        void Play(CueReference cue)
-        {
-#if !UNITY_SERVER
-            var host=CueAudioHost.Instance;
-            if(host && host.Engine!=null && !string.IsNullOrEmpty(cue.Id))host.Engine.PlayAt(cue,transform.position,owner:this);
-#endif
-        }
+        void Play(CueReference cue)=>CueAudioHost.PlayAt(cue,transform.position,this);
     }
 }

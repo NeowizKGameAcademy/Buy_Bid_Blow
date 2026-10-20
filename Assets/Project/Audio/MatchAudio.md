@@ -14,9 +14,9 @@
 - match.auction_start: 경매 시작. 공개·비공개 각 슬롯 시작.
 - match.closing_soon: 마감 임박. 남은 10초 이하 진입 시 슬롯당 한 번.
 - match.auction_end: 낙찰 망치. 슬롯 종료 한 번. 낙찰창은 중복 재생하지 않는다.
-- match.closing_bell: 새 시세 공개. 라운드 마감의 lastClosedRound 증가 시. 임시 라운드 시작 시세음은 제거했다.
+- match.closing_bell: 새 시세 공개. 라운드 구간 종료 시. 임시 라운드 시작 시세음은 제거했다.
 
-MatchAudioClient는 MatchNet.Current의 기존 공개 상태를 읽는 일반 MonoBehaviour다. 동일 상태 반복, 재활성화 시 지난 알림 재생을 막는다. 네트워크 코드 변경 없음.
+HallSpeaker(장내 스피커)는 SC_ExchangeFurnished의 가운데 전광판(TickerBoard_Center) 위에 놓인 물체다. MatchTimeline의 구간 시작·종료 static 이벤트를 듣고 CueAudioHost.PlayAt으로 자기 위치에서 재생을 요청한다. 타임라인은 지난 시각을 다시 내지 않으므로 재활성화·늦은 접속에도 지난 알림을 재생하지 않는다. 마감 임박은 경매 구간 끝 10초 전(구간이 더 짧으면 시작 시점)에 슬롯당 한 번. 현재 큐는 spatialBlend 0(2D)이라 위치와 무관하게 들리며, MatchAudio.json에서 값을 올리면 스피커 쪽에서 들린다.
 GameAudio는 같은 프레임 동일 UI 큐를 합친다. UIAudioFeedback은 버튼 포커스/마우스 진입과 클릭을 처리하고 거래·팝업의 전용 처리와 구분한다.
 
 ## BGM
@@ -31,4 +31,4 @@ PlayerActionAudio.PlayFootstep(), PlayJump(), PlayEmotion(). 점프는 PlayerMov
 ## 검증
 Logs/FullAudioTests.xml: 2개 Passed. 실제 Mirror 호스트에서 시세 공개 5회, 경매 시작·종료·마감 임박 각 2회, 중복 방지, 행동 호출 지점, 메뉴→게임 BGM 전환 후 이전 곡 종료, UI 선택·페이지·수첩·수량·닫기·확인, 서버 확인 거래·베팅 성공음을 검사했다. AudioSource 및 CueAudio Playing 기록을 검증하며 스피커 청음·음량 평가는 별도다.
 전용 서버 UNITY_SERVER에서는 오디오가 꺼진다. 청음/오디오 테스트는 Player subtarget으로 한다.
-조립: Tools/Buy Bid Blow/Audio/Connect Match Sounds (MatchAudioSetup.Apply).
+조립: Tools/Buy Bid Blow/Audio/Connect Match Sounds (MatchAudioSetup.Apply). 스피커만 다시 놓기: Tools/Buy Bid Blow/Audio/Install Hall Speaker.

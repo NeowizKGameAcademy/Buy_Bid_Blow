@@ -53,7 +53,7 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
                 settings.RoundCount=5;settings.RoundSeconds=2;settings.AuctionRoundSeconds=6;settings.AuctionRounds=new[]{2};settings.AuctionDurationSeconds=2;
                 settings.AuctionSlots=new[]{new AuctionSlot{StartsAtSeconds=0,DurationSeconds=2},new AuctionSlot{StartsAtSeconds=2,DurationSeconds=2}};
             });
-            var observer=Object.FindFirstObjectByType<MatchAudioClient>();Assert.IsNotNull(observer);
+            var observer=Object.FindFirstObjectByType<HallSpeaker>();Assert.IsNotNull(observer);
             yield return null;Assert.IsNotNull(CueAudioHost.Instance);
             var audio=CueAudioHost.Instance.Engine;Assert.IsNotNull(audio);Assert.IsEmpty(CueAudioHost.Instance.Catalog.Validate());
             Assert.AreEqual(0,Count(audio,"match.round_start"));
