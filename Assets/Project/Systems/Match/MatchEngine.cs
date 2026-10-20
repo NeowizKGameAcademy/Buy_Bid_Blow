@@ -21,6 +21,7 @@ public sealed class MatchEngine {
  public double Deadline {get;private set;}
  public bool Complete {get;private set;}
  public event Action Changed;
+ public event Action<PlayerId,Company,int,int> BetSettled;
  public event Action<AuctionResult> InformationAwarded; public event Action<AuctionResult> PublicResolved; public event Action<SecretResult> SecretResolved;
  readonly int roundSecondsOverride;
  // now: when round 1 opens. roundSecondsOverride > 0 makes every round that long (playtests).
@@ -67,7 +68,7 @@ public sealed class MatchEngine {
  Auction=new AuctionRound(lots.Next(),lots.Next(),now,Settings.AuctionSlots,1,assets);
  Auction.OpenClosed+=r=>{PublicResolved?.Invoke(r);if(r.Sold)InformationAwarded?.Invoke(r);};Auction.SecretClosed+=r=>{SecretResolved?.Invoke(r);if(r.Result.Sold)InformationAwarded?.Invoke(r.Result);};Auction.Tick(now);
  }}
- public void Tick(double now){if(Complete)return;bool changed=false;while(!Complete&&now>=Deadline){Auction?.Tick(Deadline);int closing=Round;foreach(var entry in bets){var b=entry.Value;if(prices[closing][(int)b.Company]<prices[closing-1][(int)b.Company])assets[entry.Key].Credit(b.Stake*2);}bets.Clear();double boundary=Deadline;if(Round==Settings.RoundCount){Complete=true;Auction=null;}else{Round++;StartRound(boundary);}changed=true;}Auction?.Tick(now);if(changed)Changed?.Invoke();}
+ public void Tick(double now){if(Complete)return;bool changed=false;while(!Complete&&now>=Deadline){Auction?.Tick(Deadline);int closing=Round;foreach(var entry in bets){var b=entry.Value;int payout=prices[closing][(int)b.Company]<prices[closing-1][(int)b.Company]?b.Stake*2:0;if(payout>0)assets[entry.Key].Credit(payout);BetSettled?.Invoke(entry.Key,b.Company,b.Stake,payout);}bets.Clear();double boundary=Deadline;if(Round==Settings.RoundCount){Complete=true;Auction=null;}else{Round++;StartRound(boundary);}changed=true;}Auction?.Tick(now);if(changed)Changed?.Invoke();}
  public int Total(PlayerId p){var s=Snapshot(p);int total=s.Cash;foreach(Company c in Enum.GetValues(typeof(Company)))total=checked(total+s.GetShares(c)*Price(c));return total;}
  public string Standings(){var order=assets.Keys.OrderByDescending(Total).ThenByDescending(p=>Enum.GetValues(typeof(Company)).Cast<Company>().Sum(c=>Snapshot(p).GetShares(c))).ToList();var rows=new List<string>();int rank=0,previousTotal=-1,previousShares=-1;for(int i=0;i<order.Count;i++){var p=order[i];int total=Total(p),shares=Enum.GetValues(typeof(Company)).Cast<Company>().Sum(c=>Snapshot(p).GetShares(c));if(total!=previousTotal||shares!=previousShares)rank=i+1;rows.Add($"{rank}위 {p} · ${total} · {shares}주");previousTotal=total;previousShares=shares;}return string.Join("\n",rows);}
  readonly struct Bet {public readonly Company Company;public readonly int Stake;public Bet(Company company,int stake){Company=company;Stake=stake;}}

@@ -11,6 +11,10 @@ namespace BuyBidBlow.UI.HUD
     {
         [SerializeField] private TradePanelController tradePanel;
         [SerializeField] private RadialMenuController radialMenu;
+        [SerializeField] private Texture2D pointer;
+        [SerializeField] private Vector2 hotspot = new Vector2(.37f,.11f);
+        void OnEnable(){if(pointer)Cursor.SetCursor(pointer,new Vector2(pointer.width*hotspot.x,pointer.height*hotspot.y),CursorMode.Auto);}
+        void OnDisable(){Cursor.SetCursor(null,Vector2.zero,CursorMode.Auto);}
 
         private void Update()
         {
@@ -23,6 +27,7 @@ namespace BuyBidBlow.UI.HUD
             }
 
             bool free = panelOpen
+                || BuyBidBlow.UI.Notebook.NetworkNotebookController.BlocksInput
                 || (radialMenu != null && radialMenu.IsOpen)
                 || (keyboard != null && keyboard.leftAltKey.isPressed);
             // Reasserted every frame: the lock comes back once the game window has focus again.

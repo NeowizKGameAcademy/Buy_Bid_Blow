@@ -19,11 +19,13 @@ namespace BuyBidBlow.UI.Lobby
         void OnEnable()
         {
             room.ClientMatchStarted += BeginMatch;
+            room.ClientMatchReturned += ReturnToLobby;
             if (room.ClientInMatch) BeginMatch();
         }
         void OnDisable()
         {
             if (room) room.ClientMatchStarted -= BeginMatch;
+            if (room) room.ClientMatchReturned -= ReturnToLobby;
             if (IsPlaying) { Cursor.lockState=CursorLockMode.None; Cursor.visible=true; }
         }
 
@@ -34,6 +36,12 @@ namespace BuyBidBlow.UI.Lobby
             lobbyPresentation.SetActive(true);
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
+        }
+
+        void ReturnToLobby()
+        {
+            IsPlaying=false;gameplayPresentation.SetActive(false);lobbyPresentation.SetActive(true);
+            Cursor.lockState=CursorLockMode.None;Cursor.visible=true;
         }
 
         void BeginMatch()

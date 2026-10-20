@@ -19,7 +19,7 @@ namespace BuyBidBlow.UI.Result
         public Image[] RowBackgrounds;
         public Text Winner;
         // Rank/order are supplied by the authoritative result; this view never calculates game rules.
-        public void ShowResults(IReadOnlyList<ResultEntry> entries, bool revealBreakdown, bool canReturn)
+        public void ShowResults(IReadOnlyList<ResultEntry> entries, bool revealBreakdown, bool canReturn, int totalRounds = 17)
         {
             if (entries == null || entries.Count < 1 || entries.Count > Rows.Length) throw new ArgumentException("Expected 1 to 6 authoritative entries.");
             for (int i = 0; i < Rows.Length; i++)
@@ -34,7 +34,7 @@ namespace BuyBidBlow.UI.Result
             }
             Winner.text = string.Join(" · ", entries.Where(e => e.Rank == 1).Select(e => e.Nickname));
             SetButtons("로비로 돌아가기"); EscapeEnabled = false;
-            Show("최종 결과", "17 / 17 ROUND"); SetButtonEnabled(0, canReturn);
+            Show("최종 결과", $"{totalRounds} / {totalRounds} ROUND"); SetButtonEnabled(0, canReturn);
             Footer.text = canReturn ? "총자산 동점 → 보유 주식 수 비교 → 동일하면 공동 순위" : "방장의 로비 복귀를 기다리고 있습니다.";
         }
     }

@@ -26,6 +26,20 @@
 
 ## 검증
 
+## 경기 피드백 / 결과 / 마우스 거래
+
+`NetworkMatchFeedback`는 기존 MarketNoticeView, AuctionResultView, MatchResultView를 사용한다. PlayerNet의 TargetRpc로 전달된 본인 요청 결과, 베팅 정산, 공개 낙찰 결과와 자신의 비공개 낙찰 결과를 화면에 표시한다. 진행 중인 하락 베팅 배지는 LocalBet와 LocalBetStake에서 읽는다.
+
+최종 순위는 서버가 총자산 내림차순 → 보유 주식 수 내림차순으로 계산하며 두 값이 같으면 공동 순위다. 시작 참가자 목록을 보관해 경기 중 이탈자의 이름도 유지한다. 타인의 현금·주식 평가액·보유 수량은 전달하지 않고 결과창에서도 숨긴다. 결과 스냅샷을 클라이언트에 캐시해 HUD가 늦게 켜져도 표시한다. 방장의 로비 복귀 요청은 서버가 권한과 경기 종료 여부를 검사한 뒤 전원에게 전환을 전달한다.
+
+거래창 Button의 targetGraphic에 raycastTarget을 켜서 탭, 수량, 확인, 닫기를 마우스로 조작한다. Enter가 UI 모듈과 단축키 양쪽에서 들어와도 같은 프레임에 거래를 두 번 전송하지 않는다. 늑대 발바닥 포인터는 CursorController가 적용하며 해당 컴포넌트를 끄면 기본 포인터로 복원한다.
+
+재조립: HUDRefinementSetup.Apply 후 MatchFeedbackSetup.Apply 순서. MatchFeedbackSetup은 게임 씬을 다시 만들지 않고 실제 씬이 참조하는 프리팹을 갱신한다.
+
+`MatchFeedbackTests.MouseTradingBetsAuctionsResultsAndReturnUseServerEvents` PlayMode 검사 통과. 실제 Mirror 호스트 연결로 마우스 raycast 매수·매도·베팅, 진행 배지, 정산 알림, 공개 및 비공개 입찰/낙찰, 정보 지급, 결과 점수, 결과창 버튼을 통한 전원 로비 복귀를 확인했다. 결과: Logs/MatchFeedbackTests3.xml. 원격 다중 클라이언트 동시 접속은 별도다. RPC 변경으로 접속 프로토콜 버전은 6이며 서버·클라이언트 모두 동일한 새 빌드를 사용해야 한다.
+
+### 기존 HUD 검증
+
 - NetworkHUDSetup.Apply: 시안 추출과 실제 씬 배치. 재실행하면 이 HUD만 교체한다.
 - NetworkHUDVerification.Run: 대기, 현금/보유량/평가액, 예약금, 라운드/단계, 시작 알림/중복 방지, 종료, 연결 해제, Dev 컴포넌트 미포함 검사 통과.
 - NetworkHUDPlayVerification.Run: 실제 홀 씬 Play에서 HUD 활성화, Canvas 양수 Scale, 타이머 갱신, 시작 알림 자동 종료 검사 통과. 주입한 네트워크 상태로 검증하며 실제 다중 클라이언트 연결 검증은 별도다.

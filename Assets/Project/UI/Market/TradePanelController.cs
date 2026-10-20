@@ -28,6 +28,7 @@ namespace BuyBidBlow.UI.Market
         private Tab tab;
         private int quantity = 1;
         private int openedFrame = -1;
+        private int confirmedFrame = -1;
         private Text feedback;
         private float feedbackUntil;
 
@@ -140,7 +141,9 @@ namespace BuyBidBlow.UI.Market
 
         public void Confirm()
         {
-            if (!IsOpen || !active.CanConfirm) return;
+            // Enter may arrive through both the UI module and the keyboard shortcut.
+            if (!IsOpen || !active.CanConfirm || confirmedFrame == Time.frameCount) return;
+            confirmedFrame = Time.frameCount;
             if (tab == Tab.Buy) RequestBuy();
             else if (tab == Tab.Sell) RequestSell();
             else BetRequested?.Invoke(selectedCompany);

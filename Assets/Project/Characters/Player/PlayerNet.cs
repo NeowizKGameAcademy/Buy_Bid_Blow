@@ -103,10 +103,23 @@ namespace BuyBidBlow.Characters
         }
         [TargetRpc] public void TargetResetInformation()
         {
+            ClearLocalResults();
             localInformation.Clear(); LocalInformationChanged?.Invoke();
         }
         // The server's answer to this client's last trade or bet request.
         public static event Action<string> LocalReply;
+        public static event Action<BuyBidBlow.Common.MatchNotice> LocalNotice;
+        public static event Action<BuyBidBlow.Common.AuctionOutcome> LocalAuctionOutcome;
+        public static event Action LocalResultsChanged;
+        public static BuyBidBlow.Common.FinalStanding[] LocalResults { get; private set; }
+        public static int LocalResultRounds { get; private set; }
+        [TargetRpc] public void TargetNotice(BuyBidBlow.Common.MatchNotice notice) => LocalNotice?.Invoke(notice);
+        [TargetRpc] public void TargetAuctionOutcome(BuyBidBlow.Common.AuctionOutcome outcome) => LocalAuctionOutcome?.Invoke(outcome);
+        [TargetRpc] public void TargetResults(BuyBidBlow.Common.FinalStanding[] rows, int rounds)
+        { LocalResults = rows; LocalResultRounds = rounds; LocalResultsChanged?.Invoke(); }
+        public void ClearLocalResults() { LocalResults = null; LocalResultRounds = 0; }
+        [Command] public void CmdReturnToLobby()
+        { if(NetworkManager.singleton is GameNetworkManager room) room.RequestReturnToLobby(this); }
 
         [Command] public void CmdTrade(Company company, int quantity, bool buy)
         {
@@ -169,6 +182,6 @@ namespace BuyBidBlow.Characters
             else if (character) character.SetSeated(!string.IsNullOrEmpty(seat));
         }
 
-        public override void OnStopLocalPlayer() { LocalPortfolio = null; LocalBet = null; LocalBetStake = 0; LocalSecretBid = 0; localInformation.Clear(); LocalInformationChanged?.Invoke(); LocalPortfolioChanged?.Invoke(null); base.OnStopLocalPlayer(); }
+        public override void OnStopLocalPlayer() { ClearLocalResults(); LocalPortfolio = null; LocalBet = null; LocalBetStake = 0; LocalSecretBid = 0; localInformation.Clear(); LocalInformationChanged?.Invoke(); LocalPortfolioChanged?.Invoke(null); base.OnStopLocalPlayer(); }
     }
 }

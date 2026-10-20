@@ -41,6 +41,7 @@ namespace BuyBidBlow.Characters
         public void ApplyServerState(PortfolioSnapshot snapshot)
         {
             EnsureCompanies();
+            if(snapshot==null){cash=reserved=0;foreach(Company company in Enum.GetValues(typeof(Company)))shares[company]=0;return;}
             cash = Mathf.Max(0, snapshot.Cash);
             reserved = Mathf.Max(0, snapshot.Reserved);
 

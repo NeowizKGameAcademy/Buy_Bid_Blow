@@ -1579,6 +1579,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.UI.HUD.CursorController
   tradePanel: {fileID: 4503746201585617679}
   radialMenu: {fileID: 6711403351142814726}
+  pointer: {fileID: 2800000, guid: d03285e797873ff44ab71709a8d1372d, type: 3}
+  hotspot: {x: 0.37, y: 0.11}
 --- !u!114 &6991418496188244764
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2395,6 +2397,7 @@ MonoBehaviour:
   view: {fileID: 925591918562026302}
   seating: {fileID: 3798767778802700119}
   assets: {fileID: 2051769963190029571}
+  noticeSeconds: 3
 --- !u!1001 &8295860570933467180
 PrefabInstance:
   m_ObjectHideFlags: 0

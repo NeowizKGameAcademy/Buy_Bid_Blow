@@ -179,6 +179,7 @@ namespace BuyBidBlow.Common
         private void OnServerPortfolio(PortfolioSnapshot snapshot)
         {
             assets.ApplyServerState(snapshot);
+            if(snapshot==null){tradePanel.Close();BindMatch(null);return;}
             RefreshOpenPanel();
         }
 
