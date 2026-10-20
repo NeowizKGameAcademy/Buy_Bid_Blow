@@ -19,6 +19,7 @@ namespace BuyBidBlow.Common
         // First round start while preparing. Server time (NetworkTime.time).
         [SyncVar] public double firstRoundStartsAt;
         [SyncVar] public double roundClosesAt;
+        [SyncVar] public int totalRounds;
         // Last closed round and the changes applied at its Closing Bell (0 = none yet).
         public readonly SyncList<PriceChange> lastChanges = new SyncList<PriceChange>();
         [SyncVar(hook = nameof(OnClosingBell))] public int lastClosedRound;

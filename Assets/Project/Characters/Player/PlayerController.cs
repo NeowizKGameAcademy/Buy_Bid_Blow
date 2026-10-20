@@ -75,14 +75,14 @@ namespace BuyBidBlow.Characters
         public void OnMove(InputAction.CallbackContext context)
         {
             bufferedMoveInput = context.ReadValue<Vector2>();
-            if (controlsBlocked || (radialMenu != null && radialMenu.IsOpen)) return;
+            if (controlsBlocked || BuyBidBlow.UI.Notebook.NetworkNotebookController.BlocksInput || (radialMenu != null && radialMenu.IsOpen)) return;
 
             ApplyMoveInput(bufferedMoveInput);
         }
 
         public void OnRotate(InputAction.CallbackContext context)
         {
-            if (controlsBlocked || (radialMenu != null && radialMenu.IsOpen)) return;
+            if (controlsBlocked || BuyBidBlow.UI.Notebook.NetworkNotebookController.BlocksInput || (radialMenu != null && radialMenu.IsOpen)) return;
             playerMove.Rotate(
                 context.ReadValue<Vector2>()
             );
@@ -90,7 +90,7 @@ namespace BuyBidBlow.Characters
 
         public void OnJump(InputAction.CallbackContext context)
         {
-            if (controlsBlocked) return;
+            if (controlsBlocked || BuyBidBlow.UI.Notebook.NetworkNotebookController.BlocksInput) return;
 
             if (context.started)
             {
@@ -114,7 +114,7 @@ namespace BuyBidBlow.Characters
 
         public void OnInteract(InputAction.CallbackContext context)
         {
-            if (controlsBlocked) return;
+            if (controlsBlocked || BuyBidBlow.UI.Notebook.NetworkNotebookController.BlocksInput) return;
 
             // Shift shares the existing Interction action with E. Inspect the
             // triggering control so E keeps its existing trade behaviour.
