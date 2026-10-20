@@ -13,18 +13,19 @@ SC_PlayerUI에서 Play하면 MatchSettings.json으로 실제 로컬 경기가 �
 ## 역할 분리
 | 구성 | 책임 |
 |---|---|
-| LocalMatchGame (Systems/Match) | 로컬 권위 경기 상태. 현재 라운드/마감, 기존 주가 생성기·상품 생성기·경매·자산·거래 서비스 조합, 베팅·종료 순위. UI/Unity 오브젝트에 의존하지 않음 |
+| MatchEngine (Systems/Match) | 로컬 권위 경기 상태. 현재 라운드/마감, 기존 주가 생성기·상품 생성기·경매·자산·거래 서비스 조합, 베팅·종료 순위. UI/Unity 오브젝트에 의존하지 않음 |
 | LocalTradeService / PlayerAssetState | 거래 검증과 자산 변경, 예약금 제외 현금, 유한 재고 차감·매도 반환. 기존 호출은 옵션 재고 인자를 생략하면 기존 동작 유지 |
 | AuctionRound / OpenAuction / SecretAuction | 공개·비공개 시간 슬롯, 입찰 검증·예약·해제·정산·동액 처리 |
 | MatchUIBridge | 한 로컬 플레이어의 요청 전달, 실제 스냅샷으로 HUD/거래창/경매/월드 시세판 갱신. 봉투 라운드 연결. 네트워크 연동 시 요청/스냅샷 경로를 교체할 경계 |
 | PlayerUIController | 입력, 탐색/거래/경매 전환, 카메라 착석·복원, 이동/감지 잠금 |
-| TradingPanelView | 전달된 데이터 표시, 예상 합계·거래 후 현금, 탭·버튼 상태. 자산 변경 없음 |
+| TradingPanelView (UI/Market/TradingPanel) | 전달된 데이터 표시, 예상 합계·거래 후 현금, 탭·버튼 상태. 자산 변경 없음 |
 | TradePreviewSource | 에디터 배치 캡처의 예시값. Play에서는 MatchUIBridge의 실제 데이터 사용 |
 | UIInteractionTarget / DetectObject | 창구·의자 식별 / 기존 레이캐스트와 조준점 |
-| AuctionEnvelopeDisplay | 월드 봉투 회전과 라운드 글자. 게임 정산과 UI 배치에 의존하지 않음 |
+| AuctionPanelView (UI/Auction/Panel) | 경매 헤더·입찰 조작·상품 표시. 입찰하지 않음 |
+| AuctionEnvelopeDisplay (Content/Props/AuctionEnvelope) | 월드 봉투 회전과 라운드 글자. 게임 정산과 UI 배치에 의존하지 않음 |
 | 편집 가능한 HUD 프리팹 | Text/Image/RectTransform 디자인. 3개 회사 패널과 공통 고정 HUD |
 
-기존 MatchManager와 Move & Trade 씬은 유지합니다. 새 통합 씬에서는 별도 LocalMatchGame이 경기 진행을 맡아 싱글턴 중복을 피합니다. PF_PlayerUIRig에는 로컬 런타임도 포함합니다. 다른 씬에서 재사용하면 시세판과 월드 봉투 참조를 해당 씬 대상으로 지정해야 합니다.
+기존 MatchManager와 Move & Trade 씬은 유지합니다. 새 통합 씬에서는 별도 MatchEngine이 경기 진행을 맡아 싱글턴 중복을 피합니다. PF_PlayerUIRig에는 로컬 런타임도 포함합니다. 다른 씬에서 재사용하면 시세판과 월드 봉투 참조를 해당 씬 대상으로 지정해야 합니다.
 
 ## 마감 처리
 마감 시각 이상 요청 거절 → 경매 마감 정산 → 종가 적용 → 실제 종가 하락일 때 베팅 총 2배 지급 → 다음 라운드. 17R 종료 시 현금 + 주식 평가액으로 순위, 동액이면 총 보유 주식 수, 이것도 같으면 공동 순위.
@@ -40,7 +41,7 @@ PlayerMove의 stableControls 옵션은 이 테스트 리그에서만 켭니다. 
 창을 닫을 때 원래 카메라 기울기를 복원하고, 포커스나 커서 잠금이 없을 때는 탐색 이동을 입력하지 않습니다. 캡슐 마찰을 제거하여 벽에 붙어 버티는 현상을 줄였습니다.
 
 ## 정보 수첩
-Notebook/SpriteRequirements.md에 12종 스프라이트 요구사항, Notebook/SpritePrompts.json에 image_gen 제작 프롬프트를 기록했습니다. PNG 원본과 별도 trimmed Sprite 자산은 Notebook/Sprites에 저장합니다. PF_InformationNotebook은 Notebook/Prefabs에 있습니다.
+Notebook/SpriteRequirements.md에 12종 스프라이트 요구사항, Notebook/SpritePrompts.json에 image_gen 제작 프롬프트를 기록했습니다. PNG 원본과 trimmed Sprite 자산(UI/Notebook/Sprites), PF_InformationNotebook과 InformationNotebookView는 UI/Notebook에 있습니다.
 I로 열기/닫기, Esc 닫기, 위/아래 방향키로 한 라운드씩 스크롤합니다. 17라운드 중 8행을 표시합니다. 수첩을 열어도 경기 시간은 계속 진행하며, 이동·시점·거래·입찰 입력은 잠급니다. 닫으면 이전 거래/착석 상태를 유지합니다.
 InformationNotebookView는 MatchUIBridge.OwnedInformation만 받습니다. 미래 가격 일정은 참조하지 않으며 낙찰받지 않은 칸은 빈칸입니다. 제목·회사명·라운드·방향·안내는 일반 Text, 배경·아이콘·칸·밑칠은 개별 Image입니다. 에디터의 NotebookAssembled.png는 디자인 검수용 샘플이며 실제 Play 데이터는 LiveNotebook.png에서 확인합니다.
 제작 도구: built-in image_gen. 알파/빈칸 테두리 검사 및 실제 Play의 미보유 칸, 낙찰 정보 4칸, 스크롤 끝, 입력 잠금/복원 검증 통과.

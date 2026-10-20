@@ -3,6 +3,7 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
+using BuyBidBlow.Props;
 namespace BuyBidBlow.AuctionDisplay.Editor {
  public static partial class EnvelopeBuilder {
  static void AddCloche(GameObject envelope){

@@ -2,23 +2,25 @@ using System;
 using System.Collections.Generic;
 using BuyBidBlow.Systems.Match;
 using BuyBidBlow.Systems.Types;
-using BuyBidBlow.AuctionDisplay;
+using BuyBidBlow.Props;
+using BuyBidBlow.UI.Auction;
+using BuyBidBlow.UI.Market;
 using UnityEngine;
 using UnityEngine.UI;
 namespace BuyBidBlow.PlayerUISandbox {
 // Bridges one local player's inputs/views to the local authority. No network transport here.
 [DefaultExecutionOrder(-100)] public sealed class MatchUIBridge:MonoBehaviour {
- public TextAsset settingsFile;public PlayerUIController controller;public Text lotDetails,privateInfo,betStatus,marketBoard;
+ public TextAsset settingsFile;public PlayerUIController controller;public Text privateInfo,betStatus,marketBoard;public AuctionPanelView auctionPanel;
  public Transform exchangeBoard; public AuctionEnvelopeDisplay envelope;public int seed=20261016;[Min(.01f)] public float clockSpeed=1;
- public LocalMatchGame Game {get;private set;}
+ public MatchEngine Game {get;private set;}
  public PlayerId Player {get;}=new PlayerId("나");
  public int BidAmount {get;private set;}=1;
  public double Now {get;private set;}
  readonly List<Info> information=new List<Info>();public IReadOnlyList<Info> OwnedInformation=>information;bool showInformation;string feedback="";float feedbackUntil;int lastAuctionRound;bool lastSecret;
- void Start(){var settings=JsonUtility.FromJson<MatchSettings>(settingsFile.text);var players=new List<PlayerId>{Player};for(int i=1;i<settings.DefaultPlayerCount;i++)players.Add(new PlayerId("대기 참가자 "+i));Game=new LocalMatchGame(settings,seed,players,0);Game.InformationAwarded+=r=>{if(r.Winner.Equals(Player)){information.Add(r.Lot.First);information.Add(r.Lot.Second);}};Game.PublicResolved+=r=>Message(r.Sold?$"공개 낙찰 · {r.Winner} · ${r.Price}":"공개 경매 유찰");Game.SecretResolved+=r=>{foreach(var bidder in r.Players)if(bidder.Equals(Player))Message(r.Result.Sold&&r.Result.Winner.Equals(Player)?"비공개 경매 낙찰 성공":"비공개 경매 낙찰 실패");};Refresh();}
+ void Start(){var settings=JsonUtility.FromJson<MatchSettings>(settingsFile.text);var players=new List<PlayerId>{Player};for(int i=1;i<settings.DefaultPlayerCount;i++)players.Add(new PlayerId("대기 참가자 "+i));Game=new MatchEngine(settings,seed,players,0);Game.InformationAwarded+=r=>{if(r.Winner.Equals(Player)){information.Add(r.Lot.First);information.Add(r.Lot.Second);}};Game.PublicResolved+=r=>Message(r.Sold?$"공개 낙찰 · {r.Winner} · ${r.Price}":"공개 경매 유찰");Game.SecretResolved+=r=>{foreach(var bidder in r.Players)if(bidder.Equals(Player))Message(r.Result.Sold&&r.Result.Winner.Equals(Player)?"비공개 경매 낙찰 성공":"비공개 경매 낙찰 실패");};Refresh();}
  void Update(){if(Game==null)return;AdvanceClock(Time.deltaTime*clockSpeed);}
  public void AdvanceClock(double seconds){if(Game==null||seconds<0)return;int oldRound=Game.Round;Now+=seconds;Game.Tick(Now);if((Game.Round!=oldRound||Game.Complete)&&controller.CurrentMode==PlayerUIController.Mode.Trade){controller.Close();Message("라운드 마감 · 새 주가를 확인하세요.");}Refresh();}
- public TradePreviewData TradeData(int company){var c=(Company)company;var s=Game.Snapshot(Player);return new TradePreviewData{company=c.ToString(),price=Game.Price(c),owned=s.GetShares(c),stock=Game.Stock(c),available=s.Available,change=Game.LastChange(c),hasBet=Game.HasBet(Player,c),otherBet=Game.HasBet(Player)&&!Game.HasBet(Player,c),betStake=Game.BetStake(Player),closed=Game.Complete};}
+ public TradingPanelData TradeData(int company){var c=(Company)company;var s=Game.Snapshot(Player);return new TradingPanelData{company=c.ToString(),price=Game.Price(c),owned=s.GetShares(c),stock=Game.Stock(c),available=s.Available,change=Game.LastChange(c),hasBet=Game.HasBet(Player,c),otherBet=Game.HasBet(Player)&&!Game.HasBet(Player,c),betStake=Game.BetStake(Player),closed=Game.Complete};}
  public void ConfirmTrade(int company,int tab,int quantity){if(Game==null)return;Message(tab==2?Game.ToggleBet(Player,(Company)company,Now):Game.Trade(Player,(Company)company,quantity,tab==0,Now));Refresh();}
  public void AdjustBid(int delta){BidAmount=Mathf.Max(MinimumBid(),BidAmount+delta);}
  int MinimumBid()=>Game?.Auction?.Secret!=null?1:Game?.Auction?.Open?.HasBid==true?Game.Auction.Open.HighestBid+1:1;
@@ -34,10 +36,10 @@ namespace BuyBidBlow.PlayerUISandbox {
  if(privateInfo){privateInfo.transform.parent.gameObject.SetActive(Game.Complete);if(Game.Complete)privateInfo.text="최종 순위\n"+Game.Standings();}if(controller.notebook){if(Game.Complete&&controller.notebook.IsOpen){showInformation=false;controller.notebook.SetOpen(false,Game.Round);}controller.notebook.Present(Game.Round,Game.Settings.RoundCount,information);}
  if(marketBoard){var lines=new List<string>();foreach(Company c in Enum.GetValues(typeof(Company))){int change=Game.LastChange(c);lines.Add($"{c}   ${Game.Price(c)}   "+(change==0?"보합":change>0?"+$"+change:"−$"+(-change)));}marketBoard.text=string.Join("\n",lines);}
  if(exchangeBoard)for(int i=0;i<3;i++){var company=(Company)i;int change=Game.LastChange(company);Set(exchangeBoard,"Price "+i,"$"+Game.Price(company));Set(exchangeBoard,"Change "+i,change==0?"보합":change>0?"+$"+change:"−$"+(-change));var delta=exchangeBoard.Find("Change "+i);if(delta)delta.GetComponent<Text>().color=change<0?new Color(.2f,.75f,1):change>0?new Color(1,.81f,.35f):Color.white;}
- bool seated=controller.CurrentMode==PlayerUIController.Mode.Auction;var a=Game.Auction;bool secret=a?.Secret!=null;bool live=a!=null&&!a.IsFinished&&!Game.Complete;controller.auctionHeader.SetActive(seated);controller.auctionControls.SetActive(seated&&live);if(lotDetails)lotDetails.transform.parent.gameObject.SetActive(seated&&live);
- if(live){if(lastAuctionRound!=Game.Round||lastSecret!=secret){lastAuctionRound=Game.Round;lastSecret=secret;BidAmount=1;}BidAmount=Mathf.Max(BidAmount,MinimumBid());Lot lot=secret?a.Secret.Lot:a.Open.Lot;if(envelope)envelope.SetRounds(lot.First.Round,lot.Second.Round);if(lotDetails)lotDetails.text=$"방향 정보\n{lot.First.Round}R · {lot.First.CompanyA} / {lot.First.CompanyB}\n{lot.Second.Round}R · {lot.Second.CompanyA} / {lot.Second.CompanyB}\n낙찰자만 방향 확인 · I 내 정보";
- var header=controller.auctionHeader.transform;Set(header,"Stage",secret?"2차 비공개 경매":"1차 공개 경매");Set(header,"Highest Bid",secret?"내 제출 $"+a.Secret.GetSubmitted(Player):a.Open.HasBid?$"최고 입찰 ${a.Open.HighestBid} · {a.Open.HighestBidder}":"입찰 없음");Set(header,"Leading Status",secret?"다른 입찰 비공개":a.Open.HasBid&&a.Open.HighestBidder.Equals(Player)?"현재 최고 입찰 중":"");Set(header,"Countdown",TimeText((secret?a.Secret.Deadline:a.Open.Deadline)-Now));var bid=controller.auctionControls.transform;Set(bid,"Amount","$"+BidAmount);int previous=secret?a.Secret.GetSubmitted(Player):0;bool ownHighest=!secret&&a.Open.HasBid&&a.Open.HighestBidder.Equals(Player);Set(bid,"Cash After",ownHighest?"거래 가능 $"+s.Available:"입찰 후 거래 가능 $"+(s.Available+previous-BidAmount));Set(bid,"Submit - Visual Only/Submit Label",ownHighest?"최고 입찰 중":"입찰");Set(bid,"Rule",secret?"C 취소 · 마감 전 수정 가능":"최고 입찰 취소 불가");Set(bid,"Amount Label",secret?"제출할 금액":"다음 입찰 금액");
- }else if(seated){Set(controller.auctionHeader.transform,"Stage",Game.Complete?"경기 종료":"진행 중인 경매 없음");Set(controller.auctionHeader.transform,"Highest Bid","다음 경매 2 · 6 · 10 · 14R");Set(controller.auctionHeader.transform,"Leading Status","");Set(controller.auctionHeader.transform,"Countdown","--:--");}
+ bool seated=controller.CurrentMode==PlayerUIController.Mode.Auction;var a=Game.Auction;bool secret=a?.Secret!=null;bool live=a!=null&&!a.IsFinished&&!Game.Complete;var panel=new AuctionPanelData{seated=seated,live=live,secret=secret,complete=Game.Complete,idleNote="다음 경매 2 · 6 · 10 · 14R"};
+ if(live){if(lastAuctionRound!=Game.Round||lastSecret!=secret){lastAuctionRound=Game.Round;lastSecret=secret;BidAmount=1;}BidAmount=Mathf.Max(BidAmount,MinimumBid());Lot lot=secret?a.Secret.Lot:a.Open.Lot;if(envelope)envelope.SetRounds(lot.First.Round,lot.Second.Round);panel.lot=lot;panel.secondsLeft=(secret?a.Secret.Deadline:a.Open.Deadline)-Now;panel.hasBid=!secret&&a.Open.HasBid;panel.highestBid=panel.hasBid?a.Open.HighestBid:0;panel.highestBidder=panel.hasBid?a.Open.HighestBidder.ToString():"";panel.ownSubmitted=secret?a.Secret.GetSubmitted(Player):0;panel.ownHighest=panel.hasBid&&a.Open.HighestBidder.Equals(Player);panel.bidAmount=BidAmount;panel.available=s.Available;
+ }
+ if(auctionPanel)auctionPanel.Present(panel);
  if(envelope)envelope.gameObject.SetActive(live);
  if(Time.unscaledTime<feedbackUntil)controller.prompt.text=feedback;else if(seated)controller.prompt.text="←→ 금액 · E 입찰 · C 비공개 취소 · I 내 정보 · Esc 퇴석";
  }

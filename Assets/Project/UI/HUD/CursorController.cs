@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using BuyBidBlow.Characters;
 using BuyBidBlow.UI.Market;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -9,6 +10,8 @@ namespace BuyBidBlow.UI.HUD
     public class CursorController : MonoBehaviour
     {
         [SerializeField] private TradePanelController tradePanel;
+        // While seated, Esc stands the player up (SeatController) instead of releasing the cursor.
+        [SerializeField] private PlayerSeating seating;
         private Coroutine lockCursorRoutine;
 
         private void Start()
@@ -77,7 +80,7 @@ namespace BuyBidBlow.UI.HUD
                 return;
             }
 
-            if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
+            if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame && !(seating != null && seating.IsSeated))
                 UnlockCursor();
 
             if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame &&

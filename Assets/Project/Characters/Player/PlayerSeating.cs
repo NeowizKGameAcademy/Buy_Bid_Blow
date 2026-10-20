@@ -10,6 +10,7 @@ namespace BuyBidBlow.Characters
         public float hipHeight = .85f;
         public UnityEvent<bool> onSeatedChanged = new UnityEvent<bool>();
         public bool IsSeated => seat;
+        public Seat CurrentSeat => seat;
         Seat seat;
         int slot;
         Transform point;

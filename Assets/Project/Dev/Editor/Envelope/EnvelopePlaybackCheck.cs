@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
+using BuyBidBlow.Props;
 namespace BuyBidBlow.AuctionDisplay.Editor {
  [InitializeOnLoad] public static class EnvelopePlaybackCheck {
  static double next;static float startedTime;static Quaternion before;static AuctionEnvelopeDisplay item;

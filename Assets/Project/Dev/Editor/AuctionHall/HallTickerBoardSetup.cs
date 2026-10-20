@@ -179,7 +179,9 @@ namespace BuyBidBlow.Dev.Editor
             }
             var replacements = root.GetComponentsInChildren<MeshRenderer>().Where(r => r.sharedMaterial.name != "BBB_TV_Mount_Steel").ToArray();
             if (before != TriangleCount(replacements)) throw new Exception("Ticker extraction changed triangle count.");
+            if (merged.Length == 0) HallTickerSpacing.ApplySavedLayout(root.transform);
             VerifyGeometry(originalBody, replacements);
+            if (merged.Length > 0) HallTickerSpacing.ApplySavedLayout(root.transform);
             // These batches use only TV-specific materials; no wall/furniture geometry is removed.
             foreach (var renderer in merged)
             {

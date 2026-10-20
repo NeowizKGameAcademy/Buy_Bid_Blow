@@ -60,6 +60,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PF_Staff_Yellow
       objectReference: {fileID: 0}
+    - target: {fileID: 8526117575412250177, guid: a0a4efcc583cbea4897b93e9d46334ef, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 8728739353295243419, guid: a0a4efcc583cbea4897b93e9d46334ef, type: 3}
       propertyPath: m_LocalRotation.x
       value: 0.00892886
@@ -75,6 +79,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8526117575412250177, guid: a0a4efcc583cbea4897b93e9d46334ef, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2091420712106561642}
+    - targetCorrespondingSourceObject: {fileID: 8526117575412250177, guid: a0a4efcc583cbea4897b93e9d46334ef, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4141895138972675457}
+    - targetCorrespondingSourceObject: {fileID: 8526117575412250177, guid: a0a4efcc583cbea4897b93e9d46334ef, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 488052974568358677}
   m_SourcePrefab: {fileID: 100100000, guid: a0a4efcc583cbea4897b93e9d46334ef, type: 3}
 --- !u!1 &2224119888079259009 stripped
 GameObject:
@@ -103,3 +113,39 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!136 &4141895138972675457
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2224119888079259009}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.2685961
+  m_Height: 1.1077195
+  m_Direction: 1
+  m_Center: {x: -0.011172097, y: 0.44742894, z: 0.012956269}
+--- !u!114 &488052974568358677
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2224119888079259009}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd39b0aebbcb43f44b3a063bfc1a03b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.Characters.NPCInfo
+  company: 0

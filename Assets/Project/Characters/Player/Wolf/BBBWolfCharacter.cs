@@ -47,6 +47,12 @@ namespace BuyBidBlow.Characters
 
         public void StopAction() => PlayAction(Action.Locomotion);
 
+        // Chair-seated pose, switched instantly with no sit-down or stand-up motion.
+        public void SetSeated(bool seated)
+        {
+            if (animator) animator.Play(seated ? "Seated" : "Locomotion", 0, 0);
+        }
+
         public void SetPlaybackPaused(bool paused)
         {
             if (animator) animator.speed = paused ? 0 : speed;

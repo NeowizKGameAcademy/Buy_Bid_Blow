@@ -6,8 +6,9 @@ using BuyBidBlow.Systems.Market;
 using BuyBidBlow.Systems.Types;
 using BuyBidBlow.Systems.Portfolio;
 namespace BuyBidBlow.Systems.Match {
-// Local authority for the sandbox. UI receives snapshots and submits requests only.
-public sealed class LocalMatchGame {
+// Match rules authority: the dedicated server runs one per match, the PlayerUI sandbox one locally.
+// UI receives snapshots and submits requests only.
+public sealed class MatchEngine {
  public readonly MatchSettings Settings;
  readonly Dictionary<PlayerId,PlayerPortfolio> assets=new Dictionary<PlayerId,PlayerPortfolio>();
  readonly Dictionary<Company,int> inventory=new Dictionary<Company,int>();
@@ -20,8 +21,11 @@ public sealed class LocalMatchGame {
  public bool Complete {get;private set;}
  public event Action Changed;
  public event Action<AuctionResult> InformationAwarded; public event Action<AuctionResult> PublicResolved; public event Action<SecretResult> SecretResolved;
- public LocalMatchGame(MatchSettings settings,int seed,IReadOnlyList<PlayerId> players,double now){
- settings.Validate();Settings=settings;int supply=settings.GetInitialCompanySupply(players.Count);
+ readonly int roundSecondsOverride;
+ // now: when round 1 opens. roundSecondsOverride > 0 makes every round that long (playtests).
+ public MatchEngine(MatchSettings settings,int seed,IReadOnlyList<PlayerId> players,double now,int roundSecondsOverride=0){
+ settings.Validate();Settings=settings;this.roundSecondsOverride=roundSecondsOverride;// Servers may start with fewer players for playtests (-minPlayers); they get the smallest table's supply.
+ int supply=settings.GetInitialCompanySupply(Math.Max(players.Count,settings.MinPlayerCount));
  foreach(var p in players){if(assets.ContainsKey(p))throw new ArgumentException("Duplicate player");assets.Add(p,new PlayerPortfolio(settings.StartingCash,settings.StartingShares));}
  foreach(Company c in Enum.GetValues(typeof(Company)))inventory[c]=supply;
  var rng=new Random(seed);prices.Add(settings.RollStartingPrices(rng));
@@ -31,6 +35,9 @@ public sealed class LocalMatchGame {
  int PriceIndex=>Complete?Settings.RoundCount:Round-1;
  public int Price(Company c)=>prices[PriceIndex][(int)c];
  public int LastChange(Company c)=>PriceIndex==0?0:prices[PriceIndex][(int)c]-prices[PriceIndex-1][(int)c];
+ // Public chart history stops at the currently revealed price, never the precomputed future.
+ public int PublishedPriceCount=>PriceIndex+1;
+ public int PublishedPrice(int sample,Company company){if(sample<0||sample>=PublishedPriceCount)throw new ArgumentOutOfRangeException(nameof(sample));return prices[sample][(int)company];}
  public int Stock(Company c)=>inventory[c];
  public PortfolioSnapshot Snapshot(PlayerId p)=>Trades.GetSnapshot(p);
  public bool HasBet(PlayerId p)=>bets.ContainsKey(p);
@@ -53,7 +60,7 @@ public sealed class LocalMatchGame {
  else result=Auction.PlaceOpenBid(p,amount,now);
  Changed?.Invoke();return result==AuctionError.None?(cancel?"입찰 취소 완료":"입찰 접수 완료"):"입찰 실패: "+result;
  }
- void StartRound(double now){Deadline=now+Settings.GetRoundSeconds(Round);Auction=null;if(Settings.IsAuctionRound(Round)){
+ void StartRound(double now){Deadline=now+(roundSecondsOverride>0?roundSecondsOverride:Settings.GetRoundSeconds(Round));Auction=null;if(Settings.IsAuctionRound(Round)){
  // No agreed minimum yet: retain the existing local $1 fallback.
  Auction=new AuctionRound(lots.Next(),lots.Next(),now,Settings.AuctionSlots,1,assets);
  Auction.OpenClosed+=r=>{PublicResolved?.Invoke(r);if(r.Sold)InformationAwarded?.Invoke(r);};Auction.SecretClosed+=r=>{SecretResolved?.Invoke(r);if(r.Result.Sold)InformationAwarded?.Invoke(r.Result);};Auction.Tick(now);

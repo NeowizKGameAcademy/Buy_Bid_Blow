@@ -56,7 +56,7 @@ namespace BuyBidBlow.UI.HUD
             if (!isTradeOpen && seatedActor != null && seatedActor.IsSeated)
             {
                 Prompt.SetActive(true);
-                keyText.text = "E";
+                keyText.text = "Esc";
                 InteractionText.text = "Stand up";
                 return;
             }

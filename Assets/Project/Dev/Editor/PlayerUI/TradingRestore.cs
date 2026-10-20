@@ -6,6 +6,7 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using BuyBidBlow.UI.Market;
 namespace BuyBidBlow.PlayerUISandbox.Editor {
 [InitializeOnLoad] public static class TradingRestore {
 const string Root="Assets/Project/Dev/Sandbox/Interface/PlayerUI";
@@ -16,10 +17,10 @@ public static void Apply(){
 var path=Root+"/SC_PlayerUI.unity";var scene=SceneManager.GetSceneByPath(path);bool close=!scene.isLoaded;if(close)scene=EditorSceneManager.OpenScene(path,OpenSceneMode.Additive);
 try{
 var c=scene.GetRootGameObjects().SelectMany(g=>g.GetComponentsInChildren<PlayerUIController>(true)).Single();var hud=c.hud;
-foreach(var img in AssetDatabase.FindAssets("t:Texture2D",new[]{"Assets/Project/Dev/Sandbox/Interface/Trading/Sprites"}))AssetDatabase.ImportAsset(AssetDatabase.GUIDToAssetPath(img),ImportAssetOptions.ForceUpdate|ImportAssetOptions.ForceSynchronousImport);
+foreach(var img in AssetDatabase.FindAssets("t:Texture2D",new[]{"Assets/Project/UI/Market/TradingPanel/Sprites"}))AssetDatabase.ImportAsset(AssetDatabase.GUIDToAssetPath(img),ImportAssetOptions.ForceUpdate|ImportAssetOptions.ForceSynchronousImport);
 foreach(var child in hud.GetComponentsInChildren<RectTransform>(true).Where(r=>r.name=="Stock Trade Panel"||r.name.StartsWith("Stock Trade - ")).ToArray())if(child)UnityEngine.Object.DestroyImmediate(child.gameObject);
 c.companyPanels=new GameObject[3];string[] names={"Straw","Timber","Brick"};
-for(int i=0;i<3;i++){var prefab=AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Project/Dev/Sandbox/Interface/Trading/PF_TradingPanel_"+names[i]+".prefab");var panel=(GameObject)PrefabUtility.InstantiatePrefab(prefab,scene);panel.transform.SetParent(hud.transform,false);panel.name="Stock Trade - "+names[i];var r=(RectTransform)panel.transform;r.anchorMin=r.anchorMax=r.pivot=Vector2.one;r.anchoredPosition=new Vector2(-32,-220);r.sizeDelta=new Vector2(860,850);r.localScale=Vector3.one*.92f;
+for(int i=0;i<3;i++){var prefab=AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Project/UI/Market/TradingPanel/PF_TradingPanel_"+names[i]+".prefab");var panel=(GameObject)PrefabUtility.InstantiatePrefab(prefab,scene);panel.transform.SetParent(hud.transform,false);panel.name="Stock Trade - "+names[i];var r=(RectTransform)panel.transform;r.anchorMin=r.anchorMax=r.pivot=Vector2.one;r.anchoredPosition=new Vector2(-32,-220);r.sizeDelta=new Vector2(860,850);r.localScale=Vector3.one*.92f;
 foreach(var text in panel.GetComponentsInChildren<Text>(true)){text.horizontalOverflow=HorizontalWrapMode.Wrap;text.verticalOverflow=VerticalWrapMode.Truncate;text.resizeTextForBestFit=true;text.resizeTextMaxSize=text.fontSize;text.resizeTextMinSize=Mathf.Max(14,Mathf.RoundToInt(text.fontSize*.8f));}
 Rect(panel.transform.Find("Company Header/Company Name"),202,-35,324,100);
 Rect(panel.transform.Find("Company Header/Price Label"),596,-25,228,28);

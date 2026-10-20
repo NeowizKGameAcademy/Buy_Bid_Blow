@@ -4,6 +4,8 @@ using System.Linq;
 using UnityEditor;
 using UnityEditor.Animations;
 using UnityEditor.SceneManagement;
+using BuyBidBlow.Characters;
+using BuyBidBlow.Systems.Types;
 using UnityEngine;
 
 namespace BuyBidBlow.Dev.Editor
@@ -14,6 +16,7 @@ namespace BuyBidBlow.Dev.Editor
         const string GroupName = "Desk Pig Staff";
         static readonly string[] Colors = { "Yellow", "Green", "Red" };
         static readonly string[] Desks = { "STRAW", "WOOD", "BRICK" };
+        static readonly Company[] Companies = { Company.Straw, Company.Timber, Company.Brick };
         static Bounds BoundsOf(GameObject go)
         {
             var renderers = go.GetComponentsInChildren<Renderer>();
@@ -46,9 +49,38 @@ namespace BuyBidBlow.Dev.Editor
                     animator.avatar = avatar;
                 }
                 clip.SampleAnimation(go, 0);
+                MakeTradeTarget(go, Companies[Array.IndexOf(Colors, color)]);
                 return PrefabUtility.SaveAsPrefabAsset(go, folder + "/PF_Staff_" + color + ".prefab");
             }
             finally { UnityEngine.Object.DestroyImmediate(go); }
+        }
+        // E on a desk clerk opens that company's trade panel: Interactable layer + body collider + NPCInfo.
+        static void MakeTradeTarget(GameObject go, Company company)
+        {
+            go.layer = LayerMask.NameToLayer("Interactable");
+            var bounds = BoundsOf(go);
+            var scale = go.transform.lossyScale;
+            var capsule = go.GetComponent<CapsuleCollider>(); if (!capsule) capsule = go.AddComponent<CapsuleCollider>();
+            capsule.direction = 1;
+            capsule.center = go.transform.InverseTransformPoint(bounds.center);
+            capsule.height = bounds.size.y / scale.y;
+            capsule.radius = Mathf.Min(bounds.extents.x, bounds.extents.z) / Mathf.Max(scale.x, scale.z);
+            var info = go.GetComponent<NPCInfo>(); if (!info) info = go.AddComponent<NPCInfo>();
+            var so = new SerializedObject(info); so.FindProperty("company").enumValueIndex = (int)company; so.ApplyModifiedPropertiesWithoutUndo();
+        }
+        // Adds the trade target to the existing staff prefabs without rebuilding or re-placing them.
+        public static void AddTradeTargetsBatch()
+        {
+            try {
+                for (int i = 0; i < Colors.Length; i++)
+                {
+                    string path = Root + "/StandingStaff/PF_Staff_" + Colors[i] + ".prefab";
+                    var go = PrefabUtility.LoadPrefabContents(path);
+                    try { MakeTradeTarget(go, Companies[i]); PrefabUtility.SaveAsPrefabAsset(go, path); } finally { PrefabUtility.UnloadPrefabContents(go); }
+                }
+                AssetDatabase.SaveAssets();
+                File.WriteAllText("Logs/DeskStaffTrade.result", "PASS");
+            } catch(Exception e) { File.WriteAllText("Logs/DeskStaffTrade.result", e.ToString()); Debug.LogException(e); }
         }
         static void Place(GameObject hall, GameObject[] staff)
         {

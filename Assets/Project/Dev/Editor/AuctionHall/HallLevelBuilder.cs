@@ -98,7 +98,7 @@ namespace BuyBidBlow.Dev.Editor
                     if(group.kind=="door")go.AddComponent<Door>().openAngle=group.angle;
                     else if (!group.name.Contains("Staff_Chair"))
                     {
-                        var seat=go.AddComponent<Seat>();var forward=V(group.forward).normalized;var right=Vector3.Cross(Vector3.up,forward);
+                        var seat=go.AddComponent<Seat>();seat.auction=group.name.StartsWith("A41_");var forward=V(group.forward).normalized;var right=Vector3.Cross(Vector3.up,forward);
                         float width=Mathf.Abs(right.x)*bounds.size.x+Mathf.Abs(right.z)*bounds.size.z;
                         float depth=Mathf.Abs(forward.x)*bounds.size.x+Mathf.Abs(forward.z)*bounds.size.z;
                         int slots=Mathf.Max(1,group.slots);seat.sittingPoints=new Transform[slots];seat.exitPoints=new Transform[slots+10];

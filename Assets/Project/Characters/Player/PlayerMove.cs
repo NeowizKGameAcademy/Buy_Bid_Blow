@@ -21,12 +21,15 @@ namespace BuyBidBlow.Characters
         [SerializeField] private float rotateSpeed = 0.1f;
         [SerializeField] private float upperLimit = 60f;
         [SerializeField] private float lowerLimit = 40f;
+        // Seated, the chair holds the body, so only the head and camera turn, this far either side.
+        [SerializeField] private float seatedYawLimit = 90f;
 
         private Vector2 curMoveInput;
 
         private bool isGround;
         private bool isJumpHeld;
         private float currentY;
+        private float seatedYaw;
 
         private Quaternion headLocalRotation;
 
@@ -48,10 +51,11 @@ namespace BuyBidBlow.Characters
                 headLocalRotation = Head.transform.localRotation;
         }
 
+        private bool IsSeated => TryGetComponent(out PlayerSeating seating) && seating.IsSeated;
+
         private void FixedUpdate()
         {
-            var seatActor = GetComponent<PlayerSeating>();
-            if (seatActor != null && seatActor.IsSeated) return;
+            if (IsSeated) return;
             Move();
         }
 
@@ -59,6 +63,12 @@ namespace BuyBidBlow.Characters
         // so animation clips cannot overwrite the mouse-controlled head rotation.
         private void LateUpdate()
         {
+            // Standing up faces the body forward again; the camera follows it.
+            if (seatedYaw != 0 && !IsSeated)
+            {
+                seatedYaw = 0;
+                ApplyLook();
+            }
             if (Head != null)
                 Head.transform.localRotation = headLocalRotation;
         }
@@ -70,27 +80,33 @@ namespace BuyBidBlow.Characters
 
         public void Rotate(Vector2 mouseDelta)
         {
-            var seatActor = GetComponent<PlayerSeating>();
-            if (seatActor != null && seatActor.IsSeated) return;
             if (playerCamera == null)
                 return;
 
             float mouseX = mouseDelta.x * rotateSpeed / 100;
-            transform.Rotate(Vector3.up * mouseX);
+            if (IsSeated)
+                seatedYaw = Mathf.Clamp(seatedYaw + mouseX, -seatedYawLimit, seatedYawLimit);
+            else
+                transform.Rotate(Vector3.up * mouseX);
 
             float mouseY = mouseDelta.y * rotateSpeed / 100;
 
             currentY -= mouseY;
             currentY = Mathf.Clamp(currentY, -upperLimit, lowerLimit);
 
-            playerCamera.CameraTransform.localRotation = Quaternion.Euler(currentY, 0f, 0f);
-            headLocalRotation = Quaternion.Euler(currentY, 0f, 0f);
+            ApplyLook();
+        }
+
+        private void ApplyLook()
+        {
+            var look = Quaternion.Euler(currentY, seatedYaw, 0f);
+            playerCamera.CameraTransform.localRotation = look;
+            headLocalRotation = look;
         }
 
         public void SetJumpHeld(bool isHeld)
         {
-            var seatActor = GetComponent<PlayerSeating>();
-            if (seatActor != null && seatActor.IsSeated) { isJumpHeld = false; return; }
+            if (IsSeated) { isJumpHeld = false; return; }
             isJumpHeld = isHeld;
 
             if (isJumpHeld && isGround)

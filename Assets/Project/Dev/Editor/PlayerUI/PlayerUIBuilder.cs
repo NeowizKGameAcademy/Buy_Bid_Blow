@@ -21,7 +21,7 @@ namespace BuyBidBlow.PlayerUISandbox.Editor {
  foreach(var root in scene.GetRootGameObjects())if(root.name=="Player UI Test Rig"||root.name=="Interaction Test Stations")UnityEngine.Object.DestroyImmediate(root);
  foreach(var cam in scene.GetRootGameObjects().SelectMany(g=>g.GetComponentsInChildren<Camera>(true)))cam.gameObject.SetActive(false);
  var hud=scene.GetRootGameObjects().Single(g=>g.name=="Auction HUD - Editable v2"||g.name=="Player HUD");hud.SetActive(true);hud.name="Player HUD";
- var trade=(GameObject)PrefabUtility.InstantiatePrefab(AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Project/Dev/Sandbox/Interface/Trading/PF_TradingPanel.prefab"),scene);trade.transform.SetParent(hud.transform,false);trade.name="Stock Trade Panel";
+ var trade=(GameObject)PrefabUtility.InstantiatePrefab(AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Project/UI/Market/TradingPanel/PF_TradingPanel.prefab"),scene);trade.transform.SetParent(hud.transform,false);trade.name="Stock Trade Panel";
  foreach(var b in trade.GetComponentsInChildren<Button>(true))b.interactable=false;
  var prompt=Label("Interaction Prompt",hud.transform,"WASD 이동 · E 상호작용",new Vector2(950,50),new Vector2(0,18));
  var cross=new GameObject("Crosshair - Copied From Move And Trade",typeof(RectTransform),typeof(Image));cross.transform.SetParent(hud.transform,false);var cr=cross.GetComponent<RectTransform>();cr.anchorMin=cr.anchorMax=cr.pivot=new Vector2(.5f,.5f);cr.sizeDelta=new Vector2(22,22);var image=cross.GetComponent<Image>();image.raycastTarget=false;
