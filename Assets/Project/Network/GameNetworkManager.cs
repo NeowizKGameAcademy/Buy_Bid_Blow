@@ -20,7 +20,7 @@ namespace BuyBidBlow.Network
     public struct MatchStarting : NetworkMessage {}
     public sealed class GameNetworkManager : NetworkManager
     {
-        public const int ProtocolVersion=4;
+        public const int ProtocolVersion=5;
         public const string PlayScene="SC_ExchangeFurnished";
         [Header("Match")]
         // Lower this in the Inspector to test with fewer players (e.g. one ParrelSync clone).
@@ -120,8 +120,17 @@ namespace BuyBidBlow.Network
             var settings=JsonUtility.FromJson<MatchSettings>(matchSettingsFile.text);
             double startsAt=NetworkTime.time+prepareSeconds;
             engine=new MatchEngine(settings,randomSeed!=0?randomSeed:Environment.TickCount,players,startsAt,roundSecondsOverride);
+            foreach(var conn in NetworkServer.connections.Values)
+                if(conn.identity && conn.identity.TryGetComponent<PlayerNet>(out var participant)) participant.TargetResetInformation();
+            engine.InformationAwarded += award =>
+            {
+                foreach(var conn in NetworkServer.connections.Values)
+                    if(PlayerIdOf(conn).Equals(award.Winner) && conn.identity && conn.identity.TryGetComponent<PlayerNet>(out var winner))
+                    { winner.TargetAwardInformation(award.Lot.First, award.Lot.Second); break; }
+            };
 
             var go=Instantiate(matchNetPrefab);matchNet=go.GetComponent<MatchNet>();
+            matchNet.totalRounds=settings.RoundCount;
             matchNet.phase=MatchNet.Phase.Preparing;matchNet.firstRoundStartsAt=startsAt;matchNet.roundClosesAt=engine.Deadline;
             PublishMarket();PublishAuction(NetworkTime.time);
             NetworkServer.Spawn(go);

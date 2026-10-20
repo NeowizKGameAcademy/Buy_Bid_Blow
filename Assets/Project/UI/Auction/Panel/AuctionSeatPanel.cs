@@ -34,7 +34,7 @@ namespace BuyBidBlow.UI.Auction
             if (!SeatedForAuction) { view.Present(default); return; }
 
             var keyboard = Keyboard.current;
-            if (keyboard != null)
+            if (keyboard != null && !BuyBidBlow.UI.Notebook.NetworkNotebookController.BlocksInput)
             {
                 if (keyboard.rightArrowKey.wasPressedThisFrame) AdjustBid(1);
                 if (keyboard.leftArrowKey.wasPressedThisFrame) AdjustBid(-1);

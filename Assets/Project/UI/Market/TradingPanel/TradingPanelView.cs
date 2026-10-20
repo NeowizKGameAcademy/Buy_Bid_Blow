@@ -20,7 +20,7 @@ public sealed class TradingPanelView : MonoBehaviour {
  Set("Last Change",data.change==0?"보합":data.change>0?"+$"+data.change:"−$"+(-data.change));labels["Last Change"].color=data.change<0?new Color(.2f,.75f,1):new Color(1,.81f,.35f);
  Set("Quantity",tab==2?"$"+data.price:quantity.ToString());Set("Unit",tab==2?"":"주");
  Set("Total Label",tab==2?"성공 지급액":tab==1?"매도 금액":"합계");Set("Total Value","$"+(tab==2?data.price*2:cost));
- Set("Cash After Label","거래 가능 $"+data.available+"  →  거래 후");Set("Cash After","$"+(CanConfirm?(tab==2&&data.hasBet?data.available+data.betStake:tab==1?data.available+cost:data.available-cost):data.available));
+ Set("Cash After Label","거래 후 현금");Set("Cash After","$"+(CanConfirm?(tab==2&&data.hasBet?data.available+data.betStake:tab==1?data.available+cost:data.available-cost):data.available));
  Set("Action",CanConfirm?(tab==2&&data.hasBet?"베팅 취소":new[]{"매수 확인","매도 확인","베팅 확인"}[tab]):Status);
  var q=transform.Find("Quantity Control/Label");if(q)q.GetComponent<Text>().text=new[]{"매수 수량","매도 수량","베팅 참가금"}[tab];
  var names=new[]{"Buy","Sell","Downside Bet"};for(int i=0;i<3;i++){var t=transform.Find("Trade Tabs/"+names[i]);t.Find("Label").GetComponent<Text>().color=i==tab?new Color(1,.81f,.35f):new Color(.62f,.7f,.69f);t.GetComponent<Image>().color=new Color(1,1,1,i==tab?.08f:.01f);}

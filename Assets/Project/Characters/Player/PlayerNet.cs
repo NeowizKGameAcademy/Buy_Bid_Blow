@@ -265,6 +265,18 @@ namespace BuyBidBlow.Characters
         // This client's submission to the running secret auction (0 = none); nobody else learns it.
         public static int LocalSecretBid { get; private set; }
         public static event Action<PortfolioSnapshot> LocalPortfolioChanged;
+        static readonly List<Info> localInformation = new List<Info>();
+        public static IReadOnlyList<Info> LocalInformation => localInformation;
+        public static event Action LocalInformationChanged;
+        [TargetRpc] public void TargetAwardInformation(Info first, Info second)
+        {
+            localInformation.Add(first); localInformation.Add(second);
+            LocalInformationChanged?.Invoke();
+        }
+        [TargetRpc] public void TargetResetInformation()
+        {
+            localInformation.Clear(); LocalInformationChanged?.Invoke();
+        }
         // The server's answer to this client's last trade or bet request.
         public static event Action<string> LocalReply;
 
@@ -332,6 +344,6 @@ namespace BuyBidBlow.Characters
             animator.Play(string.IsNullOrEmpty(seat) ? "Player_Idle" : "Seated", 0, 0);
         }
 
-        public override void OnStopLocalPlayer() { LocalPortfolio = null; LocalBet = null; LocalBetStake = 0; LocalSecretBid = 0; base.OnStopLocalPlayer(); }
+        public override void OnStopLocalPlayer() { LocalPortfolio = null; LocalBet = null; LocalBetStake = 0; LocalSecretBid = 0; localInformation.Clear(); LocalInformationChanged?.Invoke(); LocalPortfolioChanged?.Invoke(null); base.OnStopLocalPlayer(); }
     }
 }

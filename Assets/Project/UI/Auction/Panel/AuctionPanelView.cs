@@ -28,18 +28,33 @@ namespace BuyBidBlow.UI.Auction
         [SerializeField] private GameObject header;
         [SerializeField] private GameObject controls;
         [SerializeField] private Text lotDetails;
+        [SerializeField] private GameObject lotSummary;
+        [SerializeField] private Text[] lotRounds;
+        [SerializeField] private Image[] lotCompanies;
+        [SerializeField] private Sprite[] companyIcons;
 
         public void Present(AuctionPanelData data)
         {
             header.SetActive(data.seated);
             controls.SetActive(data.seated && data.live);
             if (lotDetails)
-                lotDetails.transform.parent.gameObject.SetActive(data.seated && data.live);
+                lotDetails.transform.parent.gameObject.SetActive(!lotSummary && data.seated && data.live);
+            if (lotSummary) lotSummary.SetActive(data.seated && data.live);
 
             if (data.live)
             {
                 if (lotDetails)
-                    lotDetails.text = $"방향 정보\n{Describe(data.lot.First)}\n{Describe(data.lot.Second)}\n낙찰자만 방향 확인 · I 내 정보";
+                    lotDetails.text = $"{Describe(data.lot.First)}\n{Describe(data.lot.Second)}";
+                if(lotSummary)
+                {
+                    var rows = new[] { data.lot.First, data.lot.Second };
+                    for(int row=0;row<2;row++)
+                    {
+                        lotRounds[row].text = rows[row].Round + "R";
+                        lotCompanies[row*2].sprite = companyIcons[(int)rows[row].CompanyA];
+                        lotCompanies[row*2+1].sprite = companyIcons[(int)rows[row].CompanyB];
+                    }
+                }
 
                 Set(header, "Stage", data.secret ? "2차 비공개 경매" : "1차 공개 경매");
                 Set(header, "Highest Bid", data.secret ? "내 제출 $" + data.ownSubmitted

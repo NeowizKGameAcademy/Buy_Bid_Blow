@@ -53,10 +53,6 @@ namespace BuyBidBlow.UI.HUD
             if (!IsOpen)
                 return;
 
-            // CursorController can normally lock the cursor after a click.
-            // Keep it usable for the whole time this menu is held open.
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
             if (Mouse.current != null)
                 selectedIndex = GetSelectedIndex(Mouse.current.position.ReadValue());
 
@@ -82,8 +78,6 @@ namespace BuyBidBlow.UI.HUD
             openedAt = Time.unscaledTime;
             ResetRadiusToInnerEdge();
             SetMenuVisible(true);
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
         }
 
         public void EndSelection(bool confirm)
@@ -97,8 +91,6 @@ namespace BuyBidBlow.UI.HUD
             SetHoveredIndex(-1);
             RestoreDefaultRadii();
             SetMenuVisible(false);
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
 
             if (confirm && confirmedIndex >= 0)
                 SelectionConfirmed?.Invoke(confirmedIndex + 1);

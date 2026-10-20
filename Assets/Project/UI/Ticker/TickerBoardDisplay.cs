@@ -1,5 +1,6 @@
 using System;
 using BuyBidBlow.Common;
+using BuyBidBlow.Systems.Market;
 using Mirror;
 using TMPro;
 using UnityEngine;
@@ -60,7 +61,7 @@ namespace BuyBidBlow.UI.Ticker
             }
             double elapsed=Math.Max(0,NetworkTime.time-current.firstRoundStartsAt);
             int company=(int)(elapsed/Math.Max(1,companySeconds))%3;
-            if(company!=cachedCompany){PresentCompany(history,company);cachedCompany=company;}
+            if(company!=cachedCompany){PresentCompany(history,company,-PriceChangeGenerator.HistoryRoundCount);cachedCompany=company;}
             SetClock(current.phase==MatchNet.Phase.Finished?0:current.SecondsLeft);
         }
 
@@ -114,7 +115,7 @@ namespace BuyBidBlow.UI.Ticker
                 smallPlots[c].Present(Series(data,c),tint);
             }
         }
-        void PresentCompany(int[] data,int c)
+        void PresentCompany(int[] data,int c,int firstRound=0)
         {
             int end=data.Length-3,prior=Math.Max(0,end-3);
             int value=data[end+c],previous=data[prior+c];var tint=ChangeColor(value,previous);
@@ -128,7 +129,8 @@ namespace BuyBidBlow.UI.Ticker
             {
                 if(i>=ticks){roundTicks[i].text="";continue;}
                 int sample=ticks==1?0:Mathf.RoundToInt((float)i*(series.Length-1)/(ticks-1));
-                roundTicks[i].text=sample==0?"START":"R"+sample;
+                int round=firstRound+sample;
+                roundTicks[i].text=round==0?"START":"R"+round;
                 var p=roundTicks[i].rectTransform.anchoredPosition;
                 p.x=58+(series.Length==1?0:(float)sample/(series.Length-1))*1050-38;
                 roundTicks[i].rectTransform.anchoredPosition=p;

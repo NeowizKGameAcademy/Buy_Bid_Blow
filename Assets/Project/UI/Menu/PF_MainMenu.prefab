@@ -2952,7 +2952,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "Esc\uB85C \uAC70\uB798\uCC3D \uB2EB\uAE30 \uB610\uB294 \uACBD\uB9E4 \uC758\uC790
+  m_Text: "Q\uB85C \uAC70\uB798\uCC3D \uB2EB\uAE30 \uB610\uB294 \uACBD\uB9E4 \uC758\uC790
     \uD1F4\uC11D"
 --- !u!1 &888563677718022373
 GameObject:
@@ -20462,7 +20462,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: ESC
+  m_Text: Q
 --- !u!114 &8151610741009620883
 MonoBehaviour:
   m_ObjectHideFlags: 0
