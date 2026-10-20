@@ -20,7 +20,7 @@ namespace BuyBidBlow.Network
     public struct MatchStarting : NetworkMessage {}
     public sealed class GameNetworkManager : NetworkManager
     {
-        public const int ProtocolVersion=4;
+        public const int ProtocolVersion=5;
         public const string PlayScene="SC_ExchangeFurnished";
         [Header("Match")]
         // Lower this in the Inspector to test with fewer players (e.g. one ParrelSync clone).

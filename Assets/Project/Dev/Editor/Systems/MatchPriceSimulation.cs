@@ -8,7 +8,7 @@ namespace BuyBidBlow.Dev.Editor
     // Preview only. Not the server's Match state or trading/betting implementation.
     public sealed class MatchPriceSimulation
     {
-        public const int HistoryRoundCount = 5;
+        public const int HistoryRoundCount = PriceChangeGenerator.HistoryRoundCount;
         public int Seed;
         public int[] StartingPrices;
         // Six prices at -5..0, five forward changes. Index 5 is the real match start.
@@ -47,37 +47,15 @@ namespace BuyBidBlow.Dev.Editor
                 result.Rounds[round - 1] = row;
             }
             // Independent stream: enabling history must never consume the match's random draws.
-            result.GenerateHistory(settings, new Random(unchecked(seed ^ (int)0x6D2B79F5)));
-            return result;
-        }
-
-        private void GenerateHistory(MatchSettings settings, Random random)
-        {
-            int count = StartingPrices.Length;
-            HistoryPrices = new int[HistoryRoundCount + 1][];
-            HistoryChanges = new int[HistoryRoundCount][];
-            for (int i = 0; i < HistoryPrices.Length; i++) HistoryPrices[i] = new int[count];
-            for (int i = 0; i < HistoryChanges.Length; i++) HistoryChanges[i] = new int[count];
-
-            for (int company = 0; company < count; company++)
+            result.HistoryPrices = PriceChangeGenerator.GenerateHistory(settings.PriceChange, result.StartingPrices, settings.MinPrice, seed);
+            result.HistoryChanges = new int[HistoryRoundCount][];
+            for (int i = 0; i < HistoryRoundCount; i++)
             {
-                bool accepted = false;
-                for (int attempt = 0; attempt < 10000; attempt++)
-                {
-                    HistoryPrices[HistoryRoundCount][company] = StartingPrices[company];
-                    bool valid = true;
-                    for (int i = HistoryRoundCount - 1; i >= 0; i--)
-                    {
-                        int change = PriceChangeGenerator.Generate(settings.PriceChange, random)[company].Amount;
-                        long previous = (long)HistoryPrices[i + 1][company] - change;
-                        if (previous < settings.MinPrice || previous > int.MaxValue) { valid = false; break; }
-                        HistoryPrices[i][company] = (int)previous;
-                        HistoryChanges[i][company] = change;
-                    }
-                    if (valid) { accepted = true; break; }
-                }
-                if (!accepted) throw new InvalidOperationException("Could not generate valid history for company " + company + ". Try another seed or price settings.");
+                result.HistoryChanges[i] = new int[result.StartingPrices.Length];
+                for (int c = 0; c < result.StartingPrices.Length; c++)
+                    result.HistoryChanges[i][c] = result.HistoryPrices[i + 1][c] - result.HistoryPrices[i][c];
             }
+            return result;
         }
 
         public string ToCsv()

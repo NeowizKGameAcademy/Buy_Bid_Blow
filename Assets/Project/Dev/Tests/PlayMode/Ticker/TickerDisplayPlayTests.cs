@@ -39,13 +39,15 @@ namespace BuyBidBlow.Dev.Tests.PlayMode.Ticker
             match=NewMatch();
             match.phase=MatchNet.Phase.Playing;match.firstRoundStartsAt=NetworkTime.time;
             match.roundClosesAt=NetworkTime.time+30;
-            ReceiveHistory(match,new[]{18,40,42,22,36,48,21,37,46,24,35,46});
+            ReceiveHistory(match,new[]{30,38,40,28,39,41,26,40,42,25,39,43,23,38,44,18,40,42,22,36,48,21,37,46,24,35,46});
             yield return null;
             Assert.AreEqual("$24",Text("Company detail/Price").text);
             Assert.AreEqual("+3 (+14.29%)",Text("Company detail/Change").text);
             Assert.AreEqual("$35",Text("Market overview/Price 1").text);
             var plot=board.transform.Find("Ticker UI/Company detail/Price chart").GetComponent<TickerPlot>();
-            CollectionAssert.AreEqual(new[]{18f,22f,21f,24f},plot.values);
+            CollectionAssert.AreEqual(new[]{30f,28f,26f,25f,23f,18f,22f,21f,24f},plot.values);
+            Assert.AreEqual("R-5",Text("Company detail/Round tick 0").text);
+            Assert.AreEqual("R3",Text("Company detail/Round tick 4").text);
             StringAssert.Contains("00:30",Text("Timer/Countdown").text);
             match.firstRoundStartsAt=NetworkTime.time-8.1;
             yield return null;

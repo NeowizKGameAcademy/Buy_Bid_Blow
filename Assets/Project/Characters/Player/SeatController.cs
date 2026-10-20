@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 namespace BuyBidBlow.Characters
 {
-    // The local player's chairs: E on a free seat asks to sit, Esc stands up. In a match the server
+    // The local player's chairs: E on a free seat asks to sit, Q stands up. In a match the server
     // grants the seat first (PlayerNet.hallSeat); offline the seat is taken directly.
     public sealed class SeatController : MonoBehaviour
     {
@@ -34,8 +34,7 @@ namespace BuyBidBlow.Characters
 
         private void Update()
         {
-            if (BuyBidBlow.UI.Notebook.NetworkNotebookController.BlocksInput) return;
-            if (IsSeated && Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
+            if (IsSeated && Keyboard.current != null && Keyboard.current.qKey.wasPressedThisFrame)
                 RequestStand();
         }
 
