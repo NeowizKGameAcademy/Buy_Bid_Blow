@@ -42,6 +42,7 @@ namespace BuyBidBlow.Characters
         {
             playerMove.GroundedChanged += SetGroundedAnimation;
             playerMove.Jumped += PlayJumpAnimation;
+            playerMove.MoveInputChanged += OnMoveInputChanged;
 
             if (radialMenu != null)
                 radialMenu.SelectionConfirmed += HandleRadialMenuSelection;
@@ -51,12 +52,14 @@ namespace BuyBidBlow.Characters
                 tradePanel.OpenStateChanged += SetControlsBlocked;
                 SetControlsBlocked(tradePanel.IsOpen);
             }
+            OnMoveInputChanged(playerMove.MoveInput);
         }
 
         private void OnDisable()
         {
             playerMove.GroundedChanged -= SetGroundedAnimation;
             playerMove.Jumped -= PlayJumpAnimation;
+            playerMove.MoveInputChanged -= OnMoveInputChanged;
 
             if (radialMenu != null)
                 radialMenu.SelectionConfirmed -= HandleRadialMenuSelection;
@@ -94,7 +97,7 @@ namespace BuyBidBlow.Characters
 
             if (context.started)
             {
-                emotionPlaying = false;
+                StopEmotionForInput("Player_Idle");
                 playerMove.SetJumpHeld(true);
             }
             else if (context.canceled)
@@ -104,12 +107,13 @@ namespace BuyBidBlow.Characters
         private void SetGroundedAnimation(bool isGrounded)
         {
             playerAnimation.SetBool("isGroud", isGrounded);
+            if (TryGetComponent(out PlayerNet net)) net.SetGroundedAnimation(isGrounded);
         }
 
         private void PlayJumpAnimation()
         {
-            playerAnimation.ResetTrigger(JumpTrigger);
-            playerAnimation.SetTrigger(JumpTrigger);
+            ResetAnimationTrigger(JumpTrigger);
+            SetAnimationTrigger(JumpTrigger);
         }
 
         public void OnInteract(InputAction.CallbackContext context)
@@ -126,7 +130,6 @@ namespace BuyBidBlow.Characters
                     // the menu, otherwise the player keeps moving while input
                     // callbacks are intentionally ignored.
                     playerMove.SetMoveInput(Vector2.zero);
-                    playerAnimation.SetBool("isWalking", false);
                     radialMenu?.BeginSelection();
                 }
                 else if (context.canceled)
@@ -156,23 +159,22 @@ namespace BuyBidBlow.Characters
         {
             Debug.Log($"Radial menu selected: {menuNumber}", this);
             emotionPlaying = true;
-
             switch (menuNumber)
             {
                 case 1:
-                    playerAnimation.SetTrigger("Defeat");
+                    SetAnimationTrigger("Defeat");
                     break;
 
                 case 2:
-                    playerAnimation.SetTrigger("Flair");
+                    SetAnimationTrigger("Flair");
                     break;
 
                 case 3:
-                    playerAnimation.SetTrigger("Hadraise");
+                    SetAnimationTrigger("Hadraise");
                     break;
 
                 case 4:
-                    playerAnimation.SetTrigger("HipHopDance");
+                    SetAnimationTrigger("HipHopDance");
                     break;
             }
         }
@@ -183,16 +185,47 @@ namespace BuyBidBlow.Characters
                 return;
 
             emotionPlaying = false;
+            playerAnimation.ResetTrigger("Defeat");
+            playerAnimation.ResetTrigger("Flair");
+            playerAnimation.ResetTrigger("Hadraise");
+            playerAnimation.ResetTrigger("HipHopDance");
             playerAnimation.Play(nextState, 0, 0f);
+            if (TryGetComponent(out PlayerNet net))
+                net.CancelEmotion(nextState == "Player_Walking");
         }
 
         private void ApplyMoveInput(Vector2 moveInput)
         {
+            playerMove.SetMoveInput(moveInput);
+        }
+
+        private void OnMoveInputChanged(Vector2 moveInput)
+        {
             if (moveInput != Vector2.zero)
                 StopEmotionForInput("Player_Walking");
 
-            playerMove.SetMoveInput(moveInput);
             playerAnimation.SetBool("isWalking", moveInput != Vector2.zero);
+            if (TryGetComponent(out PlayerNet net))
+                net.SetWalkingAnimation(moveInput != Vector2.zero);
+        }
+
+        private void SetAnimationTrigger(string trigger)
+        {
+            playerAnimation.SetTrigger(trigger);
+            if (TryGetComponent(out PlayerNet net))
+                net.PlayAnimationTrigger(trigger);
+        }
+
+        private void SetAnimationTrigger(int trigger)
+        {
+            playerAnimation.SetTrigger(trigger);
+            if (TryGetComponent(out PlayerNet net))
+                net.PlayAnimationTrigger(trigger);
+        }
+
+        private void ResetAnimationTrigger(int trigger)
+        {
+            playerAnimation.ResetTrigger(trigger);
         }
     }
 }

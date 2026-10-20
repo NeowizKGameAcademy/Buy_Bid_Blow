@@ -12,6 +12,12 @@ namespace BuyBidBlow.Characters
 
         public Transform CameraTransform => cameraObject.transform;
 
+        public void SetGameplayActive(bool active)
+        {
+            if (cameraObject)
+                cameraObject.SetActive(active);
+        }
+
         private void Awake()
         {
             cameraObject.SetActive(true);
