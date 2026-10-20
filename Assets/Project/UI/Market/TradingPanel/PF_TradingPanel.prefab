@@ -4223,7 +4223,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: ESC
+  m_Text: Q
 --- !u!114 &7047688605479256930
 MonoBehaviour:
   m_ObjectHideFlags: 0

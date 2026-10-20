@@ -13,6 +13,7 @@ public sealed class MatchEngine {
  readonly Dictionary<PlayerId,PlayerPortfolio> assets=new Dictionary<PlayerId,PlayerPortfolio>();
  readonly Dictionary<Company,int> inventory=new Dictionary<Company,int>();
  readonly Dictionary<PlayerId,Bet> bets=new Dictionary<PlayerId,Bet>();
+ readonly int[][] history;
  readonly List<int[]> prices=new List<int[]>();readonly LotGenerator lots;
  public readonly TradeService Trades;
  public AuctionRound Auction {get;private set;}
@@ -30,14 +31,15 @@ public sealed class MatchEngine {
  foreach(Company c in Enum.GetValues(typeof(Company)))inventory[c]=supply;
  var rng=new Random(seed);prices.Add(settings.RollStartingPrices(rng));
  for(int i=0;i<settings.RoundCount;i++){var next=(int[])prices[i].Clone();foreach(var change in PriceChangeGenerator.Generate(settings.PriceChange,rng))next[(int)change.Company]=Math.Max(settings.MinPrice,next[(int)change.Company]+change.Amount);prices.Add(next);}
+ history=PriceChangeGenerator.GenerateHistory(settings.PriceChange,prices[0],settings.MinPrice,seed);
  lots=new LotGenerator(settings.AuctionRounds,prices,rng);Trades=new TradeService(assets,Price,inventory);StartRound(now);
  }
  int PriceIndex=>Complete?Settings.RoundCount:Round-1;
  public int Price(Company c)=>prices[PriceIndex][(int)c];
  public int LastChange(Company c)=>PriceIndex==0?0:prices[PriceIndex][(int)c]-prices[PriceIndex-1][(int)c];
  // Public chart history stops at the currently revealed price, never the precomputed future.
- public int PublishedPriceCount=>PriceIndex+1;
- public int PublishedPrice(int sample,Company company){if(sample<0||sample>=PublishedPriceCount)throw new ArgumentOutOfRangeException(nameof(sample));return prices[sample][(int)company];}
+ public int PublishedPriceCount=>PriceChangeGenerator.HistoryRoundCount+PriceIndex+1;
+ public int PublishedPrice(int sample,Company company){if(sample<0||sample>=PublishedPriceCount)throw new ArgumentOutOfRangeException(nameof(sample));return sample<PriceChangeGenerator.HistoryRoundCount?history[sample][(int)company]:prices[sample-PriceChangeGenerator.HistoryRoundCount][(int)company];}
  public int Stock(Company c)=>inventory[c];
  public PortfolioSnapshot Snapshot(PlayerId p)=>Trades.GetSnapshot(p);
  public bool HasBet(PlayerId p)=>bets.ContainsKey(p);

@@ -28,7 +28,7 @@ namespace BuyBidBlow.Common
         // Current price and remaining market stock per company, indexed by Company.
         public readonly SyncList<int> prices = new SyncList<int>();
         public readonly SyncList<int> stock = new SyncList<int>();
-        // Flat rows: Straw, Timber, Brick. Initial price followed by each revealed closing price.
+        // Flat rows: Straw, Timber, Brick. Prices at -5..0 followed by each revealed closing price.
         // Replicated in full for clients that load the hall after a price update.
         public readonly SyncList<int> priceHistory = new SyncList<int>();
 

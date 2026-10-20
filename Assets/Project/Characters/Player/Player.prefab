@@ -1578,7 +1578,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.UI.HUD.CursorController
   tradePanel: {fileID: 4503746201585617679}
-  seating: {fileID: 3798767778802700119}
+  radialMenu: {fileID: 6711403351142814726}
 --- !u!114 &6991418496188244764
 MonoBehaviour:
   m_ObjectHideFlags: 0
