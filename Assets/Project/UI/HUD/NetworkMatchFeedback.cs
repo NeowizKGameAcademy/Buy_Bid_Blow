@@ -84,10 +84,10 @@ namespace BuyBidBlow.UI.HUD
             string company=((Company)n.Company).ToString();
             switch(n.Kind)
             {
-                case MatchNoticeKind.Trade:notices.TradeCompleted(company,n.Quantity,n.Buy?-n.Amount:n.Amount,n.Buy);break;
+                case MatchNoticeKind.Trade:BuyBidBlow.Audio.GameAudio.Play("market.trade",this);notices.TradeCompleted(company,n.Quantity,n.Buy?-n.Amount:n.Amount,n.Buy);break;
                 case MatchNoticeKind.Rejected:notices.Rejected(n.Message);break;
                 case MatchNoticeKind.BetSettled:notices.BetSettled(company,n.Amount,n.Payout,n.Won);break;
-                case MatchNoticeKind.BetJoined:notices.Stack.Push("하락 베팅 참여",$"{company} · 참가금 ${n.Amount} · 성공 지급 ${n.Amount*2}",NoticeTone.Success);break;
+                case MatchNoticeKind.BetJoined:BuyBidBlow.Audio.GameAudio.Play("market.bet",this);notices.Stack.Push("하락 베팅 참여",$"{company} · 참가금 ${n.Amount} · 성공 지급 ${n.Amount*2}",NoticeTone.Success);break;
                 case MatchNoticeKind.BetCancelled:notices.Stack.Push("하락 베팅 취소",$"참가금 ${n.Amount} 전액 환불");break;
                 default:notices.Stack.Push(n.Message,"",NoticeTone.Success);break;
             }

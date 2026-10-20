@@ -49,7 +49,7 @@ namespace BuyBidBlow.UI.Notebook
                 if(view.IsOpen) Close();
                 else if(!trading || !trading.IsOpen) view.SetOpen(true,MatchNet.Current.round);
             }
-            else if(view.IsOpen && k.escapeKey.wasPressedThisFrame) Close();
+            else if(view.IsOpen && k.qKey.wasPressedThisFrame) Close();
             if(!view.IsOpen) return;
             if(movement) { movement.SetMoveInput(Vector2.zero); movement.SetJumpHeld(false); }
             if(k.upArrowKey.wasPressedThisFrame) view.Scroll(-1);
@@ -69,7 +69,7 @@ namespace BuyBidBlow.UI.Notebook
         void Refresh()
         {
             var match = MatchNet.Current;
-            view.Present(match ? Mathf.Max(1,match.round) : 1, match && match.totalRounds > 0 ? match.totalRounds : 17, PlayerNet.LocalInformation);
+            view.Present(match ? Mathf.Max(1,match.round) : 1, match && match.totalRounds > 0 ? match.totalRounds : 13, PlayerNet.LocalInformation);
         }
     }
 }

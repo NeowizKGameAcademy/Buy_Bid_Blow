@@ -44,7 +44,8 @@ namespace BuyBidBlow.UI.Auction
             view.Present(Seated());
         }
 
-        public void AdjustBid(int delta) => bidAmount = Mathf.Max(MinimumBid(), bidAmount + delta);
+        public void AdjustBid(int delta)
+        {int before=bidAmount;bidAmount=Mathf.Max(MinimumBid(),bidAmount+delta);if(before!=bidAmount)BuyBidBlow.Audio.GameAudio.Play("ui.quantity",this);}
 
         public void SubmitBid()
         {
@@ -59,7 +60,7 @@ namespace BuyBidBlow.UI.Auction
         private void Send(int amount, bool cancel)
         {
             var local = NetworkClient.localPlayer ? NetworkClient.localPlayer.GetComponent<PlayerNet>() : null;
-            if (local) local.CmdBid(amount, cancel);
+            if (local){BuyBidBlow.Audio.GameAudio.Play(cancel?"ui.close":"ui.confirm",this);local.CmdBid(amount, cancel);}
         }
 
         private void ShowReply(string message)

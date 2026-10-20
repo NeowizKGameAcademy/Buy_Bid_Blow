@@ -70,7 +70,7 @@ namespace BuyBidBlow.Dev.Editor
                 var controller=existing?existing:root.AddComponent<NetworkNotebookController>();controller.view=notebook.GetComponent<InformationNotebookView>();
                 notebook.transform.SetAsLastSibling();notebook.SetActive(false);
                 foreach(var text in notebook.GetComponentsInChildren<Text>(true))
-                    if(text.name=="Keyboard Guide")text.text="↑ ↓ 스크롤 · Tab / Esc 닫기";
+                    if(text.name=="Keyboard Guide")text.text="↑ ↓ 스크롤 · Q / Tab 닫기";
                 var hint=root.transform.Find("Notebook Hint");if(hint)Object.DestroyImmediate(hint.gameObject);
                 var label=Rect("Notebook Hint",root.transform,new Vector2(0,1),new Vector2(0,1),new Vector2(35,-246),new Vector2(300,32)).gameObject.AddComponent<Text>();
                 var source=root.transform.Find("Assets - Top Left/Cash").GetComponent<Text>();

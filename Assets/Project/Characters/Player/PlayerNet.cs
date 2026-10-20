@@ -189,6 +189,9 @@ namespace BuyBidBlow.Characters
         }
         [ClientRpc] void RpcPlayAnimationTrigger(int trigger)
         {
+            // The accepted jump reaches the owner and observers once through the existing RPC.
+            if (trigger == Animator.StringToHash("Jump") && TryGetComponent<BuyBidBlow.Audio.PlayerActionAudio>(out var audio))
+                audio.PlayJump();
             if (isLocalPlayer) return;
             var animator = GetComponentInChildren<Animator>(true);
             if (animator) animator.SetTrigger(trigger);

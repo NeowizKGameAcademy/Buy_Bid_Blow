@@ -123,6 +123,7 @@ namespace BuyBidBlow.Network
             if(!matchSettingsFile){Debug.LogError("[Server] GameNetworkManager needs the MatchSettings JSON file.",this);return false;}
             if(!matchNetPrefab){Debug.LogError("[Server] GameNetworkManager needs the MatchNet prefab.",this);return false;}
             var settings=JsonUtility.FromJson<MatchSettings>(matchSettingsFile.text);
+            Debug.Log($"[Server] Match rules: {settings.RoundCount} rounds, ordinary {settings.RoundSeconds}s, auction {settings.AuctionRoundSeconds}s, clock override {roundSecondsOverride}s");
             double startsAt=NetworkTime.time+prepareSeconds;
             engine=new MatchEngine(settings,randomSeed!=0?randomSeed:Environment.TickCount,players,startsAt,roundSecondsOverride);
             matchParticipants.Clear();

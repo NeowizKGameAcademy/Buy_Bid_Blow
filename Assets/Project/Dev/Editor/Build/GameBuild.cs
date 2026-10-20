@@ -17,6 +17,16 @@ namespace BuyBidBlow.Dev.Editor
     // Client: menu and the shared lobby/game hall as a normal Windows player.
     public static class GameBuild
     {
+        [InitializeOnLoadMethod] static void WatchRebuildRequest()=>EditorApplication.update+=CheckRebuildRequest;
+        static void CheckRebuildRequest()
+        {
+            const string request="Library/RebuildServer.request";
+            if(!File.Exists(request)||EditorApplication.isCompiling||EditorApplication.isUpdating||EditorApplication.isPlayingOrWillChangePlaymode)return;
+            File.Delete(request);
+            try{BuildAndRunServer();File.WriteAllText("Library/RebuildServer.result","PASS");}
+            catch(Exception e){File.WriteAllText("Library/RebuildServer.result",e.ToString());Debug.LogException(e);}
+            finally{EditorUserBuildSettings.standaloneBuildSubtarget=StandaloneBuildSubtarget.Player;}
+        }
         const string LobbyScene = LobbyBuilder.ScenePath;
         const string ServerScene = "Assets/Project/Scenes/SC_Server.unity";
         const string Output = "Builds/Server/BuyBidBlowServer.exe";
@@ -59,7 +69,9 @@ namespace BuyBidBlow.Dev.Editor
             StopServer();
             BuildServer(false);
             var exe = Path.GetFullPath(Output);
-            Process.Start(new ProcessStartInfo(exe, RunArguments) { UseShellExecute = true, WorkingDirectory = Path.GetDirectoryName(exe) });
+            Directory.CreateDirectory("Logs");
+            var arguments=RunArguments+" -batchmode -nographics -logFile \""+Path.GetFullPath("Logs/DedicatedServer.log")+"\"";
+            Process.Start(new ProcessStartInfo(exe, arguments) { UseShellExecute = false, CreateNoWindow = true, WorkingDirectory = Path.GetDirectoryName(exe) });
             Debug.Log($"Server started: {exe} {RunArguments}");
         }
 

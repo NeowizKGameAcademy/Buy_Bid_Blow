@@ -25,6 +25,7 @@ namespace BuyBidBlow.UI.Shared
 
         public virtual void Show(string title, string body, string cause = "")
         {
+            BuyBidBlow.Audio.UIAudioFeedback.Bind(transform);
             if (!gameObject.activeSelf) previousSelection = EventSystem.current ? EventSystem.current.currentSelectedGameObject : null;
             Title.text = title ?? ""; Body.text = body ?? "";
             if (Cause) Cause.text = cause ?? "";
@@ -56,6 +57,7 @@ namespace BuyBidBlow.UI.Shared
         public void Submit(int index)
         {
             if (index >= 0 && (index >= Buttons.Length || !Buttons[index].gameObject.activeSelf || !Buttons[index].interactable)) return;
+            BuyBidBlow.Audio.GameAudio.Play(index<0?"ui.close":"ui.confirm",this);
             if (CloseOnAction) Hide();
             ActionRequested?.Invoke(index);
         }

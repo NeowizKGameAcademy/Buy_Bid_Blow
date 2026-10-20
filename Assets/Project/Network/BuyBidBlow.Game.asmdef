@@ -2,6 +2,7 @@
     "name": "BuyBidBlow.Game",
     "rootNamespace": "BuyBidBlow",
     "references": [
+        "CueAudio.Runtime",
         "BuyBidBlow.Systems",
         "Mirror",
         "Mirror.Transports",
