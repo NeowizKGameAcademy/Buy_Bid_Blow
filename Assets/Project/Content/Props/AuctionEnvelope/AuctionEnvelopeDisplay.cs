@@ -1,6 +1,6 @@
 using TMPro;
 using UnityEngine;
-namespace BuyBidBlow.AuctionDisplay {
+namespace BuyBidBlow.Props {
  public sealed class AuctionEnvelopeDisplay:MonoBehaviour {
   public Transform rotatingModel;
   public TMP_Text roundLabel;

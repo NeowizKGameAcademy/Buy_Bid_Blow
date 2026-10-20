@@ -119,7 +119,7 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &1149494905
+--- !u!1 &1587232743
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -127,9 +127,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1149494908}
-  - component: {fileID: 1149494907}
-  - component: {fileID: 1149494906}
+  - component: {fileID: 1587232746}
+  - component: {fileID: 1587232745}
+  - component: {fileID: 1587232744}
   m_Layer: 0
   m_Name: Server Network
   m_TagString: Untagged
@@ -137,13 +137,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1149494906
+--- !u!114 &1587232744
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1149494905}
+  m_GameObject: {fileID: 1587232743}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 32a815df6c415ff499fb05ffc11ff949, type: 3}
@@ -157,7 +157,7 @@ MonoBehaviour:
   offlineScene: 
   onlineScene: 
   offlineSceneLoadDelay: 0
-  transport: {fileID: 1149494907}
+  transport: {fileID: 1587232745}
   networkAddress: localhost
   maxConnections: 10
   disconnectInactiveConnections: 0
@@ -188,13 +188,13 @@ MonoBehaviour:
   randomSeed: 0
   matchNetPrefab: {fileID: 6472023346010084752, guid: f1ad330f26f9967468b1c3f5d89c6c7c, type: 3}
   prepareSeconds: 5
---- !u!114 &1149494907
+--- !u!114 &1587232745
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1149494905}
+  m_GameObject: {fileID: 1587232743}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6b0fecffa3f624585964b0d0eb21b18e, type: 3}
@@ -217,13 +217,13 @@ MonoBehaviour:
   debugLog: 0
   statisticsGUI: 0
   statisticsLog: 0
---- !u!4 &1149494908
+--- !u!4 &1587232746
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1149494905}
+  m_GameObject: {fileID: 1587232743}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -236,4 +236,4 @@ Transform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 1149494908}
+  - {fileID: 1587232746}

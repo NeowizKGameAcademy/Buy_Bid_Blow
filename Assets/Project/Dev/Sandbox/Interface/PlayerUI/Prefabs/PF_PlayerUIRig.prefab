@@ -3533,7 +3533,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2737aa7cd0afe5d4785582b57e207bed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: BuyBidBlow.Dev::BuyBidBlow.PlayerUISandbox.InformationNotebookView
-  owner: {fileID: 871591951728162395}
   overlay: {fileID: 2170358482139641174}
   pageRange: {fileID: 3610258271783732417}
   roundNumbers:
@@ -3863,6 +3862,7 @@ GameObject:
   - component: {fileID: 8581077668120573615}
   - component: {fileID: 2212708644747115562}
   - component: {fileID: 4477401327081971181}
+  - component: {fileID: 981065619343099888}
   m_Layer: 0
   m_Name: Player HUD
   m_TagString: Untagged
@@ -3950,6 +3950,21 @@ MonoBehaviour:
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
   m_PresetInfoIsWorld: 0
+--- !u!114 &981065619343099888
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2267253259140343184}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cfb06bdbe0b0df4c914959d8e791590, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.UI.Auction.AuctionPanelView
+  header: {fileID: 2413885795363086670}
+  controls: {fileID: 5341357682496496139}
+  lotDetails: {fileID: 888041349728373324}
 --- !u!1 &2413885795363086670
 GameObject:
   m_ObjectHideFlags: 0
@@ -14642,10 +14657,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: BuyBidBlow.Dev::BuyBidBlow.PlayerUISandbox.MatchUIBridge
   settingsFile: {fileID: 4900000, guid: d501cfe0b4b4b944dbdd6eddb9288512, type: 3}
   controller: {fileID: 871591951728162395}
-  lotDetails: {fileID: 888041349728373324}
   privateInfo: {fileID: 5892753232553174953}
   betStatus: {fileID: 8201337982635497801}
   marketBoard: {fileID: 0}
+  auctionPanel: {fileID: 981065619343099888}
   exchangeBoard: {fileID: 0}
   envelope: {fileID: 0}
   seed: 20261016
@@ -16660,9 +16675,6 @@ MonoBehaviour:
   rotateSpeed: 15
   upperLimit: 60
   lowerLimit: 40
-  stableControls: 1
-  groundAcceleration: 35
-  airAcceleration: 10
 --- !u!114 &871591951728162395
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18103,9 +18115,6 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 415534143541678332, guid: 9ef16dc9f173603468af9b6a351e3b5e, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 3792979805650151143}
-    - targetCorrespondingSourceObject: {fileID: 415534143541678332, guid: 9ef16dc9f173603468af9b6a351e3b5e, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 8210685636804990466}
   m_SourcePrefab: {fileID: 100100000, guid: 9ef16dc9f173603468af9b6a351e3b5e, type: 3}
 --- !u!1 &2217169698674451532 stripped
@@ -18113,18 +18122,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 415534143541678332, guid: 9ef16dc9f173603468af9b6a351e3b5e, type: 3}
   m_PrefabInstance: {fileID: 1945763955118519472}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &3792979805650151143
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2217169698674451532}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49de30408f635d041a7b81a67c749009, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: BuyBidBlow.Dev::BuyBidBlow.PlayerUISandbox.TradingPanelView
 --- !u!225 &8210685636804990466
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -18999,9 +18996,6 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3877371002893808541, guid: 18c524ae178c4374880e5fb47a4b0f36, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2512842000768292402}
-    - targetCorrespondingSourceObject: {fileID: 3877371002893808541, guid: 18c524ae178c4374880e5fb47a4b0f36, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 8942569924204674423}
   m_SourcePrefab: {fileID: 100100000, guid: 18c524ae178c4374880e5fb47a4b0f36, type: 3}
 --- !u!1 &772151195716099256 stripped
@@ -19009,18 +19003,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3877371002893808541, guid: 18c524ae178c4374880e5fb47a4b0f36, type: 3}
   m_PrefabInstance: {fileID: 4573417557770350373}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2512842000768292402
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 772151195716099256}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49de30408f635d041a7b81a67c749009, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: BuyBidBlow.Dev::BuyBidBlow.PlayerUISandbox.TradingPanelView
 --- !u!225 &8942569924204674423
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -19895,9 +19877,6 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 6086976601113198122, guid: c1524a6574eebb6439e69dfbd35f6271, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 8114753514695514378}
-    - targetCorrespondingSourceObject: {fileID: 6086976601113198122, guid: c1524a6574eebb6439e69dfbd35f6271, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 4604195133109971756}
   m_SourcePrefab: {fileID: 100100000, guid: c1524a6574eebb6439e69dfbd35f6271, type: 3}
 --- !u!1 &484393785067728493 stripped
@@ -19905,18 +19884,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 6086976601113198122, guid: c1524a6574eebb6439e69dfbd35f6271, type: 3}
   m_PrefabInstance: {fileID: 5963224829047410759}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &8114753514695514378
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 484393785067728493}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49de30408f635d041a7b81a67c749009, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: BuyBidBlow.Dev::BuyBidBlow.PlayerUISandbox.TradingPanelView
 --- !u!225 &4604195133109971756
 CanvasGroup:
   m_ObjectHideFlags: 0

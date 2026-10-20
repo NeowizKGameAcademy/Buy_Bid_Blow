@@ -6,9 +6,10 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using BuyBidBlow.Props;
 namespace BuyBidBlow.AuctionDisplay.Editor {
  [InitializeOnLoad] public static partial class EnvelopeBuilder {
- const string Root="Assets/Project/Dev/Sandbox/Interface/Envelope";
+ const string Root="Assets/Project/Content/Props/AuctionEnvelope";
  static EnvelopeBuilder(){EditorApplication.update+=Tick;}
  static void Tick(){if(!File.Exists("Library/AuctionEnvelope.request")||EditorApplication.isCompiling||EditorApplication.isUpdating)return;File.Delete("Library/AuctionEnvelope.request");try{Build();File.WriteAllText("Library/AuctionEnvelope.result","PASS");}catch(Exception ex){File.WriteAllText("Library/AuctionEnvelope.result",ex.ToString());Debug.LogException(ex);}}
  static Material Material(string id,Color color){string path=Root+"/"+id+".mat";var mat=AssetDatabase.LoadAssetAtPath<Material>(path);if(!mat){mat=new Material(Shader.Find("Universal Render Pipeline/Lit"));AssetDatabase.CreateAsset(mat,path);}mat.SetColor("_BaseColor",color);mat.SetFloat("_Smoothness",.12f);EditorUtility.SetDirty(mat);return mat;}

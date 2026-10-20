@@ -734,6 +734,7 @@ MonoBehaviour:
   - {fileID: 2968187422858559861}
   - {fileID: 7783967191628357623}
   - {fileID: 1903101972175633332}
+  auction: 1
   onOccupancyChanged:
     m_PersistentCalls:
       m_Calls: []

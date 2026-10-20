@@ -1,17 +1,19 @@
+using System;
 using System.Collections.Generic;
 using BuyBidBlow.Systems.Types;
 using UnityEngine;
 using UnityEngine.UI;
-namespace BuyBidBlow.PlayerUISandbox {
+namespace BuyBidBlow.UI.Notebook {
 // Displays only information explicitly awarded to this player. Never reads future prices.
 public sealed class InformationNotebookView : MonoBehaviour {
- public PlayerUIController owner;
  public GameObject overlay;
  public Text pageRange;
  public Text[] roundNumbers,roundStates,cellValues;
  public Image[] cellMarks,currentBands,currentMarkers,cellFrames;
  public RectTransform scrollThumb;
  public Sprite riseMark,fallMark,flatMark;
+ // The owner locks or restores player input while the notebook is open.
+ public event Action<bool> OpenChanged;
  public bool IsOpen {get;private set;}
  public int FirstRound {get;private set;}=1;
  int currentRound=1,totalRounds=17;
@@ -19,7 +21,7 @@ public sealed class InformationNotebookView : MonoBehaviour {
  static readonly Color Ink=new Color(.04f,.18f,.18f),Past=new Color(.43f,.41f,.37f);
  public void SetOpen(bool open,int round){
  if(open==IsOpen)return;IsOpen=open;if(open)FirstRound=Mathf.Clamp(round-2,1,Mathf.Max(1,totalRounds-7));
- overlay.SetActive(open);owner.SetNotebookLock(open);RenderRows();
+ overlay.SetActive(open);OpenChanged?.Invoke(open);RenderRows();
  }
  public void Scroll(int rows){FirstRound=Mathf.Clamp(FirstRound+rows,1,Mathf.Max(1,totalRounds-7));RenderRows();}
  public void Present(int round,int total,IReadOnlyList<Info> information){currentRound=round;totalRounds=total;known.Clear();foreach(var entry in information){known[entry.Round*3+(int)entry.CompanyA]=entry.DirectionA;known[entry.Round*3+(int)entry.CompanyB]=entry.DirectionB;}FirstRound=Mathf.Clamp(FirstRound,1,Mathf.Max(1,totalRounds-7));if(IsOpen)RenderRows();}

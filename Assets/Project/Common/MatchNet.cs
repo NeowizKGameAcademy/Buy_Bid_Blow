@@ -25,8 +25,24 @@ namespace BuyBidBlow.Common
         [SyncVar(hook = nameof(OnPhaseChanged))] public Phase phase;
         // 0 while preparing; stays at the last round once finished.
         [SyncVar(hook = nameof(OnRoundChanged))] public int round;
-        // Current price per company, indexed by Company.
+        // Current price and remaining market stock per company, indexed by Company.
         public readonly SyncList<int> prices = new SyncList<int>();
+        public readonly SyncList<int> stock = new SyncList<int>();
+        // Flat rows: Straw, Timber, Brick. Initial price followed by each revealed closing price.
+        // Replicated in full for clients that load the hall after a price update.
+        public readonly SyncList<int> priceHistory = new SyncList<int>();
+
+        // Mezzanine auction, public part only. The lot shows rounds and companies; directions go to the winner alone.
+        public enum AuctionStage { None, Open, Secret }
+        public struct PublicLot { public int firstRound, firstA, firstB, secondRound, secondA, secondB; }
+        [SyncVar] public AuctionStage auctionStage;
+        [SyncVar] public double auctionClosesAt;
+        [SyncVar] public PublicLot auctionLot;
+        // Open auction only (secret bids stay private): 0 = no bid yet.
+        [SyncVar] public int highestBid;
+        [SyncVar] public string highestBidder;
+        // Next round with an auction, 0 when none are left.
+        [SyncVar] public int nextAuctionRound;
 
         public event Action<Phase> PhaseChanged;
         public event Action<int> RoundStarted;
@@ -35,6 +51,7 @@ namespace BuyBidBlow.Common
 
         public double SecondsLeft => Math.Max(0, (phase == Phase.Preparing ? firstRoundStartsAt : roundClosesAt) - NetworkTime.time);
         public int GetPrice(Company company) => prices[(int)company];
+        public int GetStock(Company company) => stock[(int)company];
 
         public override void OnStartServer() { base.OnStartServer(); DontDestroyOnLoad(gameObject); }
 

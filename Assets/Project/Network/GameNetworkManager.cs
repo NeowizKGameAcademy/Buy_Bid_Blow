@@ -4,12 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using BuyBidBlow.Characters;
 using BuyBidBlow.Common;
-using BuyBidBlow.Systems.Auction;
-using BuyBidBlow.Systems.Market;
 using BuyBidBlow.Systems.Match;
-using BuyBidBlow.Systems.Portfolio;
 using BuyBidBlow.Systems.Room;
-using BuyBidBlow.Systems.Round;
 using BuyBidBlow.Systems.Types;
 using Mirror;
 using UnityEngine;
@@ -24,7 +20,7 @@ namespace BuyBidBlow.Network
     public struct MatchStarting : NetworkMessage {}
     public sealed class GameNetworkManager : NetworkManager
     {
-        public const int ProtocolVersion=3;
+        public const int ProtocolVersion=4;
         public const string PlayScene="SC_ExchangeFurnished";
         [Header("Match")]
         // Lower this in the Inspector to test with fewer players (e.g. one ParrelSync clone).
@@ -90,17 +86,17 @@ namespace BuyBidBlow.Network
         {
             if(!IsRoomHost(requester)||!CanStartMatch)return;
             var participants=NetworkServer.connections.Values.Where(c=>c.identity&&c.identity.GetComponent<PlayerNet>()).ToArray();
-            if(!BeginMatch(participants.Select(PlayerIdOf)))return;
-            SpawnMatchNet();
+            if(!BeginMatch(participants.Select(PlayerIdOf).ToList()))return;
             MatchStarted=true;
             foreach(var conn in participants)conn.identity.GetComponent<PlayerNet>().inMatch=true;
+            SendPortfolios();
             NetworkServer.SendToAll(new MatchStarting());
             Debug.Log($"[Server] Match started with {participants.Length} player(s)");
         }
 
         // ---- Match controller (server only) ----
-        // Rolls the price schedule and lots for the whole match and owns every participant's portfolio.
-        // Trading and auctions share those portfolios, so cash reserved by a bid can't be spent on stock.
+        // MatchEngine owns the rules (prices, stock, portfolios, bets, auctions, standings).
+        // This only drives its clock, forwards participants' requests and publishes the results.
         [Header("Match rules")]
         [SerializeField] TextAsset matchSettingsFile;
         // 0 picks a new seed each match; set it to replay the same prices and lots.
@@ -111,172 +107,142 @@ namespace BuyBidBlow.Network
         [SerializeField,Min(0)] float prepareSeconds=5;
         // -roundSeconds: every round this long instead of the rules (quick playtests). 0 = rules.
         int roundSecondsOverride;
-        RoundClock clock;
         MatchNet matchNet;
-        // Minimum bid is still undecided in the rules; $1 until it is.
-        const int MinBid=1;
-        MatchSettings settings;
-        LotGenerator lotGenerator;
-        readonly Dictionary<Company,int> prices=new Dictionary<Company,int>();
-        readonly List<PriceChange[]> scheduledPriceChanges=new List<PriceChange[]>();
-        readonly List<int[]> scheduledPrices=new List<int[]>();
-        readonly Dictionary<PlayerId,PlayerPortfolio> portfolios=new Dictionary<PlayerId,PlayerPortfolio>();
-        public int CurrentRound {get;private set;}
-        public bool IsMatchComplete=>settings!=null&&CurrentRound>=settings.RoundCount;
-        public TradeService TradeService {get;private set;}
-        public event Action<int,IReadOnlyList<PriceChange>> RoundAdvanced;
-        // Round open for requests (0 while preparing) and its deadline; requests at or after the deadline are late.
-        public int PlayingRound=>matchNet?matchNet.round:0;
-        public double RoundClosesAt=>matchNet?matchNet.roundClosesAt:0;
+        MatchEngine engine;
 
         // Players are identified by their connection for the life of the match.
         public static PlayerId PlayerIdOf(NetworkConnectionToClient conn)=>new PlayerId("conn-"+conn.connectionId);
 
-        bool BeginMatch(IEnumerable<PlayerId> players)
+        bool BeginMatch(IReadOnlyList<PlayerId> players)
         {
             if(!matchSettingsFile){Debug.LogError("[Server] GameNetworkManager needs the MatchSettings JSON file.",this);return false;}
             if(!matchNetPrefab){Debug.LogError("[Server] GameNetworkManager needs the MatchNet prefab.",this);return false;}
-            settings=JsonUtility.FromJson<MatchSettings>(matchSettingsFile.text);
-            settings.Validate();
-            var random=new System.Random(randomSeed!=0?randomSeed:Environment.TickCount);
+            var settings=JsonUtility.FromJson<MatchSettings>(matchSettingsFile.text);
+            double startsAt=NetworkTime.time+prepareSeconds;
+            engine=new MatchEngine(settings,randomSeed!=0?randomSeed:Environment.TickCount,players,startsAt,roundSecondsOverride);
 
-            int[] startingPrices=settings.RollStartingPrices(random);
-            scheduledPriceChanges.Clear();scheduledPrices.Clear();
-            scheduledPrices.Add((int[])startingPrices.Clone());
-            var nextPrices=(int[])startingPrices.Clone();
-            for(int round=0;round<settings.RoundCount;round++)
-            {
-                PriceChange[] changes=PriceChangeGenerator.Generate(settings.PriceChange,random);
-                scheduledPriceChanges.Add(changes);
-                foreach(PriceChange change in changes)
-                    nextPrices[(int)change.Company]=Math.Max(settings.MinPrice,nextPrices[(int)change.Company]+change.Amount);
-                scheduledPrices.Add((int[])nextPrices.Clone());
-            }
-            lotGenerator=new LotGenerator(settings.AuctionRounds,scheduledPrices,random);
-
-            CurrentRound=0;ApplyPrices(scheduledPrices[0]);
-            portfolios.Clear();
-            foreach(var player in players)AddPlayer(player);
-            TradeService=new TradeService(portfolios,GetPrice);
-            Debug.Log($"[Server] Match prices {string.Join(", ",prices.Select(p=>p.Key+" $"+p.Value))} · {portfolios.Count} portfolio(s)");
+            var go=Instantiate(matchNetPrefab);matchNet=go.GetComponent<MatchNet>();
+            matchNet.phase=MatchNet.Phase.Preparing;matchNet.firstRoundStartsAt=startsAt;matchNet.roundClosesAt=engine.Deadline;
+            PublishMarket();PublishAuction(NetworkTime.time);
+            NetworkServer.Spawn(go);
+            Debug.Log($"[Server] Match prices {string.Join(", ",Companies.Select(c=>c+" $"+engine.Price(c)))} · {players.Count} player(s)");
             return true;
         }
 
         void EndMatch()
         {
             if(matchNet&&NetworkServer.active)NetworkServer.Destroy(matchNet.gameObject);
-            matchNet=null;clock=null;
-            MatchStarted=false;settings=null;lotGenerator=null;TradeService=null;CurrentRound=0;
-            prices.Clear();scheduledPriceChanges.Clear();scheduledPrices.Clear();portfolios.Clear();
+            foreach(var conn in NetworkServer.connections.Values)if(conn.identity&&conn.identity.TryGetComponent<PlayerNet>(out var player))player.StandUp();
+            matchNet=null;engine=null;MatchStarted=false;
         }
 
-        public int GetPrice(Company company)
-        {
-            if(!prices.TryGetValue(company,out int price))throw new InvalidOperationException($"No price has been initialized for {company}.");
-            return price;
-        }
+        static readonly Company[] Companies=(Company[])Enum.GetValues(typeof(Company));
 
-        public int GetPriceForRound(Company company,int round)
-        {
-            if(round<0||round>=scheduledPrices.Count)throw new ArgumentOutOfRangeException(nameof(round));
-            return scheduledPrices[round][(int)company];
-        }
-
-        public IReadOnlyList<PriceChange> GetChangesForRound(int round)
-        {
-            if(round<1||round>scheduledPriceChanges.Count)throw new ArgumentOutOfRangeException(nameof(round));
-            return scheduledPriceChanges[round-1];
-        }
-
-        // Registers a participant with the starting assets. Calling again for the same player keeps their assets.
-        public void AddPlayer(PlayerId playerId)
-        {
-            if(settings==null)throw new InvalidOperationException("No match is running.");
-            if(!portfolios.ContainsKey(playerId))portfolios.Add(playerId,new PlayerPortfolio(settings.StartingCash,settings.StartingShares));
-        }
-
-        // Lots come out in auction order: 1st (Open) then 2nd (Secret) of each auction round.
-        public Lot NextLot()=>lotGenerator.Next();
-
-        // Call at the start of an auction round, then feed it Tick(now) and player requests.
-        public AuctionRound CreateAuctionRound(double roundStart)
-        {
-            if(settings==null)throw new InvalidOperationException("No match is running.");
-            Lot first=NextLot();Lot second=NextLot();
-            return new AuctionRound(first,second,roundStart,settings.AuctionSlots,MinBid,portfolios);
-        }
-
-        public void AdvanceRound()
-        {
-            if(settings==null||IsMatchComplete)return;
-            CurrentRound++;
-            PriceChange[] changes=scheduledPriceChanges[CurrentRound-1];
-            ApplyPrices(scheduledPrices[CurrentRound]);
-            RoundAdvanced?.Invoke(CurrentRound,changes);
-        }
-
-        void SpawnMatchNet()
-        {
-            var go=Instantiate(matchNetPrefab);matchNet=go.GetComponent<MatchNet>();
-            double startsAt=NetworkTime.time+prepareSeconds;
-            clock=new RoundClock(settings,startsAt,roundSecondsOverride);
-            matchNet.phase=MatchNet.Phase.Preparing;matchNet.firstRoundStartsAt=startsAt;
-            PublishPrices();
-            NetworkServer.Spawn(go);
-        }
-
-        // Round timer: opens rounds on schedule and rings the Closing Bell when each one closes.
+        // Opens round 1 after the countdown, then lets the engine close rounds on its own deadlines.
         public override void Update()
         {
             base.Update();
-            if(!NetworkServer.active||clock==null||!matchNet||matchNet.phase==MatchNet.Phase.Finished)return;
-            int due=clock.RoundAt(NetworkTime.time);
-            while(matchNet.round<due)
+            if(!NetworkServer.active||engine==null||!matchNet||matchNet.phase==MatchNet.Phase.Finished)return;
+            double now=NetworkTime.time;
+            if(matchNet.phase==MatchNet.Phase.Preparing)
             {
-                int closing=matchNet.round;
-                if(closing>=1)CloseRound(closing);
-                if(closing+1>clock.RoundCount){FinishMatch();return;}
-                OpenRound(closing+1);
+                if(now<matchNet.firstRoundStartsAt)return;
+                matchNet.phase=MatchNet.Phase.Playing;matchNet.round=engine.Round;
+                Debug.Log($"[Server] Round {engine.Round}/{engine.Settings.RoundCount} open");
             }
-        }
-
-        void OpenRound(int round)
-        {
-            matchNet.roundClosesAt=clock.ClosesAt(round);
-            matchNet.phase=MatchNet.Phase.Playing;
-            matchNet.round=round;
-            // Auction rounds also run their two auctions; hooked up with the auction step (CreateAuctionRound).
-            Debug.Log($"[Server] Round {round}/{clock.RoundCount} open for {clock.ClosesAt(round)-clock.StartsAt(round):F0}s{(settings.IsAuctionRound(round)?" · auction round":"")}");
-        }
-
-        // Closing Bell: prices were fixed during the round; apply this round's change now.
-        void CloseRound(int round)
-        {
-            var changes=GetChangesForRound(round).ToArray();
-            AdvanceRound();
-            PublishPrices();
+            int round=engine.Round;
+            engine.Tick(now);
+            PublishAuction(now);
+            if(engine.Round==round&&!engine.Complete)return;
+            // Closing Bell: publish the new prices and changes, then the next round (or the end).
+            PublishMarket();
             matchNet.lastChanges.Clear();
-            foreach(var change in changes)matchNet.lastChanges.Add(change);
-            matchNet.lastClosedRound=round;
-            Debug.Log($"[Server] Closing Bell R{round}: {string.Join(", ",prices.Select(p=>p.Key+" $"+p.Value))}");
+            foreach(var company in Companies)if(engine.LastChange(company)!=0)matchNet.lastChanges.Add(new PriceChange(company,engine.LastChange(company)));
+            matchNet.lastClosedRound=engine.Complete?engine.Settings.RoundCount:engine.Round-1;
+            if(engine.Complete){matchNet.phase=MatchNet.Phase.Finished;Debug.Log("[Server] Match finished\n"+engine.Standings());}
+            else{matchNet.roundClosesAt=engine.Deadline;matchNet.round=engine.Round;Debug.Log($"[Server] Round {engine.Round}/{engine.Settings.RoundCount} open");}
+            // Bets settle at the bell, so every portfolio may have changed.
+            SendPortfolios();
         }
 
-        void FinishMatch()
+        // The running auction slot as everyone may see it. Mirror only sends values that changed.
+        void PublishAuction(double now)
         {
-            matchNet.phase=MatchNet.Phase.Finished;
-            Debug.Log("[Server] Match finished");
+            var auction=engine.Complete?null:engine.Auction;
+            bool secret=auction?.Secret!=null&&now<auction.Secret.Deadline;
+            bool open=!secret&&auction?.Open!=null&&now<auction.Open.Deadline;
+            var stage=secret?MatchNet.AuctionStage.Secret:open?MatchNet.AuctionStage.Open:MatchNet.AuctionStage.None;
+            // An auction slot opened or closed: settlement moved cash and released reservations.
+            if(stage!=matchNet.auctionStage)SendPortfolios();
+            matchNet.auctionStage=stage;
+            if(secret||open)
+            {
+                var lot=secret?auction.Secret.Lot:auction.Open.Lot;
+                matchNet.auctionClosesAt=secret?auction.Secret.Deadline:auction.Open.Deadline;
+                matchNet.auctionLot=new MatchNet.PublicLot{firstRound=lot.First.Round,firstA=(int)lot.First.CompanyA,firstB=(int)lot.First.CompanyB,
+                    secondRound=lot.Second.Round,secondA=(int)lot.Second.CompanyA,secondB=(int)lot.Second.CompanyB};
+            }
+            bool bid=open&&auction.Open.HasBid;
+            matchNet.highestBid=bid?auction.Open.HighestBid:0;
+            matchNet.highestBidder=bid?NicknameOf(auction.Open.HighestBidder):"";
+            matchNet.nextAuctionRound=engine.Settings.AuctionRounds.Where(r=>r>engine.Round).DefaultIfEmpty(0).Min();
         }
 
-        void PublishPrices()
+        string NicknameOf(PlayerId id)
         {
-            matchNet.prices.Clear();
-            foreach(Company company in Enum.GetValues(typeof(Company)))matchNet.prices.Add(GetPrice(company));
+            foreach(var conn in NetworkServer.connections.Values)
+                if(PlayerIdOf(conn).Equals(id)&&conn.identity&&conn.identity.TryGetComponent<PlayerNet>(out var player))return player.nickname;
+            return "";
         }
 
-        void ApplyPrices(int[] roundPrices)
+        // Prices and remaining market stock, indexed by Company.
+        void PublishMarket()
         {
-            var companies=(Company[])Enum.GetValues(typeof(Company));
-            for(int i=0;i<companies.Length;i++)prices[companies[i]]=roundPrices[i];
+            matchNet.prices.Clear();matchNet.stock.Clear();
+            foreach(var company in Companies){matchNet.prices.Add(engine.Price(company));matchNet.stock.Add(engine.Stock(company));}
+            for(int sample=matchNet.priceHistory.Count/Companies.Length;sample<engine.PublishedPriceCount;sample++)
+                foreach(var company in Companies)matchNet.priceHistory.Add(engine.PublishedPrice(sample,company));
+        }
+
+        void SendPortfolios()
+        {
+            foreach(var conn in NetworkServer.connections.Values)
+                if(conn.identity&&conn.identity.TryGetComponent<PlayerNet>(out var player)&&player.inMatch)SendPortfolio(conn,player);
+        }
+
+        void SendPortfolio(NetworkConnectionToClient conn,PlayerNet player)
+        {
+            var id=PlayerIdOf(conn);
+            var bet=Companies.Where(c=>engine.HasBet(id,c)).Select(c=>(int)c).DefaultIfEmpty(-1).First();
+            player.SendPortfolio(engine.Snapshot(id),bet,engine.BetStake(id),engine.Auction?.Secret?.GetSubmitted(id)??0);
+        }
+
+        // A participant's request; the engine answers with the message to show. Rounds must be open.
+        [Server]
+        public string Trade(NetworkConnectionToClient conn,Company company,int quantity,bool buy)=>
+            Request(conn,()=>quantity<=0||!Enum.IsDefined(typeof(Company),company)?"잘못된 거래 요청입니다.":engine.Trade(PlayerIdOf(conn),company,quantity,buy,NetworkTime.time));
+
+        [Server]
+        public string ToggleBet(NetworkConnectionToClient conn,Company company)=>
+            Request(conn,()=>!Enum.IsDefined(typeof(Company),company)?"잘못된 베팅 요청입니다.":engine.ToggleBet(PlayerIdOf(conn),company,NetworkTime.time));
+
+        // Only seated players bid. The server has no hall, so which chairs are auction chairs is the client's call.
+        [Server]
+        public string Bid(NetworkConnectionToClient conn,int amount,bool cancel)
+        {
+            if(!conn.identity.TryGetComponent<PlayerNet>(out var player)||!player.IsSeated)return "객석에 앉아야 입찰할 수 있습니다.";
+            string message=Request(conn,()=>engine.Bid(PlayerIdOf(conn),amount,cancel,NetworkTime.time));
+            // An open bid releases the outbid player's reserved cash.
+            SendPortfolios();
+            return message;
+        }
+
+        string Request(NetworkConnectionToClient conn,Func<string> apply)
+        {
+            if(engine==null||!matchNet||matchNet.phase!=MatchNet.Phase.Playing)return "지금은 거래할 수 없습니다.";
+            string message=apply();
+            PublishMarket();SendPortfolio(conn,conn.identity.GetComponent<PlayerNet>());
+            return message;
         }
         public override void OnClientConnect()
         {

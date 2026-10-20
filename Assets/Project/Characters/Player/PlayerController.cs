@@ -141,7 +141,7 @@ namespace BuyBidBlow.Characters
             if (context.performed)
             {
                 StopEmotionForInput("Player_Idle");
-                playerInteraction?.Interact();
+                playerInteraction.Interact();
             }
         }
 

@@ -1,117 +1,172 @@
 using System;
 using UnityEngine;
-using TMPro;
+using UnityEngine.InputSystem;
+using UnityEngine.UI;
 using BuyBidBlow.Systems.Types;
 
 namespace BuyBidBlow.UI.Market
 {
+    // Drives the desk trading panel: one designed panel per company, the selected tab and quantity.
+    // It only raises requests; whoever owns the trade (LocalTradeController) answers with new data.
     public class TradePanelController : MonoBehaviour
     {
-        [SerializeField] private GameObject tradePanel;
-        [SerializeField] private TextMeshProUGUI itemNameText;
-        [SerializeField] private TextMeshProUGUI unitPriceText;
-        [SerializeField] private TextMeshProUGUI quantityText;
-        [SerializeField] private TextMeshProUGUI logText;
+        public enum Tab { Buy, Sell, DownsideBet }
+
+        // Indexed by Company.
+        [SerializeField] private TradingPanelView[] companyPanels = new TradingPanelView[3];
+        [SerializeField, Min(0)] private float feedbackSeconds = 3;
 
         public event Action<Company, int> BuyRequested;
         public event Action<Company, int> SellRequested;
+        // Join, or cancel, a downside bet on the company.
+        public event Action<Company> BetRequested;
         public event Action<bool> OpenStateChanged;
 
+        private TradingPanelView active;
+        private TradingPanelData data;
         private Company selectedCompany;
-        private bool hasSelectedCompany;
-        private int selectedQuantity = 1;
+        private Tab tab;
+        private int quantity = 1;
+        private int openedFrame = -1;
+        private Text feedback;
+        private float feedbackUntil;
 
-        public bool IsOpen => tradePanel.activeSelf;
+        public bool IsOpen => active != null && active.gameObject.activeSelf;
+        public Company SelectedCompany => selectedCompany;
 
         private void Awake()
         {
+            for (int i = 0; i < companyPanels.Length; i++)
+                if (companyPanels[i] != null)
+                    BindButtons(companyPanels[i]);
             Close();
         }
 
-        public void Open(Company company)
+        private void BindButtons(TradingPanelView panel)
         {
-            selectedCompany = company;
-            hasSelectedCompany = true;
-            selectedQuantity = 1;
-            RefreshQuantity();
-            SetLog(string.Empty);
+            void On(string path, Action action)
+            {
+                var target = panel.transform.Find(path);
+                if (target && target.TryGetComponent<Button>(out var button))
+                    button.onClick.AddListener(() => action());
+            }
+            On("Trade Tabs/Buy", () => SelectTab(Tab.Buy));
+            On("Trade Tabs/Sell", () => SelectTab(Tab.Sell));
+            On("Trade Tabs/Downside Bet", () => SelectTab(Tab.DownsideBet));
+            On("Quantity Control/Increase", IncreaseQuantity);
+            On("Quantity Control/Decrease", DecreaseQuantity);
+            On("Payment Summary/Confirm Purchase", Confirm);
+            On("Close Hint/Keycap", Close);
+        }
 
-            tradePanel.SetActive(true);
+        public void Open(Company company, TradingPanelData panelData)
+        {
+            Hide();
+            selectedCompany = company;
+            active = companyPanels[(int)company];
+            var feedbackLabel = active.transform.Find("Feedback");
+            feedback = feedbackLabel ? feedbackLabel.GetComponent<Text>() : null;
+            tab = Tab.Buy;
+            quantity = 1;
+            openedFrame = Time.frameCount;
+            SetLog(string.Empty);
+            active.gameObject.SetActive(true);
+            Present(panelData);
             OpenStateChanged?.Invoke(true);
         }
 
-        // 외부 거래 대상에서 아이템 이름과 단가를 전달받습니다.
-        public void Open(Company company, string itemName, int unitPrice)
+        // New prices or assets while the panel stays open.
+        public void Present(TradingPanelData panelData)
         {
-            Open(company);
-            SetItemDetails(itemName, unitPrice);
-        }
-
-        // Can be called while the panel remains open after a round price change.
-        public void SetItemDetails(string itemName, int unitPrice)
-        {
-            itemNameText.text = itemName;
-            unitPriceText.text = $"$ {Mathf.Max(0, unitPrice):N0}";
+            data = panelData;
+            Refresh();
         }
 
         public void Close()
         {
-            tradePanel.SetActive(false);
-            hasSelectedCompany = false;
+            Hide();
+            active = null;
             OpenStateChanged?.Invoke(false);
         }
 
-        public void SelectItem(Company company)
+        private void Hide()
         {
-            selectedCompany = company;
-            hasSelectedCompany = true;
-            selectedQuantity = 1;
-            RefreshQuantity();
-            SetLog(string.Empty);
+            foreach (var panel in companyPanels)
+                if (panel != null)
+                    panel.gameObject.SetActive(false);
+        }
+
+        private void Update()
+        {
+            if (!IsOpen)
+                return;
+
+            if (feedback && feedbackUntil > 0 && Time.unscaledTime >= feedbackUntil)
+                SetLog(string.Empty);
+
+            var keyboard = Keyboard.current;
+            // The E press that opened the panel must not also confirm a trade.
+            if (keyboard == null || Time.frameCount == openedFrame)
+                return;
+
+            if (keyboard.rightArrowKey.wasPressedThisFrame) IncreaseQuantity();
+            if (keyboard.leftArrowKey.wasPressedThisFrame) DecreaseQuantity();
+            if (keyboard.upArrowKey.wasPressedThisFrame) SelectTab((Tab)(((int)tab + 2) % 3));
+            if (keyboard.downArrowKey.wasPressedThisFrame) SelectTab((Tab)(((int)tab + 1) % 3));
+            if (keyboard.eKey.wasPressedThisFrame || keyboard.enterKey.wasPressedThisFrame) Confirm();
+        }
+
+        public void SelectTab(Tab value)
+        {
+            if (!IsOpen) return;
+            tab = value;
+            quantity = 1;
+            Refresh();
         }
 
         public void IncreaseQuantity()
         {
-            if (!IsOpen || selectedQuantity == int.MaxValue)
-                return;
-
-            selectedQuantity++;
-            RefreshQuantity();
+            if (!IsOpen || quantity == int.MaxValue) return;
+            quantity++;
+            Refresh();
         }
 
         public void DecreaseQuantity()
         {
-            if (!IsOpen || selectedQuantity <= 1)
-                return;
-
-            selectedQuantity--;
-            RefreshQuantity();
+            if (!IsOpen || quantity <= 1) return;
+            quantity--;
+            Refresh();
         }
 
-        private void RefreshQuantity()
+        public void Confirm()
         {
-            quantityText.text = selectedQuantity.ToString();
-        }
-
-        public void SetLog(string message)
-        {
-            logText.text = message;
+            if (!IsOpen || !active.CanConfirm) return;
+            if (tab == Tab.Buy) RequestBuy();
+            else if (tab == Tab.Sell) RequestSell();
+            else BetRequested?.Invoke(selectedCompany);
         }
 
         public void RequestBuy()
         {
-            if (!IsOpen || !hasSelectedCompany)
-                return;
-
-            BuyRequested?.Invoke(selectedCompany, selectedQuantity);
+            if (IsOpen) BuyRequested?.Invoke(selectedCompany, quantity);
         }
 
         public void RequestSell()
         {
-            if (!IsOpen || !hasSelectedCompany)
-                return;
+            if (IsOpen) SellRequested?.Invoke(selectedCompany, quantity);
+        }
 
-            SellRequested?.Invoke(selectedCompany, selectedQuantity);
+        public void SetLog(string message)
+        {
+            if (!feedback) return;
+            feedback.text = message;
+            feedbackUntil = string.IsNullOrEmpty(message) ? 0 : Time.unscaledTime + feedbackSeconds;
+        }
+
+        private void Refresh()
+        {
+            if (IsOpen)
+                active.Present(data, (int)tab, ref quantity);
         }
     }
 }

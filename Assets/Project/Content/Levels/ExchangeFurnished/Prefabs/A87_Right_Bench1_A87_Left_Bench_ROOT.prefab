@@ -254,6 +254,7 @@ MonoBehaviour:
   - {fileID: 1908620944500055546}
   - {fileID: 820692060413003663}
   - {fileID: 6174335024103131960}
+  auction: 0
   onOccupancyChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -282,7 +283,7 @@ Transform:
   m_GameObject: {fileID: 2724625104978342622}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: -0.3000005, y: 0.29818848, z: -0.00045633316}
+  m_LocalPosition: {x: -0.30000067, y: 0.71096563, z: -0.16045666}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -735,7 +736,7 @@ Transform:
   m_GameObject: {fileID: 7189157481343222327}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 0.29999954, y: 0.29818848, z: -0.00045633316}
+  m_LocalPosition: {x: 0.2999997, y: 0.7112127, z: -0.16045666}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

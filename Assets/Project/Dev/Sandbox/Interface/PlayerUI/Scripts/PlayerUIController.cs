@@ -1,5 +1,7 @@
 using BuyBidBlow.Characters;
 using BuyBidBlow.UI.HUD;
+using BuyBidBlow.UI.Market;
+using BuyBidBlow.UI.Notebook;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -11,7 +13,7 @@ namespace BuyBidBlow.PlayerUISandbox {
  public Mode CurrentMode{get;private set;}
  public GameObject[] companyPanels; int company; public MatchUIBridge bridge; public InformationNotebookView notebook; public bool isLocalPreview=true;
  Vector3 cameraPosition;Quaternion cameraRotation;Transform cameraParent;int quantity=1,tab;float relock;bool lookedLastFrame;
- public void Awake(){if(!isLocalPreview){hud.SetActive(false);enabled=false;return;}cameraParent=view.transform.parent;cameraPosition=view.transform.localPosition;cameraRotation=view.transform.localRotation;Close();}
+ public void Awake(){if(!isLocalPreview){hud.SetActive(false);enabled=false;return;}if(notebook){notebook.OpenChanged-=SetNotebookLock;notebook.OpenChanged+=SetNotebookLock;}cameraParent=view.transform.parent;cameraPosition=view.transform.localPosition;cameraRotation=view.transform.localRotation;Close();}
  void OnDisable(){if(movement){movement.SetMoveInput(Vector2.zero);movement.SetJumpHeld(false);}Cursor.lockState=CursorLockMode.None;Cursor.visible=true;}
  void Update(){var k=Keyboard.current;var m=Mouse.current;if(k==null)return;if(k.iKey.wasPressedThisFrame&&bridge)bridge.ToggleInformation();if(notebook&&notebook.IsOpen){if(k.escapeKey.wasPressedThisFrame)bridge.ToggleInformation();else if(k.upArrowKey.wasPressedThisFrame)notebook.Scroll(-1);else if(k.downArrowKey.wasPressedThisFrame)notebook.Scroll(1);return;}
  if(CurrentMode==Mode.Explore){bool captured=Application.isFocused&&Cursor.lockState==CursorLockMode.Locked;movement.SetMoveInput(captured?new Vector2((k.dKey.isPressed?1:0)-(k.aKey.isPressed?1:0),(k.wKey.isPressed?1:0)-(k.sKey.isPressed?1:0)):Vector2.zero);movement.SetJumpHeld(captured&&k.spaceKey.isPressed);if(m!=null&&captured&&lookedLastFrame)movement.Rotate(m.delta.ReadValue());lookedLastFrame=captured;
