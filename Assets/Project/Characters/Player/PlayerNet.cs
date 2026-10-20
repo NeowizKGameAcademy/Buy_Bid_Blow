@@ -25,7 +25,7 @@ namespace BuyBidBlow.Characters
         [SyncVar] float syncedLookPitch;
         [SyncVar] float syncedLookYaw;
         // The player object lives from connection through lobby and match, across scene loads.
-        public override void OnStartServer(){base.OnStartServer();DontDestroyOnLoad(gameObject);}
+        public override void OnStartServer(){base.OnStartServer();DontDestroyOnLoad(gameObject);SetGameplayActive(false);}
         public override void OnStartClient(){base.OnStartClient();DontDestroyOnLoad(gameObject);All.Add(this);RefreshAvatar();}
         public override void OnStopClient(){All.Remove(this);base.OnStopClient();}
         public static readonly List<PlayerNet> All = new List<PlayerNet>();
@@ -243,6 +243,8 @@ namespace BuyBidBlow.Characters
                 if (!active) movement.SetMoveInput(Vector2.zero);
             }
             if (TryGetComponent(out PlayerInteraction interaction)) interaction.enabled = active;
+            if (TryGetComponent(out BuyBidBlow.Common.LocalTradeController trading)) trading.enabled = active;
+            if (TryGetComponent(out SeatController seats)) seats.enabled = active;
             if (TryGetComponent(out UnityEngine.InputSystem.PlayerInput input)) input.enabled = active;
             foreach (var canvas in GetComponentsInChildren<Canvas>(true))
                 canvas.gameObject.SetActive(active);

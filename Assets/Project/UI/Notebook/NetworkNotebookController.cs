@@ -18,8 +18,17 @@ namespace BuyBidBlow.UI.Notebook
         void OnEnable()
         {
             current = this;
-            if(!movement) movement = FindFirstObjectByType<PlayerMove>(FindObjectsInactive.Include);
-            if(!trading) trading = FindFirstObjectByType<TradePanelController>(FindObjectsInactive.Include);
+            var owner=GetComponentInParent<PlayerNet>(true);
+            if(owner)
+            {
+                movement=owner.GetComponent<PlayerMove>();
+                trading=owner.GetComponentInChildren<TradePanelController>(true);
+            }
+            else
+            {
+                if(!movement) movement = FindFirstObjectByType<PlayerMove>(FindObjectsInactive.Include);
+                if(!trading) trading = FindFirstObjectByType<TradePanelController>(FindObjectsInactive.Include);
+            }
             PlayerNet.LocalInformationChanged += Refresh; Refresh();
         }
         void OnDisable()

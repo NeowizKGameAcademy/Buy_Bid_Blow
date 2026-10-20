@@ -40,6 +40,9 @@ namespace BuyBidBlow.UI.Lobby
 
         void ReturnToLobby()
         {
+            var local=NetworkClient.localPlayer?NetworkClient.localPlayer.GetComponent<PlayerNet>():null;
+            if(local)local.SetGameplayActive(false);
+            if(EventSystem.current)EventSystem.current.SetSelectedGameObject(null);
             IsPlaying=false;gameplayPresentation.SetActive(false);lobbyPresentation.SetActive(true);
             Cursor.lockState=CursorLockMode.None;Cursor.visible=true;
         }
@@ -49,13 +52,13 @@ namespace BuyBidBlow.UI.Lobby
             if (IsPlaying) return;
             var local = NetworkClient.localPlayer ? NetworkClient.localPlayer.GetComponent<PlayerNet>() : null;
             if (!local) { Debug.LogError("Cannot enter the match without the admitted local player.",this); return; }
+            player = local.GetComponent<PlayerMove>();
+            if (!player) { Debug.LogError("Network player is missing PlayerMove.", this); return; }
             IsPlaying = true;
             if (EventSystem.current) EventSystem.current.SetSelectedGameObject(null);
             lobbyPresentation.SetActive(false);
             // The spawned network Player owns the local camera, HUD and input.
             // The scene's old presentation rig remains disabled.
-            player = local.GetComponent<PlayerMove>();
-            if (!player) { Debug.LogError("Network player is missing PlayerMove.", this); return; }
             local.SetGameplayActive(true);
             // Start at the avatar's own waiting position, keeping the six players apart.
             player.transform.SetPositionAndRotation(PlayerNet.SeatPosition(local.seat), Quaternion.Euler(0,180,0));

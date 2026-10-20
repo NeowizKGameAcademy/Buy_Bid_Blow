@@ -1,8 +1,8 @@
 # 서버 모드 Player HUD
 
 - 실제 씬: `Assets/Project/Scenes/SC_ExchangeFurnished.unity`
-- 위치: `Gameplay Presentation/PF_NetworkPlayerHUD`
-- `HallSession`이 경기 시작 시 Gameplay Presentation을 활성화한다. 로비에서 숨겨지는 것은 정상이다.
+- 위치: 네트워크로 생성된 `Player/Network Player HUD` (`Player.prefab`의 중첩 프리팹)
+- `PlayerNet.SetGameplayActive`가 본인 Player의 Canvas만 활성화한다. 원격 Player·서버·로비에서는 HUD가 비활성화된다. `Gameplay Presentation`은 구형 씬 리그이므로 계속 꺼 둔다.
 - 디자인 원본: Dev `PF_PlayerHUD`의 `Assets - Top Left`, `Round Timer - Top Right`. Dev 원본은 수정하지 않는다.
 - 편집 대상: `UI/HUD/PF_NetworkPlayerHUD.prefab`. Text/Image/RectTransform은 개별 편집 가능하다.
 
@@ -39,6 +39,10 @@
 `MatchFeedbackTests.MouseTradingBetsAuctionsResultsAndReturnUseServerEvents` PlayMode 검사 통과. 실제 Mirror 호스트 연결로 마우스 raycast 매수·매도·베팅, 진행 배지, 정산 알림, 공개 및 비공개 입찰/낙찰, 정보 지급, 결과 점수, 결과창 버튼을 통한 전원 로비 복귀를 확인했다. 결과: Logs/MatchFeedbackTests3.xml. 원격 다중 클라이언트 동시 접속은 별도다. RPC 변경으로 접속 프로토콜 버전은 6이며 서버·클라이언트 모두 동일한 새 빌드를 사용해야 한다.
 
 ### 기존 HUD 검증
+
+병합 후 구조 검증: `LocalPlayerHUDTests`와 기존 `MatchFeedbackTests` 모두 통과 (`Logs/HUDIntegrationTests.xml`). 로컬 HUD 활성화, 원격 HUD 비활성화, 자기 PlayerMove/TradePanelController 참조, 마우스 거래·베팅·낙찰·결과·로비 복귀를 확인했다. 원격 실제 동시 접속은 별도다.
+
+`LocalPlayerHUDSetup.Apply`는 실제 Player 프리팹에 공통 HUD를 중첩하고 씬의 중복 HUD를 제거한다. 전용 서버 씬도 동일한 Player.prefab을 사용한다. 서버에서는 Player의 입력·Canvas·카메라를 끈다. 수첩과 피드백은 부모 Player를 우선 참조하므로 씬의 비활성 구형 Player를 잘못 선택하지 않는다. 로비 복귀 시 로컬 Player를 명시적으로 비활성화한다.
 
 - NetworkHUDSetup.Apply: 시안 추출과 실제 씬 배치. 재실행하면 이 HUD만 교체한다.
 - NetworkHUDVerification.Run: 대기, 현금/보유량/평가액, 예약금, 라운드/단계, 시작 알림/중복 방지, 종료, 연결 해제, Dev 컴포넌트 미포함 검사 통과.

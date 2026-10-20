@@ -37,8 +37,17 @@ namespace BuyBidBlow.UI.HUD
         void OnEnable()
         {
             current=this;
-            if(!movement)movement=FindFirstObjectByType<PlayerMove>(FindObjectsInactive.Include);
-            if(!trading)trading=FindFirstObjectByType<TradePanelController>(FindObjectsInactive.Include);
+            var owner=GetComponentInParent<PlayerNet>(true);
+            if(owner)
+            {
+                movement=owner.GetComponent<PlayerMove>();
+                trading=owner.GetComponentInChildren<TradePanelController>(true);
+            }
+            else
+            {
+                if(!movement)movement=FindFirstObjectByType<PlayerMove>(FindObjectsInactive.Include);
+                if(!trading)trading=FindFirstObjectByType<TradePanelController>(FindObjectsInactive.Include);
+            }
             PlayerNet.LocalNotice+=OnNotice;PlayerNet.LocalAuctionOutcome+=OnOutcome;PlayerNet.LocalResultsChanged+=ShowResults;
             auctionResult.ActionRequested+=OnAuctionAction;results.ActionRequested+=OnReturn;
             auctionResult.CloseOnAction=true;results.CloseOnAction=false;
@@ -56,6 +65,7 @@ namespace BuyBidBlow.UI.HUD
         }
         void Update()
         {
+            EnsureEventSystem();
             RefreshBet();
             if(BlocksInput && movement){movement.SetMoveInput(Vector2.zero);movement.SetJumpHeld(false);}
             if(!shownResults && !auctionResult.IsOpen && !notebook.view.IsOpen && outcomes.Count>0)PresentOutcome(outcomes.Dequeue());
