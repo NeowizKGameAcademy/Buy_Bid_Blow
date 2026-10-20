@@ -10,18 +10,29 @@ namespace BuyBidBlow.Props
         public float gust = .15f;
         public CapsuleCollider[] supportColliders = new CapsuleCollider[0];
         Cloth cloth;
+        CapsuleCollider[] assignedContacts = new CapsuleCollider[0];
+        CapsuleCollider[] lastPlayers;
         void Awake() { cloth = GetComponent<Cloth>(); SetContacts(new CapsuleCollider[0]); }
-        // The banner reacts to the player's body as well as its support colliders.
-        void Start()
+        void Update()
         {
-            var player = GameObject.FindWithTag("Player");
-            if (player && player.TryGetComponent(out CapsuleCollider body)) SetContacts(new[] { body });
+            var players = PlayerPropContacts.Current;
+            if (!ReferenceEquals(players, lastPlayers))
+            {
+                lastPlayers = players;
+                ApplyContacts(players);
+            }
+            if (cloth) cloth.externalAcceleration = wind + Vector3.forward * (Mathf.Sin(Time.time * .7f) * gust);
         }
-        void Update() { if (cloth) cloth.externalAcceleration = wind + Vector3.forward * (Mathf.Sin(Time.time * .7f) * gust); }
         public void SetContacts(CapsuleCollider[] capsules)
         {
+            assignedContacts = capsules ?? new CapsuleCollider[0];
+            ApplyContacts(Application.isPlaying ? PlayerPropContacts.Current : new CapsuleCollider[0]);
+        }
+        void ApplyContacts(CapsuleCollider[] players)
+        {
             if (!cloth) cloth = GetComponent<Cloth>();
-            cloth.capsuleColliders = supportColliders.Concat(capsules ?? new CapsuleCollider[0]).Where(c=>c).Distinct().ToArray();
+            cloth.capsuleColliders = PlayerPropContacts.Combine(
+                (supportColliders ?? new CapsuleCollider[0]).Concat(assignedContacts).ToArray(), players);
         }
     }
 }

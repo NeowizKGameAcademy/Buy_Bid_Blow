@@ -15,6 +15,7 @@ namespace BuyBidBlow.Props
         RopeBarrierSimulation simulation;
         Transform[] bones;
         Mesh mesh;
+        CapsuleCollider[] lastPlayers, lastAssignedContacts, combinedContacts;
         const int Sides = 8;
         public float PinError { get; private set; }
         public float SegmentError { get; private set; }
@@ -44,18 +45,21 @@ namespace BuyBidBlow.Props
             mesh.vertices = vertices; mesh.uv = uv; mesh.triangles = triangles; GetComponent<MeshFilter>().sharedMesh = mesh; UpdateMesh();
         }
         void Awake() { if (restPoints != null && restPoints.Length > 1) Initialize(); }
-        // The rope reacts to the player's body unless contacts were assigned explicitly.
-        void Start()
-        {
-            var player = GameObject.FindWithTag("Player");
-            if (contacts.Length == 0 && player && player.TryGetComponent(out CapsuleCollider body)) contacts = new[] { body };
-        }
         void FixedUpdate() => Simulate(Time.fixedDeltaTime);
         public void Simulate(float dt)
         {
             if (!startAnchor || !endAnchor || restPoints == null || restPoints.Length < 2) return;
             Initialize();
-            simulation.ropeLength=ropeLength; simulation.contacts=contacts; simulation.contactRadius=radius;
+            simulation.ropeLength=ropeLength;
+            var players = PlayerPropContacts.Current;
+            if (!ReferenceEquals(players, lastPlayers) || !ReferenceEquals(contacts, lastAssignedContacts))
+            {
+                lastPlayers = players;
+                lastAssignedContacts = contacts;
+                combinedContacts = PlayerPropContacts.Combine(contacts, players);
+            }
+            simulation.contacts=combinedContacts;
+            simulation.contactRadius=radius;
             simulation.Step(Mathf.Min(dt,.04f));
             for(int i=0;i<points.Length;i++)points[i]=bones[i].position;
             PinError=simulation.MaxPinError;SegmentError=simulation.MaxSegmentError;

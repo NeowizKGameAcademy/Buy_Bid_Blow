@@ -74,7 +74,7 @@ namespace BuyBidBlow.Props
                 }
                 foreach(var capsule in contacts)
                 {
-                    if(!capsule || !capsule.enabled)continue;
+                    if(!capsule || !capsule.enabled || !capsule.gameObject.activeInHierarchy)continue;
                     Vector3 axis=capsule.direction==0?Vector3.right:capsule.direction==1?Vector3.up:Vector3.forward;
                     Vector3 scale=capsule.transform.lossyScale;
                     float axial=Mathf.Abs(capsule.direction==0?scale.x:capsule.direction==1?scale.y:scale.z);
