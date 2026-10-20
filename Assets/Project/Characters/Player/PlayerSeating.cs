@@ -33,8 +33,15 @@ namespace BuyBidBlow.Characters
             controllerEnabled = controller && System.Array.IndexOf(colliders, controller) >= 0 && enabledBefore[System.Array.IndexOf(colliders, controller)];
             Snap(); onSeatedChanged.Invoke(true);
         }
+        // Apply the seat's facing direction once when sitting down.  During the
+        // seated state only the position is anchored, so mouse-look can still
+        // turn the player's view without allowing movement.
         void Snap() { if (point) transform.SetPositionAndRotation(point.position - Vector3.up * hipHeight, point.rotation); }
-        void LateUpdate() { if (seat) Snap(); }
+        void LateUpdate()
+        {
+            if (seat && point)
+                transform.position = point.position - Vector3.up * hipHeight;
+        }
         public bool TryStand()
         {
             if (!seat) return false;
