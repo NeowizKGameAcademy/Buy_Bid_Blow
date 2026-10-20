@@ -70,6 +70,8 @@ namespace BuyBidBlow.Characters
 
         public void Rotate(Vector2 mouseDelta)
         {
+            var seatActor = GetComponent<PlayerSeating>();
+            if (seatActor != null && seatActor.IsSeated) return;
             if (playerCamera == null)
                 return;
 

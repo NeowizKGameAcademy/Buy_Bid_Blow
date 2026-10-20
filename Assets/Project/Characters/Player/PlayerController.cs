@@ -75,13 +75,6 @@ namespace BuyBidBlow.Characters
         public void OnMove(InputAction.CallbackContext context)
         {
             bufferedMoveInput = context.ReadValue<Vector2>();
-            if (IsSeated)
-            {
-                bufferedMoveInput = Vector2.zero;
-                StopMovementForSeat();
-                return;
-            }
-
             if (controlsBlocked || (radialMenu != null && radialMenu.IsOpen)) return;
 
             ApplyMoveInput(bufferedMoveInput);
@@ -97,11 +90,7 @@ namespace BuyBidBlow.Characters
 
         public void OnJump(InputAction.CallbackContext context)
         {
-            if (controlsBlocked || IsSeated)
-            {
-                playerMove.SetJumpHeld(false);
-                return;
-            }
+            if (controlsBlocked) return;
 
             if (context.started)
             {
@@ -127,20 +116,9 @@ namespace BuyBidBlow.Characters
         {
             if (controlsBlocked) return;
 
-            var isShift = IsShiftControl(context);
-            if (IsSeated)
-            {
-                // E is reserved for releasing the seat. All other interaction
-                // controls, including the Shift emotion menu, stay unavailable.
-                StopMovementForSeat();
-                if (!isShift && context.performed)
-                    playerInteraction?.Interact();
-                return;
-            }
-
             // Shift shares the existing Interction action with E. Inspect the
             // triggering control so E keeps its existing trade behaviour.
-            if (isShift)
+            if (IsShiftControl(context))
             {
                 if (context.started)
                 {
@@ -176,9 +154,6 @@ namespace BuyBidBlow.Characters
 
         private void HandleRadialMenuSelection(int menuNumber)
         {
-            if (IsSeated)
-                return;
-
             Debug.Log($"Radial menu selected: {menuNumber}", this);
             emotionPlaying = true;
 
@@ -218,24 +193,6 @@ namespace BuyBidBlow.Characters
 
             playerMove.SetMoveInput(moveInput);
             playerAnimation.SetBool("isWalking", moveInput != Vector2.zero);
-        }
-
-        private bool IsSeated => TryGetComponent(out PlayerSeating seating) && seating.IsSeated;
-
-        private void StopMovementForSeat()
-        {
-            playerMove.SetMoveInput(Vector2.zero);
-            playerMove.SetJumpHeld(false);
-            playerAnimation.SetBool("isWalking", false);
-            StopEmotionForInput("Player_Idle");
-        }
-
-        private void Update()
-        {
-            // Clear input that was active just before sitting down, so neither
-            // movement nor its animation can remain active while seated.
-            if (IsSeated)
-                StopMovementForSeat();
         }
     }
 }
