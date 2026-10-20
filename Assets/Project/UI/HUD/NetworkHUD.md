@@ -1,5 +1,9 @@
 # 서버 모드 Player HUD
 
+현재 기본 규칙: 13라운드, 경매 2·6·10R은 180초(공개 60초 + 비공개 60초 + 거래 60초), 일반 라운드 60초. 회사별 초기 공급은 실제 시작 참가 인원 × 5 + 5주이며 추가 발행 없이 매도분만 반환한다. 수첩은 Tab으로 열고 Q 또는 Tab으로 닫는다. 안내 프리팹·메인 메뉴 HowToPlay도 동일하게 갱신했다.
+
+검증: UpdatedMatchRulesTests 통과 (`Logs/UpdatedMatchRulesTests.xml`). 실제 설정 JSON으로 3인/6인 경기 13라운드 전체의 60/180초 시간표, 20/35주 재고와 총 19분을 검증했다. Mirror 호스트 경기에서는 실제 참가 1명에 10주를 수신하고, Q/Tab 입력과 13R 종료·결과창을 확인했다. 이 호스트 실행의 라운드 시간만 1초로 단축했으며 기본 180초는 앞선 실제 설정 기반 전체 경기 검사에서 확인했다.
+
 - 실제 씬: `Assets/Project/Scenes/SC_ExchangeFurnished.unity`
 - 위치: 네트워크로 생성된 `Player/Network Player HUD` (`Player.prefab`의 중첩 프리팹)
 - `PlayerNet.SetGameplayActive`가 본인 Player의 Canvas만 활성화한다. 원격 Player·서버·로비에서는 HUD가 비활성화된다. `Gameplay Presentation`은 구형 씬 리그이므로 계속 꺼 둔다.
@@ -16,7 +20,7 @@
 
 ## 개인 정보 수첩과 경매 품목
 
-`NetworkNotebookController`가 Tab으로 수첩을 열고 닫으며 Esc도 닫기로 동작한다. 위/아래 방향키로 스크롤한다. 거래창을 연 동안은 수첩을 열지 않는다. 수첩을 읽는 동안 이동·시점·점프·상호작용·입찰·퇴석 입력을 막고, 닫는 Esc가 같은 프레임에 퇴석으로 전달되지 않게 한다.
+`NetworkNotebookController`가 Tab으로 수첩을 열고 닫으며 Q도 닫기로 동작한다. 위/아래 방향키로 스크롤한다. 거래창을 연 동안은 수첩을 열지 않는다. 수첩을 읽는 동안 이동·시점·점프·상호작용·입찰·퇴석 입력을 막고, 닫는 Q가 같은 프레임에 퇴석으로 전달되지 않게 한다.
 
 서버 MatchEngine.InformationAwarded → 낙찰자의 PlayerNet.TargetAwardInformation → 본인 LocalInformation → InformationNotebookView 순서로 연결한다. 방향 데이터는 MatchNet에 넣지 않는다. 새 경기와 연결 종료 시 개인 정보 목록을 지운다. 경매 품목 패널은 공개된 라운드 두 개와 각 회사 아이콘만 표시한다.
 

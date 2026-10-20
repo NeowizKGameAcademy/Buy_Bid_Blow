@@ -1,0 +1,325 @@
+{
+    "version": 1,
+    "cues": [
+        {
+            "id": "match.closing_bell",
+            "clips": [
+                "closing_bell"
+            ],
+            "selection": "first",
+            "bus": "sfx",
+            "volume": 0.6499999761581421,
+            "pitchRange": {
+                "x": 1.0,
+                "y": 1.0
+            },
+            "loop": false,
+            "spatialBlend": 0.0,
+            "minDistance": 1.5,
+            "maxDistance": 18.0,
+            "cooldownSeconds": 0.0,
+            "maxInstances": 4,
+            "overflow": "stopOldest"
+        },
+        {
+            "id": "match.auction_start",
+            "clips": [
+                "auction_start"
+            ],
+            "selection": "first",
+            "bus": "sfx",
+            "volume": 0.6499999761581421,
+            "pitchRange": {
+                "x": 1.0,
+                "y": 1.0
+            },
+            "loop": false,
+            "spatialBlend": 0.0,
+            "minDistance": 1.5,
+            "maxDistance": 18.0,
+            "cooldownSeconds": 0.0,
+            "maxInstances": 4,
+            "overflow": "stopOldest"
+        },
+        {
+            "id": "match.auction_end",
+            "clips": [
+                "auction_end"
+            ],
+            "selection": "first",
+            "bus": "sfx",
+            "volume": 0.6499999761581421,
+            "pitchRange": {
+                "x": 1.0,
+                "y": 1.0
+            },
+            "loop": false,
+            "spatialBlend": 0.0,
+            "minDistance": 1.5,
+            "maxDistance": 18.0,
+            "cooldownSeconds": 0.0,
+            "maxInstances": 4,
+            "overflow": "stopOldest"
+        },
+        {
+            "id": "player.footstep",
+            "clips": [
+                "footstep"
+            ],
+            "selection": "first",
+            "bus": "sfx",
+            "volume": 0.3499999940395355,
+            "pitchRange": {
+                "x": 1.0,
+                "y": 1.0
+            },
+            "loop": false,
+            "spatialBlend": 1.0,
+            "minDistance": 1.5,
+            "maxDistance": 18.0,
+            "cooldownSeconds": 0.0,
+            "maxInstances": 4,
+            "overflow": "stopOldest"
+        },
+        {
+            "id": "player.jump",
+            "clips": [
+                "jump"
+            ],
+            "selection": "first",
+            "bus": "sfx",
+            "volume": 0.6499999761581421,
+            "pitchRange": {
+                "x": 1.0,
+                "y": 1.0
+            },
+            "loop": false,
+            "spatialBlend": 1.0,
+            "minDistance": 1.5,
+            "maxDistance": 18.0,
+            "cooldownSeconds": 0.0,
+            "maxInstances": 4,
+            "overflow": "stopOldest"
+        },
+        {
+            "id": "match.closing_soon",
+            "clips": [
+                "closing_soon"
+            ],
+            "selection": "first",
+            "bus": "sfx",
+            "volume": 0.6499999761581421,
+            "pitchRange": {
+                "x": 1.0,
+                "y": 1.0
+            },
+            "loop": false,
+            "spatialBlend": 0.0,
+            "minDistance": 1.5,
+            "maxDistance": 18.0,
+            "cooldownSeconds": 0.0,
+            "maxInstances": 4,
+            "overflow": "stopOldest"
+        },
+        {
+            "id": "ui.navigate",
+            "clips": [
+                "navigate"
+            ],
+            "selection": "first",
+            "bus": "sfx",
+            "volume": 0.6499999761581421,
+            "pitchRange": {
+                "x": 1.0,
+                "y": 1.0
+            },
+            "loop": false,
+            "spatialBlend": 0.0,
+            "minDistance": 1.5,
+            "maxDistance": 18.0,
+            "cooldownSeconds": 0.0,
+            "maxInstances": 4,
+            "overflow": "stopOldest"
+        },
+        {
+            "id": "ui.confirm",
+            "clips": [
+                "confirm"
+            ],
+            "selection": "first",
+            "bus": "sfx",
+            "volume": 0.6499999761581421,
+            "pitchRange": {
+                "x": 1.0,
+                "y": 1.0
+            },
+            "loop": false,
+            "spatialBlend": 0.0,
+            "minDistance": 1.5,
+            "maxDistance": 18.0,
+            "cooldownSeconds": 0.0,
+            "maxInstances": 4,
+            "overflow": "stopOldest"
+        },
+        {
+            "id": "ui.close",
+            "clips": [
+                "close"
+            ],
+            "selection": "first",
+            "bus": "sfx",
+            "volume": 0.6499999761581421,
+            "pitchRange": {
+                "x": 1.0,
+                "y": 1.0
+            },
+            "loop": false,
+            "spatialBlend": 0.0,
+            "minDistance": 1.5,
+            "maxDistance": 18.0,
+            "cooldownSeconds": 0.0,
+            "maxInstances": 4,
+            "overflow": "stopOldest"
+        },
+        {
+            "id": "ui.quantity",
+            "clips": [
+                "quantity"
+            ],
+            "selection": "first",
+            "bus": "sfx",
+            "volume": 0.6499999761581421,
+            "pitchRange": {
+                "x": 1.0,
+                "y": 1.0
+            },
+            "loop": false,
+            "spatialBlend": 0.0,
+            "minDistance": 1.5,
+            "maxDistance": 18.0,
+            "cooldownSeconds": 0.0,
+            "maxInstances": 4,
+            "overflow": "stopOldest"
+        },
+        {
+            "id": "ui.notebook",
+            "clips": [
+                "notebook"
+            ],
+            "selection": "first",
+            "bus": "sfx",
+            "volume": 0.6499999761581421,
+            "pitchRange": {
+                "x": 1.0,
+                "y": 1.0
+            },
+            "loop": false,
+            "spatialBlend": 0.0,
+            "minDistance": 1.5,
+            "maxDistance": 18.0,
+            "cooldownSeconds": 0.0,
+            "maxInstances": 4,
+            "overflow": "stopOldest"
+        },
+        {
+            "id": "ui.page",
+            "clips": [
+                "page"
+            ],
+            "selection": "first",
+            "bus": "sfx",
+            "volume": 0.6499999761581421,
+            "pitchRange": {
+                "x": 1.0,
+                "y": 1.0
+            },
+            "loop": false,
+            "spatialBlend": 0.0,
+            "minDistance": 1.5,
+            "maxDistance": 18.0,
+            "cooldownSeconds": 0.0,
+            "maxInstances": 4,
+            "overflow": "stopOldest"
+        },
+        {
+            "id": "market.trade",
+            "clips": [
+                "trade"
+            ],
+            "selection": "first",
+            "bus": "sfx",
+            "volume": 0.6499999761581421,
+            "pitchRange": {
+                "x": 1.0,
+                "y": 1.0
+            },
+            "loop": false,
+            "spatialBlend": 0.0,
+            "minDistance": 1.5,
+            "maxDistance": 18.0,
+            "cooldownSeconds": 0.0,
+            "maxInstances": 4,
+            "overflow": "stopOldest"
+        },
+        {
+            "id": "market.bet",
+            "clips": [
+                "bet"
+            ],
+            "selection": "first",
+            "bus": "sfx",
+            "volume": 0.6499999761581421,
+            "pitchRange": {
+                "x": 1.0,
+                "y": 1.0
+            },
+            "loop": false,
+            "spatialBlend": 0.0,
+            "minDistance": 1.5,
+            "maxDistance": 18.0,
+            "cooldownSeconds": 0.0,
+            "maxInstances": 4,
+            "overflow": "stopOldest"
+        },
+        {
+            "id": "bgm.menu",
+            "clips": [
+                "bgm_menu"
+            ],
+            "selection": "randomNoRepeat",
+            "bus": "music",
+            "volume": 0.25,
+            "pitchRange": {
+                "x": 1.0,
+                "y": 1.0
+            },
+            "loop": true,
+            "spatialBlend": 0.0,
+            "minDistance": 1.0,
+            "maxDistance": 30.0,
+            "cooldownSeconds": 0.0,
+            "maxInstances": 1,
+            "overflow": "stopOldest"
+        },
+        {
+            "id": "bgm.game",
+            "clips": [
+                "bgm_game"
+            ],
+            "selection": "randomNoRepeat",
+            "bus": "music",
+            "volume": 0.25,
+            "pitchRange": {
+                "x": 1.0,
+                "y": 1.0
+            },
+            "loop": true,
+            "spatialBlend": 0.0,
+            "minDistance": 1.0,
+            "maxDistance": 30.0,
+            "cooldownSeconds": 0.0,
+            "maxInstances": 1,
+            "overflow": "stopOldest"
+        }
+    ]
+}

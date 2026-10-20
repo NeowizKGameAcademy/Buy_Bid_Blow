@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae5f3965fe1f67146800e26b849b2433, type: 3}
+  m_Name: MatchAudioCatalog
+  m_EditorClassIdentifier: CueAudio.Runtime::CueAudio.CueCatalog
+  definitions: {fileID: 4900000, guid: 782ec7f42df6cb24c8142c37a0c10035, type: 3}
+  clips:
+  - id: closing_bell
+    clip: {fileID: 8300000, guid: f320a13c70d0b8748b1e416e119c7d53, type: 3}
+  - id: auction_start
+    clip: {fileID: 8300000, guid: 898ff34133083e449bf0dfd8f902f33f, type: 3}
+  - id: auction_end
+    clip: {fileID: 8300000, guid: 2e65cbe590ab09d4bb31bde590a4dd6c, type: 3}
+  - id: footstep
+    clip: {fileID: 8300000, guid: 9a41ee8ddcbbd5b45aecd3196f2d9458, type: 3}
+  - id: jump
+    clip: {fileID: 8300000, guid: 132be9ad05884534daed2bc64731f178, type: 3}
+  - id: closing_soon
+    clip: {fileID: 8300000, guid: c004f70a4861bf54f9a227f9d18449c6, type: 3}
+  - id: navigate
+    clip: {fileID: 8300000, guid: 3d46f2f7edc791e41bf5dab7c8d02ea3, type: 3}
+  - id: confirm
+    clip: {fileID: 8300000, guid: e54130e503c8264429ffaad757097910, type: 3}
+  - id: close
+    clip: {fileID: 8300000, guid: 3747a4f5b57651b459426232b53e42fd, type: 3}
+  - id: quantity
+    clip: {fileID: 8300000, guid: 855f52d7d8599204fb861b83c0d3a734, type: 3}
+  - id: notebook
+    clip: {fileID: 8300000, guid: aec9f0080a6ce6e4f8accf0d502a8306, type: 3}
+  - id: page
+    clip: {fileID: 8300000, guid: 189db9ebba6246c409a21c22b1a3fef2, type: 3}
+  - id: trade
+    clip: {fileID: 8300000, guid: f1853d957c9ff3a4196fcd7ee22a2bfa, type: 3}
+  - id: bet
+    clip: {fileID: 8300000, guid: de044ec939256124f95e466318ec6c8d, type: 3}
+  - id: bgm_menu
+    clip: {fileID: 8300000, guid: 07bb20a8cb4c70443bea87c665e5f76f, type: 3}
+  - id: bgm_game
+    clip: {fileID: 8300000, guid: 8c8213281ac61674d9816d3a4c53cd1d, type: 3}
+  buses:
+  - id: sfx
+    mixerGroup: {fileID: 0}
+    volume: 1
+  - id: music
+    mixerGroup: {fileID: 0}
+    volume: 1
+  - id: ui
+    mixerGroup: {fileID: 0}
+    volume: 1

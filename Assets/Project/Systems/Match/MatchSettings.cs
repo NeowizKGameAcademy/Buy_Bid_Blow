@@ -12,6 +12,7 @@ namespace BuyBidBlow.Systems.Match
         public int DefaultPlayerCount;
         public int MaxPlayerCount;
         public int SharesPerCompanyPerPlayer;
+        public int AdditionalSharesPerCompany;
         public int RoundCount;
         public int RoundSeconds;
         public int[] AuctionRounds;
@@ -33,7 +34,7 @@ namespace BuyBidBlow.Systems.Match
         {
             if (playerCount < MinPlayerCount || playerCount > MaxPlayerCount)
                 throw new ArgumentOutOfRangeException(nameof(playerCount));
-            return checked(playerCount * SharesPerCompanyPerPlayer);
+            return checked(playerCount * SharesPerCompanyPerPlayer + AdditionalSharesPerCompany);
         }
 
         public bool IsAuctionRound(int round)
@@ -64,6 +65,7 @@ namespace BuyBidBlow.Systems.Match
                 throw new FormatException("Player counts must satisfy 1 <= minimum <= default <= maximum.");
             if (SharesPerCompanyPerPlayer <= 0)
                 throw new FormatException("SharesPerCompanyPerPlayer must be positive.");
+            if (AdditionalSharesPerCompany < 0) throw new FormatException("AdditionalSharesPerCompany must not be negative.");
             if (RoundCount <= 0) throw new FormatException("RoundCount must be positive.");
             if (RoundSeconds <= 0) throw new FormatException("RoundSeconds must be positive.");
             if (AuctionRounds == null) throw new FormatException("AuctionRounds is required.");

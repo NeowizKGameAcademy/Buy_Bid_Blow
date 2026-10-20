@@ -34,6 +34,7 @@ namespace BuyBidBlow.Characters
 
         private void Update()
         {
+            if(BuyBidBlow.UI.Notebook.NetworkNotebookController.BlocksInput)return;
             if (IsSeated && Keyboard.current != null && Keyboard.current.qKey.wasPressedThisFrame)
                 RequestStand();
         }

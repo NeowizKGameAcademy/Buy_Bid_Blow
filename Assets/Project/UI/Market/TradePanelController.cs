@@ -37,6 +37,7 @@ namespace BuyBidBlow.UI.Market
 
         private void Awake()
         {
+            BuyBidBlow.Audio.UIAudioFeedback.Bind(transform.parent?transform.parent:transform);
             for (int i = 0; i < companyPanels.Length; i++)
                 if (companyPanels[i] != null)
                     BindButtons(companyPanels[i]);
@@ -85,6 +86,7 @@ namespace BuyBidBlow.UI.Market
 
         public void Close()
         {
+            if(IsOpen)BuyBidBlow.Audio.GameAudio.Play("ui.close",this);
             Hide();
             active = null;
             OpenStateChanged?.Invoke(false);
@@ -120,6 +122,8 @@ namespace BuyBidBlow.UI.Market
         public void SelectTab(Tab value)
         {
             if (!IsOpen) return;
+            if(tab==value)return;
+            BuyBidBlow.Audio.GameAudio.Play("ui.navigate",this);
             tab = value;
             quantity = 1;
             Refresh();
@@ -129,6 +133,7 @@ namespace BuyBidBlow.UI.Market
         {
             if (!IsOpen || quantity == int.MaxValue) return;
             quantity++;
+            BuyBidBlow.Audio.GameAudio.Play("ui.quantity",this);
             Refresh();
         }
 
@@ -136,6 +141,7 @@ namespace BuyBidBlow.UI.Market
         {
             if (!IsOpen || quantity <= 1) return;
             quantity--;
+            BuyBidBlow.Audio.GameAudio.Play("ui.quantity",this);
             Refresh();
         }
 
@@ -144,6 +150,7 @@ namespace BuyBidBlow.UI.Market
             // Enter may arrive through both the UI module and the keyboard shortcut.
             if (!IsOpen || !active.CanConfirm || confirmedFrame == Time.frameCount) return;
             confirmedFrame = Time.frameCount;
+            BuyBidBlow.Audio.GameAudio.Play("ui.confirm",this);
             if (tab == Tab.Buy) RequestBuy();
             else if (tab == Tab.Sell) RequestSell();
             else BetRequested?.Invoke(selectedCompany);

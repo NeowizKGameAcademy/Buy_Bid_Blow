@@ -26,8 +26,8 @@ public sealed class MatchEngine {
  readonly int roundSecondsOverride;
  // now: when round 1 opens. roundSecondsOverride > 0 makes every round that long (playtests).
  public MatchEngine(MatchSettings settings,int seed,IReadOnlyList<PlayerId> players,double now,int roundSecondsOverride=0){
- settings.Validate();Settings=settings;this.roundSecondsOverride=roundSecondsOverride;// Servers may start with fewer players for playtests (-minPlayers); they get the smallest table's supply.
- int supply=settings.GetInitialCompanySupply(Math.Max(players.Count,settings.MinPlayerCount));
+ settings.Validate();Settings=settings;this.roundSecondsOverride=roundSecondsOverride;// Servers may start with fewer players for playtests (-minPlayers); supply still uses the actual starting player count.
+ int supply=checked(players.Count*settings.SharesPerCompanyPerPlayer+settings.AdditionalSharesPerCompany);
  foreach(var p in players){if(assets.ContainsKey(p))throw new ArgumentException("Duplicate player");assets.Add(p,new PlayerPortfolio(settings.StartingCash,settings.StartingShares));}
  foreach(Company c in Enum.GetValues(typeof(Company)))inventory[c]=supply;
  var rng=new Random(seed);prices.Add(settings.RollStartingPrices(rng));
