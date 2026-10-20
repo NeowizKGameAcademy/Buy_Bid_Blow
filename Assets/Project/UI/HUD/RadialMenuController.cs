@@ -9,7 +9,8 @@ namespace BuyBidBlow.UI.HUD
     public class RadialMenuController : MonoBehaviour
     {
         [SerializeField] private GameObject menuRoot;
-        [SerializeField] private Image[] menu = new Image[4];
+        [SerializeField] private Image[] menu = new Image[8];
+        [SerializeField] private Image[] emotionIcons = new Image[8];
         [Header("Selection")]
         [Tooltip("Cursor positions inside this radius never select a menu item.")]
         [FormerlySerializedAs("innerRadius")]
@@ -37,7 +38,7 @@ namespace BuyBidBlow.UI.HUD
 
         public bool IsOpen { get; private set; }
         public int SelectedIndex => selectedIndex;
-        /// <summary>Raised when Shift is released over a menu item. Value is 1 through 4.</summary>
+        /// <summary>Raised when Shift is released over a menu item. Value is 1 through 8.</summary>
         public event Action<int> SelectionConfirmed;
 
         private void Awake()
@@ -112,7 +113,8 @@ namespace BuyBidBlow.UI.HUD
             rootCanvas = menuRoot.GetComponentInParent<Canvas>();
 
             if (menu == null || menu.Length == 0 || AllEntriesAreEmpty())
-                menu = menuRoot.GetComponentsInChildren<Image>(true);
+                menu = Array.FindAll(menuRoot.GetComponentsInChildren<Image>(true),
+                    image => image.material != null && image.material.HasProperty(OuterRadiusId));
 
             // These are visual slices, not rectangular button hit targets.
             foreach (var image in menu)
@@ -193,6 +195,7 @@ namespace BuyBidBlow.UI.HUD
                 currentOuterRadii[i] = Mathf.Lerp(
                     baseRadius, baseRadius * hoverRadiusMultiplier, hoverAmounts[i]);
                 material.SetFloat(OuterRadiusId, currentOuterRadii[i]);
+                UpdateIcon(i, revealProgress, hoverAmounts[i]);
             }
         }
 
@@ -211,7 +214,20 @@ namespace BuyBidBlow.UI.HUD
                 if (hoverAmounts != null)
                     hoverAmounts[i] = 0f;
                 material.SetFloat(OuterRadiusId, currentOuterRadii[i]);
+                UpdateIcon(i, 0f, 0f);
             }
+        }
+
+        private void UpdateIcon(int index, float visibility, float hover)
+        {
+            if (emotionIcons == null || index >= emotionIcons.Length || emotionIcons[index] == null)
+                return;
+
+            var icon = emotionIcons[index];
+            var color = icon.color;
+            color.a = visibility;
+            icon.color = color;
+            icon.rectTransform.localScale = Vector3.one * Mathf.Lerp(1f, hoverRadiusMultiplier, hover);
         }
 
         private void RestoreDefaultRadii()
@@ -282,28 +298,19 @@ namespace BuyBidBlow.UI.HUD
             if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(menuRectTransform, screenPosition, cameraForCanvas, out var localPoint))
                 return -1;
 
-            var distance = localPoint.magnitude;
-            // There is no outer limit: a slice remains selectable all the way
-            // to the edge of the screen. Only the central empty circle is dead.
-            if (distance < selectionDeadZoneRadius)
+            return GetSelectedIndexFromLocalPoint(localPoint);
+        }
+
+        public int GetSelectedIndexFromLocalPoint(Vector2 localPoint)
+        {
+            if (menu == null || menu.Length == 0 || localPoint.magnitude < selectionDeadZoneRadius)
                 return -1;
 
-            var angle = Mathf.Repeat(Mathf.Atan2(localPoint.y, localPoint.x) * Mathf.Rad2Deg, 360f);
-
-            // The displayed shape has four 60-degree pieces, with empty gaps
-            // above (60..120) and below (240..300). Numbering requested,
-            // clockwise from left-bottom: left-bottom -> left-top ->
-            // right-top -> right-bottom.
-            var index = angle switch
-            {
-                >= 180f and < 240f => 0, // 1: left-bottom
-                >= 120f and < 180f => 1, // 2: left-top
-                >= 0f and < 60f => 2,    // 3: right-top
-                >= 300f and < 360f => 3, // 4: right-bottom
-                _ => -1                  // visual gap: no selection
-            };
-
-            return index >= 0 && index < menu.Length && menu[index] != null ? index : -1;
+            // First slice starts at 180 degrees; subsequent slices run clockwise.
+            var sliceAngle = 360f / menu.Length;
+            var angle = Mathf.Atan2(localPoint.y, localPoint.x) * Mathf.Rad2Deg;
+            var index = Mathf.FloorToInt(Mathf.Repeat(180f + sliceAngle - angle, 360f) / sliceAngle);
+            return menu[index] != null ? index : -1;
         }
     }
 }
