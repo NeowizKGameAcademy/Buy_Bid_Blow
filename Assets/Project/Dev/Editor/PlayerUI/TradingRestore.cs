@@ -42,7 +42,7 @@ Rect(panel.transform.Find("Payment Summary/Cash After Label"),30,-166,565,38);
 Rect(panel.transform.Find("Payment Summary/Cash After"),605,-164,180,43);
 Rect(panel.transform.Find("Close Hint"),300,-766,260,50);
 var closeHint=panel.transform.Find("Close Hint");closeHint.gameObject.SetActive(false);
-var hint=new GameObject("Keyboard Guide",typeof(RectTransform),typeof(Text));hint.transform.SetParent(panel.transform,false);var hr=(RectTransform)hint.transform;hr.anchorMin=hr.anchorMax=hr.pivot=new Vector2(0,1);Rect(hr,35,-788,790,36);var ht=hint.GetComponent<Text>();ht.font=panel.GetComponentsInChildren<Text>(true)[0].font;ht.fontSize=19;ht.alignment=TextAnchor.MiddleCenter;ht.color=new Color(.85f,.88f,.81f);ht.text="↑↓ 메뉴   ·   ←→ 수량   ·   E 확인   ·   Q 닫기";
+var hint=new GameObject("Keyboard Guide",typeof(RectTransform),typeof(Text));hint.transform.SetParent(panel.transform,false);var hr=(RectTransform)hint.transform;hr.anchorMin=hr.anchorMax=hr.pivot=new Vector2(0,1);Rect(hr,35,-788,790,36);var ht=hint.GetComponent<Text>();ht.font=panel.GetComponentsInChildren<Text>(true)[0].font;ht.fontSize=19;ht.alignment=TextAnchor.MiddleCenter;ht.color=new Color(.85f,.88f,.81f);ht.text="W 오른쪽 탭 · S 왼쪽 탭 · A/D 수량 · E 확인 · Q 닫기";
 panel.AddComponent<TradingPanelView>();
 // Keyboard preview owns input; retain the normal button artwork.
 var group=panel.AddComponent<CanvasGroup>();group.blocksRaycasts=false;

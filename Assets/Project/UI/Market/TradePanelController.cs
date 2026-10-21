@@ -59,6 +59,9 @@ namespace BuyBidBlow.UI.Market
             On("Quantity Control/Decrease", DecreaseQuantity);
             On("Payment Summary/Confirm Purchase", Confirm);
             On("Close Hint/Keycap", Close);
+            var guide=panel.transform.Find("Keyboard Guide");
+            if(guide && guide.TryGetComponent<Text>(out var guideText))
+                guideText.text="W 오른쪽 탭 · S 왼쪽 탭 · A/D 수량 · E 확인 · Q 닫기";
         }
 
         public void Open(Company company, TradingPanelData panelData)
@@ -112,10 +115,10 @@ namespace BuyBidBlow.UI.Market
             if (keyboard == null || Time.frameCount == openedFrame)
                 return;
 
-            if (keyboard.rightArrowKey.wasPressedThisFrame) IncreaseQuantity();
-            if (keyboard.leftArrowKey.wasPressedThisFrame) DecreaseQuantity();
-            if (keyboard.upArrowKey.wasPressedThisFrame) SelectTab((Tab)(((int)tab + 2) % 3));
-            if (keyboard.downArrowKey.wasPressedThisFrame) SelectTab((Tab)(((int)tab + 1) % 3));
+            if (keyboard.dKey.wasPressedThisFrame) IncreaseQuantity();
+            if (keyboard.aKey.wasPressedThisFrame) DecreaseQuantity();
+            if (keyboard.wKey.wasPressedThisFrame) SelectTab((Tab)(((int)tab + 1) % 3));
+            if (keyboard.sKey.wasPressedThisFrame) SelectTab((Tab)(((int)tab + 2) % 3));
             if (keyboard.eKey.wasPressedThisFrame || keyboard.enterKey.wasPressedThisFrame) Confirm();
         }
 
@@ -139,8 +142,10 @@ namespace BuyBidBlow.UI.Market
 
         public void DecreaseQuantity()
         {
-            if (!IsOpen || quantity <= 1) return;
-            quantity--;
+            if (!IsOpen) return;
+            int next=quantity>1?quantity-1:Mathf.Max(1,TradingPanelView.QuantityLimit(data,(int)tab));
+            if(next==quantity)return;
+            quantity=next;
             BuyBidBlow.Audio.GameAudio.Play("ui.quantity",this);
             Refresh();
         }
