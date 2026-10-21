@@ -1,0 +1,8 @@
+PASS: seven saved, linked prefab instances. Position and rotation match approved Blender layout. 1.5x size baked into shared mesh; instance scales are 1. Materials resolved. Existing audio controllers preserved. Rear information speaker excluded.
+PA_01_Left_Lounge (-12.64, 2.70, 10.55)
+PA_02_Right_Lounge (12.64, 2.70, 10.55)
+PA_04_Auction_Hall (13.78, 3.60, -12.00)
+PA_Reference_01_Lobby_TV (13.86, 9.24, -11.00)
+PA_Reference_02_Opposite_TV (-13.86, 9.24, -11.00)
+PA_Reference_03_Banner_Right (11.65, 9.23, 12.33)
+PA_Reference_04_Banner_Left (-11.65, 9.23, 12.33)

@@ -37,7 +37,7 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
             var anchor = chair.sittingPoints[0];
 
             // Aim at the chair from the aisle beside it; the camera rig is detached so it holds still.
-            detect.transform.SetParent(null, true);
+            match.Detach(detect.transform);
             var eye = anchor.position + anchor.right * 1.3f + Vector3.up * .6f;
             detect.transform.SetPositionAndRotation(eye, Quaternion.LookRotation(anchor.position - eye));
             yield return null; yield return null;

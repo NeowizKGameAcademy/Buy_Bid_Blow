@@ -1,0 +1,105 @@
+{
+  "count": 7,
+  "width_m": 0.375,
+  "height_m": 0.51,
+  "speakers": [
+    {
+      "name": "PA_01_Left_Lounge",
+      "position": [
+        -12.635772705078125,
+        10.554766654968262,
+        2.700000047683716
+      ],
+      "scale": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "mount_preserved": true
+    },
+    {
+      "name": "PA_02_Right_Lounge",
+      "position": [
+        12.635773658752441,
+        10.554766654968262,
+        2.700000047683716
+      ],
+      "scale": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "mount_preserved": true
+    },
+    {
+      "name": "PA_04_Auction_Hall",
+      "position": [
+        13.776000022888184,
+        -12.0,
+        3.5999999046325684
+      ],
+      "scale": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "mount_preserved": true
+    },
+    {
+      "name": "PA_Reference_01_Lobby_TV",
+      "position": [
+        13.861137390136719,
+        -11.0,
+        9.236092567443848
+      ],
+      "scale": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "mount_preserved": true
+    },
+    {
+      "name": "PA_Reference_02_Opposite_TV",
+      "position": [
+        -13.861136436462402,
+        -11.0,
+        9.236091613769531
+      ],
+      "scale": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "mount_preserved": true
+    },
+    {
+      "name": "PA_Reference_03_Banner_Right",
+      "position": [
+        11.65153694152832,
+        12.334821701049805,
+        9.231759071350098
+      ],
+      "scale": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "mount_preserved": true
+    },
+    {
+      "name": "PA_Reference_04_Banner_Left",
+      "position": [
+        -11.651537895202637,
+        12.334821701049805,
+        9.231759071350098
+      ],
+      "scale": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "mount_preserved": true
+    }
+  ]
+}

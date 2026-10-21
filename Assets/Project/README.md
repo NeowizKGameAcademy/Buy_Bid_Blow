@@ -83,7 +83,7 @@ Content/Props/TradeCounter/
 |---|---|---|
 | 접미사 없음 | 규칙 개념 그대로 (`Match`, `Auction`, `Portfolio`) | `Systems` |
 | `*Event` | 필요한 시스템 처리 결과 이벤트 | `Systems/Types` |
-| `*Net` | 오브젝트별 Mirror NetworkBehaviour (SyncVar·Command·Rpc) | 해당 오브젝트의 `Characters/*`·`Content/Props/*`·`UI/*` 폴더 (예: `PlayerNet` → `Characters/Player`). 경기 전체 공개 상태(라운드·마감 시각·주가·Closing Bell)는 `Common/MatchNet`이 갖고, 소품·HUD는 이를 읽어 표시한다 |
+| `*Net` | 오브젝트별 Mirror NetworkBehaviour (SyncVar·Command·Rpc) | 해당 오브젝트의 `Characters/*`·`Content/Props/*`·`UI/*` 폴더 (예: `PlayerNet` → `Characters/Player`). 경기 전체 공개 상태(라운드·주가·Closing Bell 결과)는 `Common/MatchNet`이, 경기 일정(라운드·경매 구간의 시작·끝 시각)은 `Common/MatchTimeline`이 갖고, 소품·HUD는 이를 읽어 표시한다. 이벤트는 static이다: 일어난 일은 `MatchNet.RoundTurned`(라운드 마감과 다음 라운드 시작이 한 번에)·`MatchNet.AuctionStageChanged`, 미리 알아야 하는 시각은 `MatchTimeline`, 내 데이터는 `PlayerNet.Local*` |
 | `*View` | UI 컴포넌트. 로직이 커질 때만 `*Presenter`로 분리한다 | `UI/*` |
 | `*Repository` | 저장 인터페이스·구현 (저장 기능 도입 시) | 미정 |
 | `*Tests` | 테스트 클래스. 메서드 이름은 `조건_결과` 형식이다 | `Dev/Tests` |

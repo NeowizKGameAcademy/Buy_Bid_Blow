@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Linq;
 using BuyBidBlow.Audio;
 using CueAudio;
 using UnityEditor;
@@ -11,50 +11,83 @@ using Object=UnityEngine.Object;
 
 namespace BuyBidBlow.Dev.Editor
 {
+    // MatchAudio.json is the only place to set match audio: each cue lists its clip files by asset path, and buses
+    // carry their volumes. MatchAudioCatalog is generated from it so builds include the clips; don't edit it by hand.
     public static class MatchAudioSetup
     {
         const string Root="Assets/Project/Audio";
+        public const string JsonPath=Root+"/Cues/MatchAudio.json";
         public const string CatalogPath=Root+"/Cues/MatchAudioCatalog.asset";
         public const string HostPath=Root+"/Resources/GameAudioHost.prefab";
+
+        // The fields of MatchAudio.json that CueDocument does not read.
+        [Serializable] sealed class BusSetting{public string id;public float volume=1;}
+        [Serializable] sealed class Settings{public List<BusSetting> buses=new List<BusSetting>();}
+
+        // Rebuilds the catalog's clip bindings and bus volumes from the JSON. Returns validation errors.
+        public static List<string> Sync()
+        {
+            var json=AssetDatabase.LoadAssetAtPath<TextAsset>(JsonPath);
+            if(!json)throw new Exception("Match audio settings are missing: "+JsonPath);
+            var document=CueDocument.Parse(json.text);
+            var settings=JsonUtility.FromJson<Settings>(json.text);
+            var catalog=AssetDatabase.LoadAssetAtPath<CueCatalog>(CatalogPath);
+            if(!catalog){catalog=ScriptableObject.CreateInstance<CueCatalog>();AssetDatabase.CreateAsset(catalog,CatalogPath);}
+            var so=new SerializedObject(catalog);
+            so.FindProperty("definitions").objectReferenceValue=json;
+            var paths=document.cues.SelectMany(c=>c.clips).Distinct().ToList();
+            var bindings=so.FindProperty("clips");bindings.arraySize=paths.Count;
+            for(int i=0;i<paths.Count;i++)
+            {
+                var entry=bindings.GetArrayElementAtIndex(i);entry.FindPropertyRelative("id").stringValue=paths[i];
+                entry.FindPropertyRelative("clip").objectReferenceValue=AssetDatabase.LoadAssetAtPath<AudioClip>(paths[i]);
+            }
+            // Keeps any mixer group assigned in the catalog; only ids and volumes come from the JSON.
+            var buses=so.FindProperty("buses");var mixers=new Dictionary<string,Object>();
+            for(int i=0;i<buses.arraySize;i++){var b=buses.GetArrayElementAtIndex(i);mixers[b.FindPropertyRelative("id").stringValue]=b.FindPropertyRelative("mixerGroup").objectReferenceValue;}
+            buses.arraySize=settings.buses.Count;
+            for(int i=0;i<settings.buses.Count;i++)
+            {
+                var b=buses.GetArrayElementAtIndex(i);b.FindPropertyRelative("id").stringValue=settings.buses[i].id;
+                b.FindPropertyRelative("volume").floatValue=settings.buses[i].volume;
+                b.FindPropertyRelative("mixerGroup").objectReferenceValue=mixers.TryGetValue(settings.buses[i].id,out var mixer)?mixer:null;
+            }
+            so.ApplyModifiedPropertiesWithoutUndo();EditorUtility.SetDirty(catalog);AssetDatabase.SaveAssetIfDirty(catalog);
+            // Music streams from disk instead of sitting decoded in memory.
+            foreach(var cue in document.cues.Where(c=>c.bus=="music"))
+                foreach(var path in cue.clips)
+                {
+                    if(!(AssetImporter.GetAtPath(path) is AudioImporter importer))continue;
+                    var sample=importer.defaultSampleSettings;if(sample.loadType==AudioClipLoadType.Streaming)continue;
+                    sample.loadType=AudioClipLoadType.Streaming;importer.defaultSampleSettings=sample;importer.SaveAndReimport();
+                }
+            var errors=catalog.Validate();
+            if(errors.Count>0)Debug.LogError("[Audio] "+JsonPath+":\n"+string.Join("\n",errors),json);
+            return errors;
+        }
+
+        // Saving the JSON, or importing a clip it may list, updates the catalog.
+        sealed class SyncOnImport:AssetPostprocessor
+        {
+            static void OnPostprocessAllAssets(string[] imported,string[] deleted,string[] moved,string[] movedFrom)
+            {
+                if(imported.Concat(deleted).Concat(moved).Any(p=>p==JsonPath||p.StartsWith(Root+"/Clips/",StringComparison.Ordinal)&&!p.EndsWith(".meta")))
+                    EditorApplication.delayCall+=()=>Sync();
+            }
+        }
+
         [MenuItem("Tools/Buy Bid Blow/Audio/Connect Match Sounds")]
         public static void Apply()
         {
-            var clips=new Dictionary<string,string>{
-                {"closing_bell","Market/SFX_Market_PriceReveal.wav"},
-                {"auction_start","Auction/SFX_Auction_Start.wav"},{"auction_end","Auction/SFX_Auction_Gavel.wav"},
-                {"footstep","Movement/SFX_Footsteps_Wood.wav"},{"jump","Movement/SFX_Jump.wav"},
-                {"closing_soon","Auction/SFX_Auction_ClosingSoon.wav"},
-                {"navigate","UI/SFX_UI_Navigate.wav"},{"confirm","UI/SFX_UI_Confirm.wav"},{"close","UI/SFX_UI_BackClose.wav"},
-                {"quantity","UI/SFX_UI_Quantity.wav"},{"notebook","UI/SFX_UI_Notebook.wav"},{"page","UI/SFX_UI_PageTurn.wav"},
-                {"trade","Market/SFX_Trade_Complete.wav"},{"bet","Market/SFX_Bet_Place.wav"}};
-            var document=new CueDocument();
-            foreach(var pair in clips)document.cues.Add(new CueDefinition{id=Id(pair.Key),clips=new List<string>{pair.Key},selection="first",bus="sfx",volume=pair.Key=="footstep"?.35f:.65f,pitchRange=Vector2.one,spatialBlend=pair.Key=="footstep"||pair.Key=="jump"?1:0,minDistance=1.5f,maxDistance=18,cooldownSeconds=0,maxInstances=4,overflow="stopOldest"});
-            document.cues.Add(new CueDefinition{id="bgm.menu",clips=new List<string>{"bgm_menu"},bus="music",volume=.25f,loop=true,maxInstances=1,overflow="stopOldest"});
-            document.cues.Add(new CueDefinition{id="bgm.game",clips=new List<string>{"bgm_game"},bus="music",volume=.25f,loop=true,maxInstances=1,overflow="stopOldest"});
-            var jsonPath=Root+"/Cues/MatchAudio.json";File.WriteAllText(jsonPath,JsonUtility.ToJson(document,true));AssetDatabase.ImportAsset(jsonPath);
+            var errors=Sync();if(errors.Count>0)throw new Exception(string.Join("\n",errors));
             var catalog=AssetDatabase.LoadAssetAtPath<CueCatalog>(CatalogPath);
-            if(!catalog){catalog=ScriptableObject.CreateInstance<CueCatalog>();AssetDatabase.CreateAsset(catalog,CatalogPath);}
-            var so=new SerializedObject(catalog);so.FindProperty("definitions").objectReferenceValue=AssetDatabase.LoadAssetAtPath<TextAsset>(jsonPath);
-            var bindings=so.FindProperty("clips");bindings.arraySize=clips.Count+2;int index=0;
-            foreach(var pair in clips)
-            {
-                var entry=bindings.GetArrayElementAtIndex(index++);entry.FindPropertyRelative("id").stringValue=pair.Key;
-                entry.FindPropertyRelative("clip").objectReferenceValue=AssetDatabase.LoadAssetAtPath<AudioClip>(Root+"/Clips/CollectedSFX/"+pair.Value);
-            }
-            foreach(var entry in new[]{new[]{"bgm_menu","BGM_MainMenu.mp3"},new[]{"bgm_game","BGM_InGame.mp3"}})
-            {
-                var binding=bindings.GetArrayElementAtIndex(index++);binding.FindPropertyRelative("id").stringValue=entry[0];
-                binding.FindPropertyRelative("clip").objectReferenceValue=AssetDatabase.LoadAssetAtPath<AudioClip>(Root+"/Clips/BGM/"+entry[1]);
-                var musicImporter=(AudioImporter)AssetImporter.GetAtPath(Root+"/Clips/BGM/"+entry[1]);var sample=musicImporter.defaultSampleSettings;sample.loadType=AudioClipLoadType.Streaming;musicImporter.defaultSampleSettings=sample;musicImporter.SaveAndReimport();
-            }
-            so.ApplyModifiedPropertiesWithoutUndo();var errors=catalog.Validate();if(errors.Count>0)throw new Exception(string.Join("\n",errors));
             var host=new GameObject("Match CueAudio Host");host.SetActive(false);
             try
             {
                 var audio=host.AddComponent<CueAudioHost>();var hostSO=new SerializedObject(audio);
                 hostSO.FindProperty("catalog").objectReferenceValue=catalog;hostSO.FindProperty("persistAcrossScenes").boolValue=true;hostSO.ApplyModifiedPropertiesWithoutUndo();
                 var driver=host.AddComponent<SceneAudioDriver>();driver.menuMusic=new CueReference(catalog,"bgm.menu");driver.gameMusic=new CueReference(catalog,"bgm.game");
-                Directory.CreateDirectory(Root+"/Resources");AssetDatabase.Refresh();
+                System.IO.Directory.CreateDirectory(Root+"/Resources");AssetDatabase.Refresh();
                 host.SetActive(true);PrefabUtility.SaveAsPrefabAsset(host,HostPath);
             }
             finally{Object.DestroyImmediate(host);}
@@ -62,12 +95,12 @@ namespace BuyBidBlow.Dev.Editor
             try
             {
                 var actions=prefab.GetComponent<PlayerActionAudio>();if(!actions)actions=prefab.AddComponent<PlayerActionAudio>();
-                actions.footstep=new CueReference(catalog,Id("footstep"));actions.jump=new CueReference(catalog,Id("jump"));
+                actions.footstep=new CueReference(catalog,"player.footstep");actions.jump=new CueReference(catalog,"player.jump");
                 PrefabUtility.SaveAsPrefabAsset(prefab,"Assets/Project/Characters/Player/Player.prefab");
             }
             finally{PrefabUtility.UnloadPrefabContents(prefab);}
             InstallSpeaker(catalog);
-            AssetDatabase.SaveAssets();File.WriteAllText("Library/MatchAudioSetup.result","PASS: catalog validated, existing clips bound, hall speaker installed, action hooks prepared without RPC changes.");
+            AssetDatabase.SaveAssets();System.IO.File.WriteAllText("Library/MatchAudioSetup.result","PASS: catalog synced from MatchAudio.json, hall speaker installed, action hooks prepared without RPC changes.");
         }
         const string HallScene="Assets/Project/Scenes/SC_ExchangeFurnished.unity";
         // The hall PA speaker sits above the middle ticker board, so announcements come from the boards.
@@ -96,14 +129,13 @@ namespace BuyBidBlow.Dev.Editor
                 if(!board)throw new Exception("TickerBoard_Center not found in "+HallScene);
                 var renderers=board.GetComponentsInChildren<Renderer>(true);var bounds=renderers[0].bounds;foreach(var r in renderers)bounds.Encapsulate(r.bounds);
                 speaker.transform.SetPositionAndRotation(new Vector3(bounds.center.x,bounds.max.y+.5f,bounds.center.z),Quaternion.identity);
-                speaker.roundStart=default;speaker.closingBell=new CueReference(catalog,Id("closing_bell"));
-                speaker.closingSoon=new CueReference(catalog,Id("closing_soon"));
-                speaker.auctionStart=new CueReference(catalog,Id("auction_start"));speaker.auctionEnd=new CueReference(catalog,Id("auction_end"));
+                speaker.matchStart=new CueReference(catalog,"match.start");speaker.matchEnd=new CueReference(catalog,"match.end");
+                speaker.roundTurn=new CueReference(catalog,"match.round_turn");speaker.closingSoon=new CueReference(catalog,"match.closing_soon");
+                speaker.auctionStart=new CueReference(catalog,"match.auction_start");speaker.auctionEnd=new CueReference(catalog,"match.auction_end");
                 EditorSceneManager.MarkSceneDirty(scene);EditorSceneManager.SaveScene(scene);
                 Debug.Log($"[Audio] Hall speaker at {speaker.transform.position} above {board.name}");
             }
             finally{if(opened)EditorSceneManager.CloseScene(scene,true);}
         }
-        static string Id(string key)=>key=="footstep"||key=="jump"?"player."+key:key=="navigate"||key=="confirm"||key=="close"||key=="quantity"||key=="notebook"||key=="page"?"ui."+key:key=="trade"||key=="bet"?"market."+key:"match."+key;
     }
 }

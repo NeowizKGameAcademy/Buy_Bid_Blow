@@ -1,0 +1,62 @@
+[
+  {
+    "zone": "01_Left_Lounge",
+    "position": [
+      -12.665488243103027,
+      10.569119453430176,
+      2.700000047683716
+    ],
+    "rotation": [
+      0.0,
+      0.0,
+      1.120827078819275
+    ],
+    "wall": "A18_Walls_Ellipse_DoorOpenings",
+    "height": 2.7
+  },
+  {
+    "zone": "02_Right_Lounge",
+    "position": [
+      12.665489196777344,
+      10.569119453430176,
+      2.700000047683716
+    ],
+    "rotation": [
+      0.0,
+      0.0,
+      -1.120827078819275
+    ],
+    "wall": "A18_Walls_Ellipse_DoorOpenings",
+    "height": 2.7
+  },
+  {
+    "zone": "03_Rear_Information",
+    "position": [
+      -2.1982576847076416,
+      17.307294845581055,
+      2.700000047683716
+    ],
+    "rotation": [
+      0.0,
+      0.0,
+      0.02454298734664917
+    ],
+    "wall": "A18_Walls_Ellipse_DoorOpenings",
+    "height": 2.7
+  },
+  {
+    "zone": "04_Auction_Hall",
+    "position": [
+      13.809000015258789,
+      -12.0,
+      3.5999999046325684
+    ],
+    "rotation": [
+      0.0,
+      0.0,
+      -1.5707963705062866
+    ],
+    "wall": "A18_Walls_Ellipse_DoorOpenings",
+    "height": 3.6
+  }
+]

@@ -1,0 +1,240 @@
+ROOT AuctionHall_Furnished
+  Entry_Left_Door_Pivot_004 center=(13.99, 1.97, -6.45) size=(1.19, 3.66, 2.00) renderers=3 baked=0
+    BBB_Door_Wood, BBB_Door_Teal, BBB_Door_Brass
+  Entry_Right_Door_Pivot_004 center=(13.99, 1.97, -4.43) size=(1.19, 3.66, 2.00) renderers=3 baked=0
+    BBB_Door_Wood, BBB_Door_Teal, BBB_Door_Brass
+  Women_HingePivot center=(-13.98, 1.34, -7.36) size=(0.31, 2.64, 1.66) renderers=3 baked=0
+    Restroom_Teal, Restroom_Brass, Restroom_Walnut
+  Men_HingePivot center=(-13.98, 1.34, -3.86) size=(0.31, 2.64, 1.66) renderers=3 baked=0
+    Restroom_Teal, Restroom_Brass, Restroom_Walnut
+  A24_STRAW_05_Staff_Chair_STRAW_ROOT center=(6.90, 0.52, -16.85) size=(0.63, 1.03, 0.66) renderers=3 baked=0
+    BBB_Props_Black_plastic, BBB_Leather_STRAW, BBB_Props_Brushed_Brass_Metal_001
+  A24_WOOD_05_Staff_Chair_ROOT center=(0.00, 0.52, -15.73) size=(0.58, 1.03, 0.63) renderers=3 baked=0
+    BBB_Props_Black_plastic, BBB_Leather_WOOD, BBB_Props_Brushed_Brass_Metal_001
+  A24_BRICK_05_Staff_Chair_BRICK_ROOT center=(-6.90, 0.52, -16.88) size=(0.63, 1.03, 0.62) renderers=3 baked=0
+    BBB_Props_Black_plastic, BBB_Leather_BRICK, BBB_Props_Brushed_Brass_Metal_001
+  A25_Staff_Entry_Left_Door_Pivot_004 center=(0.83, 1.62, -22.51) size=(1.64, 3.00, 0.98) renderers=3 baked=0
+    BBB_Door_Teal, BBB_Door_Wood, BBB_Door_Brass
+  A25_Staff_Entry_Right_Door_Pivot_004 center=(-0.83, 1.62, -22.51) size=(1.64, 3.00, 0.98) renderers=3 baked=0
+    BBB_Door_Teal, BBB_Door_Brass, BBB_Door_Wood
+  A41_Front_Seat_1 center=(-2.13, 5.28, 11.65) size=(0.69, 1.18, 0.72) renderers=3 baked=0
+    A39_BK_Walnut, A39_BK_Velvet, A39_BK_Brass
+  A41_Front_Seat_2 center=(-0.72, 5.28, 11.28) size=(0.59, 1.18, 0.64) renderers=3 baked=0
+    A39_BK_Walnut, A39_BK_Velvet, A39_BK_Brass
+  A41_Front_Seat_3 center=(0.72, 5.28, 11.28) size=(0.59, 1.18, 0.64) renderers=3 baked=0
+    A39_BK_Walnut, A39_BK_Velvet, A39_BK_Brass
+  A41_Rear_Seat_1 center=(-1.56, 5.96, 14.99) size=(0.70, 1.18, 0.74) renderers=3 baked=0
+    A39_BK_Walnut, A39_BK_Velvet, A39_BK_Brass
+  A41_Rear_Seat_2 center=(0.00, 5.96, 14.64) size=(0.53, 1.18, 0.59) renderers=3 baked=0
+    A39_BK_Walnut, A39_BK_Velvet, A39_BK_Brass
+  A41_Rear_Seat_3 center=(1.56, 5.96, 14.99) size=(0.70, 1.18, 0.74) renderers=3 baked=0
+    A39_BK_Walnut, A39_BK_Velvet, A39_BK_Brass
+  A41_Front_Seat_4 center=(2.13, 5.28, 11.65) size=(0.69, 1.18, 0.72) renderers=3 baked=0
+    A39_BK_Walnut, A39_BK_Velvet, A39_BK_Brass
+  A87_Left_Sofa_ROOT center=(11.74, 0.53, -12.63) size=(2.01, 1.07, 2.01) renderers=3 baked=0
+    BBB_Seating_Walnut, BBB_Seating_TealVelvet, BBB_Seating_Brass
+  A87_Left_Bench_ROOT center=(9.51, 0.31, -10.36) size=(1.47, 0.62, 1.47) renderers=3 baked=0
+    BBB_Seating_Walnut, BBB_Seating_BurgundyVelvet, BBB_Seating_Brass
+  A87_Right_Bench1_A87_Left_Bench_ROOT center=(-5.38, 0.32, -9.30) size=(1.56, 0.62, 0.66) renderers=3 baked=0
+    BBB_Seating_Brass, BBB_Seating_BurgundyVelvet, BBB_Seating_Walnut
+  A87_Right_Bench2_A87_Left_Bench_ROOT center=(-8.00, 0.32, -9.30) size=(1.56, 0.62, 0.66) renderers=3 baked=0
+    BBB_Seating_Brass, BBB_Seating_BurgundyVelvet, BBB_Seating_Walnut
+  A88_Red_Sofa_ROOT center=(11.43, 0.56, -9.92) size=(2.29, 1.13, 2.29) renderers=3 baked=0
+    BBB_Seating_Walnut_001, BBB_Seating_OxbloodLeather, BBB_Seating_Brass_001
+  A73_Lower_Left center=(-8.85, 0.59, 1.10) size=(8.77, 1.19, 0.47) renderers=5 baked=0
+    RB_Satin_Gold, RB_Burgundy_Velvet_BK
+  A73_Lower_Right center=(8.85, 0.59, 1.10) size=(8.77, 1.19, 0.47) renderers=5 baked=0
+    RB_Satin_Gold, RB_Burgundy_Velvet_BK
+  A73_Upper_Left center=(-8.85, 4.59, 11.71) size=(5.57, 1.19, 0.68) renderers=4 baked=0
+    RB_Satin_Gold, RB_Burgundy_Velvet_BK
+  A73_Upper_Right center=(8.85, 4.59, 11.71) size=(5.57, 1.19, 0.68) renderers=4 baked=0
+    RB_Satin_Gold, RB_Burgundy_Velvet_BK
+  A73_Staff_Left center=(-11.23, 0.59, -15.98) size=(2.02, 1.19, 1.22) renderers=2 baked=0
+    RB_Satin_Gold, RB_Burgundy_Velvet_BK
+  A73_Staff_Right center=(11.23, 0.59, -15.98) size=(2.02, 1.19, 1.22) renderers=2 baked=0
+    RB_Satin_Gold, RB_Burgundy_Velvet_BK
+  A78_Auction_Rear_Banner center=(0.00, 10.94, 14.89) size=(12.42, 0.25, 0.34) renderers=4 baked=0
+    RB_Satin_Gold
+  Static_0_1_0 center=(0.00, 2.69, 10.10) size=(28.00, 5.34, 14.80) renderers=18 baked=8
+    Hall_Dark_Herringbone, Hall_Dark_Walnut_Border, A68_Oval_Auction_Woven, BBB_Wall_TrimSheet, A93_Fixture_BlenderKit_Brass, A93_Wall_Sconce_ON, A39_BK_DarkWalnut, A39_BK_Walnut, A39_BK_Runner, A39_BK_Brass, RB_Walnut_BK, Tables_Satin_Brass, Green_marble, Brass_gold_stratched_metal, BBB_Furniture_Walnut_Edge_001, BBB_Furniture_Walnut_Recess_001, BBB_Furniture_Hall_Brass_001, BBB_Furniture_Hall_Walnut_001
+  Static_-1_0_0 center=(-3.61, 2.59, 5.08) size=(14.37, 5.18, 5.95) renderers=10 baked=2
+    Hall_Dark_Herringbone, BBB_Railing_Walnut, BBB_Railing_Brass, BBB_Furniture_Walnut_Recess, BBB_Furniture_Hall_Walnut, BBB_Furniture_Hall_Brass, BBB_Furniture_Ivory_Paper, BBB_Furniture_Deep_Green_Painted_Wood, BBB_Furniture_Crimson_Woven_Cloth, BBB_Furniture_Walnut_Edge_001
+  Static_-2_0_0 center=(-8.90, 2.52, 4.03) size=(10.21, 5.03, 8.26) renderers=10 baked=3
+    Hall_Dark_Herringbone, BBB_Railing_Walnut, BBB_Railing_Brass, BBB_Wall_TrimSheet, A93_Fixture_BlenderKit_Brass, A93_Wall_Sconce_ON, A70_Royal_Runner_Woven, Frame_A_Walnut, Frame_A_Antique_Brass, A87_Forest_Artwork
+  Static_0_0_0 center=(4.89, 2.59, 5.08) size=(11.83, 5.18, 5.95) renderers=10 baked=2
+    Hall_Dark_Herringbone, BBB_Railing_Walnut, BBB_Railing_Brass, BBB_Furniture_Walnut_Recess, BBB_Furniture_Hall_Walnut, BBB_Furniture_Crimson_Woven_Cloth, BBB_Furniture_Hall_Brass, BBB_Furniture_Ivory_Paper, BBB_Furniture_Deep_Green_Painted_Wood, BBB_Furniture_Walnut_Edge_001
+  Static_1_0_0 center=(8.90, 2.52, 4.03) size=(10.21, 5.03, 8.26) renderers=7 baked=3
+    Hall_Dark_Herringbone, BBB_Railing_Walnut, BBB_Railing_Brass, BBB_Wall_TrimSheet, A93_Fixture_BlenderKit_Brass, A93_Wall_Sconce_ON, A70_Royal_Runner_Woven
+  Static_0_0_2 center=(7.00, 12.28, 7.50) size=(14.00, 7.75, 20.00) renderers=2 baked=2
+    Hall_Ceiling, BBB_Column_Walnut
+  Static_-1_0_2 center=(-7.00, 12.28, 7.50) size=(14.00, 7.75, 20.00) renderers=2 baked=2
+    Hall_Ceiling, BBB_Column_Walnut
+  Static_-1_-2_2 center=(-7.00, 12.28, -12.50) size=(14.00, 7.75, 20.00) renderers=2 baked=2
+    Hall_Ceiling, BBB_Column_Walnut
+  Static_0_-2_2 center=(7.00, 12.28, -12.50) size=(14.00, 7.75, 20.00) renderers=2 baked=2
+    Hall_Ceiling, BBB_Column_Walnut
+  Static_1_-1_0 center=(13.71, 4.07, -3.97) size=(1.45, 8.14, 8.11) renderers=8 baked=3
+    BBB_Door_Wood, BBB_Door_Brass, BBB_Door_Teal, BBB_Column_Walnut, BBB_Column_Brass, BBB_Wall_TrimSheet, A93_Fixture_BlenderKit_Brass, A93_Wall_Sconce_ON
+  Static_1_-1_1 center=(13.79, 6.95, -3.61) size=(1.50, 4.10, 7.37) renderers=4 baked=2
+    BBB_Door_Wood, BBB_Door_Brass, BBB_Column_Brass, BBB_Column_Walnut
+  Static_0_-1_3 center=(0.00, 15.45, -2.50) size=(3.30, 0.91, 3.30) renderers=2 baked=1
+    BBB_Column_Walnut, A93_Fixture_BlenderKit_Brass
+  Static_0_2_0 center=(2.66, 4.07, 16.51) size=(9.31, 8.14, 1.93) renderers=3 baked=3
+    BBB_Column_Walnut, BBB_Column_Brass, BBB_Wall_TrimSheet
+  Static_0_2_1 center=(6.69, 8.56, 16.16) size=(1.23, 0.89, 1.23) renderers=2 baked=2
+    BBB_Column_Brass, BBB_Column_Walnut
+  Static_-1_2_0 center=(-3.64, 4.07, 16.51) size=(7.35, 8.14, 1.93) renderers=3 baked=3
+    BBB_Column_Walnut, BBB_Column_Brass, BBB_Wall_TrimSheet
+  Static_-1_2_1 center=(-6.69, 8.56, 16.16) size=(1.23, 0.89, 1.23) renderers=2 baked=2
+    BBB_Column_Brass, BBB_Column_Walnut
+  Static_-2_-1_0 center=(-12.45, 4.07, -4.51) size=(3.40, 8.14, 9.18) renderers=11 baked=6
+    BBB_Column_Walnut, BBB_Column_Brass, Restroom_Walnut, Restroom_Brass, A64_Teal_Runner_Woven, BBB_Wall_TrimSheet, A93_Fixture_BlenderKit_Brass, A93_Wall_Sconce_ON, Frame_A_Walnut, Frame_A_Antique_Brass, A55_Palace_Painting
+  Static_-2_-1_1 center=(-13.52, 8.56, -0.40) size=(0.96, 0.89, 0.96) renderers=2 baked=2
+    BBB_Column_Brass, BBB_Column_Walnut
+  Static_-1_-3_0 center=(-2.86, 4.07, -19.32) size=(10.32, 8.14, 7.08) renderers=23 baked=8
+    BBB_Column_Walnut, BBB_Column_Brass, BBB_Wall_TrimSheet, BBB_Props_Black_plastic, BBB_Props_Brushed_Brass_Metal_001, BBB_Leather_BRICK, BBB_Printed_Ink, BBB_Ivory_Paper, BBB_Props_Polished_Walnut_Wood_001, BBB_Door_Wood, BBB_Door_Brass, BBB_Door_Teal, BBB_Medallion_Dark_Edge, BBB_Medallion_Light_Inlay, BBB_Medallion_Walnut, BBB_Medallion_Honey_Wood, BBB_Medallion_Walnut_Alternate, A93_Fixture_BlenderKit_Brass, A93_Wall_Sconce_ON, BBB_Areca_Cane_001, BBB_Areca_Frond_Card_001, BBB_Props_Brushed_Brass_Metal_003, BBB_Furniture_Dark_Soil_001
+  Static_-1_-3_1 center=(-6.69, 8.56, -21.16) size=(1.23, 0.89, 1.23) renderers=2 baked=2
+    BBB_Column_Brass, BBB_Column_Walnut
+  Static_0_-3_0 center=(3.00, 4.07, -19.37) size=(9.95, 8.14, 6.99) renderers=17 baked=3
+    BBB_Column_Walnut, BBB_Column_Brass, BBB_Wall_TrimSheet, BBB_Props_Black_plastic, BBB_Soft_Rubber, BBB_Ivory_Paper, BBB_Props_Brushed_Brass_Metal_001, BBB_Props_Polished_Walnut_Wood_001, BBB_Door_Wood, BBB_Door_Brass, BBB_Door_Teal, A93_Fixture_BlenderKit_Brass, A93_Wall_Sconce_ON, BBB_Areca_Frond_Card_001, BBB_Areca_Cane_001, BBB_Props_Brushed_Brass_Metal_003, BBB_Furniture_Dark_Soil_001
+  Static_0_-3_1 center=(6.69, 8.56, -21.16) size=(1.23, 0.89, 1.23) renderers=2 baked=2
+    BBB_Column_Brass, BBB_Column_Walnut
+  Static_0_-1_-1 center=(0.00, -0.15, -2.50) size=(28.00, 0.30, 40.00) renderers=1 baked=1
+    Hall_Dark_Herringbone
+  Static_-1_-1_0 center=(0.00, 4.50, -2.50) size=(28.24, 9.00, 40.24) renderers=2 baked=2
+    BBB_Wall_Soft_Teal_001, A58_Burgundy_Runner_Woven
+  Static_-1_-1_2 center=(-5.95, 12.14, -2.34) size=(15.24, 7.49, 4.52) renderers=3 baked=1
+    BBB_Column_Walnut, A93_Fixture_BlenderKit_Brass, A93_Chandelier_ON
+  Static_0_-1_2 center=(5.66, 12.14, -2.49) size=(15.83, 7.49, 4.81) renderers=3 baked=1
+    BBB_Column_Walnut, A93_Fixture_BlenderKit_Brass, A93_Chandelier_ON
+  Static_-2_-2_0 center=(-11.09, 2.89, -12.18) size=(6.11, 5.79, 8.00) renderers=11 baked=3
+    Restroom_Walnut, Restroom_Brass, BBB_Wall_TrimSheet, BBB_Props_Polished_Walnut_Wood_001, BBB_Ivory_Paper, BBB_Props_Brushed_Brass_Metal_001, A93_Fixture_BlenderKit_Brass, A93_Wall_Sconce_ON, Frame_A_Walnut, Frame_A_Antique_Brass, A55_River_Painting
+  Static_0_-1_0 center=(0.00, 0.76, -2.50) size=(28.00, 1.52, 40.00) renderers=6 baked=3
+    Hall_Dark_Walnut_Border, A58_Burgundy_Runner_Woven, A60_Round_Salon_Woven, BBB_Furniture_Hall_Walnut, Tables_Satin_Brass, BBB_Door_Teal
+  Static_-2_1_0 center=(-9.09, 2.01, 11.70) size=(9.18, 4.03, 9.19) renderers=2 baked=2
+    A58_Burgundy_Runner_Woven, BBB_Wall_TrimSheet
+  Static_1_1_0 center=(9.09, 2.43, 11.70) size=(9.18, 4.85, 9.19) renderers=4 baked=2
+    A58_Burgundy_Runner_Woven, BBB_Wall_TrimSheet, RB_Walnut_BK, Tables_Satin_Brass
+  Static_-2_0_1 center=(-11.35, 6.05, 5.00) size=(5.22, 2.17, 5.76) renderers=5 baked=0
+    BBB_Railing_Walnut, BBB_Railing_Brass, Frame_A_Walnut, Frame_A_Antique_Brass, A84_Horse_Artwork
+  Static_-1_0_1 center=(-4.86, 5.17, 5.53) size=(11.61, 0.41, 5.08) renderers=5 baked=1
+    BBB_Railing_Walnut, BBB_Railing_Brass, BBB_Furniture_Crimson_Woven_Cloth, BBB_Furniture_Walnut_Edge, BBB_Furniture_Hall_Brass_001
+  Static_1_0_1 center=(11.35, 6.19, 3.97) size=(5.22, 2.44, 3.69) renderers=5 baked=0
+    BBB_Railing_Walnut, BBB_Railing_Brass, Frame_B_Antique_Gold, A53_Wolf_Oil_Portrait, Frame_A_Walnut_002
+  Static_0_0_1 center=(3.53, 5.17, 5.40) size=(14.25, 0.41, 5.34) renderers=4 baked=0
+    BBB_Railing_Walnut, BBB_Railing_Brass, BBB_Furniture_Walnut_Edge, BBB_Furniture_Hall_Brass_001
+  Static_-1_1_0 center=(-2.27, 2.69, 12.05) size=(12.48, 4.95, 8.05) renderers=18 baked=8
+    BBB_Wall_TrimSheet, A93_Fixture_BlenderKit_Brass, A93_Wall_Sconce_ON, A39_BK_DarkWalnut, A39_BK_PanelWalnut, A39_BK_Walnut, A39_BK_HoneyWalnut, A39_BK_Runner, A39_BK_Brass, Tables_Satin_Brass, RB_Walnut_BK, Brass_gold_stratched_metal, RB_Walnut_BK_001, BBB_Furniture_Hall_Walnut_001, BBB_Furniture_Walnut_Edge_001, BBB_Furniture_Walnut_Recess_001, BBB_Furniture_Hall_Brass_001, BBB_Furniture_Emerald_Woven_Cloth
+  Static_-2_-3_0 center=(-10.37, 2.74, -18.66) size=(6.11, 5.47, 5.71) renderers=17 baked=1
+    BBB_Wall_TrimSheet, BBB_Desk_IvoryPaint, BBB_Props_Polished_Walnut_Wood, BBB_Props_Brushed_Brass_Metal, BBB_Enamel_WOOD, BBB_Props_Polished_Walnut_Wood_001, BBB_Ivory_Paper, BBB_Props_Brushed_Brass_Metal_001, BBB_Furniture_Terracotta, BBB_Leaf_Stylised_BlendKit_Fitted, BBB_Leaf_Study_Vein, BBB_Furniture_Dark_Soil, BBB_Leather_BRICK, BBB_Printed_Ink, Frame_A_Walnut, Frame_A_Antique_Brass, A51_Founder_Portrait
+  Static_1_-3_0 center=(10.37, 2.74, -18.66) size=(6.11, 5.47, 5.71) renderers=16 baked=1
+    BBB_Wall_TrimSheet, BBB_Desk_IvoryPaint, BBB_Props_Polished_Walnut_Wood, BBB_Props_Brushed_Brass_Metal, BBB_Enamel_WOOD, BBB_Furniture_Terracotta, BBB_Leaf_Stylised_BlendKit_Fitted, BBB_Leaf_Study_Vein, BBB_Furniture_Dark_Soil, BBB_Props_Polished_Walnut_Wood_001, BBB_Ivory_Paper, BBB_Props_Brushed_Brass_Metal_001, Frame_A_Walnut_001, Frame_A_Antique_Brass_001, A51_Collector_Portrait, Frame_B_Antique_Gold
+  Static_1_-2_0 center=(11.35, 2.32, -12.09) size=(5.27, 4.64, 8.48) renderers=15 baked=1
+    BBB_Wall_TrimSheet, BBB_Props_Brushed_Brass_Metal_001, BBB_Leather_STRAW, BBB_Printed_Ink, BBB_Ivory_Paper, A93_Fixture_BlenderKit_Brass, A93_Wall_Sconce_ON, Frame_A_Walnut, Frame_A_Antique_Brass, A56_Harbor_Art, Frame_B_Antique_Gold, A56_Stag_Art, Frame_A_Walnut_002, RB_Walnut_BK, Tables_Satin_Brass
+  Static_0_-2_0 center=(3.22, 0.73, -15.62) size=(13.80, 1.47, 4.09) renderers=20 baked=0
+    BBB_Props_Polished_Walnut_Wood, BBB_Desk_STRAWPaint, BBB_Desk_IvoryPaint, BBB_Props_Brushed_Brass_Metal, BBB_Desk_WOODPaint, BBB_Props_Black_plastic, BBB_Soft_Rubber, BBB_Black_Screen, BBB_Props_Polished_Walnut_Wood_001, BBB_Ivory_Paper, BBB_Props_Brushed_Brass_Metal_001, BBB_Leather_STRAW, BBB_Printed_Ink, BBB_Enamel_STRAW, BBB_Enamel_WOOD_001, BBB_Furniture_Terracotta, BBB_Leaf_Stylised_BlendKit_Fitted, BBB_Leaf_Study_Vein, BBB_Furniture_Dark_Soil, BBB_Leather_WOOD
+  Static_-1_-2_0 center=(-3.22, 0.73, -15.56) size=(13.80, 1.47, 4.22) renderers=18 baked=0
+    BBB_Props_Polished_Walnut_Wood, BBB_Desk_IvoryPaint, BBB_Props_Brushed_Brass_Metal, BBB_Desk_BRICKPaint, BBB_Props_Black_plastic, BBB_Soft_Rubber, BBB_Props_Polished_Walnut_Wood_001, BBB_Ivory_Paper, BBB_Props_Brushed_Brass_Metal_001, BBB_Leather_WOOD, BBB_Printed_Ink, BBB_Black_Screen, BBB_Enamel_BRICK, BBB_Furniture_Terracotta, BBB_Leaf_Stylised_BlendKit_Fitted, BBB_Leaf_Study_Vein, BBB_Furniture_Dark_Soil, BBB_Leather_BRICK
+  Static_1_1_1 center=(13.07, 6.50, 9.53) size=(0.23, 0.80, 0.22) renderers=2 baked=0
+    A93_Fixture_BlenderKit_Brass, A93_Wall_Sconce_ON
+  Static_-1_1_1 center=(-2.48, 5.45, 12.91) size=(10.99, 2.89, 8.75) renderers=12 baked=7
+    A93_Fixture_BlenderKit_Brass, A93_Wall_Sconce_ON, A39_BK_PanelWalnut, A39_BK_Walnut, A39_BK_HoneyWalnut, A39_BK_Velvet, A39_BK_Brass, A39_BK_DarkWalnut, A39_BK_Runner, Brass_gold_stratched_metal, RB_Walnut_BK_001, BBB_Furniture_Hall_Brass_001
+  Static_0_1_1 center=(2.16, 5.45, 12.64) size=(11.82, 2.89, 9.49) renderers=15 baked=8
+    A93_Fixture_BlenderKit_Brass, A93_Wall_Sconce_ON, A39_BK_PanelWalnut, A39_BK_Walnut, A39_BK_DarkWalnut, A39_BK_HoneyWalnut, A39_BK_Velvet, A39_BK_Brass, A39_BK_Runner, Metal_Old_Bronze, Green_marble_001, Brass_gold_stratched_metal, BBB_Furniture_Crimson_Woven_Cloth_001, BBB_Furniture_Walnut_Edge_001, BBB_Furniture_Hall_Brass_001
+  Static_-2_1_1 center=(-13.07, 6.50, 9.53) size=(0.23, 0.80, 0.22) renderers=2 baked=0
+    A93_Fixture_BlenderKit_Brass, A93_Wall_Sconce_ON
+  Static_0_-1_1 center=(0.50, 9.32, -2.50) size=(1.20, 0.40, 2.20) renderers=2 baked=0
+    A93_Fixture_BlenderKit_Brass, A93_Chandelier_ON
+  Static_-1_-1_1 center=(-0.03, 9.34, -2.50) size=(2.14, 0.43, 2.08) renderers=2 baked=0
+    A93_Fixture_BlenderKit_Brass, A93_Chandelier_ON
+  TickerBoards center=(0.00, 8.09, -17.85) size=(25.83, 5.18, 9.23) renderers=18 baked=0
+    BBB_TV_Vent_Dark, BBB_TV_Mount_Steel, BBB_TV_Charcoal_Bezel, BBB_TV_Black_Screen, BBB_TV_Matte_Back
+ROOT Hall Lighting
+ROOT UnderMezzanine_GamePosters
+  Poster_Sandguard center=(2.20, 2.15, 17.32) size=(0.95, 1.40, 0.06) renderers=2 baked=0
+    PosterFrame, Sandguard
+  Poster_FourWinds center=(3.54, 2.15, 17.22) size=(0.95, 1.40, 0.15) renderers=2 baked=0
+    PosterFrame, FourWinds
+  Poster_OrapaMagic center=(4.89, 2.15, 16.97) size=(0.93, 1.40, 0.27) renderers=2 baked=0
+    PosterFrame, OrapaMagic
+ROOT UnderMezzanine_Lounge_Clusters
+  A90_InformationBoard_A center=(-6.70, 0.86, 6.90) size=(1.08, 1.71, 0.81) renderers=3 baked=3
+    Lounge_Lounge_BK_Atlas, Lounge_InformationBoard_A
+  A90_ServiceTrolley_A center=(-10.40, 0.50, 8.34) size=(0.47, 1.00, 0.93) renderers=2 baked=2
+    Lounge_Lounge_BK_Atlas
+  A90_Table_A center=(-8.65, 0.23, 10.60) size=(0.66, 0.46, 1.14) renderers=2 baked=2
+    Lounge_Lounge_BK_Atlas
+  A90_Bookcase_A center=(-9.90, 0.94, 13.24) size=(1.06, 1.87, 0.81) renderers=6 baked=6
+    Lounge_Lounge_BK_Atlas, Lounge_Furniture_Accents
+  A90_Shelf_A center=(-11.00, 0.83, 12.35) size=(0.67, 1.65, 0.75) renderers=2 baked=2
+    Lounge_Lounge_BK_Atlas
+  A90_Table_B center=(-2.20, 0.39, 15.83) size=(1.35, 0.78, 0.69) renderers=4 baked=0
+    Furniture_Accents, Lounge_BK_Atlas
+  A90_Bookcase_B center=(3.60, 0.52, 16.68) size=(1.66, 1.03, 0.71) renderers=7 baked=0
+    Lounge_BK_Atlas, Furniture_Accents, Lounge_BK_Glass
+  A90_Shelf_B center=(-2.20, 1.79, 17.20) size=(0.95, 1.22, 0.28) renderers=2 baked=0
+    Lounge_BK_Atlas
+  A90_DisplayCabinet center=(5.20, 0.57, 16.10) size=(1.33, 1.15, 0.90) renderers=3 baked=0
+    Lounge_BK_Glass, Lounge_BK_Atlas
+  A90_InformationBoard_B center=(-0.85, 0.64, 15.35) size=(0.72, 1.28, 0.61) renderers=5 baked=0
+    Furniture_Accents, Lounge_BK_Atlas, InformationBoard_B
+  A90_ServiceTrolley_B center=(10.40, 0.44, 8.35) size=(0.46, 0.88, 0.75) renderers=2 baked=0
+    Lounge_BK_Atlas
+  A90_LeafletRack center=(-3.55, 0.62, 15.47) size=(0.57, 1.19, 0.66) renderers=2 baked=0
+    Lounge_BK_Atlas
+  A90_UmbrellaStand center=(6.98, 0.48, 6.96) size=(0.54, 0.97, 0.48) renderers=2 baked=0
+    Lounge_BK_Atlas
+  A91_Left_Teal_Sofa center=(-10.01, 0.53, 10.60) size=(2.84, 1.07, 2.75) renderers=3 baked=3
+    Lounge_BBB_Seating_Walnut, Lounge_BBB_Seating_TealVelvet, Lounge_BBB_Seating_Brass
+  A91_Right_Red_Sofa center=(10.05, 0.56, 10.60) size=(3.24, 1.13, 3.23) renderers=3 baked=0
+    BBB_Seating_Walnut_001, BBB_Seating_OxbloodLeather, BBB_Seating_Brass_001
+  A91_Left_Bench center=(-7.20, 0.31, 10.60) size=(2.08, 0.62, 2.08) renderers=3 baked=3
+    Lounge_BBB_Seating_Walnut, Lounge_BBB_Seating_BurgundyVelvet, Lounge_BBB_Seating_Brass
+  A91_Right_Bench center=(7.20, 0.31, 10.60) size=(2.08, 0.62, 2.08) renderers=3 baked=0
+    BBB_Seating_Walnut, BBB_Seating_BurgundyVelvet, BBB_Seating_Brass
+  A91_Right_Coffee_Table center=(8.65, 0.23, 10.60) size=(0.66, 0.46, 1.14) renderers=2 baked=0
+    Lounge_BK_Atlas
+  A91_Rear_Library_Case center=(-4.75, 0.94, 16.39) size=(1.04, 1.87, 0.66) renderers=6 baked=0
+    Lounge_BK_Atlas, Furniture_Accents
+  A91_Right_Library_Case center=(9.39, 0.52, 13.39) size=(1.57, 1.03, 1.32) renderers=7 baked=0
+    Lounge_BK_Atlas, Furniture_Accents, Lounge_BK_Glass
+  A91_Rear_Display_Cabinet center=(1.90, 0.57, 16.80) size=(1.22, 1.15, 0.59) renderers=3 baked=0
+    Lounge_BK_Glass, Lounge_BK_Atlas
+  A91_Information_Desk_Chair center=(-2.20, 0.51, 16.60) size=(0.64, 1.03, 0.63) renderers=3 baked=0
+    BBB_Props_Black_plastic, BBB_Leather_WOOD, BBB_Props_Brushed_Brass_Metal_001
+  A91_Left_Planter center=(-11.30, 0.93, 7.40) size=(2.02, 1.86, 1.97) renderers=4 baked=3
+    Lounge_BBB_Areca_Cane_001, Lounge_BBB_Areca_Frond_Card_001, Lounge_BBB_Props_Brushed_Brass_Metal_003, Lounge_BBB_Furniture_Dark_Soil_001
+  A91_Right_Planter center=(11.27, 0.93, 7.42) size=(2.02, 1.86, 1.97) renderers=4 baked=0
+    BBB_Areca_Cane_001, BBB_Areca_Frond_Card_001, BBB_Props_Brushed_Brass_Metal_003, BBB_Furniture_Dark_Soil_001
+  A91_Rear_Planter center=(-5.61, 0.93, 14.55) size=(1.87, 1.86, 1.80) renderers=4 baked=0
+    BBB_Areca_Cane_001, BBB_Areca_Frond_Card_001, BBB_Props_Brushed_Brass_Metal_003, BBB_Furniture_Dark_Soil_001
+  A91_Left_Rug center=(-8.80, 0.01, 10.60) size=(4.00, 0.00, 4.10) renderers=1 baked=1
+    Lounge_Lounge_Rug_BlenderKit_Fabric
+  A91_Right_Rug center=(8.80, 0.01, 10.60) size=(4.00, 0.00, 4.10) renderers=1 baked=0
+    Lounge_Rug_BlenderKit_Fabric
+ROOT Hall_Lighting_Bright_Jewel
+ROOT Lobby Presentation
+  Lobby Selection Ring center=(-5.25, 0.06, 9.60) size=(2.00, 0.00, 2.00) renderers=1 baked=0
+    M_LobbySelectionRing
+ROOT Lobby Network - KCP 7777
+ROOT Gameplay Presentation
+  Player center=(-5.25, 1.36, 9.29) size=(0.10, 0.01, 0.05) renderers=1 baked=0
+    Face_Ink
+ROOT Hall Session
+ROOT Hall Speaker
+ROOT PA_Speakers_Approved
+  PA_01_Left_Lounge center=(-12.64, 2.70, 10.55) size=(0.30, 0.51, 0.40) renderers=4 baked=0
+    PA_Matte_GrayGreen, PA_Inner_Shadow
+  PA_02_Right_Lounge center=(12.64, 2.70, 10.55) size=(0.30, 0.51, 0.40) renderers=4 baked=0
+    PA_Matte_GrayGreen, PA_Inner_Shadow
+  PA_04_Auction_Hall center=(13.78, 3.60, -12.00) size=(0.18, 0.51, 0.38) renderers=4 baked=0
+    PA_Matte_GrayGreen, PA_Inner_Shadow
+  PA_Reference_01_Lobby_TV center=(13.87, 9.24, -11.00) size=(0.23, 0.53, 0.38) renderers=4 baked=0
+    PA_Matte_GrayGreen, PA_Inner_Shadow
+  PA_Reference_02_Opposite_TV center=(-13.87, 9.24, -11.00) size=(0.23, 0.53, 0.38) renderers=4 baked=0
+    PA_Matte_GrayGreen, PA_Inner_Shadow
+  PA_Reference_03_Banner_Right center=(11.65, 9.23, 12.33) size=(0.42, 0.53, 0.44) renderers=4 baked=0
+    PA_Matte_GrayGreen, PA_Inner_Shadow
+  PA_Reference_04_Banner_Left center=(-11.65, 9.23, 12.33) size=(0.42, 0.53, 0.44) renderers=4 baked=0
+    PA_Matte_GrayGreen, PA_Inner_Shadow
+ROOT Left_Lounge_Visual_Study

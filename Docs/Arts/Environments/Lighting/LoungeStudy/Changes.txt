@@ -1,0 +1,2 @@
+Left lounge only. Dedicated materials: 12; prepared lightmap receivers: 25.
+Bake complete in 60.9 seconds.

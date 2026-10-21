@@ -7,22 +7,22 @@ using UnityEngine;
 
 namespace BuyBidBlow.Audio
 {
-    // The hall's PA speaker above the ticker boards. Hears match moments from MatchTimeline and asks CueAudio
-    // to play them from its position. No commands, RPCs or replicated fields.
+    // The hall's PA speaker above the ticker boards. Plays what happened on the same MatchNet events the screens use,
+    // and the closing-soon warning ahead of time from MatchTimeline, from its own position. No commands, RPCs or replicated fields.
     public sealed class HallSpeaker : MonoBehaviour
     {
         const double ClosingSoonSeconds=10;
-        public CueReference roundStart, closingBell, auctionStart, auctionEnd,closingSoon;
+        public CueReference matchStart, matchEnd, roundTurn, auctionStart, auctionEnd,closingSoon;
         // Start of the auction slot already warned, so each slot warns once.
         double warnedSlot=double.NaN;
 
         void OnEnable()
         {
             GameAudio.EnsureHost();
-            // The timeline only raises moments from now on, so late activation never replays old bells.
-            MatchTimeline.SpanStarted+=Started;MatchTimeline.SpanEnded+=Ended;
+            // MatchNet only raises changes seen while connected, so late activation never replays old bells.
+            MatchNet.RoundTurned+=Turned;MatchNet.AuctionStageChanged+=StageChanged;
         }
-        void OnDisable(){MatchTimeline.SpanStarted-=Started;MatchTimeline.SpanEnded-=Ended;}
+        void OnDisable(){MatchNet.RoundTurned-=Turned;MatchNet.AuctionStageChanged-=StageChanged;}
         void Update()
         {
             var timeline=MatchTimeline.Current;if(!timeline)return;
@@ -32,17 +32,13 @@ namespace BuyBidBlow.Audio
                 &&slot.StartsAt!=warnedSlot&&now>=Math.Max(slot.StartsAt,slot.EndsAt-ClosingSoonSeconds))
             {warnedSlot=slot.StartsAt;Play(closingSoon);}
         }
-        void Started(TimelineSpan span)
+        // The first round's opening is the match start and the last bell the match end; every other turn rings the bell.
+        void Turned(MatchNet.RoundTurn turn)=>Play(turn.Closed==0?matchStart:turn.Opened==0?matchEnd:roundTurn);
+        void StageChanged(MatchNet.AuctionStage previous,MatchNet.AuctionStage current)
         {
-            if(span.Kind==TimelineSpanKind.Round)Play(roundStart);
-            if(IsAuction(span))Play(auctionStart);
+            if(previous!=MatchNet.AuctionStage.None)Play(auctionEnd);
+            if(current!=MatchNet.AuctionStage.None)Play(auctionStart);
         }
-        void Ended(TimelineSpan span)
-        {
-            if(span.Kind==TimelineSpanKind.Round)Play(closingBell);
-            if(IsAuction(span))Play(auctionEnd);
-        }
-        static bool IsAuction(TimelineSpan span)=>span.Kind==TimelineSpanKind.OpenAuction||span.Kind==TimelineSpanKind.SecretAuction;
         void Play(CueReference cue)=>CueAudioHost.PlayAt(cue,transform.position,this);
     }
 }

@@ -39,7 +39,7 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
 
             // Aim from the customer side of the desk at eye height; the camera rig is detached so it holds still.
             float eye = detect.transform.position.y - interaction.transform.position.y;
-            detect.transform.SetParent(null, true);
+            match.Detach(detect.transform);
 
             foreach (var (staffName, company) in Desks)
             {
@@ -110,11 +110,13 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
         {
             yield return match.Start(roundSeconds: 1);
             int bells = 0;
-            MatchNet.Current.ClosingBell += (_, __) => bells++;
-            yield return HostedMatch.Until(() => MatchNet.Current.phase == MatchNet.Phase.Finished, "match finished", 40);
-            Assert.AreEqual(17, MatchNet.Current.lastClosedRound, "last Closing Bell is round 17");
-            Assert.AreEqual(17, MatchNet.Current.round, "round stays at the last one");
-            Assert.GreaterOrEqual(bells, 16, "a Closing Bell per round");
+            System.Action<MatchNet.RoundTurn> count = turn => { if (turn.Closed > 0) bells++; };
+            MatchNet.RoundTurned += count;
+            try { yield return HostedMatch.Until(() => MatchNet.Current.phase == MatchNet.Phase.Finished, "match finished", 40); }
+            finally { MatchNet.RoundTurned -= count; }
+            Assert.AreEqual(13, MatchNet.Current.lastClosedRound, "last Closing Bell is round 13");
+            Assert.AreEqual(13, MatchNet.Current.round, "round stays at the last one");
+            Assert.GreaterOrEqual(bells, 12, "a Closing Bell per round");
         }
 
         static string Label(TradingPanelView view, string path) => view.transform.Find(path).GetComponent<UnityEngine.UI.Text>().text;

@@ -1,0 +1,5 @@
+PASS: saved scene reopened. 468 primary static surfaces have valid lightmaps.
+PASS: five added reflection probes have saved HDR textures; approved left-lounge rig retained.
+PASS: moving doors remain dynamic. doors=6; seats=16; ropes=16; cloth=1.
+PASS: matching before/after cameras and unchanged global post-processing.
+Lightmap atlases: 1. Added realtime-shadow spotlights: 6; remaining new lights baked.

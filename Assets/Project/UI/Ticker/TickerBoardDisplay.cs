@@ -28,6 +28,11 @@ namespace BuyBidBlow.UI.Ticker
         [SerializeField] Image latestBadge;
         [SerializeField] TickerPlot largePlot;
         MatchNet source;
+        // Runtime layers over the screens: the scheduled video and the short black cut between channels.
+        RawImage videoLayer;
+        Image cutLayer;
+        string shownChannel;
+        float cutUntil;
         int cachedCount=-1, cachedCompany=-1;
         int[] history=Array.Empty<int>();
         static readonly Color White=new Color(.96f,.94f,.86f);
@@ -39,7 +44,10 @@ namespace BuyBidBlow.UI.Ticker
             name.EndsWith("_Left",StringComparison.Ordinal)?ScreenMode.Timer:
             name.EndsWith("_Right",StringComparison.Ordinal)?ScreenMode.Company:ScreenMode.Overview;
 
-        void Awake(){ApplyMode();ShowWaiting();}
+        // The scheduled channel id, or null while the board shows its fixed screen.
+        public string CurrentChannel=>shownChannel;
+
+        void Awake(){EnsureLayers();ApplyMode();ShowWaiting();}
         void OnEnable(){cachedCount=-1;}
         void Update()
         {
@@ -49,6 +57,10 @@ namespace BuyBidBlow.UI.Ticker
                 source=current;cachedCount=-1;cachedCompany=-1;
                 history=Array.Empty<int>();ShowWaiting();
             }
+            var director=TickerDirector.Active;
+            TickerShot shot=default;
+            bool scheduled=director&&director.TryGetShot(name,out shot);
+            Program(director,shot);
             if(!current||!surface)return;
             // Poll after Mirror's message application, not in a partially applied SyncList callback.
             int count=current.priceHistory.Count;
@@ -60,17 +72,50 @@ namespace BuyBidBlow.UI.Ticker
                 PresentOverview(history);
             }
             double elapsed=Math.Max(0,NetworkTime.time-current.firstRoundStartsAt);
-            int company=(int)(elapsed/Math.Max(1,companySeconds))%3;
+            int company=scheduled&&shot.Channel.screen=="Company"?shot.Company:(int)(elapsed/Math.Max(1,companySeconds))%3;
             if(company!=cachedCompany){PresentCompany(history,company,-PriceChangeGenerator.HistoryRoundCount);cachedCompany=company;}
             SetClock(current.phase==MatchNet.Phase.Finished?0:current.SecondsLeft);
         }
 
-        public void ApplyMode()
+        public void ApplyMode()=>Show(ResolvedMode);
+        void Show(ScreenMode screen)
         {
             if(!timerGroup)return;
-            timerGroup.SetActive(ResolvedMode==ScreenMode.Timer);
-            overviewGroup.SetActive(ResolvedMode==ScreenMode.Overview);
-            companyGroup.SetActive(ResolvedMode==ScreenMode.Company);
+            timerGroup.SetActive(screen==ScreenMode.Timer);
+            overviewGroup.SetActive(screen==ScreenMode.Overview);
+            companyGroup.SetActive(screen==ScreenMode.Company);
+        }
+        // Shows the director's channel for this board, or the fixed screen when nothing is scheduled.
+        void Program(TickerDirector director,TickerShot shot)
+        {
+            if(!videoLayer)return;
+            string channel=shot.IsSet?shot.Channel.id:null;
+            if(channel!=shownChannel)
+            {
+                if(shownChannel!=null&&channel!=null)cutUntil=Time.unscaledTime+director.Schedule.Data.cutSeconds;
+                shownChannel=channel;
+            }
+            bool video=shot.IsSet&&!string.IsNullOrEmpty(shot.Channel.video);
+            if(!shot.IsSet)Show(ResolvedMode);
+            else if(!video)Show((ScreenMode)Enum.Parse(typeof(ScreenMode),shot.Channel.screen));
+            var texture=video?director.VideoTexture(shot.Channel.video):null;
+            videoLayer.enabled=texture;
+            if(texture)
+            {
+                float slices=director.Schedule.BoardCount;
+                videoLayer.texture=texture;
+                videoLayer.uvRect=shot.Slot>=0&&shot.Channel.wide?new Rect(shot.Slot/slices,0,1/slices,1):new Rect(0,0,1,1);
+            }
+            cutLayer.enabled=Time.unscaledTime<cutUntil;
+        }
+        void EnsureLayers()
+        {
+            if(!surface||videoLayer)return;
+            videoLayer=Node(surface,"Video feed",0,0,1280,720).gameObject.AddComponent<RawImage>();
+            videoLayer.raycastTarget=false;videoLayer.enabled=false;
+            cutLayer=Panel(surface,"Channel cut",0,0,1280,720,Color.black);cutLayer.enabled=false;
+            // The LED grid stays on top of everything shown.
+            var grid=surface.Find("Subtle LED grid");if(grid)grid.SetAsLastSibling();
         }
         public void ShowWaiting()
         {
