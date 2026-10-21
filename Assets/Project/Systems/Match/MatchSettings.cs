@@ -71,8 +71,6 @@ namespace BuyBidBlow.Systems.Match
             if (AuctionRounds == null) throw new FormatException("AuctionRounds is required.");
             if (AuctionRoundSeconds <= 0 || AuctionDurationSeconds <= 0)
                 throw new FormatException("Auction round and auction durations must be positive.");
-            if ((long)AuctionDurationSeconds * 2 > AuctionRoundSeconds)
-                throw new FormatException("Both auctions must fit inside an auction round.");
             for (int i = 0; i < AuctionRounds.Length; i++)
                 if (AuctionRounds[i] < 1 || AuctionRounds[i] > RoundCount ||
                     Array.IndexOf(AuctionRounds, AuctionRounds[i]) != i)
@@ -89,12 +87,14 @@ namespace BuyBidBlow.Systems.Match
                 throw new FormatException($"PriceChange.RiseChances needs {companyCount} entries in Company order.");
             foreach (float chance in PriceChange.RiseChances)
                 if (chance < 0f || chance > 1f) throw new FormatException("PriceChange.RiseChances must be between 0 and 1.");
-            if (AuctionSlots == null) throw new FormatException("AuctionSlots is required.");
+            if (AuctionSlots == null || AuctionSlots.Length != 2) throw new FormatException("Exactly two AuctionSlots are required.");
             // In order: public, then secret. Relative to each auction round's start.
             foreach (AuctionSlot slot in AuctionSlots)
-                if (slot == null || slot.StartsAtSeconds < 0 || slot.DurationSeconds != AuctionDurationSeconds ||
+                if (slot == null || slot.StartsAtSeconds < 0 || slot.DurationSeconds <= 0 ||
                     (long)slot.StartsAtSeconds + slot.DurationSeconds > AuctionRoundSeconds)
-                    throw new FormatException("Each auction slot must fit inside an auction round and use AuctionDurationSeconds.");
+                    throw new FormatException("Each auction slot must have positive duration and fit inside an auction round.");
+            if ((long)AuctionSlots[0].StartsAtSeconds + AuctionSlots[0].DurationSeconds > AuctionSlots[1].StartsAtSeconds)
+                throw new FormatException("Public and secret auction slots must not overlap.");
         }
 
         private static void ValidateOffsets(IntRange[] offsets, int companyCount, string name)

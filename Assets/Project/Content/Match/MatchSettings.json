@@ -7,7 +7,7 @@
     "RoundCount": 13,
     "RoundSeconds": 60,
     "AuctionRounds": [2, 6, 10],
-    "AuctionRoundSeconds": 180,
+    "AuctionRoundSeconds": 120,
     "AuctionDurationSeconds": 60,
     "StartingCash": 200,
     "StartingShares": 0,
@@ -29,6 +29,6 @@
     },
     "AuctionSlots": [
         { "StartsAtSeconds": 0, "DurationSeconds": 60 },
-        { "StartsAtSeconds": 60, "DurationSeconds": 60 }
+        { "StartsAtSeconds": 60, "DurationSeconds": 30 }
     ]
 }
