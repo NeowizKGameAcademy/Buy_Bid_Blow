@@ -374,6 +374,66 @@
             "cooldownSeconds": 0.0,
             "maxInstances": 1,
             "overflow": "stopOldest"
+        },
+        {
+          "id": "auction.won",
+          "clips": [
+            "Assets/Project/Audio/Clips/CollectedSFX/Auction/SFX_Auction_Won.wav"
+          ],
+          "selection": "first",
+          "bus": "sfx",
+          "volume": 0.65,
+          "pitchRange": {
+            "x": 1.0,
+            "y": 1.0
+          },
+          "loop": false,
+          "spatialBlend": 0.0,
+          "minDistance": 1.5,
+          "maxDistance": 18.0,
+          "cooldownSeconds": 0.0,
+          "maxInstances": 4,
+          "overflow": "stopOldest"
+        },
+        {
+          "id": "information.reveal",
+          "clips": [
+            "Assets/Project/Audio/Clips/CollectedSFX/Auction/SFX_Information_Reveal.wav"
+          ],
+          "selection": "first",
+          "bus": "sfx",
+          "volume": 0.65,
+          "pitchRange": {
+            "x": 1.0,
+            "y": 1.0
+          },
+          "loop": false,
+          "spatialBlend": 0.0,
+          "minDistance": 1.5,
+          "maxDistance": 18.0,
+          "cooldownSeconds": 0.0,
+          "maxInstances": 4,
+          "overflow": "stopOldest"
+        },
+        {
+          "id": "ui.error",
+          "clips": [
+            "Assets/Project/Audio/Clips/CollectedSFX/UI/SFX_UI_Error.wav"
+          ],
+          "selection": "first",
+          "bus": "sfx",
+          "volume": 0.65,
+          "pitchRange": {
+            "x": 1.0,
+            "y": 1.0
+          },
+          "loop": false,
+          "spatialBlend": 0.0,
+          "minDistance": 1.5,
+          "maxDistance": 18.0,
+          "cooldownSeconds": 0.0,
+          "maxInstances": 4,
+          "overflow": "stopOldest"
         }
     ]
 }

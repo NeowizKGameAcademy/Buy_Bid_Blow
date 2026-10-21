@@ -19,8 +19,8 @@ public sealed class InformationNotebookView : MonoBehaviour {
  int currentRound=1,totalRounds=13;
  readonly Dictionary<int,Direction> known=new Dictionary<int,Direction>();
  static readonly Color Ink=new Color(.04f,.18f,.18f),Past=new Color(.43f,.41f,.37f);
- public void SetOpen(bool open,int round){
- if(open==IsOpen)return;BuyBidBlow.Audio.GameAudio.Play("ui.notebook",this);IsOpen=open;if(open)FirstRound=Mathf.Clamp(round-2,1,Mathf.Max(1,totalRounds-7));
+ public void SetOpen(bool open,int round,string openingCue="ui.notebook"){
+ if(open==IsOpen)return;BuyBidBlow.Audio.GameAudio.Play(open?openingCue:"ui.notebook",this);IsOpen=open;if(open)FirstRound=Mathf.Clamp(round-2,1,Mathf.Max(1,totalRounds-7));
  overlay.SetActive(open);OpenChanged?.Invoke(open);RenderRows();
  }
  public void Scroll(int rows){int before=FirstRound;FirstRound=Mathf.Clamp(FirstRound+rows,1,Mathf.Max(1,totalRounds-7));if(before!=FirstRound)BuyBidBlow.Audio.GameAudio.Play("ui.page",this);RenderRows();}

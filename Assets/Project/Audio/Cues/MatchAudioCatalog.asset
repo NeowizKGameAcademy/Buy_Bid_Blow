@@ -50,6 +50,12 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 07bb20a8cb4c70443bea87c665e5f76f, type: 3}
   - id: Assets/Project/Audio/Clips/BGM/BGM_InGame.mp3
     clip: {fileID: 8300000, guid: 8c8213281ac61674d9816d3a4c53cd1d, type: 3}
+  - id: Assets/Project/Audio/Clips/CollectedSFX/Auction/SFX_Auction_Won.wav
+    clip: {fileID: 8300000, guid: 82852b3f171941842a41377a0ca81f30, type: 3}
+  - id: Assets/Project/Audio/Clips/CollectedSFX/Auction/SFX_Information_Reveal.wav
+    clip: {fileID: 8300000, guid: f7bdee8f88002884d9a8aeeb778110b9, type: 3}
+  - id: Assets/Project/Audio/Clips/CollectedSFX/UI/SFX_UI_Error.wav
+    clip: {fileID: 8300000, guid: 04e9118a80af23344aef0b7fe0db0d82, type: 3}
   buses:
   - id: sfx
     mixerGroup: {fileID: 0}

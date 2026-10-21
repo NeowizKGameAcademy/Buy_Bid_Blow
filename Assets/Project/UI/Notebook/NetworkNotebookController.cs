@@ -55,11 +55,12 @@ namespace BuyBidBlow.UI.Notebook
             if(k.wKey.wasPressedThisFrame) view.Scroll(-1);
             if(k.sKey.wasPressedThisFrame) view.Scroll(1);
         }
-        public void Open()
+        public void Open()=>OpenInformation(false);
+        public void OpenInformation(bool newlyAcquired)
         {
             if(!MatchNet.Current || PlayerNet.LocalPortfolio==null)return;
             if(trading && trading.IsOpen)trading.Close();
-            view.SetOpen(true,MatchNet.Current.round);
+            view.SetOpen(true,MatchNet.Current.round,newlyAcquired?"information.reveal":"ui.notebook");
         }
         public void Close()
         {

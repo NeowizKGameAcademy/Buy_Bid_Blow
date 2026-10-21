@@ -85,7 +85,7 @@ namespace BuyBidBlow.UI.HUD
             switch(n.Kind)
             {
                 case MatchNoticeKind.Trade:BuyBidBlow.Audio.GameAudio.Play("market.trade",this);notices.TradeCompleted(company,n.Quantity,n.Buy?-n.Amount:n.Amount,n.Buy);break;
-                case MatchNoticeKind.Rejected:notices.Rejected(n.Message);break;
+                case MatchNoticeKind.Rejected:BuyBidBlow.Audio.GameAudio.Play("ui.error",this);notices.Rejected(n.Message);break;
                 case MatchNoticeKind.BetSettled:notices.BetSettled(company,n.Amount,n.Payout,n.Won);break;
                 case MatchNoticeKind.BetJoined:BuyBidBlow.Audio.GameAudio.Play("market.bet",this);notices.Stack.Push("하락 베팅 참여",$"{company} · 참가금 ${n.Amount} · 성공 지급 ${n.Amount*2}",NoticeTone.Success);break;
                 case MatchNoticeKind.BetCancelled:notices.Stack.Push("하락 베팅 취소",$"참가금 ${n.Amount} 전액 환불");break;
@@ -97,11 +97,12 @@ namespace BuyBidBlow.UI.HUD
         {
             if(trading && trading.IsOpen)trading.Close();
             canRead=outcome.Won;
+            if(outcome.Won)BuyBidBlow.Audio.GameAudio.Play("auction.won",this);
             if(outcome.Secret)auctionResult.ShowSecret(outcome.Won,outcome.Amount);
             else if(outcome.Sold)auctionResult.ShowPublic(outcome.Winner,outcome.Amount,outcome.Won);
             else auctionResult.ShowUnsold();
         }
-        void OnAuctionAction(int action){if(action==0 && canRead)notebook.Open();}
+        void OnAuctionAction(int action){if(action==0 && canRead)notebook.OpenInformation(true);}
         public void ShowResults()
         {
             var rows=PlayerNet.LocalResults;if(rows==null || rows.Length==0)return;

@@ -12,6 +12,17 @@ namespace BuyBidBlow.Dev.Editor
         static HUDIntegrationRunner(){api=ScriptableObject.CreateInstance<TestRunnerApi>();api.RegisterCallbacks(new Report());EditorApplication.update+=Tick;}
         static void Tick()
         {
+            if(File.Exists("Library/NewAudioTests.request") && !EditorApplication.isCompiling && !EditorApplication.isUpdating && !EditorApplication.isPlayingOrWillChangePlaymode)
+            {
+                if(EditorUserBuildSettings.standaloneBuildSubtarget!=StandaloneBuildSubtarget.Player){EditorUserBuildSettings.standaloneBuildSubtarget=StandaloneBuildSubtarget.Player;return;}
+#if UNITY_SERVER
+                File.Delete("Library/NewAudioTests.request");
+                UnityEditor.Compilation.CompilationPipeline.RequestScriptCompilation();
+                return;
+#endif
+                File.Delete("Library/NewAudioTests.request");
+                api.Execute(new ExecutionSettings(new Filter{testMode=TestMode.PlayMode,testNames=new[]{"BuyBidBlow.Dev.Tests.PlayMode.MatchAudioTests.NewNotebookAwardAndRejectionSounds"}}));return;
+            }
             if(File.Exists("Library/TradeRefreshTests.request") && !EditorApplication.isCompiling && !EditorApplication.isUpdating && !EditorApplication.isPlayingOrWillChangePlaymode)
             {
                 File.Delete("Library/TradeRefreshTests.request");
