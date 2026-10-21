@@ -37,3 +37,11 @@ PlayerActionAudio.PlayFootstep(), PlayJump(), PlayEmotion(). 점프는 PlayerMov
 Logs/FullAudioTests.xml: 2개 Passed. 실제 Mirror 호스트에서 시세 공개 5회, 경매 시작·종료·마감 임박 각 2회, 중복 방지, 행동 호출 지점, 메뉴→게임 BGM 전환 후 이전 곡 종료, UI 선택·페이지·수첩·수량·닫기·확인, 서버 확인 거래·베팅 성공음을 검사했다. AudioSource 및 CueAudio Playing 기록을 검증하며 스피커 청음·음량 평가는 별도다.
 전용 서버 UNITY_SERVER에서는 오디오가 꺼진다. 청음/오디오 테스트는 Player subtarget으로 한다.
 조립: Tools/Buy Bid Blow/Audio/Connect Match Sounds (MatchAudioSetup.Apply, 카탈로그 동기화 후 호스트·플레이어·스피커 연결). 스피커만 다시 놓기: Tools/Buy Bid Blow/Audio/Install Hall Speaker.
+
+## 추가 효과음 (2026-10-21)
+- ui.notebook: 수첩 열기·닫기 수정본으로 교체. 기존 파일 경로와 GUID 유지.
+- auction.won: 본인 낙찰 결과창이 표시될 때 벨. 공개/비공개 공통이며 패찰/유찰에는 재생하지 않음.
+- information.reveal: 낙찰 결과창의 정보 보기로 수첩을 열 때 종이 바스락. 일반 수첩 열기음을 대체하며 이후 닫기는 ui.notebook.
+- ui.error: 서버가 보낸 MatchNoticeKind.Rejected 수신 시 한 번. 거래·입찰·베팅 거절에 공통 사용하며 일반 패찰에는 재생하지 않음.
+추가 음원 원본 위치: C:/훈련생폴더/팀 프로젝트/Buy,Bid,Blow/사운드. 원본을 수정하지 않고 CollectedSFX로 복사. MatchAudio.json 저장 시 기존 SyncOnImport가 카탈로그를 갱신.
+검증: Logs/NewAudioTests.xml Passed. 호스트에서 일반 수첩 열기/닫기, 본인 낙찰음 1회, 패찰 무음, 정보 열람 시 일반 수첩음 중복 방지, 거래·입찰·베팅 서버 거절음, 카탈로그 유효성과 Playing 기록을 확인. 음량에 대한 청음 평가는 별도.

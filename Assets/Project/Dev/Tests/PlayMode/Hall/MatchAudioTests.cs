@@ -14,6 +14,37 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
     public sealed class MatchAudioTests
     {
         readonly HostedMatch match=new HostedMatch();
+        [UnityTest]public IEnumerator NewNotebookAwardAndRejectionSounds()
+        {
+#if UNITY_SERVER
+            Assert.Ignore("Client audio only.");
+#endif
+            yield return match.Start(port:27998);
+            var audio=GameAudio.EnsureHost().Engine;
+            Assert.IsEmpty(CueAudioHost.Instance.Catalog.Validate());
+            var player=NetworkClient.localPlayer.GetComponent<BuyBidBlow.Characters.PlayerNet>();
+            var feedback=player.GetComponentInChildren<BuyBidBlow.UI.HUD.NetworkMatchFeedback>(true);
+            var notebook=feedback.notebook;
+            notebook.Open();yield return null;notebook.Close();yield return null;
+            Assert.AreEqual(2,Count(audio,"ui.notebook"));
+            feedback.OnOutcome(new AuctionOutcome{Sold=true,Won=false,Winner="Other",Amount=5});
+            yield return null;yield return null;Assert.AreEqual(0,Count(audio,"auction.won"));
+            feedback.auctionResult.Hide();
+            feedback.OnOutcome(new AuctionOutcome{Sold=true,Won=true,Winner=player.nickname,Amount=5});
+            yield return null;yield return null;Assert.AreEqual(1,Count(audio,"auction.won"));
+            yield return null;Assert.AreEqual(1,Count(audio,"auction.won"),"no repeated bell while showing the result");
+            feedback.auctionResult.Submit(0);yield return null;
+            Assert.IsTrue(notebook.view.IsOpen);Assert.AreEqual(1,Count(audio,"information.reveal"));
+            Assert.AreEqual(2,Count(audio,"ui.notebook"),"reveal replaces the ordinary opening sound");
+            notebook.Close();yield return null;Assert.AreEqual(3,Count(audio,"ui.notebook"));
+            player.CmdTrade(BuyBidBlow.Systems.Types.Company.Straw,0,true);
+            yield return HostedMatch.Until(()=>Count(audio,"ui.error")==1,"trade rejection sound");yield return null;
+            player.CmdBid(1,false);
+            yield return HostedMatch.Until(()=>Count(audio,"ui.error")==2,"unseated bid rejection sound");yield return null;
+            player.CmdToggleBet((BuyBidBlow.Systems.Types.Company)99);
+            yield return HostedMatch.Until(()=>Count(audio,"ui.error")==3,"bet rejection sound");
+            Assert.IsFalse(audio.History.Any(r=>r.Result!="Playing"),"all requested clips resolve and play");
+        }
         [UnityTest]public IEnumerator ProductionClockAndActualJumpUseCurrentSettings()
         {
 #if UNITY_SERVER
