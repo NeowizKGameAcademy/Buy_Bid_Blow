@@ -36,7 +36,7 @@ namespace BuyBidBlow.Dev.Editor
                     .Replace("2 · 6 · 10 · 14R","2 · 6 · 10R").Replace("2R · 6R · 10R · 14R","2R · 6R · 10R")
                     .Replace("시작 인원 × 4주","시작 인원 × 5 + 5주").Replace("I로 내 정보","Tab으로 내 정보")
                     .Replace("I / Esc 닫기","Q / Tab 닫기").Replace("Tab / Esc 닫기","Q / Tab 닫기");
-                if(text.name=="Keyboard Guide" && text.GetComponentInParent<BuyBidBlow.UI.Notebook.InformationNotebookView>(true))value="↑ ↓ 스크롤 · Q / Tab 닫기";
+                if(text.name=="Keyboard Guide" && text.GetComponentInParent<BuyBidBlow.UI.Notebook.InformationNotebookView>(true))value="W / S 스크롤 · Q / Tab 닫기";
                 text.text=value;
             }
         }

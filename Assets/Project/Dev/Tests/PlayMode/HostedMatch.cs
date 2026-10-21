@@ -18,7 +18,7 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
         public GameNetworkManager Room { get; private set; }
 
         // roundSeconds 0 keeps the rules' round lengths; tweak edits a copy of the match rules first.
-        public IEnumerator Start(int roundSeconds = 0, Action<MatchSettings> tweak = null)
+        public IEnumerator Start(int roundSeconds = 0, Action<MatchSettings> tweak = null, ushort port = 0)
         {
             SceneManager.LoadScene(GameNetworkManager.PlayScene);
             yield return null;
@@ -35,6 +35,7 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
                 file.SetValue(Room, new TextAsset(JsonUtility.ToJson(settings)));
             }
             Room.LocalNickname = "Tester";
+            if(port!=0)Room.transport.GetType().GetProperty("Port").SetValue(Room.transport,port);
             Room.StartHost();
             yield return Until(() => NetworkClient.localPlayer, "local player spawned");
             var net = NetworkClient.localPlayer.GetComponent<PlayerNet>();

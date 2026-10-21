@@ -26,6 +26,8 @@ namespace BuyBidBlow.Common
         private Company selectedCompany;
         private bool hasSelectedCompany;
         private bool joined;
+        private TradingPanelData displayedData;
+        private bool hasDisplayedData;
 
         private static bool Networked => NetworkClient.active && MatchNet.Current != null;
 
@@ -82,6 +84,17 @@ namespace BuyBidBlow.Common
             hasSelectedCompany = true;
 
             tradePanel.Open(company, PanelData(company));
+            hasDisplayedData=false;
+        }
+
+        // Public SyncLists (inventory/prices) and private portfolio RPCs can arrive separately.
+        // Reconcile after network updates, including other players' trades and phase changes.
+        private void LateUpdate()
+        {
+            if(!tradePanel.IsOpen)return;
+            if(Networked)BindMatch(MatchNet.Current);
+            else if(match!=null){tradePanel.Close();BindMatch(null);return;}
+            RefreshOpenPanel();
         }
 
         // What the panel shows for one company, from the server-confirmed assets and the published price.
@@ -150,8 +163,8 @@ namespace BuyBidBlow.Common
 
             if (Networked)
             {
-                NetworkClient.localPlayer.GetComponent<PlayerNet>().CmdTrade(requestedCompany, quantity, buy);
                 ShowResult("거래 요청 중...");
+                NetworkClient.localPlayer.GetComponent<PlayerNet>().CmdTrade(requestedCompany, quantity, buy);
                 return;
             }
 
@@ -165,8 +178,8 @@ namespace BuyBidBlow.Common
         private void Bet(Company requestedCompany)
         {
             if (!Networked || !Validate(requestedCompany, 1)) return;
-            NetworkClient.localPlayer.GetComponent<PlayerNet>().CmdToggleBet(requestedCompany);
             ShowResult("베팅 요청 중...");
+            NetworkClient.localPlayer.GetComponent<PlayerNet>().CmdToggleBet(requestedCompany);
         }
 
         // The server sends the new portfolio before its reply, so the panel already shows the result.
@@ -241,7 +254,12 @@ namespace BuyBidBlow.Common
         private void RefreshOpenPanel()
         {
             if (hasSelectedCompany && tradePanel.IsOpen)
-                tradePanel.Present(PanelData(selectedCompany));
+            {
+                var current=PanelData(selectedCompany);
+                if(hasDisplayedData && current.Equals(displayedData))return;
+                displayedData=current;hasDisplayedData=true;
+                tradePanel.Present(current);
+            }
         }
     }
 }

@@ -134,8 +134,11 @@ namespace BuyBidBlow.UI.Market
 
         public void IncreaseQuantity()
         {
-            if (!IsOpen || quantity == int.MaxValue) return;
-            quantity++;
+            if (!IsOpen) return;
+            int limit=Mathf.Max(1,TradingPanelView.QuantityLimit(data,(int)tab));
+            int next=quantity>=limit?1:quantity+1;
+            if(next==quantity)return;
+            quantity=next;
             BuyBidBlow.Audio.GameAudio.Play("ui.quantity",this);
             Refresh();
         }

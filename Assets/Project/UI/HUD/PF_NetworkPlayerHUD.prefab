@@ -2405,7 +2405,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 206573858661558569, guid: 1a9b3ff7ab3c5ee4b9ecf7c85efe9fa5, type: 3}
       propertyPath: m_Text
-      value: "\u2191 \u2193 \uC2A4\uD06C\uB864 \xB7 Q / Tab \uB2EB\uAE30"
+      value: "W / S \uC2A4\uD06C\uB864 \xB7 Q / Tab \uB2EB\uAE30"
       objectReference: {fileID: 0}
     - target: {fileID: 6149602504300150842, guid: 1a9b3ff7ab3c5ee4b9ecf7c85efe9fa5, type: 3}
       propertyPath: m_Name

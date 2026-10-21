@@ -52,8 +52,8 @@ namespace BuyBidBlow.UI.Notebook
             else if(view.IsOpen && k.qKey.wasPressedThisFrame) Close();
             if(!view.IsOpen) return;
             if(movement) { movement.SetMoveInput(Vector2.zero); movement.SetJumpHeld(false); }
-            if(k.upArrowKey.wasPressedThisFrame) view.Scroll(-1);
-            if(k.downArrowKey.wasPressedThisFrame) view.Scroll(1);
+            if(k.wKey.wasPressedThisFrame) view.Scroll(-1);
+            if(k.sKey.wasPressedThisFrame) view.Scroll(1);
         }
         public void Open()
         {

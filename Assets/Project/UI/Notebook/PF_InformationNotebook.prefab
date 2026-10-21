@@ -4943,7 +4943,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u2191 \u2193 \uC2A4\uD06C\uB864 \xB7 Q / Tab \uB2EB\uAE30"
+  m_Text: "W / S \uC2A4\uD06C\uB864 \xB7 Q / Tab \uB2EB\uAE30"
 --- !u!1 &4169024445056453336
 GameObject:
   m_ObjectHideFlags: 0
