@@ -57,6 +57,8 @@ namespace BuyBidBlow.Characters
 
         private void OnDisable()
         {
+            emotionPlaying = false;
+            if (TryGetComponent(out PlayerCamera camera)) camera.SetEmotionView(false);
             playerMove.GroundedChanged -= SetGroundedAnimation;
             playerMove.Jumped -= PlayJumpAnimation;
             playerMove.MoveInputChanged -= OnMoveInputChanged;
@@ -85,6 +87,7 @@ namespace BuyBidBlow.Characters
 
         public void OnRotate(InputAction.CallbackContext context)
         {
+            if (emotionPlaying) return;
             if (controlsBlocked || BuyBidBlow.UI.Notebook.NetworkNotebookController.BlocksInput || (radialMenu != null && radialMenu.IsOpen)) return;
             playerMove.Rotate(
                 context.ReadValue<Vector2>()
@@ -158,7 +161,11 @@ namespace BuyBidBlow.Characters
         private void HandleRadialMenuSelection(int menuNumber)
         {
             Debug.Log($"Radial menu selected: {menuNumber}", this);
+            if (menuNumber < 1 || menuNumber > 8)
+                return;
+
             emotionPlaying = true;
+            if (TryGetComponent(out PlayerCamera camera)) camera.SetEmotionView(true);
             switch (menuNumber)
             {
                 case 1:
@@ -176,6 +183,18 @@ namespace BuyBidBlow.Characters
                 case 4:
                     SetAnimationTrigger("HipHopDance");
                     break;
+                case 5:
+                    SetAnimationTrigger("GolfDrive");
+                    break;
+                case 6:
+                    SetAnimationTrigger("JumpingJacks");
+                    break;
+                case 7:
+                    SetAnimationTrigger("LayingPose");
+                    break;
+                case 8:
+                    SetAnimationTrigger("HurricaneKick");
+                    break;
             }
         }
 
@@ -185,10 +204,15 @@ namespace BuyBidBlow.Characters
                 return;
 
             emotionPlaying = false;
+            if (TryGetComponent(out PlayerCamera camera)) camera.SetEmotionView(false);
             playerAnimation.ResetTrigger("Defeat");
             playerAnimation.ResetTrigger("Flair");
             playerAnimation.ResetTrigger("Hadraise");
             playerAnimation.ResetTrigger("HipHopDance");
+            playerAnimation.ResetTrigger("GolfDrive");
+            playerAnimation.ResetTrigger("JumpingJacks");
+            playerAnimation.ResetTrigger("LayingPose");
+            playerAnimation.ResetTrigger("HurricaneKick");
             playerAnimation.Play(nextState, 0, 0f);
             if (TryGetComponent(out PlayerNet net))
                 net.CancelEmotion(nextState == "Player_Walking");

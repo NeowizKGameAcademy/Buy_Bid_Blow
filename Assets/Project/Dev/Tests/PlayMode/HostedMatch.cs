@@ -16,6 +16,14 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
     public sealed class HostedMatch
     {
         public GameNetworkManager Room { get; private set; }
+        readonly System.Collections.Generic.List<GameObject> detached = new System.Collections.Generic.List<GameObject>();
+
+        // Takes a rig out of the player so the test can aim it still. Stop destroys it, or it would outlive the player.
+        public void Detach(Transform rig)
+        {
+            rig.SetParent(null, true);
+            detached.Add(rig.gameObject);
+        }
 
         // roundSeconds 0 keeps the rules' round lengths; tweak edits a copy of the match rules first.
         public IEnumerator Start(int roundSeconds = 0, Action<MatchSettings> tweak = null, ushort port = 0)
@@ -48,6 +56,8 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
         public IEnumerator Stop()
         {
             if (NetworkServer.active || NetworkClient.active) Room.StopHost();
+            foreach (var rig in detached) if (rig) UnityEngine.Object.Destroy(rig);
+            detached.Clear();
             yield return null;
             if (Room) UnityEngine.Object.Destroy(Room.gameObject);
             yield return null;

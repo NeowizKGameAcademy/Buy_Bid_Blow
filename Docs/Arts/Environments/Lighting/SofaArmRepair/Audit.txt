@@ -1,0 +1,1 @@
+Roll face counts: 2936, 2936. Mean radial facing: 0.9834, -0.9834.

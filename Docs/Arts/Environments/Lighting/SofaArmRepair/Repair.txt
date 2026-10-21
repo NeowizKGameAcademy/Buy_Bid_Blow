@@ -1,0 +1,3 @@
+Assets/Project/Content/Levels/ExchangeFurnished/Meshes/A88_Red_Sofa_ROOT_118.asset: reversed 3395 faces; positions, UV0 and UV2 unchanged.
+Assets/Project/Content/Levels/ExchangeFurnished/Lighting/HallPolish/Meshes/da5f09fa3c9044b45980526d867024ee_4300000.asset: reversed 3395 faces; positions, UV0 and UV2 unchanged.
+PASS: repaired meshes reloaded; lighting rebaked; both hall instances captured under unchanged lighting and materials.

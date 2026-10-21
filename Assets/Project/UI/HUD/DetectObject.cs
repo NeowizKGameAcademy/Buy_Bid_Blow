@@ -38,12 +38,10 @@ namespace BuyBidBlow.UI.HUD
             ChangeCursor(isDetected);
         }
 
+        // The crosshair is HUD feedback only; detection still works without it.
         private void ChangeCursor(bool Detected)
         {
-            if(Detected)
-                cursor.sprite = cursorImage[1];
-            else
-                cursor.sprite = cursorImage[0];
+            if (cursor) cursor.sprite = cursorImage[Detected ? 1 : 0];
         }
     }
 }

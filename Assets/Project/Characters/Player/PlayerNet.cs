@@ -160,6 +160,10 @@ namespace BuyBidBlow.Characters
             animator.ResetTrigger("Flair");
             animator.ResetTrigger("Hadraise");
             animator.ResetTrigger("HipHopDance");
+            animator.ResetTrigger("GolfDrive");
+            animator.ResetTrigger("JumpingJacks");
+            animator.ResetTrigger("LayingPose");
+            animator.ResetTrigger("HurricaneKick");
             animator.Play(walking ? "Player_Walking" : "Player_Idle", 0, 0);
         }
         void SetWalkingAnimationLocal(bool walking)
@@ -179,7 +183,8 @@ namespace BuyBidBlow.Characters
         }
         [Command] void CmdPlayAnimationTrigger(string trigger)
         {
-            if (trigger != "Jump" && trigger != "Defeat" && trigger != "Flair" && trigger != "Hadraise" && trigger != "HipHopDance") return;
+            if (trigger != "Jump" && trigger != "Defeat" && trigger != "Flair" && trigger != "Hadraise" && trigger != "HipHopDance"
+                && trigger != "GolfDrive" && trigger != "JumpingJacks" && trigger != "LayingPose" && trigger != "HurricaneKick") return;
             RpcPlayAnimationTrigger(Animator.StringToHash(trigger));
         }
         [Command] void CmdPlayAnimationTriggerHash(int trigger)
@@ -224,6 +229,7 @@ namespace BuyBidBlow.Characters
         public void SetGameplayActive(bool active)
         {
             if (!isLocalPlayer) active = false;
+            if (TryGetComponent(out PlayerCamera playerCamera)) playerCamera.SetEmotionView(false);
             RefreshAvatarLayers(active);
             // Cameras must be disabled on the GameObject as well as on their
             // component. This prevents a remote player's culling mask from

@@ -45,6 +45,7 @@ namespace BuyBidBlow.Common
             tradePanel.BetRequested += Bet;
             PlayerNet.LocalReply += OnServerReply;
             PlayerNet.LocalPortfolioChanged += OnServerPortfolio;
+            MatchNet.RoundTurned += OnRoundTurned;
             // The starting portfolio may have arrived while this was still disabled.
             if (PlayerNet.LocalPortfolio != null)
                 assets.ApplyServerState(PlayerNet.LocalPortfolio);
@@ -61,6 +62,7 @@ namespace BuyBidBlow.Common
             tradePanel.BetRequested -= Bet;
             PlayerNet.LocalReply -= OnServerReply;
             PlayerNet.LocalPortfolioChanged -= OnServerPortfolio;
+            MatchNet.RoundTurned -= OnRoundTurned;
 
             if (matchManager != null)
                 matchManager.RoundAdvanced -= OnRoundAdvanced;
@@ -238,16 +240,10 @@ namespace BuyBidBlow.Common
             return false;
         }
 
-        private void BindMatch(MatchNet value)
-        {
-            if (match == value) return;
-            if (match != null) match.ClosingBell -= OnClosingBell;
-            match = value;
-            if (match != null) match.ClosingBell += OnClosingBell;
-        }
+        private void BindMatch(MatchNet value) => match = value;
 
-        // Prices change at each Closing Bell; refresh the open panel to the new round's price.
-        private void OnClosingBell(int _, PriceChange[] __) => RefreshOpenPanel();
+        // Prices change at each Closing Bell; refresh the open panel once the new prices arrive.
+        private void OnRoundTurned(MatchNet.RoundTurn _) => RefreshOpenPanel();
 
         private void OnRoundAdvanced(int _, IReadOnlyList<PriceChange> __) => RefreshOpenPanel();
 

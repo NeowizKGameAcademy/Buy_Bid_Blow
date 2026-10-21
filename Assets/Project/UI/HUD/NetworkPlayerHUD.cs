@@ -16,7 +16,6 @@ namespace BuyBidBlow.UI.HUD
         public RoundStartView roundStart;
         MatchNet bound;
         int announcedRound;
-        bool roundPending;
 
         void OnEnable()
         {
@@ -38,16 +37,9 @@ namespace BuyBidBlow.UI.HUD
         void Bind(MatchNet match)
         {
             if (ReferenceEquals(bound, match)) return;
-            if (bound) bound.RoundStarted -= OnRoundStarted;
             bound = match;
             announcedRound = 0;
-            roundPending = match != null;
-            if (bound) bound.RoundStarted += OnRoundStarted;
         }
-
-        // Defer presentation until Update: the remaining SyncVars (including auction state)
-        // may still be deserializing while the round hook runs.
-        void OnRoundStarted(int _) { roundPending = true; }
 
         public void Refresh()
         {
@@ -72,9 +64,10 @@ namespace BuyBidBlow.UI.HUD
             int seconds = bound.phase == MatchNet.Phase.Finished ? 0 : (int)Math.Ceiling(bound.SecondsLeft);
             timeLabel.text = $"{seconds / 60:00}:{seconds % 60:00}";
             phaseLabel.text = bound.phase == MatchNet.Phase.Preparing ? "경기 준비" : bound.phase == MatchNet.Phase.Finished ? "경기 종료" : bound.auctionStage == MatchNet.AuctionStage.Open ? "공개 경매" : bound.auctionStage == MatchNet.AuctionStage.Secret ? "비공개 경매" : "주식 거래";
-            if (bound.phase == MatchNet.Phase.Playing && bound.round > 0 && (roundPending || announcedRound != bound.round))
+            // Announce from the replicated round, not the timeline: the banner shows the round number
+            // and auction state, so it waits until that data has arrived.
+            if (bound.phase == MatchNet.Phase.Playing && bound.round > 0 && announcedRound != bound.round)
             {
-                roundPending = false;
                 announcedRound = bound.round;
                 if (roundStart) roundStart.Show(bound.round, bound.totalRounds, bound.auctionStage != MatchNet.AuctionStage.None);
             }

@@ -10,14 +10,16 @@ namespace BuyBidBlow.Props
         public float gust = .15f;
         public CapsuleCollider[] supportColliders = new CapsuleCollider[0];
         Cloth cloth;
+        CapsuleCollider[] players;
         void Awake() { cloth = GetComponent<Cloth>(); SetContacts(new CapsuleCollider[0]); }
-        // The banner reacts to the player's body as well as its support colliders.
-        void Start()
+        void Update()
         {
-            var player = GameObject.FindWithTag("Player");
-            if (player && player.TryGetComponent(out CapsuleCollider body)) SetContacts(new[] { body });
+            if (!cloth) return;
+            cloth.externalAcceleration = wind + Vector3.forward * (Mathf.Sin(Time.time * .7f) * gust);
+            // The banner reacts to every player's body as well as its support colliders.
+            var current = PlayerContacts.Get();
+            if (current != players) { players = current; SetContacts(current); }
         }
-        void Update() { if (cloth) cloth.externalAcceleration = wind + Vector3.forward * (Mathf.Sin(Time.time * .7f) * gust); }
         public void SetContacts(CapsuleCollider[] capsules)
         {
             if (!cloth) cloth = GetComponent<Cloth>();

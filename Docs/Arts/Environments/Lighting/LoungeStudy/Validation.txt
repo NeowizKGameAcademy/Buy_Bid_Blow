@@ -1,0 +1,23 @@
+PASS: scene reopened; 18 primary left-lounge renderers have saved lightmaps.
+PASS: local 256px HDR box-projected reflection probe has a saved texture.
+PASS: right sofa retains its original shared materials. Global ambient and grading settings untouched.
+Comparison: 1600x1000, identical camera positions, field of view, HDR, SMAA, post-processing and exposure.
+UnderMezzanine_Lounge_Clusters/A91_Left_Teal_Sofa/A87_Left_Sofa_ROOT_113 lightmap=0 scale=3
+UnderMezzanine_Lounge_Clusters/A91_Left_Teal_Sofa/A87_Left_Sofa_ROOT_114 lightmap=0 scale=3
+UnderMezzanine_Lounge_Clusters/A91_Left_Teal_Sofa/A87_Left_Sofa_ROOT_115 lightmap=0 scale=3
+UnderMezzanine_Lounge_Clusters/A91_Left_Bench/A87_Left_Bench_ROOT_113 lightmap=0 scale=3
+UnderMezzanine_Lounge_Clusters/A91_Left_Bench/A87_Left_Bench_ROOT_116 lightmap=0 scale=3
+UnderMezzanine_Lounge_Clusters/A91_Left_Bench/A87_Left_Bench_ROOT_115 lightmap=0 scale=3
+UnderMezzanine_Lounge_Clusters/A91_Left_Rug/A91_Lounge_Rug_BlenderKit_Fabric lightmap=0 scale=5
+UnderMezzanine_Lounge_Clusters/A91_Left_Planter/BBB_Areca_Cane_001 lightmap=0 scale=3
+UnderMezzanine_Lounge_Clusters/A91_Left_Planter/BBB_Props_Brushed_Brass_Metal_003 lightmap=0 scale=3
+UnderMezzanine_Lounge_Clusters/A91_Left_Planter/BBB_Furniture_Dark_Soil_001 lightmap=0 scale=3
+UnderMezzanine_Lounge_Clusters/A90_Table_A/Table_A_Body_PBR_LOD0 lightmap=0 scale=3
+UnderMezzanine_Lounge_Clusters/A90_Bookcase_A/Bookcase_A_Body_PBR_LOD0 lightmap=0 scale=3
+UnderMezzanine_Lounge_Clusters/A90_Bookcase_A/Bookcase_A_Contents_Accents_LOD0 lightmap=0 scale=3
+UnderMezzanine_Lounge_Clusters/A90_Bookcase_A/Bookcase_A_Contents_PBR_LOD0 lightmap=0 scale=3
+UnderMezzanine_Lounge_Clusters/A90_Shelf_A/Shelf_A_Body_PBR_LOD0 lightmap=0 scale=3
+UnderMezzanine_Lounge_Clusters/A90_ServiceTrolley_A/ServiceTrolley_A_Body_PBR_LOD0 lightmap=0 scale=3
+UnderMezzanine_Lounge_Clusters/A90_InformationBoard_A/InformationBoard_A_Body_PBR_LOD0 lightmap=0 scale=3
+UnderMezzanine_Lounge_Clusters/A90_InformationBoard_A/InformationBoard_A_SignFace lightmap=0 scale=3
+Existing transform/collider records: 875; changed: 0

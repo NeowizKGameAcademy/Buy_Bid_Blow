@@ -53,14 +53,13 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
                 settings.RoundCount=5;settings.RoundSeconds=2;settings.AuctionRoundSeconds=6;settings.AuctionRounds=new[]{2};settings.AuctionDurationSeconds=2;
                 settings.AuctionSlots=new[]{new AuctionSlot{StartsAtSeconds=0,DurationSeconds=2},new AuctionSlot{StartsAtSeconds=2,DurationSeconds=2}};
             });
-            var observer=Object.FindFirstObjectByType<MatchAudioClient>();Assert.IsNotNull(observer);
+            var observer=Object.FindFirstObjectByType<HallSpeaker>();Assert.IsNotNull(observer);
             yield return null;Assert.IsNotNull(CueAudioHost.Instance);
             var audio=CueAudioHost.Instance.Engine;Assert.IsNotNull(audio);Assert.IsEmpty(CueAudioHost.Instance.Catalog.Validate());
-            Assert.AreEqual(0,Count(audio,"match.round_start"));
+            // Re-enabling must not replay anything already announced.
             observer.enabled=false;observer.enabled=true;yield return null;
-            Assert.AreEqual(0,Count(audio,"match.round_start"),"no temporary price sound at round start");
             yield return HostedMatch.Until(()=>MatchNet.Current.phase==MatchNet.Phase.Finished,"match audio finish",20);yield return null;
-            Assert.AreEqual(0,Count(audio,"match.round_start"));Assert.AreEqual(5,Count(audio,"match.closing_bell"));
+            Assert.AreEqual(1,Count(audio,"match.start"));Assert.AreEqual(4,Count(audio,"match.round_turn"),"rounds 1-4 turn over");Assert.AreEqual(1,Count(audio,"match.end"),"the last bell ends the match");
             Assert.AreEqual(2,Count(audio,"match.auction_start"),"public + secret slots");Assert.AreEqual(2,Count(audio,"match.auction_end"));
             Assert.AreEqual(2,Count(audio,"match.closing_soon"),"once per slot even when short test slots start below 10 seconds");
             Assert.AreEqual(1,Count(audio,"bgm.game"));
@@ -78,6 +77,8 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
 #if UNITY_SERVER
             Assert.Ignore("Client audio only.");
 #endif
+            // Other fixtures leave their host behind; count from a fresh one.
+            if(CueAudioHost.Instance){Object.Destroy(CueAudioHost.Instance.gameObject);yield return null;}
             UnityEngine.SceneManagement.SceneManager.LoadScene("SC_MainMenu");yield return null;yield return null;
             var host=GameAudio.EnsureHost();Assert.IsNotNull(host);var audio=host.Engine;
             Assert.AreEqual(1,Count(audio,"bgm.menu"));

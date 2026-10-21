@@ -1,0 +1,24 @@
+{
+    "boards": ["TickerBoard_Right", "TickerBoard_Center", "TickerBoard_Left"],
+    "cutSeconds": 0.15,
+    "companySeconds": 8,
+    "channels": [
+        { "id": "timer", "screen": "Timer" },
+        { "id": "overview", "screen": "Overview" },
+        { "id": "company:0", "screen": "Company", "company": 0 },
+        { "id": "company:1", "screen": "Company", "company": 1 },
+        { "id": "company:2", "screen": "Company", "company": 2 },
+        { "id": "company:cycle", "screen": "Company", "cycle": true },
+        { "id": "roundOver", "video": "roundover", "wide": true },
+        { "id": "pig", "video": "transition" }
+    ],
+    "playlist": [
+        { "layout": "split", "channels": ["company:cycle", "overview", "timer"], "seconds": 20 },
+        { "layout": "mirror", "channel": "overview", "seconds": 8 },
+        { "layout": "split", "channels": ["company:0", "company:1", "company:2"], "seconds": 10 }
+    ],
+    "rules": [
+        { "span": "Prepare", "edge": "end", "from": -5, "to": 0, "priority": 100, "layout": "mirror", "channel": "timer" },
+        { "span": "Round", "edge": "end", "from": -10, "to": 0, "priority": 100, "layout": "mirror", "channel": "timer" }
+    ]
+}

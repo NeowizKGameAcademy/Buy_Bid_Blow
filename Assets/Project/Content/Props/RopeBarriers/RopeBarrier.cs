@@ -44,18 +44,13 @@ namespace BuyBidBlow.Props
             mesh.vertices = vertices; mesh.uv = uv; mesh.triangles = triangles; GetComponent<MeshFilter>().sharedMesh = mesh; UpdateMesh();
         }
         void Awake() { if (restPoints != null && restPoints.Length > 1) Initialize(); }
-        // The rope reacts to the player's body unless contacts were assigned explicitly.
-        void Start()
-        {
-            var player = GameObject.FindWithTag("Player");
-            if (contacts.Length == 0 && player && player.TryGetComponent(out CapsuleCollider body)) contacts = new[] { body };
-        }
         void FixedUpdate() => Simulate(Time.fixedDeltaTime);
         public void Simulate(float dt)
         {
             if (!startAnchor || !endAnchor || restPoints == null || restPoints.Length < 2) return;
             Initialize();
-            simulation.ropeLength=ropeLength; simulation.contacts=contacts; simulation.contactRadius=radius;
+            // The rope reacts to every player's body unless contacts were assigned explicitly.
+            simulation.ropeLength=ropeLength; simulation.contacts=contacts.Length>0?contacts:PlayerContacts.Get(); simulation.contactRadius=radius;
             simulation.Step(Mathf.Min(dt,.04f));
             for(int i=0;i<points.Length;i++)points[i]=bones[i].position;
             PinError=simulation.MaxPinError;SegmentError=simulation.MaxSegmentError;

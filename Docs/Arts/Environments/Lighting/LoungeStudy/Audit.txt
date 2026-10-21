@@ -1,0 +1,89 @@
+UnderMezzanine_Lounge_Clusters/A91_Left_Teal_Sofa/A87_Left_Sofa_ROOT_114 | center=(-9.96, 0.63, 10.60) size=(2.71, 0.85, 2.71) | GI=Lightmaps map=-1 shadows=On/True
+  Assets/Project/Content/Levels/ExchangeFurnished/Materials/BBB_Seating_TealVelvet.mat | Universal Render Pipeline/Lit | smooth=0.28 metallic=0
+UnderMezzanine_Lounge_Clusters/A91_Rear_Planter/BBB_Areca_Cane_001 | center=(-5.62, 1.14, 14.53) size=(1.75, 1.44, 1.70) | GI=Lightmaps map=-1 shadows=On/True
+  Assets/Project/Content/Levels/ExchangeFurnished/Materials/BBB_Areca_Cane_001.mat | Universal Render Pipeline/Lit | smooth=0.38 metallic=0
+UnderMezzanine_Lounge_Clusters/A90_Bookcase_A/Bookcase_A_Contents_Accents_LOD1 | center=(-9.87, 1.16, 13.25) size=(0.76, 0.98, 0.52) | GI=Lightmaps map=-1 shadows=On/True
+  Assets/Project/Content/Props/FurnitureUtilityPack/Materials/Furniture_Accents.mat | Universal Render Pipeline/Lit | smooth=0.28 metallic=0
+AuctionHall_Furnished/Static_-1_-1_0/Static_-1_-1_0_8 | center=(0.00, 4.50, -2.50) size=(28.24, 9.00, 40.24) | GI=Lightmaps map=0 shadows=On/True
+  Assets/Project/Content/Levels/ExchangeFurnished/Materials/BBB_Wall_Soft_Teal_001.mat | Universal Render Pipeline/Lit | smooth=0.44 metallic=0
+UnderMezzanine_Lounge_Clusters/A90_InformationBoard_A/InformationBoard_A_Body_PBR_LOD0 | center=(-6.70, 0.86, 6.90) size=(1.08, 1.71, 0.81) | GI=Lightmaps map=-1 shadows=On/True
+  Assets/Project/Content/Props/LoungeAccessories/Materials/Lounge_BK_Atlas.mat | Universal Render Pipeline/Lit | smooth=1 metallic=1
+PA_Speakers_Approved/PA_01_Left_Lounge/Speaker_Grille_Dark_Back | center=(-12.57, 2.70, 10.52) size=(0.15, 0.47, 0.30) | GI=Lightmaps map=-1 shadows=On/True
+  Assets/Project/Content/Props/PASpeaker/Materials/PA_Inner_Shadow.mat | Universal Render Pipeline/Lit | smooth=0.17 metallic=0
+UnderMezzanine_Lounge_Clusters/A91_Left_Planter/BBB_Areca_Cane_001 | center=(-11.31, 1.14, 7.38) size=(1.89, 1.44, 1.85) | GI=Lightmaps map=-1 shadows=On/True
+  Assets/Project/Content/Levels/ExchangeFurnished/Materials/BBB_Areca_Cane_001.mat | Universal Render Pipeline/Lit | smooth=0.38 metallic=0
+UnderMezzanine_Lounge_Clusters/A91_Left_Planter/BBB_Furniture_Dark_Soil_001 | center=(-11.30, 0.43, 7.45) size=(0.53, 0.02, 0.52) | GI=Lightmaps map=-1 shadows=On/True
+  Assets/Project/Content/Levels/ExchangeFurnished/Materials/BBB_Furniture_Dark_Soil_001.mat | Universal Render Pipeline/Lit | smooth=0.04000002 metallic=0
+UnderMezzanine_Lounge_Clusters/A91_Left_Bench/A87_Left_Bench_ROOT_115 | center=(-7.19, 0.21, 10.60) size=(2.06, 0.41, 2.06) | GI=Lightmaps map=-1 shadows=On/True
+  Assets/Project/Content/Levels/ExchangeFurnished/Materials/BBB_Seating_Brass.mat | Universal Render Pipeline/Lit | smooth=0.73 metallic=0.88
+UnderMezzanine_Lounge_Clusters/A90_InformationBoard_A/InformationBoard_A_Body_PBR_LOD1 | center=(-6.70, 0.86, 6.90) size=(1.07, 1.71, 0.81) | GI=Lightmaps map=-1 shadows=On/True
+  Assets/Project/Content/Props/LoungeAccessories/Materials/Lounge_BK_Atlas.mat | Universal Render Pipeline/Lit | smooth=1 metallic=1
+UnderMezzanine_Lounge_Clusters/A91_Left_Rug/A91_Lounge_Rug_BlenderKit_Fabric | center=(-8.80, 0.01, 10.60) size=(4.00, 0.00, 4.10) | GI=Lightmaps map=-1 shadows=On/True
+  Assets/Project/Content/Levels/ExchangeFurnished/LoungeClusters/Materials/Lounge_Rug_BlenderKit_Fabric.mat | Universal Render Pipeline/Lit | smooth=0 metallic=0
+AuctionHall_Furnished/Static_-2_0_0/Static_-2_0_0_20 | center=(-13.70, 0.55, 4.03) size=(0.56, 1.10, 8.26) | GI=Lightmaps map=0 shadows=On/True
+  Assets/Project/Content/Levels/ExchangeFurnished/Materials/BBB_Wall_TrimSheet.mat | Universal Render Pipeline/Lit | smooth=0.5 metallic=0
+UnderMezzanine_Lounge_Clusters/A90_Bookcase_A/Bookcase_A_Body_PBR_LOD1 | center=(-9.90, 0.94, 13.24) size=(1.06, 1.87, 0.81) | GI=Lightmaps map=-1 shadows=On/True
+  Assets/Project/Content/Props/LoungeAccessories/Materials/Lounge_BK_Atlas.mat | Universal Render Pipeline/Lit | smooth=1 metallic=1
+AuctionHall_Furnished/Static_0_-1_-1/Static_0_-1_-1_1 | center=(0.00, -0.15, -2.50) size=(28.00, 0.30, 40.00) | GI=Lightmaps map=0 shadows=On/True
+  Assets/Project/Content/Levels/ExchangeFurnished/Materials/Hall_Dark_Herringbone.mat | Universal Render Pipeline/Lit | smooth=0.52 metallic=0
+UnderMezzanine_Lounge_Clusters/A90_Shelf_A/Shelf_A_Body_PBR_LOD1 | center=(-11.00, 0.83, 12.35) size=(0.67, 1.65, 0.75) | GI=Lightmaps map=-1 shadows=On/True
+  Assets/Project/Content/Props/LoungeAccessories/Materials/Lounge_BK_Atlas.mat | Universal Render Pipeline/Lit | smooth=1 metallic=1
+UnderMezzanine_Lounge_Clusters/A90_Bookcase_A/Bookcase_A_Body_PBR_LOD0 | center=(-9.90, 0.94, 13.24) size=(1.06, 1.87, 0.81) | GI=Lightmaps map=-1 shadows=On/True
+  Assets/Project/Content/Props/LoungeAccessories/Materials/Lounge_BK_Atlas.mat | Universal Render Pipeline/Lit | smooth=1 metallic=1
+UnderMezzanine_Lounge_Clusters/A91_Left_Planter/BBB_Props_Brushed_Brass_Metal_003 | center=(-11.30, 0.25, 7.45) size=(0.70, 0.50, 0.68) | GI=Lightmaps map=-1 shadows=On/True
+  Assets/Project/Content/Levels/ExchangeFurnished/Materials/BBB_Props_Brushed_Brass_Metal_003.mat | Universal Render Pipeline/Lit | smooth=0.5 metallic=0
+UnderMezzanine_Lounge_Clusters/A90_ServiceTrolley_A/ServiceTrolley_A_Body_PBR_LOD0 | center=(-10.40, 0.50, 8.34) size=(0.47, 1.00, 0.93) | GI=Lightmaps map=-1 shadows=On/True
+  Assets/Project/Content/Props/LoungeAccessories/Materials/Lounge_BK_Atlas.mat | Universal Render Pipeline/Lit | smooth=1 metallic=1
+UnderMezzanine_Lounge_Clusters/A90_Bookcase_A/Bookcase_A_Contents_Accents_LOD0 | center=(-9.87, 1.16, 13.25) size=(0.76, 0.98, 0.52) | GI=Lightmaps map=-1 shadows=On/True
+  Assets/Project/Content/Props/FurnitureUtilityPack/Materials/Furniture_Accents.mat | Universal Render Pipeline/Lit | smooth=0.28 metallic=0
+UnderMezzanine_Lounge_Clusters/A90_Bookcase_A/Bookcase_A_Contents_PBR_LOD1 | center=(-9.79, 1.17, 13.30) size=(0.46, 0.99, 0.35) | GI=Lightmaps map=-1 shadows=On/True
+  Assets/Project/Content/Props/LoungeAccessories/Materials/Lounge_BK_Atlas.mat | Universal Render Pipeline/Lit | smooth=1 metallic=1
+PA_Speakers_Approved/PA_01_Left_Lounge/Speaker_Wall_Bracket | center=(-12.71, 2.70, 10.59) size=(0.12, 0.32, 0.20) | GI=Lightmaps map=-1 shadows=On/True
+  Assets/Project/Content/Props/PASpeaker/Materials/PA_Inner_Shadow.mat | Universal Render Pipeline/Lit | smooth=0.17 metallic=0
+UnderMezzanine_Lounge_Clusters/A90_ServiceTrolley_A/ServiceTrolley_A_Body_PBR_LOD1 | center=(-10.40, 0.50, 8.34) size=(0.46, 1.00, 0.93) | GI=Lightmaps map=-1 shadows=On/True
+  Assets/Project/Content/Props/LoungeAccessories/Materials/Lounge_BK_Atlas.mat | Universal Render Pipeline/Lit | smooth=1 metallic=1
+UnderMezzanine_Lounge_Clusters/A91_Rear_Planter/BBB_Areca_Frond_Card_001 | center=(-5.61, 1.40, 14.55) size=(1.87, 0.92, 1.80) | GI=Lightmaps map=-1 shadows=On/True
+  Assets/Project/Content/Levels/ExchangeFurnished/Materials/BBB_Areca_Frond_Card_001.mat | Universal Render Pipeline/Lit | smooth=0.45 metallic=0
+UnderMezzanine_Lounge_Clusters/A91_Left_Planter/BBB_Areca_Frond_Card_001 | center=(-11.30, 1.40, 7.40) size=(2.02, 0.92, 1.97) | GI=Lightmaps map=-1 shadows=On/True
+  Assets/Project/Content/Levels/ExchangeFurnished/Materials/BBB_Areca_Frond_Card_001.mat | Universal Render Pipeline/Lit | smooth=0.45 metallic=0
+UnderMezzanine_Lounge_Clusters/A90_Table_A/Table_A_Body_PBR_LOD0 | center=(-8.65, 0.23, 10.60) size=(0.66, 0.46, 1.14) | GI=Lightmaps map=-1 shadows=On/True
+  Assets/Project/Content/Props/LoungeAccessories/Materials/Lounge_BK_Atlas.mat | Universal Render Pipeline/Lit | smooth=1 metallic=1
+UnderMezzanine_Lounge_Clusters/A90_Bookcase_A/Bookcase_A_Contents_PBR_LOD0 | center=(-9.79, 1.17, 13.30) size=(0.46, 1.00, 0.35) | GI=Lightmaps map=-1 shadows=On/True
+  Assets/Project/Content/Props/LoungeAccessories/Materials/Lounge_BK_Atlas.mat | Universal Render Pipeline/Lit | smooth=1 metallic=1
+UnderMezzanine_Lounge_Clusters/A90_InformationBoard_A/InformationBoard_A_SignFace | center=(-6.68, 0.99, 6.86) size=(0.53, 1.02, 0.25) | GI=Lightmaps map=-1 shadows=On/True
+  Assets/Project/Content/Props/FurnitureUtilityPack/Materials/InformationBoard_A.mat | Universal Render Pipeline/Lit | smooth=0.28 metallic=0
+UnderMezzanine_Lounge_Clusters/A91_Left_Bench/A87_Left_Bench_ROOT_113 | center=(-7.20, 0.23, 10.60) size=(2.06, 0.41, 2.06) | GI=Lightmaps map=-1 shadows=On/True
+  Assets/Project/Content/Levels/ExchangeFurnished/Materials/BBB_Seating_Walnut.mat | Universal Render Pipeline/Lit | smooth=0.64 metallic=0
+PA_Speakers_Approved/PA_01_Left_Lounge/Speaker_Perforated_Grille | center=(-12.56, 2.70, 10.52) size=(0.14, 0.44, 0.28) | GI=Lightmaps map=-1 shadows=On/True
+  Assets/Project/Content/Props/PASpeaker/Materials/PA_Matte_GrayGreen.mat | Universal Render Pipeline/Lit | smooth=0.17 metallic=0
+AuctionHall_Furnished/Static_0_-1_0/Static_0_-1_0_12 | center=(0.00, 0.01, -2.50) size=(28.00, 0.00, 40.00) | GI=Lightmaps map=0 shadows=On/True
+  Assets/Project/Content/Levels/ExchangeFurnished/Materials/Hall_Dark_Walnut_Border.mat | Universal Render Pipeline/Lit | smooth=0.48 metallic=0
+PA_Speakers_Approved/PA_01_Left_Lounge/Speaker_Cabinet | center=(-12.64, 2.70, 10.55) size=(0.30, 0.51, 0.40) | GI=Lightmaps map=-1 shadows=On/True
+  Assets/Project/Content/Props/PASpeaker/Materials/PA_Matte_GrayGreen.mat | Universal Render Pipeline/Lit | smooth=0.17 metallic=0
+UnderMezzanine_Lounge_Clusters/A91_Left_Bench/A87_Left_Bench_ROOT_116 | center=(-7.20, 0.51, 10.60) size=(2.08, 0.21, 2.08) | GI=Lightmaps map=-1 shadows=On/True
+  Assets/Project/Content/Levels/ExchangeFurnished/Materials/BBB_Seating_BurgundyVelvet.mat | Universal Render Pipeline/Lit | smooth=0.28 metallic=0
+Lobby Presentation/Lobby Selection Ring | center=(-5.25, 0.06, 9.60) size=(2.00, 0.00, 2.00) | GI=Lightmaps map=-1 shadows=On/True
+  Assets/Project/UI/Lobby/M_LobbySelectionRing.mat | Universal Render Pipeline/Unlit | smooth=-1 metallic=-1
+UnderMezzanine_Lounge_Clusters/A90_Table_A/Table_A_Body_PBR_LOD1 | center=(-8.65, 0.23, 10.60) size=(0.66, 0.46, 1.14) | GI=Lightmaps map=-1 shadows=On/True
+  Assets/Project/Content/Props/LoungeAccessories/Materials/Lounge_BK_Atlas.mat | Universal Render Pipeline/Lit | smooth=1 metallic=1
+UnderMezzanine_Lounge_Clusters/A91_Left_Teal_Sofa/A87_Left_Sofa_ROOT_113 | center=(-9.83, 0.62, 10.60) size=(2.49, 0.90, 2.49) | GI=Lightmaps map=-1 shadows=On/True
+  Assets/Project/Content/Levels/ExchangeFurnished/Materials/BBB_Seating_Walnut.mat | Universal Render Pipeline/Lit | smooth=0.64 metallic=0
+AuctionHall_Furnished/Static_-2_1_0/Static_-2_1_0_20 | center=(-10.39, 0.55, 12.13) size=(6.59, 1.10, 8.33) | GI=Lightmaps map=0 shadows=On/True
+  Assets/Project/Content/Levels/ExchangeFurnished/Materials/BBB_Wall_TrimSheet.mat | Universal Render Pipeline/Lit | smooth=0.5 metallic=0
+UnderMezzanine_Lounge_Clusters/A90_Shelf_A/Shelf_A_Body_PBR_LOD0 | center=(-11.00, 0.83, 12.35) size=(0.67, 1.65, 0.75) | GI=Lightmaps map=-1 shadows=On/True
+  Assets/Project/Content/Props/LoungeAccessories/Materials/Lounge_BK_Atlas.mat | Universal Render Pipeline/Lit | smooth=1 metallic=1
+UnderMezzanine_Lounge_Clusters/A91_Left_Teal_Sofa/A87_Left_Sofa_ROOT_115 | center=(-10.05, 0.10, 10.60) size=(2.75, 0.20, 2.75) | GI=Lightmaps map=-1 shadows=On/True
+  Assets/Project/Content/Levels/ExchangeFurnished/Materials/BBB_Seating_Brass.mat | Universal Render Pipeline/Lit | smooth=0.73 metallic=0.88
+LIGHT Hall_Lighting_Bright_Jewel/A33_N07_Vertical_Sconce_ROOT_WarmGlow (-6.49, 6.50, 15.66) Point 5 Baked
+LIGHT Hall_Lighting_Bright_Jewel/Hall_Soft_Bounce_-6.5_-3 (-6.50, 8.50, -3.00) Rectangle 2.3 Baked
+LIGHT Hall_Lighting_Bright_Jewel/Lower_Lounge_Bounce_-8_8.5 (-8.00, 3.45, 8.50) Rectangle 1.15 Baked
+LIGHT Hall_Lighting_Bright_Jewel/A33_L06_Vertical_Sconce_ROOT_WarmGlow (-13.66, 2.50, -12.00) Point 5 Baked
+LIGHT Hall_Lighting_Bright_Jewel/Lounge_Character_Fill_-8.5 (-8.50, 3.20, 10.50) Point 1.8 Realtime
+LIGHT Hall_Lighting_Bright_Jewel/Lower_Lounge_Bounce_-8_14.3 (-8.00, 3.45, 14.30) Rectangle 1.15 Baked
+LIGHT Hall_Lighting_Bright_Jewel/Hall_Soft_Bounce_-6.5_-14 (-6.50, 8.50, -14.00) Rectangle 2.3 Baked
+LIGHT Hall_Lighting_Bright_Jewel/A33_U06_Vertical_Sconce_ROOT_WarmGlow (-12.95, 6.50, 9.49) Point 5 Baked
+LIGHT Hall_Lighting_Bright_Jewel/A33_N03_Vertical_Sconce_ROOT_WarmGlow (-12.98, 2.50, -0.40) Point 5 Baked
+LIGHT Hall_Lighting_Bright_Jewel/Mezzanine_Upper_Fill_-8 (-8.00, 8.50, 11.00) Rectangle 2.3 Baked
+LIGHT Hall_Lighting_Bright_Jewel/A33_N05_Vertical_Sconce_ROOT_WarmGlow (-6.51, 2.50, -20.65) Point 5 Baked
+LIGHT Hall_Lighting_Bright_Jewel/A33_S01_Vertical_Sconce_ROOT_WarmGlow (-11.50, 2.50, 5.72) Point 5 Baked
+LIGHT Hall_Lighting_Bright_Jewel/A33_N01_Vertical_Sconce_ROOT_WarmGlow (-6.49, 2.50, 15.66) Point 5 Baked

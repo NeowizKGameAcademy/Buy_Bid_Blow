@@ -1,14 +1,68 @@
 {
     "version": 1,
+    "buses": [
+        {
+            "id": "sfx",
+            "volume": 1.0
+        },
+        {
+            "id": "music",
+            "volume": 1.0
+        },
+        {
+            "id": "ui",
+            "volume": 1.0
+        }
+    ],
     "cues": [
         {
-            "id": "match.closing_bell",
+            "id": "match.start",
             "clips": [
-                "closing_bell"
+                "Assets/Project/Audio/Clips/Temp/TEMP_Match_Start.wav"
             ],
             "selection": "first",
             "bus": "sfx",
-            "volume": 0.6499999761581421,
+            "volume": 0.65,
+            "pitchRange": {
+                "x": 1.0,
+                "y": 1.0
+            },
+            "loop": false,
+            "spatialBlend": 0.0,
+            "minDistance": 1.5,
+            "maxDistance": 18.0,
+            "cooldownSeconds": 0.0,
+            "maxInstances": 4,
+            "overflow": "stopOldest"
+        },
+        {
+            "id": "match.end",
+            "clips": [
+                "Assets/Project/Audio/Clips/Temp/TEMP_Match_End.wav"
+            ],
+            "selection": "first",
+            "bus": "sfx",
+            "volume": 0.65,
+            "pitchRange": {
+                "x": 1.0,
+                "y": 1.0
+            },
+            "loop": false,
+            "spatialBlend": 0.0,
+            "minDistance": 1.5,
+            "maxDistance": 18.0,
+            "cooldownSeconds": 0.0,
+            "maxInstances": 4,
+            "overflow": "stopOldest"
+        },
+        {
+            "id": "match.round_turn",
+            "clips": [
+                "Assets/Project/Audio/Clips/CollectedSFX/Market/SFX_Market_PriceReveal.wav"
+            ],
+            "selection": "first",
+            "bus": "sfx",
+            "volume": 0.65,
             "pitchRange": {
                 "x": 1.0,
                 "y": 1.0
@@ -24,11 +78,11 @@
         {
             "id": "match.auction_start",
             "clips": [
-                "auction_start"
+                "Assets/Project/Audio/Clips/CollectedSFX/Auction/SFX_Auction_Start.wav"
             ],
             "selection": "first",
             "bus": "sfx",
-            "volume": 0.6499999761581421,
+            "volume": 0.65,
             "pitchRange": {
                 "x": 1.0,
                 "y": 1.0
@@ -44,11 +98,11 @@
         {
             "id": "match.auction_end",
             "clips": [
-                "auction_end"
+                "Assets/Project/Audio/Clips/CollectedSFX/Auction/SFX_Auction_Gavel.wav"
             ],
             "selection": "first",
             "bus": "sfx",
-            "volume": 0.6499999761581421,
+            "volume": 0.65,
             "pitchRange": {
                 "x": 1.0,
                 "y": 1.0
@@ -64,11 +118,11 @@
         {
             "id": "player.footstep",
             "clips": [
-                "footstep"
+                "Assets/Project/Audio/Clips/CollectedSFX/Movement/SFX_Footsteps_Wood.wav"
             ],
             "selection": "first",
             "bus": "sfx",
-            "volume": 0.3499999940395355,
+            "volume": 0.35,
             "pitchRange": {
                 "x": 1.0,
                 "y": 1.0
@@ -84,11 +138,11 @@
         {
             "id": "player.jump",
             "clips": [
-                "jump"
+                "Assets/Project/Audio/Clips/CollectedSFX/Movement/SFX_Jump.wav"
             ],
             "selection": "first",
             "bus": "sfx",
-            "volume": 0.6499999761581421,
+            "volume": 0.65,
             "pitchRange": {
                 "x": 1.0,
                 "y": 1.0
@@ -104,11 +158,11 @@
         {
             "id": "match.closing_soon",
             "clips": [
-                "closing_soon"
+                "Assets/Project/Audio/Clips/CollectedSFX/Auction/SFX_Auction_ClosingSoon.wav"
             ],
             "selection": "first",
             "bus": "sfx",
-            "volume": 0.6499999761581421,
+            "volume": 0.65,
             "pitchRange": {
                 "x": 1.0,
                 "y": 1.0
@@ -124,11 +178,11 @@
         {
             "id": "ui.navigate",
             "clips": [
-                "navigate"
+                "Assets/Project/Audio/Clips/CollectedSFX/UI/SFX_UI_Navigate.wav"
             ],
             "selection": "first",
             "bus": "sfx",
-            "volume": 0.6499999761581421,
+            "volume": 0.65,
             "pitchRange": {
                 "x": 1.0,
                 "y": 1.0
@@ -144,11 +198,11 @@
         {
             "id": "ui.confirm",
             "clips": [
-                "confirm"
+                "Assets/Project/Audio/Clips/CollectedSFX/UI/SFX_UI_Confirm.wav"
             ],
             "selection": "first",
             "bus": "sfx",
-            "volume": 0.6499999761581421,
+            "volume": 0.65,
             "pitchRange": {
                 "x": 1.0,
                 "y": 1.0
@@ -164,11 +218,11 @@
         {
             "id": "ui.close",
             "clips": [
-                "close"
+                "Assets/Project/Audio/Clips/CollectedSFX/UI/SFX_UI_BackClose.wav"
             ],
             "selection": "first",
             "bus": "sfx",
-            "volume": 0.6499999761581421,
+            "volume": 0.65,
             "pitchRange": {
                 "x": 1.0,
                 "y": 1.0
@@ -184,11 +238,11 @@
         {
             "id": "ui.quantity",
             "clips": [
-                "quantity"
+                "Assets/Project/Audio/Clips/CollectedSFX/UI/SFX_UI_Quantity.wav"
             ],
             "selection": "first",
             "bus": "sfx",
-            "volume": 0.6499999761581421,
+            "volume": 0.65,
             "pitchRange": {
                 "x": 1.0,
                 "y": 1.0
@@ -204,11 +258,11 @@
         {
             "id": "ui.notebook",
             "clips": [
-                "notebook"
+                "Assets/Project/Audio/Clips/CollectedSFX/UI/SFX_UI_Notebook.wav"
             ],
             "selection": "first",
             "bus": "sfx",
-            "volume": 0.6499999761581421,
+            "volume": 0.65,
             "pitchRange": {
                 "x": 1.0,
                 "y": 1.0
@@ -224,11 +278,11 @@
         {
             "id": "ui.page",
             "clips": [
-                "page"
+                "Assets/Project/Audio/Clips/CollectedSFX/UI/SFX_UI_PageTurn.wav"
             ],
             "selection": "first",
             "bus": "sfx",
-            "volume": 0.6499999761581421,
+            "volume": 0.65,
             "pitchRange": {
                 "x": 1.0,
                 "y": 1.0
@@ -244,11 +298,11 @@
         {
             "id": "market.trade",
             "clips": [
-                "trade"
+                "Assets/Project/Audio/Clips/CollectedSFX/Market/SFX_Trade_Complete.wav"
             ],
             "selection": "first",
             "bus": "sfx",
-            "volume": 0.6499999761581421,
+            "volume": 0.65,
             "pitchRange": {
                 "x": 1.0,
                 "y": 1.0
@@ -264,11 +318,11 @@
         {
             "id": "market.bet",
             "clips": [
-                "bet"
+                "Assets/Project/Audio/Clips/CollectedSFX/Market/SFX_Bet_Place.wav"
             ],
             "selection": "first",
             "bus": "sfx",
-            "volume": 0.6499999761581421,
+            "volume": 0.65,
             "pitchRange": {
                 "x": 1.0,
                 "y": 1.0
@@ -284,7 +338,7 @@
         {
             "id": "bgm.menu",
             "clips": [
-                "bgm_menu"
+                "Assets/Project/Audio/Clips/BGM/BGM_MainMenu.mp3"
             ],
             "selection": "randomNoRepeat",
             "bus": "music",
@@ -304,7 +358,7 @@
         {
             "id": "bgm.game",
             "clips": [
-                "bgm_game"
+                "Assets/Project/Audio/Clips/BGM/BGM_InGame.mp3"
             ],
             "selection": "randomNoRepeat",
             "bus": "music",

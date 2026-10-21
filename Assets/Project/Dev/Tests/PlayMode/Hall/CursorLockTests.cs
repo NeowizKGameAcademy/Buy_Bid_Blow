@@ -45,7 +45,7 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
             // Trade panel: open shows the cursor, Q closes it and the lock comes back.
             var staff = GameObject.Find("Staff_STRAW_Yellow");
             float eye = detect.transform.position.y - interaction.transform.position.y;
-            detect.transform.SetParent(null, true);
+            match.Detach(detect.transform);
             var eyePos = staff.transform.position + staff.transform.forward * 2.2f + Vector3.up * eye;
             detect.transform.SetPositionAndRotation(eyePos, Quaternion.LookRotation(staff.GetComponent<Collider>().bounds.center - eyePos));
             yield return null; yield return null;
