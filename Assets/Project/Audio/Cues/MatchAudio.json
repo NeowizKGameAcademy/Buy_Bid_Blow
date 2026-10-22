@@ -22,7 +22,7 @@
             ],
             "selection": "first",
             "bus": "sfx",
-            "volume": 0.65,
+            "volume": 1.0,
             "pitchRange": {
                 "x": 1.0,
                 "y": 1.0
@@ -42,7 +42,7 @@
             ],
             "selection": "first",
             "bus": "sfx",
-            "volume": 0.65,
+            "volume": 1.0,
             "pitchRange": {
                 "x": 1.0,
                 "y": 1.0
@@ -62,7 +62,7 @@
             ],
             "selection": "first",
             "bus": "sfx",
-            "volume": 0.65,
+            "volume": 1.0,
             "pitchRange": {
                 "x": 1.0,
                 "y": 1.0
@@ -82,7 +82,7 @@
             ],
             "selection": "first",
             "bus": "sfx",
-            "volume": 0.65,
+            "volume": 1.0,
             "pitchRange": {
                 "x": 1.0,
                 "y": 1.0
@@ -102,7 +102,7 @@
             ],
             "selection": "first",
             "bus": "sfx",
-            "volume": 0.65,
+            "volume": 1.0,
             "pitchRange": {
                 "x": 1.0,
                 "y": 1.0
@@ -122,7 +122,7 @@
             ],
             "selection": "first",
             "bus": "sfx",
-            "volume": 0.35,
+            "volume": 0.6,
             "pitchRange": {
                 "x": 1.0,
                 "y": 1.0
@@ -142,7 +142,7 @@
             ],
             "selection": "first",
             "bus": "sfx",
-            "volume": 0.65,
+            "volume": 0.8,
             "pitchRange": {
                 "x": 1.0,
                 "y": 1.0
@@ -162,7 +162,7 @@
             ],
             "selection": "first",
             "bus": "sfx",
-            "volume": 0.65,
+            "volume": 1.0,
             "pitchRange": {
                 "x": 1.0,
                 "y": 1.0
@@ -182,7 +182,7 @@
             ],
             "selection": "first",
             "bus": "sfx",
-            "volume": 0.65,
+            "volume": 1.0,
             "pitchRange": {
                 "x": 1.0,
                 "y": 1.0
@@ -202,7 +202,7 @@
             ],
             "selection": "first",
             "bus": "sfx",
-            "volume": 0.65,
+            "volume": 1.0,
             "pitchRange": {
                 "x": 1.0,
                 "y": 1.0
@@ -222,7 +222,7 @@
             ],
             "selection": "first",
             "bus": "sfx",
-            "volume": 0.65,
+            "volume": 1.0,
             "pitchRange": {
                 "x": 1.0,
                 "y": 1.0
@@ -242,7 +242,7 @@
             ],
             "selection": "first",
             "bus": "sfx",
-            "volume": 0.65,
+            "volume": 1.0,
             "pitchRange": {
                 "x": 1.0,
                 "y": 1.0
@@ -262,7 +262,7 @@
             ],
             "selection": "first",
             "bus": "sfx",
-            "volume": 0.65,
+            "volume": 1.0,
             "pitchRange": {
                 "x": 1.0,
                 "y": 1.0
@@ -282,7 +282,7 @@
             ],
             "selection": "first",
             "bus": "sfx",
-            "volume": 0.65,
+            "volume": 1.0,
             "pitchRange": {
                 "x": 1.0,
                 "y": 1.0
@@ -302,7 +302,7 @@
             ],
             "selection": "first",
             "bus": "sfx",
-            "volume": 0.65,
+            "volume": 1.0,
             "pitchRange": {
                 "x": 1.0,
                 "y": 1.0
@@ -322,7 +322,7 @@
             ],
             "selection": "first",
             "bus": "sfx",
-            "volume": 0.65,
+            "volume": 1.0,
             "pitchRange": {
                 "x": 1.0,
                 "y": 1.0
@@ -342,7 +342,7 @@
             ],
             "selection": "randomNoRepeat",
             "bus": "music",
-            "volume": 0.25,
+            "volume": 0.45,
             "pitchRange": {
                 "x": 1.0,
                 "y": 1.0
@@ -362,7 +362,7 @@
             ],
             "selection": "randomNoRepeat",
             "bus": "music",
-            "volume": 0.25,
+            "volume": 0.45,
             "pitchRange": {
                 "x": 1.0,
                 "y": 1.0
@@ -382,7 +382,7 @@
           ],
           "selection": "first",
           "bus": "sfx",
-          "volume": 0.65,
+          "volume": 1.0,
           "pitchRange": {
             "x": 1.0,
             "y": 1.0
@@ -402,7 +402,7 @@
           ],
           "selection": "first",
           "bus": "sfx",
-          "volume": 0.65,
+          "volume": 1.0,
           "pitchRange": {
             "x": 1.0,
             "y": 1.0
@@ -422,7 +422,7 @@
           ],
           "selection": "first",
           "bus": "sfx",
-          "volume": 0.65,
+          "volume": 1.0,
           "pitchRange": {
             "x": 1.0,
             "y": 1.0
@@ -434,6 +434,146 @@
           "cooldownSeconds": 0.0,
           "maxInstances": 4,
           "overflow": "stopOldest"
+        },
+        {
+            "id": "emote.Defeat",
+            "clips": [
+                "Assets/Project/Audio/Clips/CollectedSFX/Emotion/SFX_Emote_Defeat.wav"
+            ],
+            "selection": "first",
+            "bus": "sfx",
+            "volume": 1.0,
+            "pitchRange": {
+                "x": 1.0,
+                "y": 1.0
+            },
+            "loop": true,
+            "spatialBlend": 1.0,
+            "minDistance": 4.0,
+            "maxDistance": 18.0,
+            "cooldownSeconds": 0.0,
+            "maxInstances": 4,
+            "overflow": "stopOldest"
+        },
+        {
+            "id": "emote.Flair",
+            "clips": [
+                "Assets/Project/Audio/Clips/CollectedSFX/Emotion/SFX_Emote_Flair.wav"
+            ],
+            "selection": "first",
+            "bus": "sfx",
+            "volume": 1.0,
+            "pitchRange": {
+                "x": 1.0,
+                "y": 1.0
+            },
+            "loop": true,
+            "spatialBlend": 1.0,
+            "minDistance": 4.0,
+            "maxDistance": 18.0,
+            "cooldownSeconds": 0.0,
+            "maxInstances": 4,
+            "overflow": "stopOldest"
+        },
+        {
+            "id": "emote.Hadraise",
+            "clips": [
+                "Assets/Project/Audio/Clips/CollectedSFX/Emotion/SFX_Emote_Hadraise.wav"
+            ],
+            "selection": "first",
+            "bus": "sfx",
+            "volume": 1.0,
+            "pitchRange": {
+                "x": 1.0,
+                "y": 1.0
+            },
+            "loop": false,
+            "spatialBlend": 1.0,
+            "minDistance": 4.0,
+            "maxDistance": 18.0,
+            "cooldownSeconds": 0.0,
+            "maxInstances": 4,
+            "overflow": "stopOldest"
+        },
+        {
+            "id": "emote.GolfDrive",
+            "clips": [
+                "Assets/Project/Audio/Clips/CollectedSFX/Emotion/SFX_Emote_GolfDrive.wav"
+            ],
+            "selection": "first",
+            "bus": "sfx",
+            "volume": 1.0,
+            "pitchRange": {
+                "x": 1.0,
+                "y": 1.0
+            },
+            "loop": false,
+            "spatialBlend": 1.0,
+            "minDistance": 4.0,
+            "maxDistance": 18.0,
+            "cooldownSeconds": 0.0,
+            "maxInstances": 4,
+            "overflow": "stopOldest"
+        },
+        {
+            "id": "emote.JumpingJacks",
+            "clips": [
+                "Assets/Project/Audio/Clips/CollectedSFX/Emotion/SFX_Emote_JumpingJacks.wav"
+            ],
+            "selection": "first",
+            "bus": "sfx",
+            "volume": 1.0,
+            "pitchRange": {
+                "x": 1.0,
+                "y": 1.0
+            },
+            "loop": true,
+            "spatialBlend": 1.0,
+            "minDistance": 4.0,
+            "maxDistance": 18.0,
+            "cooldownSeconds": 0.0,
+            "maxInstances": 4,
+            "overflow": "stopOldest"
+        },
+        {
+            "id": "emote.LayingPose",
+            "clips": [
+                "Assets/Project/Audio/Clips/CollectedSFX/Emotion/SFX_Emote_LayingPose.wav"
+            ],
+            "selection": "first",
+            "bus": "sfx",
+            "volume": 1.0,
+            "pitchRange": {
+                "x": 1.0,
+                "y": 1.0
+            },
+            "loop": false,
+            "spatialBlend": 1.0,
+            "minDistance": 4.0,
+            "maxDistance": 18.0,
+            "cooldownSeconds": 0.0,
+            "maxInstances": 4,
+            "overflow": "stopOldest"
+        },
+        {
+            "id": "emote.HurricaneKick",
+            "clips": [
+                "Assets/Project/Audio/Clips/CollectedSFX/Emotion/SFX_Emote_HurricaneKick.wav"
+            ],
+            "selection": "first",
+            "bus": "sfx",
+            "volume": 1.0,
+            "pitchRange": {
+                "x": 1.0,
+                "y": 1.0
+            },
+            "loop": true,
+            "spatialBlend": 1.0,
+            "minDistance": 4.0,
+            "maxDistance": 18.0,
+            "cooldownSeconds": 0.0,
+            "maxInstances": 4,
+            "overflow": "stopOldest"
         }
     ]
 }

@@ -69,9 +69,9 @@ namespace BuyBidBlow.Dev.Editor
             StopServer();
             BuildServer(false);
             var exe = Path.GetFullPath(Output);
-            Directory.CreateDirectory("Logs");
-            var arguments=RunArguments+" -batchmode -nographics -logFile \""+Path.GetFullPath("Logs/DedicatedServer.log")+"\"";
-            Process.Start(new ProcessStartInfo(exe, arguments) { UseShellExecute = false, CreateNoWindow = true, WorkingDirectory = Path.GetDirectoryName(exe) });
+            // "-logFile -" prints the log to its own console window; closing that window stops the server.
+            var arguments=RunArguments+" -batchmode -nographics -logFile -";
+            Process.Start(new ProcessStartInfo(exe, arguments) { UseShellExecute = true, WorkingDirectory = Path.GetDirectoryName(exe) });
             Debug.Log($"Server started: {exe} {RunArguments}");
         }
 
