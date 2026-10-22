@@ -1,6 +1,6 @@
 # HowToPlay 파일철 패널
 
-SC_MainMenu에서 HowToPlay를 누르면 열립니다. ← / → 페이지 이동, Esc 닫기. 다시 열면 첫 페이지로 돌아갑니다. 열려 있는 동안 메인 메뉴 선택과 입력을 막고, 닫으면 HowToPlay 버튼으로 선택을 복구합니다.
+SC_MainMenu에서 HowToPlay를 누르면 열립니다. A/W 이전 · D/S 다음 페이지 이동, Esc 닫기. 하단 이전·다음, 우측 색인, 닫기 버튼은 마우스 클릭도 지원합니다. 다시 열면 첫 페이지로 돌아갑니다. 열려 있는 동안 메인 메뉴 선택과 입력을 막고, 닫으면 HowToPlay 버튼으로 선택을 복구합니다.
 
 - Prefabs/PF_HowToPlay.prefab: 패널 구조. 메인 메뉴 Canvas 하위에서 사용.
 - HowToPlayPanel.cs: 페이지와 인덱스 표시, 키 입력.

@@ -26,6 +26,8 @@ namespace BuyBidBlow.Characters
             if (npcInfo != null && localTrade != null)
             {
                 localTrade.OpenPanel(npcInfo.Company);
+                if (tradePanel != null && tradePanel.IsOpen)
+                    npcInfo.GetComponent<DeskStaffAnimationClient>()?.GreetOnce();
                 return;
             }
 

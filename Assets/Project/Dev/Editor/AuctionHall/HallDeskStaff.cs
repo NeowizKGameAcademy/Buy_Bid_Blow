@@ -106,6 +106,7 @@ namespace BuyBidBlow.Dev.Editor
         {
             try {
                 var staff = Colors.Select(MakeStaff).ToArray();
+                DeskStaffAnimationSetup.Apply();
                 string path = HallLevelBuilder.Root + "/AuctionHall_Furnished.prefab";
                 var hall = PrefabUtility.LoadPrefabContents(path);
                 try { Place(hall, staff); PrefabUtility.SaveAsPrefabAsset(hall, path); } finally { PrefabUtility.UnloadPrefabContents(hall); }
