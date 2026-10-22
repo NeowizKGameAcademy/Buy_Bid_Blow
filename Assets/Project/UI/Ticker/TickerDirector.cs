@@ -24,6 +24,11 @@ namespace BuyBidBlow.UI.Ticker
         TickerShot[] shots = Array.Empty<TickerShot>();
         bool resolved;
         int resolvedFrame = -1;
+        VideoPlayer introPlayer;
+        RenderTexture introTexture;
+        bool introPlaying;
+
+        public bool IsIntroVideoPlaying => introPlaying;
 
         void Awake()
         {
@@ -35,8 +40,56 @@ namespace BuyBidBlow.UI.Ticker
             shots = new TickerShot[Schedule.BoardCount];
         }
         void OnEnable() { if (Schedule != null) Active = this; }
-        void OnDisable() { if (Active == this) Active = null; foreach (var feed in feeds.Values) feed.Player.Stop(); }
-        void OnDestroy() { foreach (var feed in feeds.Values) if (feed.Texture) { feed.Texture.Release(); Destroy(feed.Texture); } }
+        void OnDisable() { if (Active == this) Active = null; foreach (var feed in feeds.Values) feed.Player.Stop(); if (introPlayer) introPlayer.Stop(); }
+        void OnDestroy()
+        {
+            foreach (var feed in feeds.Values) if (feed.Texture) { feed.Texture.Release(); Destroy(feed.Texture); }
+            if (introTexture) { introTexture.Release(); Destroy(introTexture); }
+        }
+
+        // Local-only welcome video used by the map introduction.  The board UI asks
+        // TryGetIntroTexture each frame, so it replaces the normal ticker briefly.
+        public void PlayWelcomeVideo()
+        {
+#if UNITY_SERVER
+            return;
+#else
+            var clip = Resources.Load<VideoClip>("Video/Welcome");
+            if (!clip) { Debug.LogError("Missing Resources/Video/Welcome.mp4 for the map intro.", this); return; }
+            if (!introPlayer)
+            {
+                var go = new GameObject("Map intro welcome video");
+                go.transform.SetParent(transform, false);
+                introPlayer = go.AddComponent<VideoPlayer>();
+                introPlayer.playOnAwake = false; introPlayer.isLooping = false; introPlayer.skipOnDrop = true;
+                introPlayer.renderMode = VideoRenderMode.RenderTexture;
+                introPlayer.audioOutputMode = VideoAudioOutputMode.None;
+                introPlayer.loopPointReached += _ => introPlaying = false;
+            }
+            if (!introTexture || introTexture.width != (int)clip.width || introTexture.height != (int)clip.height)
+            {
+                if (introTexture) { introTexture.Release(); Destroy(introTexture); }
+                introTexture = new RenderTexture((int)clip.width, (int)clip.height, 0) { name = "Map intro welcome video" };
+                Clear(introTexture);
+                introPlayer.targetTexture = introTexture;
+            }
+            introPlayer.Stop(); introPlayer.clip = clip; introPlaying = true; introPlayer.Prepare();
+            Debug.Log("[Ticker] Playing Welcome.mp4 for the map introduction.", this);
+#endif
+        }
+
+        public bool TryGetIntroTexture(out Texture texture)
+        {
+            texture = null;
+#if !UNITY_SERVER
+            if (!introPlaying || !introPlayer) return false;
+            if (introPlayer.isPrepared && !introPlayer.isPlaying) introPlayer.Play();
+            texture = introTexture;
+            return texture;
+#else
+            return false;
+#endif
+        }
 
         // False while no match timeline exists; the board then keeps its own fixed screen.
         public bool TryGetShot(string board, out TickerShot shot)
@@ -69,6 +122,7 @@ namespace BuyBidBlow.UI.Ticker
         {
             Resolve();
 #if !UNITY_SERVER
+            if (introPlaying && introPlayer && introPlayer.isPrepared && !introPlayer.isPlaying) introPlayer.Play();
             foreach (var feed in feeds.Values) feed.Used = false;
             if (resolved)
                 foreach (var shot in shots)

@@ -276,6 +276,9 @@ namespace BuyBidBlow.Characters
         // This client's submission to the running secret auction (0 = none); nobody else learns it.
         public static int LocalSecretBid { get; private set; }
         public static event Action<PortfolioSnapshot> LocalPortfolioChanged;
+        // Delivered directly to each owning client before the match clock exists.
+        // This is deliberately separate from inMatch: the hall tour uses the lobby camera.
+        public static event Action LocalMatchIntroStarted;
         static readonly List<Info> localInformation = new List<Info>();
         public static IReadOnlyList<Info> LocalInformation => localInformation;
         public static event Action LocalInformationChanged;
@@ -297,6 +300,11 @@ namespace BuyBidBlow.Characters
         public static BuyBidBlow.Common.FinalStanding[] LocalResults { get; private set; }
         public static int LocalResultRounds { get; private set; }
         [TargetRpc] public void TargetNotice(BuyBidBlow.Common.MatchNotice notice) => LocalNotice?.Invoke(notice);
+        [TargetRpc] public void TargetStartMatchIntro() => LocalMatchIntroStarted?.Invoke();
+        [Command] public void CmdFinishMatchIntro()
+        {
+            if (NetworkManager.singleton is GameNetworkManager room) room.NotifyMatchIntroFinished(connectionToClient);
+        }
         [TargetRpc] public void TargetAuctionOutcome(BuyBidBlow.Common.AuctionOutcome outcome) => LocalAuctionOutcome?.Invoke(outcome);
         [TargetRpc] public void TargetResults(BuyBidBlow.Common.FinalStanding[] rows, int rounds)
         { LocalResults = rows; LocalResultRounds = rounds; LocalResultsChanged?.Invoke(); }

@@ -18,6 +18,7 @@ namespace BuyBidBlow.Network
     // minPlayers: the server's start threshold (e.g. -minPlayers 1), so clients judge "all ready" the same way.
     public struct LobbyJoinResponse : NetworkMessage {public bool accepted;public string reason;public int minPlayers;}
     public struct LobbyClosing : NetworkMessage {}
+    public struct MatchIntroStarting : NetworkMessage {}
     public struct MatchStarting : NetworkMessage {}
     public struct MatchReturning : NetworkMessage {}
     public sealed class GameNetworkManager : NetworkManager
@@ -28,10 +29,12 @@ namespace BuyBidBlow.Network
         // Lower this in the Inspector to test with fewer players (e.g. one ParrelSync clone).
         [SerializeField,Min(1)] int minPlayers=3;
         [SerializeField] string menuScene="SC_MainMenu";
-        bool clientInMatch;
+        bool clientInMatch,clientInIntro,matchStarting;
+        readonly HashSet<int> introPendingConnections = new HashSet<int>();
         public bool ClientInMatch=>clientInMatch;
+        public bool ClientInIntro=>clientInIntro;
         readonly RoomRoster roster=new RoomRoster();
-        public event Action ClientConnected,AdmissionApproved,ClientDisconnected,LocalPlayerReady,ClientMatchStarted;
+        public event Action ClientConnected,AdmissionApproved,ClientDisconnected,LocalPlayerReady,ClientMatchIntroStarted,ClientMatchStarted;
         public event Action ClientMatchReturned;
         public event Action<string> AdmissionRejected,ClientError;
         // Captured before connecting; the owned player submits it once after spawning.
@@ -68,8 +71,9 @@ namespace BuyBidBlow.Network
         {
             base.OnStartClient();NetworkClient.RegisterHandler<LobbyJoinResponse>(ReceiveResponse);
             NetworkClient.RegisterHandler<LobbyClosing>(_=>AdmissionRejected?.Invoke("서버가 방을 닫았습니다."));
+            NetworkClient.RegisterHandler<MatchIntroStarting>(_=>{clientInIntro=true;ClientMatchIntroStarted?.Invoke();});
             NetworkClient.RegisterHandler<MatchStarting>(ReceiveMatchStarting);
-            NetworkClient.RegisterHandler<MatchReturning>(_=>{clientInMatch=false;ClientMatchReturned?.Invoke();});
+            NetworkClient.RegisterHandler<MatchReturning>(_=>{clientInMatch=false;clientInIntro=false;ClientMatchReturned?.Invoke();});
             if(matchNetPrefab)NetworkClient.RegisterPrefab(matchNetPrefab);
         }
         // The room host (방장) is the player in the lowest occupied seat; there is no server host player.
@@ -81,6 +85,7 @@ namespace BuyBidBlow.Network
         void ReceiveMatchStarting(MatchStarting message)
         {
             if(clientInMatch)return;
+            clientInIntro=false;
             clientInMatch=true;
             ClientMatchStarted?.Invoke();
         }
@@ -89,13 +94,37 @@ namespace BuyBidBlow.Network
         public void RequestStartMatch(PlayerNet requester)
         {
             if(!IsRoomHost(requester)||!CanStartMatch)return;
-            var participants=NetworkServer.connections.Values.Where(c=>c.identity&&c.identity.GetComponent<PlayerNet>()).ToArray();
-            if(!BeginMatch(participants.Select(PlayerIdOf).ToList()))return;
+            // Keep the authoritative match clock stopped until the shared hall tour ends.
             MatchStarted=true;
+            matchStarting=true;
+            introPendingConnections.Clear();
+            foreach(var conn in NetworkServer.connections.Values)
+                if(conn.identity && conn.identity.GetComponent<PlayerNet>()) introPendingConnections.Add(conn.connectionId);
+            NetworkServer.SendToAll(new MatchIntroStarting());
+            foreach(var conn in NetworkServer.connections.Values)
+                if(conn.identity && conn.identity.TryGetComponent<PlayerNet>(out var player)) player.TargetStartMatchIntro();
+            StartCoroutine(BeginMatchAfterIntro());
+        }
+        [Server] IEnumerator BeginMatchAfterIntro()
+        {
+            // Every client confirms only after its local video and closing fade finish.
+            // The timeout keeps a disconnected or broken client from holding the room forever.
+            float timeout=60f;
+            while(introPendingConnections.Count>0 && timeout>0f){timeout-=Time.unscaledDeltaTime;yield return null;}
+            var participants=NetworkServer.connections.Values.Where(c=>c.identity&&c.identity.GetComponent<PlayerNet>()).ToArray();
+            if(participants.Length==0){EndMatch();yield break;}
+            if(!BeginMatch(participants.Select(PlayerIdOf).ToList())){EndMatch();yield break;}
+            matchStarting=false;
             foreach(var conn in participants)conn.identity.GetComponent<PlayerNet>().inMatch=true;
             SendPortfolios();
             NetworkServer.SendToAll(new MatchStarting());
             Debug.Log($"[Server] Match started with {participants.Length} player(s)");
+        }
+
+        [Server] public void NotifyMatchIntroFinished(NetworkConnectionToClient connection)
+        {
+            if(!matchStarting||connection==null)return;
+            introPendingConnections.Remove(connection.connectionId);
         }
 
         // ---- Match controller (server only) ----
@@ -174,7 +203,7 @@ namespace BuyBidBlow.Network
         {
             if(matchNet&&NetworkServer.active)NetworkServer.Destroy(matchNet.gameObject);
             foreach(var conn in NetworkServer.connections.Values)if(conn.identity&&conn.identity.TryGetComponent<PlayerNet>(out var player))player.StandUp();
-            matchNet=null;engine=null;MatchStarted=false;
+            matchNet=null;engine=null;MatchStarted=false;matchStarting=false;introPendingConnections.Clear();
         }
 
         static readonly Company[] Companies=(Company[])Enum.GetValues(typeof(Company));
