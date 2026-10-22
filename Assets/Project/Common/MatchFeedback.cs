@@ -14,11 +14,12 @@ namespace BuyBidBlow.Common
         public string Winner;
         public int Amount;
     }
-    // Other players' private breakdown is omitted by the server.
+    // Complete breakdown is sent only after the match ends.
     public struct FinalStanding
     {
         public int Rank, Total, Cash, StockValue, Shares;
         public string Nickname;
         public bool Own;
+        public int[] CompanyShares, FinalPrices, AssetHistory;
     }
 }

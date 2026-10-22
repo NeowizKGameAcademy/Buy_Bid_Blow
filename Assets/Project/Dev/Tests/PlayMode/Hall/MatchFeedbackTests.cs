@@ -80,7 +80,7 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
             var snapshot=PlayerNet.LocalPortfolio;
             Assert.AreEqual(snapshot.Cash+snapshot.GetShares(Company.Straw)*MatchNet.Current.GetPrice(Company.Straw),PlayerNet.LocalResults[0].Total);
             Assert.IsTrue(feedback.results.Buttons[0].interactable,"room host can return");
-            Click(feedback.results.Buttons[0]);
+            Click(feedback.results.GetComponentInChildren<BuyBidBlow.UI.Result.DetailedResultsView>().returnButton);
             yield return HostedMatch.Until(()=>!match.Room.ClientInMatch,"returned to lobby");
             var session=Object.FindFirstObjectByType<HallSession>();Assert.IsFalse(session.IsPlaying);Assert.IsTrue(session.lobbyPresentation.activeSelf);
             Assert.IsFalse(local.ready);Assert.IsNull(PlayerNet.LocalResults);

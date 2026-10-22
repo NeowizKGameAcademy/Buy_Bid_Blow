@@ -47,7 +47,7 @@ namespace BuyBidBlow.UI.Lobby
         Button pressed;
         float pressedUntil;
         public int SelectedCategory=>category;
-        public bool OptionsOpen=>optionPanel.activeSelf;
+        public bool OptionsOpen=>BuyBidBlow.UI.Menu.GameMenuController.Ensure()?.IsSettingsOpen==true;
         void Awake()
         {
             var preview=GameObject.Find("Lobby Art Preview - Editor Only");if(preview)Destroy(preview);
@@ -77,6 +77,7 @@ namespace BuyBidBlow.UI.Lobby
         // Rendering remains entirely uGUI; this method draws no IMGUI controls.
         void OnGUI()
         {
+            if(BuyBidBlow.UI.Menu.GameMenuController.BlocksInput)return;
             var e=Event.current;
             if(e.type==EventType.KeyUp){heldKeys.Remove(e.keyCode);return;}
             if(e.type!=EventType.KeyDown||e.control||e.alt||e.command||e.keyCode==KeyCode.None)return;
@@ -160,7 +161,7 @@ namespace BuyBidBlow.UI.Lobby
             help.text=help.text.Replace(" · H: 방 만들기","").Replace("  ·  H: 방 만들기","");
         }
         public void ToggleReady(){var p=Local();if(p&&NetworkClient.ready){p.SetReady(!p.ready);Pulse(ready);}}
-        public void ToggleOptions(){optionPanel.SetActive(!optionPanel.activeSelf);optionRow=0;RefreshOptions();}
+        public void ToggleOptions(){BuyBidBlow.UI.Menu.GameMenuController.Ensure()?.OpenSettings();}
         void RefreshOptions()
         {
             var rows=new[]{"음량  "+Mathf.RoundToInt(AudioListener.volume*100)+"%   ← →","전체화면  "+(Screen.fullScreen?"켜짐":"꺼짐")+"   Enter","닫기   Esc"};
@@ -186,7 +187,7 @@ namespace BuyBidBlow.UI.Lobby
             if(EventSystem.current)EventSystem.current.SetSelectedGameObject(null);
         }
         public void Join(){if(session.Join(nickname.text,address.text,port.text))StopTyping();}
-        public void Leave()=>session.Leave();
+        public void Leave()=>BuyBidBlow.UI.Menu.GameMenuController.Ensure()?.RequestLeave();
         void Pulse(Button b){pressed=b;pressedUntil=Time.unscaledTime+.15f;}
         Sprite S(string id)=>library.Find(id);
         void State(Button b,string id,bool enabled,bool selected)

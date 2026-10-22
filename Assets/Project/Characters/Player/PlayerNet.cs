@@ -50,7 +50,7 @@ namespace BuyBidBlow.Characters
         }
         public override void OnStartLocalPlayer()
         {
-            base.OnStartLocalPlayer();RefreshAvatar();
+            base.OnStartLocalPlayer();RefreshAvatar();BuyBidBlow.UI.Menu.GameMenuController.Ensure();
             if(NetworkManager.singleton is GameNetworkManager room)room.NotifyLocalPlayerReady();
         }
         // The avatar model faces the root's -Z (the lobby lines them up facing the camera with no rotation),

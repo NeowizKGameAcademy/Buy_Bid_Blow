@@ -79,6 +79,7 @@ namespace BuyBidBlow.UI.Shared
         private void Focus() { if (EventSystem.current) EventSystem.current.SetSelectedGameObject(Buttons[selected].gameObject); }
         protected virtual void Update()
         {
+            if(BuyBidBlow.UI.Menu.GameMenuController.BlocksInput)return;
             if (Time.frameCount == openedFrame) return;
             var k = Keyboard.current; if (k == null) return;
             if (k.escapeKey.wasPressedThisFrame) { Cancel(); return; }

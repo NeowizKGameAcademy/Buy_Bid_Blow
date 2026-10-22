@@ -9,7 +9,7 @@ namespace BuyBidBlow.UI.Menu {
   public Button startButton,howToPlayButton,settingsButton,howClose,settingsClose;
   public void StartGame(){SceneManager.LoadScene(BuyBidBlow.Network.GameNetworkManager.PlayScene);}
   public void HowToPlay(){if(menuInput){menuInput.interactable=false;menuInput.blocksRaycasts=false;}howToPlayPanel.SetActive(true);if(EventSystem.current)EventSystem.current.SetSelectedGameObject(null);}
-  public void Settings(){settingsPanel.SetActive(true);EventSystem.current.SetSelectedGameObject(settingsClose.gameObject);}
+  public void Settings(){GameMenuController.Ensure()?.OpenSettings();}
   public void CloseHow(){BuyBidBlow.Audio.GameAudio.Play("ui.close",this);howToPlayPanel.SetActive(false);if(menuInput){menuInput.interactable=true;menuInput.blocksRaycasts=true;}if(EventSystem.current)EventSystem.current.SetSelectedGameObject(howToPlayButton.gameObject);}
   public void CloseSettings(){BuyBidBlow.Audio.GameAudio.Play("ui.close",this);settingsPanel.SetActive(false);EventSystem.current.SetSelectedGameObject(settingsButton.gameObject);}
   public void Volume(float value){AudioListener.volume=value;}
@@ -20,6 +20,6 @@ namespace BuyBidBlow.UI.Menu {
    Application.Quit();
 #endif
   }
-  void Start(){EventSystem.current.SetSelectedGameObject(startButton.gameObject);}
+  void Start(){GameMenuController.Ensure();if(settingsPanel)settingsPanel.SetActive(false);EventSystem.current.SetSelectedGameObject(startButton.gameObject);}
  }
 }

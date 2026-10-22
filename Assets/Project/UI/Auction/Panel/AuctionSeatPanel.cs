@@ -115,6 +115,7 @@ namespace BuyBidBlow.UI.Auction
             data.ownSubmitted = data.secret ? PlayerNet.LocalSecretBid : 0;
             var local = NetworkClient.localPlayer ? NetworkClient.localPlayer.GetComponent<PlayerNet>() : null;
             data.ownHighest = data.hasBid && local && match.highestBidder == local.nickname;
+            if(data.ownHighest)data.ownSubmitted=data.highestBid;
             return data;
         }
     }

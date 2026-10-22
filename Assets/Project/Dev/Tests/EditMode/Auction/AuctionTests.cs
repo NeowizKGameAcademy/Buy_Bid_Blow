@@ -43,11 +43,17 @@ namespace BuyBidBlow.Dev.Tests.EditMode.Auction
         }
 
         [Test]
-        public void OpenHighBidderCannotRaiseOwnBid()
+        public void OpenHighBidderRaisesOnlyTheDifference()
         {
             var open = NewOpen();
             open.PlaceBid(A, 10, 0);
-            Assert.AreEqual(AuctionError.AlreadyHighest, open.PlaceBid(A, 20, 0));
+            Assert.AreEqual(AuctionError.None, open.PlaceBid(A, 100, 0));
+            Assert.AreEqual(100, players[A].Reserved);
+            Assert.AreEqual(0, players[A].Available);
+            Assert.AreEqual(AuctionError.NotEnoughCash, open.PlaceBid(A, 101, 0));
+            Assert.AreEqual(100, open.HighestBid);
+            Assert.AreEqual(100, players[A].Reserved);
+            open.Close();open.Close();Assert.AreEqual(0,players[A].Cash);
         }
 
         [Test]
