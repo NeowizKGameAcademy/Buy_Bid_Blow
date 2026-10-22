@@ -89,13 +89,19 @@ namespace BuyBidBlow.Dev.Editor
         {
             // Always refresh so the server gets the lobby manager's current settings (match rules, player prefab).
             UpdateServerScene();
-            var report = BuildPipeline.BuildPlayer(new BuildPlayerOptions
+            BuildReport report;
+            // Building the Server subtarget leaves the Editor on it, which compiles UNITY_SERVER into Play mode and mutes all audio.
+            try
             {
-                scenes = new[] { ServerScene },
-                locationPathName = Output,
-                target = BuildTarget.StandaloneWindows64,
-                subtarget = (int)StandaloneBuildSubtarget.Server,
-            });
+                report = BuildPipeline.BuildPlayer(new BuildPlayerOptions
+                {
+                    scenes = new[] { ServerScene },
+                    locationPathName = Output,
+                    target = BuildTarget.StandaloneWindows64,
+                    subtarget = (int)StandaloneBuildSubtarget.Server,
+                });
+            }
+            finally { EditorUserBuildSettings.standaloneBuildSubtarget = StandaloneBuildSubtarget.Player; }
             if (report.summary.result != BuildResult.Succeeded) throw new Exception("Server build failed: " + report.summary.result);
             Debug.Log($"Server build: {Path.GetFullPath(Output)} ({report.summary.totalSize / (1024 * 1024)} MB)");
             if (reveal && !Application.isBatchMode) EditorUtility.RevealInFinder(Output);
