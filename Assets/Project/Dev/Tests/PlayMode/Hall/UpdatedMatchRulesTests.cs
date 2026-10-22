@@ -27,8 +27,11 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
         [UnityTest]public IEnumerator ProductionRulesAndThirteenRoundServerMatch()
         {
             var rules=JsonUtility.FromJson<MatchSettings>(System.IO.File.ReadAllText("Assets/Project/Content/Match/MatchSettings.json"));rules.Validate();
-            Assert.AreEqual(13,rules.RoundCount);Assert.AreEqual(180,rules.AuctionRoundSeconds);
+            Assert.AreEqual(13,rules.RoundCount);Assert.AreEqual(120,rules.AuctionRoundSeconds);
             CollectionAssert.AreEqual(new[]{2,6,10},rules.AuctionRounds);
+            var schedule=BuyBidBlow.Systems.Round.MatchSchedule.Build(rules,0,0);
+            foreach(var span in schedule.Where(s=>s.Kind==BuyBidBlow.Systems.Round.TimelineSpanKind.SecretAuction))
+                Assert.AreEqual(30,span.EndsAt-span.StartsAt,.001,"replicated secret auction countdown");
             foreach(int count in new[]{3,6})
             {
                 var players=Enumerable.Range(0,count).Select(i=>new PlayerId("player"+i)).ToArray();
@@ -38,19 +41,20 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
                 double previous=0;
                 for(int round=1;round<=13;round++)
                 {
-                    Assert.AreEqual(round,engine.Round);Assert.AreEqual(rules.IsAuctionRound(round)?180:60,engine.Deadline-previous,.001);
+                    Assert.AreEqual(round,engine.Round);Assert.AreEqual(rules.IsAuctionRound(round)?120:60,engine.Deadline-previous,.001);
                     if(engine.Auction!=null)
                     {
                         Assert.AreEqual(60,engine.Auction.Open.Deadline-previous,.001);
-                        engine.Tick(previous+60);Assert.IsNotNull(engine.Auction.Secret);Assert.AreEqual(previous+120,engine.Auction.Secret.Deadline,.001);
-                        engine.Tick(previous+120);Assert.IsTrue(engine.Auction.IsFinished);
+                        engine.Tick(previous+60);Assert.IsNotNull(engine.Auction.Secret);Assert.AreEqual(previous+90,engine.Auction.Secret.Deadline,.001);
+                        engine.Tick(previous+90);Assert.IsTrue(engine.Auction.IsFinished);
+                        Assert.AreEqual(30,engine.Deadline-(previous+90),.001,"trading time after both auctions");
                     }
                     previous=engine.Deadline;engine.Tick(previous);
                 }
-                Assert.IsTrue(engine.Complete);Assert.AreEqual(13,engine.Round);Assert.AreEqual(1140,previous,"19 minute match");
+                Assert.IsTrue(engine.Complete);Assert.AreEqual(13,engine.Round);Assert.AreEqual(960,previous,"16 minute match");
             }
             // Same production JSON, only server clock accelerated for the end-to-end run.
-            yield return match.Start(1);
+            yield return match.Start(1,port:27999);
             Assert.AreEqual(13,MatchNet.Current.totalRounds);
             foreach(Company company in System.Enum.GetValues(typeof(Company)))Assert.AreEqual(10,MatchNet.Current.GetStock(company),"one actual test participant ×5+5");
             var local=NetworkClient.localPlayer.GetComponent<PlayerNet>();

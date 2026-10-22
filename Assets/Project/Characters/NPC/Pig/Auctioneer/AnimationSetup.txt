@@ -1,0 +1,1 @@
+2026-10-21 PlayMode PASS: opening Talking; bid update and closing warning Thankful; public sold and secret ending Counting; public unsold and match end Bow. One-shot actions return to Idle. Private secret outcomes ignored. Two independent presentation observers agree. Separate remote-client process not tested.

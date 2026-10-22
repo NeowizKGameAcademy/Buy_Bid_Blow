@@ -50,7 +50,7 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
 #if UNITY_SERVER
             Assert.Ignore("Client audio only.");
 #endif
-            yield return match.Start();
+            yield return match.Start(port:27996);
             Assert.AreEqual(13,MatchNet.Current.totalRounds);
             var flags=System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic;
             var engine=(BuyBidBlow.Systems.Match.MatchEngine)typeof(BuyBidBlow.Network.GameNetworkManager).GetField("engine",flags).GetValue(match.Room);
@@ -58,7 +58,7 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
             double firstClose=engine.Deadline;
             engine.Tick(firstClose);
             Assert.AreEqual(2,engine.Round);
-            Assert.AreEqual(180,engine.Deadline-firstClose,.001);
+            Assert.AreEqual(120,engine.Deadline-firstClose,.001);
             var local=NetworkClient.localPlayer.GetComponent<BuyBidBlow.Characters.PlayerNet>();
             var move=local.GetComponent<BuyBidBlow.Characters.PlayerMove>();
             yield return HostedMatch.Until(()=>move.IsGrounded,"player grounded");
@@ -122,7 +122,7 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
             var pointer=new UnityEngine.EventSystems.PointerEventData(UnityEngine.EventSystems.EventSystem.current);
             var button=how.howToPlayButton;UnityEngine.EventSystems.ExecuteEvents.Execute(button.gameObject,pointer,UnityEngine.EventSystems.ExecuteEvents.pointerEnterHandler);
             Assert.GreaterOrEqual(Count(audio,"ui.navigate"),1);
-            yield return match.Start();yield return new WaitForSecondsRealtime(1);
+            yield return match.Start(port:27996);yield return new WaitForSecondsRealtime(1);
             Assert.AreSame(host,CueAudioHost.Instance);Assert.AreEqual(1,Count(audio,"bgm.game"));
             Assert.AreEqual(1,audio.GetActiveVoices().Count(v=>v.CueId.StartsWith("bgm.")),"old menu music faded out");
             var player=NetworkClient.localPlayer.GetComponent<BuyBidBlow.Characters.PlayerNet>();var notebook=player.GetComponentInChildren<BuyBidBlow.UI.Notebook.NetworkNotebookController>(true);

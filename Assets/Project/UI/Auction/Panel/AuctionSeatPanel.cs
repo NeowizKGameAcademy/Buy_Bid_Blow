@@ -8,7 +8,7 @@ using UnityEngine.InputSystem;
 namespace BuyBidBlow.UI.Auction
 {
     // While the local player sits on a mezzanine auction chair: shows the auction panel from the public
-    // auction state on MatchNet and takes bids (←→ amount, E bid, C cancel the secret submission).
+    // auction state on MatchNet and takes bids (A/D amount, E bid, C cancel the secret submission).
     public sealed class AuctionSeatPanel : MonoBehaviour
     {
         [SerializeField] private AuctionPanelView view;
@@ -36,8 +36,8 @@ namespace BuyBidBlow.UI.Auction
             var keyboard = Keyboard.current;
             if (keyboard != null && !BuyBidBlow.UI.Notebook.NetworkNotebookController.BlocksInput)
             {
-                if (keyboard.rightArrowKey.wasPressedThisFrame) AdjustBid(1);
-                if (keyboard.leftArrowKey.wasPressedThisFrame) AdjustBid(-1);
+                if (keyboard.dKey.wasPressedThisFrame) AdjustBid(1);
+                if (keyboard.aKey.wasPressedThisFrame) AdjustBid(-1);
                 if (keyboard.eKey.wasPressedThisFrame) SubmitBid();
                 if (keyboard.cKey.wasPressedThisFrame) CancelSecret();
             }

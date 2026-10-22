@@ -17,6 +17,7 @@ namespace BuyBidBlow.Audio
         public void OnPointerEnter(PointerEventData data){if(button&&button.interactable)GameAudio.Play("ui.navigate",this);}
         void Click()
         {
+            if(GetComponentInParent<BuyBidBlow.UI.Menu.HowToPlayPanel>())return;
             if(GetComponentInParent<BuyBidBlow.UI.Market.TradePanelController>() || GetComponentInParent<BuyBidBlow.UI.Shared.ModalView>())return;
             // Trading panels are sibling children of the HUD, not the trade controller.
             if(GetComponentInParent<BuyBidBlow.UI.Market.TradingPanelView>())return;

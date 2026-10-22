@@ -31,7 +31,7 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
             double firstClose=MatchNet.Current.roundClosesAt;yield return null;
             Assert.IsTrue(player.GetComponentInChildren<NetworkPlayerHUD>(true).roundLabel.text.Contains("/ 13"));
             yield return HostedMatch.Until(()=>MatchNet.Current.round==2,"unaccelerated auction round",65);
-            Assert.AreEqual(180,MatchNet.Current.roundClosesAt-firstClose,.001);
+            Assert.AreEqual(120,MatchNet.Current.roundClosesAt-firstClose,.001);
             Assert.AreEqual(MatchNet.AuctionStage.Open,MatchNet.Current.auctionStage);
         }
     }

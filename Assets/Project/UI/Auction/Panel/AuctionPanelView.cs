@@ -35,6 +35,8 @@ namespace BuyBidBlow.UI.Auction
 
         public void Present(AuctionPanelData data)
         {
+            Set(controls,"Keycap ←/Key","A");
+            Set(controls,"Keycap →/Key","D");
             header.SetActive(data.seated);
             controls.SetActive(data.seated && data.live);
             if (lotDetails)

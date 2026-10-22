@@ -12,6 +12,20 @@ namespace BuyBidBlow.Dev.Editor
         static HUDIntegrationRunner(){api=ScriptableObject.CreateInstance<TestRunnerApi>();api.RegisterCallbacks(new Report());EditorApplication.update+=Tick;}
         static void Tick()
         {
+            if(File.Exists("Library/AuctioneerAnimationTests.request")&&!EditorApplication.isCompiling&&!EditorApplication.isUpdating&&!EditorApplication.isPlayingOrWillChangePlaymode)
+            {
+                File.Delete("Library/AuctioneerAnimationTests.request");
+                api.Execute(new ExecutionSettings(new Filter{testMode=TestMode.PlayMode,testNames=new[]{"BuyBidBlow.Dev.Tests.PlayMode.AuctioneerAnimationTests","BuyBidBlow.Dev.Tests.PlayMode.DeskTradeTests.EachDeskClerkOpensItsCompanyAndTradesThroughTheServer"}}));return;
+            }
+            foreach(var kind in new[]{"Capture","Review"})
+            {
+                string request="Library/HowToPlay"+kind+"Tests.request";
+                if(!File.Exists(request)||EditorApplication.isCompiling||EditorApplication.isUpdating||EditorApplication.isPlayingOrWillChangePlaymode)continue;
+                File.Delete(request);
+                if(kind=="Capture")File.WriteAllText("Library/HowToPlayCapture.enabled","capture");
+                string method=kind=="Capture"?"CaptureCurrentGameExamples":"MainMenuPagesMatchCurrentRules";
+                api.Execute(new ExecutionSettings(new Filter{testMode=TestMode.PlayMode,testNames=new[]{"BuyBidBlow.Dev.Tests.PlayMode.HowToPlayReviewTests."+method}}));return;
+            }
             if(File.Exists("Library/NewAudioTests.request") && !EditorApplication.isCompiling && !EditorApplication.isUpdating && !EditorApplication.isPlayingOrWillChangePlaymode)
             {
                 if(EditorUserBuildSettings.standaloneBuildSubtarget!=StandaloneBuildSubtarget.Player){EditorUserBuildSettings.standaloneBuildSubtarget=StandaloneBuildSubtarget.Player;return;}
@@ -54,4 +68,6 @@ namespace BuyBidBlow.Dev.Editor
         }
     }
 }
+
+
 

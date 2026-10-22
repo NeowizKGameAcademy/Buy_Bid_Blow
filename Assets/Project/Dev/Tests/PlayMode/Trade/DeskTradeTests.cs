@@ -27,7 +27,7 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
         [UnityTest]
         public IEnumerator EachDeskClerkOpensItsCompanyAndTradesThroughTheServer()
         {
-            yield return match.Start();
+            yield return match.Start(port: 27995);
             Assert.NotNull(PlayerNet.LocalPortfolio, "starting portfolio sent to the owner");
 
             var interaction = UnityEngine.Object.FindFirstObjectByType<PlayerInteraction>();
@@ -47,6 +47,10 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
                 Assert.NotNull(staff, staffName);
                 var body = staff.GetComponent<CapsuleCollider>();
                 Assert.NotNull(body, staffName + " collider");
+                var greeting = staff.GetComponent<DeskStaffAnimationClient>();
+                Assert.NotNull(greeting); Assert.IsFalse(greeting.HasGreeted);
+                Assert.IsFalse(greeting.greeting.isLooping);
+                var originalPosition = staff.transform.position;
                 Vector3 target = body.bounds.center;
                 Vector3 eyePos = staff.transform.position + staff.transform.forward * 2.2f + Vector3.up * eye;
                 detect.transform.SetPositionAndRotation(eyePos, Quaternion.LookRotation(target - eyePos));
@@ -57,6 +61,8 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
 
                 interaction.Interact();
                 Assert.IsTrue(panel.IsOpen, staffName + " opens the trade panel");
+                Assert.IsTrue(greeting.IsGreeting);
+                Assert.IsTrue(greeting.HasGreeted);
 
                 int cash = assets.Cash, shares = assets.GetShares(company), price = MatchNet.Current.GetPrice(company);
                 var view = UnityEngine.Object.FindObjectsByType<TradingPanelView>(FindObjectsSortMode.None).Single();
@@ -101,6 +107,11 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
                     Assert.AreEqual(cash, assets.Cash, company + " stake refunded");
                 }
                 finally { PlayerNet.LocalReply -= listen; }
+                panel.Close();
+                yield return HostedMatch.Until(() => !greeting.IsGreeting, staffName + " returns to idle", 8);
+                Assert.Less(Vector3.Distance(originalPosition, staff.transform.position), .001f);
+                interaction.Interact();
+                Assert.IsTrue(panel.IsOpen); Assert.IsFalse(greeting.IsGreeting, "second visit does not replay");
                 panel.Close();
             }
         }
