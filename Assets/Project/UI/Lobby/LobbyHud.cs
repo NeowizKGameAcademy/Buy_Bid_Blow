@@ -60,6 +60,7 @@ namespace BuyBidBlow.UI.Lobby
                 var go=new GameObject("Lobby UI EventSystem",typeof(EventSystem),typeof(InputSystemUIInputModule));go.transform.SetParent(transform);
                 var module=go.GetComponent<InputSystemUIInputModule>();module.AssignDefaultActions();module.move=null;module.submit=null;module.cancel=null;
             }
+            RefreshCustomizationKeyHints();
             EnsureTextInput();
             ready.onClick.AddListener(ToggleReady);options.onClick.AddListener(ToggleOptions);exit.onClick.AddListener(Leave);
             CreateStartButton();
@@ -109,10 +110,24 @@ namespace BuyBidBlow.UI.Lobby
             if(key==KeyCode.Escape){Leave();e.Use();return;}
             if(key==KeyCode.Tab){focus=(focus+1)%3;e.Use();return;}
             if(enter||key==KeyCode.Space){if(focus==0)ToggleReady();else if(focus==1)ToggleOptions();else Leave();e.Use();return;}
-            if(key==KeyCode.UpArrow){SelectCategory(-1);e.Use();}
-            if(key==KeyCode.DownArrow){SelectCategory(1);e.Use();}
-            if(key==KeyCode.LeftArrow){ChangeVariant(-1);e.Use();}
-            if(key==KeyCode.RightArrow){ChangeVariant(1);e.Use();}
+            if(key==KeyCode.W){SelectCategory(-1);e.Use();}
+            if(key==KeyCode.S){SelectCategory(1);e.Use();}
+            if(key==KeyCode.A){ChangeVariant(-1);e.Use();}
+            if(key==KeyCode.D){ChangeVariant(1);e.Use();}
+        }
+        void RefreshCustomizationKeyHints()
+        {
+            for(int i=0;i<2;i++) {
+                var cap=selector.Find("Key "+i); if(!cap)continue;
+                var arrow=cap.Find("Arrow");if(arrow)arrow.gameObject.SetActive(false);
+                var label=cap.Find("Key Label");
+                if(label)label.GetComponent<Text>().text=i==0?"W":"S";
+                else Text("Key Label",cap,i==0?"W":"S",17,new Vector2(24,24),Vector2.zero,C);
+            }
+            foreach(var button in new[]{previous,next}) {
+                if(button.transform.Find("Key Hint"))continue;
+                Text("Key Hint",button.transform,button==previous?"A":"D",18,new Vector2(40,24),new Vector2(0,-42),C);
+            }
         }
         static void EnsureTextInput()
         {
@@ -294,6 +309,7 @@ namespace BuyBidBlow.UI.Lobby
             var field=Image("Host Address",panel.transform,"14_CategoryHighlight",new Vector2(360,42),new Vector2(0,20),C,true);field.raycastTarget=true;address=field.gameObject.AddComponent<InputField>();address.targetGraphic=field;address.textComponent=Text("Address",field.transform,"localhost",21,new Vector2(332,36),Vector2.zero,C);address.text="localhost";address.characterLimit=128;
             Button("Host",panel.transform,"04_SmallButtonStates","H  방 만들기",new Vector2(220,48),new Vector2(-125,-42),C);Button("Join",panel.transform,"04_SmallButtonStates","J  접속",new Vector2(220,48),new Vector2(125,-42),C);Text("Help",panel.transform,"J: 주소 입력 → Enter 접속   ·   H: 호스트",17,new Vector2(550,30),new Vector2(0,-89),C);
             var dialog=Image("Options Dialog",root.transform,"08_Nameplate",new Vector2(520,340),Vector2.zero,C,true);optionPanel=dialog.gameObject;Text("Title",dialog.transform,"옵션",32,new Vector2(460,50),new Vector2(0,112),C);optionRows=Text("Rows",dialog.transform,"",23,new Vector2(460,210),new Vector2(0,-20),C);RefreshOptions();optionPanel.SetActive(false);
+            RefreshCustomizationKeyHints();
             UpgradeConnectionPanel();
             Canvas.ForceUpdateCanvases();Refresh(!Application.isPlaying);
         }

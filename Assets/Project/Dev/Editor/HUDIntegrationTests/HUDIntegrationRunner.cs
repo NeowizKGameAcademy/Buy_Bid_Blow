@@ -17,13 +17,13 @@ namespace BuyBidBlow.Dev.Editor
                 File.Delete("Library/AuctioneerAnimationTests.request");
                 api.Execute(new ExecutionSettings(new Filter{testMode=TestMode.PlayMode,testNames=new[]{"BuyBidBlow.Dev.Tests.PlayMode.AuctioneerAnimationTests","BuyBidBlow.Dev.Tests.PlayMode.DeskTradeTests.EachDeskClerkOpensItsCompanyAndTradesThroughTheServer"}}));return;
             }
-            foreach(var kind in new[]{"Capture","Review"})
+            foreach(var kind in new[]{"Capture","Review","Chair"})
             {
                 string request="Library/HowToPlay"+kind+"Tests.request";
                 if(!File.Exists(request)||EditorApplication.isCompiling||EditorApplication.isUpdating||EditorApplication.isPlayingOrWillChangePlaymode)continue;
                 File.Delete(request);
                 if(kind=="Capture")File.WriteAllText("Library/HowToPlayCapture.enabled","capture");
-                string method=kind=="Capture"?"CaptureCurrentGameExamples":"MainMenuPagesMatchCurrentRules";
+                string method=kind=="Capture"?"CaptureCurrentGameExamples":kind=="Chair"?"CaptureAuctionChairInteraction":"MainMenuPagesMatchCurrentRules";
                 api.Execute(new ExecutionSettings(new Filter{testMode=TestMode.PlayMode,testNames=new[]{"BuyBidBlow.Dev.Tests.PlayMode.HowToPlayReviewTests."+method}}));return;
             }
             if(File.Exists("Library/NewAudioTests.request") && !EditorApplication.isCompiling && !EditorApplication.isUpdating && !EditorApplication.isPlayingOrWillChangePlaymode)
