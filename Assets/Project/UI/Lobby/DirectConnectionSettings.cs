@@ -1,3 +1,5 @@
+using System;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Net.NetworkInformation;
@@ -10,9 +12,23 @@ namespace BuyBidBlow.UI.Lobby
     public static class DirectConnectionSettings
     {
         public const ushort DefaultPort=7777;
-        const string AddressKey="BuyBidBlow.Lobby.Address",PortKey="BuyBidBlow.Lobby.Port";
-        public static string LastAddress=>PlayerPrefs.GetString(AddressKey,"localhost");
-        public static string LastPort=>PlayerPrefs.GetInt(PortKey,DefaultPort).ToString();
+        const string AddressKey="BuyBidBlow.Lobby.Address",PortKey="BuyBidBlow.Lobby.Port",ServerFile="server.json";
+        [Serializable] class ServerEntry {public string address;public int port;}
+        static ServerEntry server;
+        static bool serverLoaded;
+        // StreamingAssets/server.json → last used (PlayerPrefs) → localhost
+        public static string LastAddress=>Server!=null&&TryAddress(Server.address,out var a)?a:PlayerPrefs.GetString(AddressKey,"localhost");
+        public static string LastPort=>Server!=null&&TryPort(Server.port.ToString(),out var p)?p.ToString():PlayerPrefs.GetInt(PortKey,DefaultPort).ToString();
+        static ServerEntry Server
+        {
+            get {
+                if(serverLoaded)return server;serverLoaded=true;
+                var path=Path.Combine(Application.streamingAssetsPath,ServerFile);
+                try{if(File.Exists(path))server=JsonUtility.FromJson<ServerEntry>(File.ReadAllText(path));}
+                catch(Exception e){Debug.LogWarning($"[Lobby] {ServerFile} 읽기 실패: {e.Message}");}
+                return server;
+            }
+        }
         public static string LocalIPv4()
         {
             try {
