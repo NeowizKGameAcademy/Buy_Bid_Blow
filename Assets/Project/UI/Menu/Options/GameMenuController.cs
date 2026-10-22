@@ -70,7 +70,8 @@ namespace BuyBidBlow.UI.Menu
             float deadline=Time.realtimeSinceStartup+5;
             while(NetworkClient.active&&Time.realtimeSinceStartup<deadline)yield return null;
             Cursor.lockState=CursorLockMode.None;Cursor.visible=true;Time.timeScale=1;
-            if(SceneManager.GetActiveScene().name!="SC_MainMenu")SceneManager.LoadScene("SC_MainMenu");else Close();
+            // The manager is DontDestroyOnLoad; drop it so the next hall load keeps the scene's own manager.
+            if(SceneManager.GetActiveScene().name!="SC_MainMenu"){if(NetworkManager.singleton)Destroy(NetworkManager.singleton.gameObject);SceneManager.LoadScene("SC_MainMenu");}else Close();
             leaving=false;
         }
         void LateUpdate()
