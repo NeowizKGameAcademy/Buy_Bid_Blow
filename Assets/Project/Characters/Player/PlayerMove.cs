@@ -90,13 +90,13 @@ namespace BuyBidBlow.Characters
             if (playerCamera == null)
                 return;
 
-            float mouseX = mouseDelta.x * rotateSpeed / 100;
+            float mouseX = mouseDelta.x * rotateSpeed * BuyBidBlow.UI.Menu.GameSettings.LookMultiplier / 100;
             if (IsSeated)
                 seatedYaw = Mathf.Clamp(seatedYaw + mouseX, -seatedYawLimit, seatedYawLimit);
             else
                 transform.Rotate(Vector3.up * mouseX);
 
-            float mouseY = mouseDelta.y * rotateSpeed / 100;
+            float mouseY = mouseDelta.y * rotateSpeed * BuyBidBlow.UI.Menu.GameSettings.LookMultiplier / 100;
 
             currentY -= mouseY;
             currentY = Mathf.Clamp(currentY, -upperLimit, lowerLimit);

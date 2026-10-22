@@ -23,7 +23,7 @@ namespace BuyBidBlow.Network
     public struct MatchReturning : NetworkMessage {}
     public sealed class GameNetworkManager : NetworkManager
     {
-        public const int ProtocolVersion=6;
+        public const int ProtocolVersion=7;
         public const string PlayScene="SC_ExchangeFurnished";
         [Header("Match")]
         // Lower this in the Inspector to test with fewer players (e.g. one ParrelSync clone).
@@ -258,7 +258,7 @@ namespace BuyBidBlow.Network
                     var p=order[i];var snapshot=engine.Snapshot(p.Id);int total=engine.Total(p.Id),shares=Companies.Sum(c=>snapshot.GetShares(c));
                     if(total!=previousTotal || shares!=previousShares)rank=i+1;
                     bool own=PlayerIdOf(conn).Equals(p.Id);
-                    rows[i]=new FinalStanding{Rank=rank,Total=total,Nickname=p.Name,Own=own,Cash=own?snapshot.Cash:0,StockValue=own?total-snapshot.Cash:0,Shares=own?shares:0};
+                    rows[i]=new FinalStanding{Rank=rank,Total=total,Nickname=p.Name,Own=own,Cash=snapshot.Cash,StockValue=total-snapshot.Cash,Shares=shares,CompanyShares=Companies.Select(c=>snapshot.GetShares(c)).ToArray(),FinalPrices=Companies.Select(c=>engine.Price(c)).ToArray(),AssetHistory=engine.AssetHistory(p.Id)};
                     previousTotal=total;previousShares=shares;
                 }
                 recipient.TargetResults(rows,engine.Settings.RoundCount);

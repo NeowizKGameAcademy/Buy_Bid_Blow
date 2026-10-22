@@ -5,8 +5,8 @@ using UnityEngine.InputSystem;
 namespace BuyBidBlow.UI.HUD
 {
     // The only owner of the in-match cursor. It stays locked unless the trade panel or the emotion menu
-    // needs it, or the player holds Left Alt. Esc is not used in play: the Editor's Game view drops the
-    // lock on Esc by itself, so Q closes the panel (and stands up, see SeatController) instead.
+    // needs it, or the player holds Left Alt. The shared Esc game menu also unlocks the cursor.
+    // Q closes trading and stands up (SeatController).
     public class CursorController : MonoBehaviour
     {
         [SerializeField] private TradePanelController tradePanel;

@@ -10,6 +10,7 @@ namespace BuyBidBlow.Audio
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]static void Reset()=>playedFrame.Clear();
         public static CueAudioHost EnsureHost()
         {
+            if(!Application.isPlaying)return null;
 #if UNITY_SERVER
             return null;
 #else

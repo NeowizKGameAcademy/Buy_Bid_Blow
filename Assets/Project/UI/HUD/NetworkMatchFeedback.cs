@@ -108,8 +108,8 @@ namespace BuyBidBlow.UI.HUD
             var rows=PlayerNet.LocalResults;if(rows==null || rows.Length==0)return;
             if(trading && trading.IsOpen)trading.Close();
             notebook.Close();auctionResult.Hide();outcomes.Clear();shownResults=true;host=IsRoomHost();
-            var entries=rows.Select(r=>new ResultEntry{Rank=r.Rank,Nickname=r.Nickname,TotalAssets=r.Total,Cash=r.Cash,StockValue=r.StockValue,TotalShares=r.Shares,IsLocal=r.Own}).ToArray();
-            results.ShowResults(entries,false,host,PlayerNet.LocalResultRounds);
+            var entries=rows.Select(r=>new ResultEntry{Rank=r.Rank,Nickname=r.Nickname,TotalAssets=r.Total,Cash=r.Cash,StockValue=r.StockValue,TotalShares=r.Shares,IsLocal=r.Own,CompanyShares=r.CompanyShares,FinalPrices=r.FinalPrices,AssetHistory=r.AssetHistory}).ToArray();
+            results.ShowResults(entries,true,host,PlayerNet.LocalResultRounds);
             EnsureEventSystem();
         }
         static bool IsRoomHost()

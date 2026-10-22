@@ -12,6 +12,7 @@ namespace BuyBidBlow.Dev.Editor
         static HUDIntegrationRunner(){api=ScriptableObject.CreateInstance<TestRunnerApi>();api.RegisterCallbacks(new Report());EditorApplication.update+=Tick;}
         static void Tick()
         {
+            foreach(var kind in new[]{"Rules","Play"}){string request="Library/GameMenu"+kind+"Tests.request";if(!File.Exists(request)||EditorApplication.isCompiling||EditorApplication.isUpdating||EditorApplication.isPlayingOrWillChangePlaymode)continue;File.Delete(request);api.Execute(new ExecutionSettings(new Filter{testMode=kind=="Rules"?TestMode.EditMode:TestMode.PlayMode,testNames=kind=="Rules"?new[]{"BuyBidBlow.Dev.Tests.EditMode.Auction.AuctionTests","BuyBidBlow.Dev.Tests.EditMode.MenuResultRulesTests"}:new[]{"BuyBidBlow.Dev.Tests.PlayMode.GameMenuResultsTests"}}));return;}
             if(File.Exists("Library/AuctioneerAnimationTests.request")&&!EditorApplication.isCompiling&&!EditorApplication.isUpdating&&!EditorApplication.isPlayingOrWillChangePlaymode)
             {
                 File.Delete("Library/AuctioneerAnimationTests.request");

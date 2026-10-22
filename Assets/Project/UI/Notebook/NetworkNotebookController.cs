@@ -14,7 +14,7 @@ namespace BuyBidBlow.UI.Notebook
         public TradePanelController trading;
         static NetworkNotebookController current;
         static int closedFrame = -1;
-        public static bool BlocksInput => (current && current.view && current.view.IsOpen) || closedFrame == Time.frameCount || BuyBidBlow.UI.HUD.NetworkMatchFeedback.BlocksInput;
+        public static bool BlocksInput => BuyBidBlow.UI.Menu.GameMenuController.BlocksInput || (current && current.view && current.view.IsOpen) || closedFrame == Time.frameCount || BuyBidBlow.UI.HUD.NetworkMatchFeedback.BlocksInput;
         void OnEnable()
         {
             current = this;
@@ -40,6 +40,7 @@ namespace BuyBidBlow.UI.Notebook
         void Update()
         {
             Refresh();
+            if(BuyBidBlow.UI.Menu.GameMenuController.BlocksInput)return;
             if(BuyBidBlow.UI.HUD.NetworkMatchFeedback.BlocksInput){Close();return;}
             if (!MatchNet.Current || PlayerNet.LocalPortfolio == null) { Close(); return; }
             var k = Keyboard.current;

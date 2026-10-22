@@ -31,6 +31,7 @@ namespace BuyBidBlow.Dev.Editor
                     var child = source.transform.Find(name);
                     if (!child) throw new Exception("Missing Dev HUD area: " + name);
                     var clone = Object.Instantiate(child.gameObject, root.transform, false); clone.name = name; clone.SetActive(true);
+                    if(name == "Round Timer - Top Right") ((RectTransform)clone.transform).anchoredPosition = new Vector2(-110,-24);
                     foreach (var graphic in clone.GetComponentsInChildren<Graphic>(true)) graphic.raycastTarget = false;
                 }
                 var view = root.AddComponent<NetworkPlayerHUD>();

@@ -104,7 +104,7 @@ namespace BuyBidBlow.UI.Market
 
         private void Update()
         {
-            if (!IsOpen)
+            if (!IsOpen || BuyBidBlow.UI.Menu.GameMenuController.BlocksInput)
                 return;
 
             if (feedback && feedbackUntil > 0 && Time.unscaledTime >= feedbackUntil)

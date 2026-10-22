@@ -31,15 +31,15 @@ namespace BuyBidBlow.Systems.Auction
         {
             if (closed || now >= Deadline) return AuctionError.Closed;
             if (!players.TryGetValue(player, out PlayerPortfolio assets)) return AuctionError.UnknownPlayer;
-            if (HasBid && player.Equals(HighestBidder)) return AuctionError.AlreadyHighest;
+            bool ownHighest = HasBid && player.Equals(HighestBidder);
 
             int minimum = HasBid ? HighestBid + 1 : MinBid;
             if (amount < minimum) return AuctionError.TooLow;
 
             // Reserve is the only step that can fail, so it goes last among the checks.
-            if (!assets.TryReserve(amount)) return AuctionError.NotEnoughCash;
+            if (!assets.TryReserve(ownHighest ? amount - HighestBid : amount)) return AuctionError.NotEnoughCash;
 
-            if (HasBid)
+            if (HasBid && !ownHighest)
                 players[HighestBidder].Release(HighestBid);
 
             HasBid = true;
