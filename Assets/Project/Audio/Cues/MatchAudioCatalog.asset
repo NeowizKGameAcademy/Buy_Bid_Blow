@@ -56,6 +56,20 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: f7bdee8f88002884d9a8aeeb778110b9, type: 3}
   - id: Assets/Project/Audio/Clips/CollectedSFX/UI/SFX_UI_Error.wav
     clip: {fileID: 8300000, guid: 04e9118a80af23344aef0b7fe0db0d82, type: 3}
+  - id: Assets/Project/Audio/Clips/CollectedSFX/Emotion/SFX_Emote_Defeat.wav
+    clip: {fileID: 8300000, guid: 38d6e81b06b50c747a1e21ee7b889718, type: 3}
+  - id: Assets/Project/Audio/Clips/CollectedSFX/Emotion/SFX_Emote_Flair.wav
+    clip: {fileID: 8300000, guid: e28b2d80edb04374898f2cccd54ea41d, type: 3}
+  - id: Assets/Project/Audio/Clips/CollectedSFX/Emotion/SFX_Emote_Hadraise.wav
+    clip: {fileID: 8300000, guid: 7f5893a618251534d9031899b4452828, type: 3}
+  - id: Assets/Project/Audio/Clips/CollectedSFX/Emotion/SFX_Emote_GolfDrive.wav
+    clip: {fileID: 8300000, guid: 33e41a8119e967d4e9c4fc41317bb15b, type: 3}
+  - id: Assets/Project/Audio/Clips/CollectedSFX/Emotion/SFX_Emote_JumpingJacks.wav
+    clip: {fileID: 8300000, guid: b0be58e1c69c45446b721dca4985f8a0, type: 3}
+  - id: Assets/Project/Audio/Clips/CollectedSFX/Emotion/SFX_Emote_LayingPose.wav
+    clip: {fileID: 8300000, guid: 3efa581ce1196e34085159fdc76dfb22, type: 3}
+  - id: Assets/Project/Audio/Clips/CollectedSFX/Emotion/SFX_Emote_HurricaneKick.wav
+    clip: {fileID: 8300000, guid: 08034bb35f97e7e4d842f69d77faaaf2, type: 3}
   buses:
   - id: sfx
     mixerGroup: {fileID: 0}

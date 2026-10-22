@@ -97,9 +97,10 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
             Assert.IsFalse(audio.History.Any(r=>r.Result!="Playing"),"all cue requests accepted");
             Assert.AreEqual(0,Count(audio,"player.footstep"));Assert.AreEqual(0,Count(audio,"player.jump"),"action hooks are not automatically driven yet");
             var action=NetworkClient.localPlayer.GetComponent<PlayerActionAudio>();Assert.IsNotNull(action);
-            action.PlayJump();action.PlayFootstep();action.PlayEmotion();
-            Assert.AreEqual(1,Count(audio,"player.jump"));Assert.AreEqual(1,Count(audio,"player.footstep"));
-            Assert.IsTrue(audio.GetActiveVoices().Where(v=>v.CueId.StartsWith("player.")).All(v=>v.Source.spatialBlend==1));
+            action.PlayJump();action.PlayFootstep();action.PlayEmotion("Flair");
+            Assert.AreEqual(1,Count(audio,"player.jump"));Assert.AreEqual(1,Count(audio,"player.footstep"));Assert.AreEqual(1,Count(audio,"emote.Flair"));
+            Assert.IsTrue(audio.GetActiveVoices().Where(v=>v.CueId.StartsWith("player.")||v.CueId.StartsWith("emote.")).All(v=>v.Source.spatialBlend==1));
+            action.StopEmotion();
             int count=audio.History.Count;yield return null;yield return null;Assert.AreEqual(count,audio.History.Count,"unchanged finished state stays silent");
             Assert.AreEqual(0,observer.GetComponents<NetworkBehaviour>().Length);
         }

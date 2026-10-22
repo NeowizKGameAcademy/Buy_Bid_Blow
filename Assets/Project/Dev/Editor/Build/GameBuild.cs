@@ -69,9 +69,9 @@ namespace BuyBidBlow.Dev.Editor
             StopServer();
             BuildServer(false);
             var exe = Path.GetFullPath(Output);
-            Directory.CreateDirectory("Logs");
-            var arguments=RunArguments+" -batchmode -nographics -logFile \""+Path.GetFullPath("Logs/DedicatedServer.log")+"\"";
-            Process.Start(new ProcessStartInfo(exe, arguments) { UseShellExecute = false, CreateNoWindow = true, WorkingDirectory = Path.GetDirectoryName(exe) });
+            // "-logFile -" prints the log to its own console window; closing that window stops the server.
+            var arguments=RunArguments+" -batchmode -nographics -logFile -";
+            Process.Start(new ProcessStartInfo(exe, arguments) { UseShellExecute = true, WorkingDirectory = Path.GetDirectoryName(exe) });
             Debug.Log($"Server started: {exe} {RunArguments}");
         }
 
@@ -89,13 +89,19 @@ namespace BuyBidBlow.Dev.Editor
         {
             // Always refresh so the server gets the lobby manager's current settings (match rules, player prefab).
             UpdateServerScene();
-            var report = BuildPipeline.BuildPlayer(new BuildPlayerOptions
+            BuildReport report;
+            // Building the Server subtarget leaves the Editor on it, which compiles UNITY_SERVER into Play mode and mutes all audio.
+            try
             {
-                scenes = new[] { ServerScene },
-                locationPathName = Output,
-                target = BuildTarget.StandaloneWindows64,
-                subtarget = (int)StandaloneBuildSubtarget.Server,
-            });
+                report = BuildPipeline.BuildPlayer(new BuildPlayerOptions
+                {
+                    scenes = new[] { ServerScene },
+                    locationPathName = Output,
+                    target = BuildTarget.StandaloneWindows64,
+                    subtarget = (int)StandaloneBuildSubtarget.Server,
+                });
+            }
+            finally { EditorUserBuildSettings.standaloneBuildSubtarget = StandaloneBuildSubtarget.Player; }
             if (report.summary.result != BuildResult.Succeeded) throw new Exception("Server build failed: " + report.summary.result);
             Debug.Log($"Server build: {Path.GetFullPath(Output)} ({report.summary.totalSize / (1024 * 1024)} MB)");
             if (reveal && !Application.isBatchMode) EditorUtility.RevealInFinder(Output);
