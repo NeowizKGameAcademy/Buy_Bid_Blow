@@ -124,7 +124,10 @@ namespace BuyBidBlow.Network
         [Server] public void NotifyMatchIntroFinished(NetworkConnectionToClient connection)
         {
             if(!matchStarting||connection==null)return;
-            introPendingConnections.Remove(connection.connectionId);
+            // The intro is purely local presentation.  Do not leave everyone in
+            // the customisation lobby if another client misses an acknowledgement.
+            // The first completed local tour starts the normal match preparation.
+            introPendingConnections.Clear();
         }
 
         // ---- Match controller (server only) ----
