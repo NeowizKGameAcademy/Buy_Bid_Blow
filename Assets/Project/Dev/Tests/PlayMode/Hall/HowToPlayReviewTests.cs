@@ -23,6 +23,32 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
         readonly HostedMatch match=new HostedMatch();
         Keyboard keyboard;InputSettings originalInput;
         [UnityTearDown]public IEnumerator Cleanup(){if(keyboard!=null)InputSystem.RemoveDevice(keyboard);if(originalInput)InputSystem.settings=originalInput;yield return match.Stop();}
+        [UnityTest]public IEnumerator CaptureAuctionChairInteraction()
+        {
+            yield return match.Start(0,s=>s.RoundSeconds=60,27996);
+            var player=NetworkClient.localPlayer.GetComponent<PlayerNet>();
+            var detect=player.GetComponentInChildren<DetectObject>();
+            match.Detach(detect.transform);
+            var camera=detect.GetComponent<Camera>();
+            if(!camera)camera=detect.GetComponentInChildren<Camera>();
+            var seats=Object.FindObjectsByType<BuyBidBlow.Props.Seat>(FindObjectsSortMode.None).Where(s=>s.auction).ToArray();
+            bool found=false;
+            foreach(var seat in seats){
+                var collider=seat.GetComponentsInChildren<Collider>().FirstOrDefault(c=>c.enabled&&!c.isTrigger);if(!collider)continue;
+                var target=collider.bounds.center;
+                foreach(var side in new[]{seat.transform.forward,-seat.transform.forward,seat.transform.right,-seat.transform.right}){
+                    var origin=target+side*1.6f+Vector3.up*.65f;
+                    detect.transform.SetPositionAndRotation(origin,Quaternion.LookRotation(target-origin));
+                    yield return null;yield return null;
+                    if(detect.isDetected&&detect.DetectedCollider.GetComponentInParent<BuyBidBlow.Props.Seat>()==seat){found=true;break;}
+                }
+                if(found)break;
+            }
+            Assert.IsTrue(found,"camera aims at a real auction chair");
+            player.GetComponentInChildren<NetworkPlayerHUD>(true).roundStart.Hide();
+            yield return null;yield return null;
+            Capture(camera,"AuctionChairInteraction",false);
+        }
         [UnityTest]public IEnumerator CaptureCurrentGameExamples()
         {
             if(!File.Exists("Library/HowToPlayCapture.enabled"))Assert.Ignore("Opt-in capture generation");
@@ -82,6 +108,16 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
             input.backgroundBehavior=InputSettings.BackgroundBehavior.IgnoreFocus;
             input.editorInputBehaviorInPlayMode=InputSettings.EditorInputBehaviorInPlayMode.AllDeviceInputAlwaysGoesToGameView;InputSystem.settings=input;
             keyboard=InputSystem.AddDevice<Keyboard>();
+            for(int page=0;page<7;page++){
+                panel.Show(page);yield return null;Assert.IsFalse(panel.DetailsOpen);
+                Assert.AreEqual(3,panel.pages[page].GetComponentsInChildren<Text>().Count(t=>t.name.StartsWith("Step Title ")));
+                yield return Press(Key.E);Assert.IsTrue(panel.DetailsOpen);
+                Assert.IsFalse(panel.pages[page].transform.Find("Steps").gameObject.activeSelf);
+                yield return Press(Key.Escape);Assert.IsFalse(panel.DetailsOpen);Assert.IsTrue(menu.howToPlayPanel.activeSelf);
+                Click(panel.pages[page].transform.Find("Details Toggle").GetComponent<Button>());Assert.IsTrue(panel.DetailsOpen);
+                panel.Show(page);Assert.IsFalse(panel.DetailsOpen);
+            }
+            panel.Show(0);
             yield return Press(Key.D);Assert.AreEqual(1,panel.PageIndex);
             yield return Press(Key.S);Assert.AreEqual(2,panel.PageIndex);
             yield return Press(Key.A);Assert.AreEqual(1,panel.PageIndex);
