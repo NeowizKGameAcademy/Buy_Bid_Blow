@@ -16,6 +16,9 @@ namespace BuyBidBlow.Characters
         // E on what the player is aiming at: a desk clerk opens trading, a free chair seats the player.
         public void Interact()
         {
+            var owner = GetComponentInParent<PlayerNet>();
+            if (Mirror.NetworkClient.active && (owner == null || !owner.isLocalPlayer)) return;
+
             if (detect == null || (tradePanel != null && tradePanel.IsOpen) || (seats != null && seats.IsSeated))
                 return;
 
@@ -26,6 +29,8 @@ namespace BuyBidBlow.Characters
             if (npcInfo != null && localTrade != null)
             {
                 localTrade.OpenPanel(npcInfo.Company);
+                if (tradePanel != null && tradePanel.IsOpen)
+                    npcInfo.GetComponent<DeskStaffAnimationClient>()?.PlayGreeting();
                 return;
             }
 
@@ -35,3 +40,4 @@ namespace BuyBidBlow.Characters
         }
     }
 }
+

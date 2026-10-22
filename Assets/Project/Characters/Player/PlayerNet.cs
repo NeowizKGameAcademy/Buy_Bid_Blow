@@ -153,6 +153,7 @@ namespace BuyBidBlow.Characters
         }
         [ClientRpc] void RpcCancelEmotion(bool walking)
         {
+            if (TryGetComponent<BuyBidBlow.Audio.PlayerActionAudio>(out var audio)) audio.StopEmotion();
             if (isLocalPlayer) return;
             var animator = GetComponentInChildren<Animator>(true);
             if (!animator) return;
@@ -192,11 +193,16 @@ namespace BuyBidBlow.Characters
             if (trigger != Animator.StringToHash("Jump")) return;
             RpcPlayAnimationTrigger(trigger);
         }
+        static readonly string[] Emotions = { "Defeat", "Flair", "Hadraise", "HipHopDance", "GolfDrive", "JumpingJacks", "LayingPose", "HurricaneKick" };
         [ClientRpc] void RpcPlayAnimationTrigger(int trigger)
         {
-            // The accepted jump reaches the owner and observers once through the existing RPC.
-            if (trigger == Animator.StringToHash("Jump") && TryGetComponent<BuyBidBlow.Audio.PlayerActionAudio>(out var audio))
-                audio.PlayJump();
+            // The accepted jump or emotion reaches the owner and observers once through the existing RPC.
+            if (TryGetComponent<BuyBidBlow.Audio.PlayerActionAudio>(out var audio))
+            {
+                if (trigger == Animator.StringToHash("Jump")) audio.PlayJump();
+                foreach (var emotion in Emotions)
+                    if (trigger == Animator.StringToHash(emotion)) audio.PlayEmotion(emotion);
+            }
             if (isLocalPlayer) return;
             var animator = GetComponentInChildren<Animator>(true);
             if (animator) animator.SetTrigger(trigger);

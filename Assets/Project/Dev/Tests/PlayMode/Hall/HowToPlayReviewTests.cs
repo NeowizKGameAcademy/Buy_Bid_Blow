@@ -11,6 +11,9 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.LowLevel;
+using UnityEngine.EventSystems;
 
 namespace BuyBidBlow.Dev.Tests.PlayMode
 {
@@ -18,7 +21,8 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
     {
         const string Root="Assets/Project/UI/Menu/HowToPlay";
         readonly HostedMatch match=new HostedMatch();
-        [UnityTearDown]public IEnumerator Cleanup(){yield return match.Stop();}
+        Keyboard keyboard;InputSettings originalInput;
+        [UnityTearDown]public IEnumerator Cleanup(){if(keyboard!=null)InputSystem.RemoveDevice(keyboard);if(originalInput)InputSystem.settings=originalInput;yield return match.Stop();}
         [UnityTest]public IEnumerator CaptureCurrentGameExamples()
         {
             if(!File.Exists("Library/HowToPlayCapture.enabled"))Assert.Ignore("Opt-in capture generation");
@@ -74,7 +78,34 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
             Assert.IsTrue(TextAt(3).Contains("비공개 30초"));Assert.IsTrue(TextAt(3).Contains("거래 시간 30초"));
             for(int page=0;page<7;page++){panel.Show(page);yield return null;Assert.AreEqual(1,panel.pages.Count(p=>p.activeSelf));Assert.AreEqual($"{page+1:00} / 07",panel.counter.text);}
             panel.Turn(1);Assert.AreEqual(6,panel.PageIndex);panel.Turn(-99);Assert.AreEqual(0,panel.PageIndex);
-            menu.CloseHow();Assert.IsFalse(menu.howToPlayPanel.activeSelf);
+            originalInput=InputSystem.settings;var input=Object.Instantiate(originalInput);
+            input.backgroundBehavior=InputSettings.BackgroundBehavior.IgnoreFocus;
+            input.editorInputBehaviorInPlayMode=InputSettings.EditorInputBehaviorInPlayMode.AllDeviceInputAlwaysGoesToGameView;InputSystem.settings=input;
+            keyboard=InputSystem.AddDevice<Keyboard>();
+            yield return Press(Key.D);Assert.AreEqual(1,panel.PageIndex);
+            yield return Press(Key.S);Assert.AreEqual(2,panel.PageIndex);
+            yield return Press(Key.A);Assert.AreEqual(1,panel.PageIndex);
+            yield return Press(Key.W);Assert.AreEqual(0,panel.PageIndex);
+            yield return Press(Key.RightArrow);Assert.AreEqual(0,panel.PageIndex,"old arrow input removed");
+            Click(panel.nextHint.GetComponent<Button>());Assert.AreEqual(1,panel.PageIndex);
+            Click(panel.previousHint.GetComponent<Button>());Assert.AreEqual(0,panel.PageIndex);
+            Assert.IsFalse(panel.previousHint.GetComponent<Button>().interactable);
+            Click(panel.tabs[6].GetComponent<Button>());Assert.AreEqual(6,panel.PageIndex);
+            Assert.IsFalse(panel.nextHint.GetComponent<Button>().interactable);
+            Click(menu.howClose);Assert.IsFalse(menu.howToPlayPanel.activeSelf);
+            menu.HowToPlay();yield return null;Click(panel.nextHint.GetComponent<Button>());Assert.AreEqual(1,panel.PageIndex,"no duplicate handlers after reopening");
+            yield return Press(Key.Escape);Assert.IsFalse(menu.howToPlayPanel.activeSelf);
+        }
+        IEnumerator Press(Key key){InputSystem.QueueStateEvent(keyboard,new KeyboardState(key));yield return null;yield return null;InputSystem.QueueStateEvent(keyboard,new KeyboardState());yield return null;}
+        static void Click(Button button)
+        {
+            Canvas.ForceUpdateCanvases();var events=EventSystem.current;Assert.IsNotNull(events);
+            var rect=button.GetComponent<RectTransform>();var canvas=button.GetComponentInParent<Canvas>();
+            var position=RectTransformUtility.WorldToScreenPoint(canvas.renderMode==RenderMode.ScreenSpaceOverlay?null:canvas.worldCamera,rect.TransformPoint(rect.rect.center));
+            var pointer=new PointerEventData(events){position=position,button=PointerEventData.InputButton.Left};
+            var hits=new System.Collections.Generic.List<RaycastResult>();events.RaycastAll(pointer,hits);
+            Assert.IsTrue(hits.Count>0);Assert.AreEqual(button,hits[0].gameObject.GetComponentInParent<Button>(),"mouse target reachable");
+            ExecuteEvents.Execute(button.gameObject,pointer,ExecuteEvents.pointerClickHandler);
         }
     }
 }

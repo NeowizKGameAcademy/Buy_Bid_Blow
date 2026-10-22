@@ -12,6 +12,11 @@ namespace BuyBidBlow.Dev.Editor
         static HUDIntegrationRunner(){api=ScriptableObject.CreateInstance<TestRunnerApi>();api.RegisterCallbacks(new Report());EditorApplication.update+=Tick;}
         static void Tick()
         {
+            if(File.Exists("Library/AuctioneerAnimationTests.request")&&!EditorApplication.isCompiling&&!EditorApplication.isUpdating&&!EditorApplication.isPlayingOrWillChangePlaymode)
+            {
+                File.Delete("Library/AuctioneerAnimationTests.request");
+                api.Execute(new ExecutionSettings(new Filter{testMode=TestMode.PlayMode,testNames=new[]{"BuyBidBlow.Dev.Tests.PlayMode.AuctioneerAnimationTests","BuyBidBlow.Dev.Tests.PlayMode.DeskTradeTests.EachDeskClerkOpensItsCompanyAndTradesThroughTheServer"}}));return;
+            }
             foreach(var kind in new[]{"Capture","Review"})
             {
                 string request="Library/HowToPlay"+kind+"Tests.request";
@@ -63,4 +68,6 @@ namespace BuyBidBlow.Dev.Editor
         }
     }
 }
+
+
 

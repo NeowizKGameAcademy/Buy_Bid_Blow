@@ -7912,7 +7912,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "[\u2190] \uC774\uC804"
+  m_Text: "[A/W] \uC774\uC804"
 --- !u!1 &2887645336962776943
 GameObject:
   m_ObjectHideFlags: 0
@@ -9567,7 +9567,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "[\u2192] \uB2E4\uC74C"
+  m_Text: "[D/S] \uB2E4\uC74C"
 --- !u!1 &3492241320816397634
 GameObject:
   m_ObjectHideFlags: 0

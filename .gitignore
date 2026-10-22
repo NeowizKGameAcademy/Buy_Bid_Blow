@@ -114,3 +114,6 @@ InitTestScene*.unity*
 /Docs/**/*.zip
 /Docs/**/*.fbx
 /Docs/**/*.glb
+
+# Local work outputs (captures, renders, exports) stay untracked.
+/[Oo]utputs/

@@ -1021,9 +1021,6 @@ MonoBehaviour:
   jump:
     catalog: {fileID: 11400000, guid: 7417b44d9862ec845b72a6794ae585e0, type: 2}
     id: player.jump
-  emotion:
-    catalog: {fileID: 0}
-    id: 
 --- !u!1 &3146760063045673235
 GameObject:
   m_ObjectHideFlags: 0

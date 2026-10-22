@@ -83,6 +83,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2957751601367004333, guid: dd2adad2e66cbb14b9b211d09605e5b9, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2557918434437414615}
+    - targetCorrespondingSourceObject: {fileID: 2957751601367004333, guid: dd2adad2e66cbb14b9b211d09605e5b9, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1002270027769173748}
   m_SourcePrefab: {fileID: 100100000, guid: dd2adad2e66cbb14b9b211d09605e5b9, type: 3}
 --- !u!1 &7704569635961911559 stripped
 GameObject:
@@ -111,3 +114,21 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1002270027769173748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7704569635961911559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4a8ebda7c1e8d7428ed35f13187cfb7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.Characters.AuctioneerAnimationClient
+  animator: {fileID: 2557918434437414615}
+  talking: {fileID: 7400000, guid: 750ac694904f27449bfcf3ca6fb843e5, type: 2}
+  counting: {fileID: 7400000, guid: 1e76df437c56c6d48bbda4ff9efdc73e, type: 2}
+  thankful: {fileID: 7400000, guid: 5cc1ef80b66b32341b683731d721bf4b, type: 2}
+  bow: {fileID: 7400000, guid: 260be1e9eca362742882a3a9c36102b0, type: 2}
+  bidReactionInterval: 3

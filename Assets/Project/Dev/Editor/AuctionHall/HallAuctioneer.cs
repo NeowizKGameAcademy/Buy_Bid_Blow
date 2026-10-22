@@ -79,6 +79,7 @@ namespace BuyBidBlow.Dev.Editor
         static void Run()
         {
             var prefab = MakePrefab();
+            AuctioneerAnimationSetup.Apply();
             string path = HallLevelBuilder.Root + "/AuctionHall_Furnished.prefab";
             var hall = PrefabUtility.LoadPrefabContents(path);
             try { Place(hall, prefab); PrefabUtility.SaveAsPrefabAsset(hall, path); } finally { PrefabUtility.UnloadPrefabContents(hall); }
