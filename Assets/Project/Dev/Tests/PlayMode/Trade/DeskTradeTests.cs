@@ -48,7 +48,7 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
                 var body = staff.GetComponent<CapsuleCollider>();
                 Assert.NotNull(body, staffName + " collider");
                 var greeting = staff.GetComponent<DeskStaffAnimationClient>();
-                Assert.NotNull(greeting); Assert.IsFalse(greeting.HasGreeted);
+                Assert.NotNull(greeting); Assert.IsFalse(greeting.IsGreeting);
                 Assert.IsFalse(greeting.greeting.isLooping);
                 var originalPosition = staff.transform.position;
                 Vector3 target = body.bounds.center;
@@ -62,7 +62,6 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
                 interaction.Interact();
                 Assert.IsTrue(panel.IsOpen, staffName + " opens the trade panel");
                 Assert.IsTrue(greeting.IsGreeting);
-                Assert.IsTrue(greeting.HasGreeted);
 
                 int cash = assets.Cash, shares = assets.GetShares(company), price = MatchNet.Current.GetPrice(company);
                 var view = UnityEngine.Object.FindObjectsByType<TradingPanelView>(FindObjectsSortMode.None).Single();
@@ -111,7 +110,7 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
                 yield return HostedMatch.Until(() => !greeting.IsGreeting, staffName + " returns to idle", 8);
                 Assert.Less(Vector3.Distance(originalPosition, staff.transform.position), .001f);
                 interaction.Interact();
-                Assert.IsTrue(panel.IsOpen); Assert.IsFalse(greeting.IsGreeting, "second visit does not replay");
+                Assert.IsTrue(panel.IsOpen); Assert.IsTrue(greeting.IsGreeting, "every visit replays locally");
                 panel.Close();
             }
         }
@@ -133,3 +132,4 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
         static string Label(TradingPanelView view, string path) => view.transform.Find(path).GetComponent<UnityEngine.UI.Text>().text;
     }
 }
+
