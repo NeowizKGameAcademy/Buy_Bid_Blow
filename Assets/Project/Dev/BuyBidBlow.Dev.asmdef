@@ -1,0 +1,25 @@
+{
+    "name": "BuyBidBlow.Dev",
+    "rootNamespace": "",
+    "references": [
+        "BuyBidBlow.Game",
+        "BuyBidBlow.Systems",
+        "CueAudio.Runtime",
+        "Mirror",
+        "Mirror.Transports",
+        "Unity.TextMeshPro",
+        "UnityEngine.UI",
+        "Unity.InputSystem"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "UNITY_EDITOR"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

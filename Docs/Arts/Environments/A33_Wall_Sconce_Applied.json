@@ -1,0 +1,191 @@
+{
+  "count": 14,
+  "first_floor": 10,
+  "second_floor": 4,
+  "revision": "Rev03",
+  "placements": [
+    {
+      "id": "L03",
+      "root": "A33_L03_Vertical_Sconce_ROOT",
+      "collection": "A33_L03",
+      "host": null,
+      "location": [
+        13.878000259399414,
+        -12.0,
+        2.0999999046325684
+      ],
+      "center_world_z": 2.4999999046325683,
+      "rotation_z_deg": -89.999995674289
+    },
+    {
+      "id": "L06",
+      "root": "A33_L06_Vertical_Sconce_ROOT",
+      "collection": "A33_L06",
+      "host": null,
+      "location": [
+        -13.878000259399414,
+        -12.0,
+        2.0999999046325684
+      ],
+      "center_world_z": 2.4999999046325683,
+      "rotation_z_deg": 89.99998884409983
+    },
+    {
+      "id": "U01",
+      "root": "A33_U01_Vertical_Sconce_ROOT",
+      "collection": "A33_U01",
+      "host": null,
+      "location": [
+        13.16137981414795,
+        9.562276840209961,
+        6.099999904632568
+      ],
+      "center_world_z": 6.499999904632569,
+      "rotation_z_deg": -69.84375226374453
+    },
+    {
+      "id": "U06",
+      "root": "A33_U06_Vertical_Sconce_ROOT",
+      "collection": "A33_U06",
+      "host": null,
+      "location": [
+        -13.161378860473633,
+        9.562276840209961,
+        6.099999904632568
+      ],
+      "center_world_z": 6.499999904632569,
+      "rotation_z_deg": 69.84375226374453
+    },
+    {
+      "id": "N01",
+      "root": "A33_N01_Vertical_Sconce_ROOT",
+      "collection": "A33_N01",
+      "host": "Installed04A_05_Column_Grooved_Shaft.003",
+      "location": [
+        -6.571824073791504,
+        15.86464786529541,
+        2.0999999046325684
+      ],
+      "center_world_z": 2.4999999046325683,
+      "rotation_z_deg": 22.50001257895059
+    },
+    {
+      "id": "N02",
+      "root": "A33_N02_Vertical_Sconce_ROOT",
+      "collection": "A33_N02",
+      "host": "Installed04A_03_Column_Grooved_Shaft.003",
+      "location": [
+        6.571824073791504,
+        15.86464786529541,
+        2.0999999046325684
+      ],
+      "center_world_z": 2.4999999046325683,
+      "rotation_z_deg": -22.50001257895059
+    },
+    {
+      "id": "N03",
+      "root": "A33_N03_Vertical_Sconce_ROOT",
+      "collection": "A33_N03",
+      "host": "Installed04A_06_Column_Grooved_Shaft.003",
+      "location": [
+        -13.19800090789795,
+        -0.4000000059604645,
+        2.0999999046325684
+      ],
+      "center_world_z": 2.4999999046325683,
+      "rotation_z_deg": 89.99998884409983
+    },
+    {
+      "id": "N04",
+      "root": "A33_N04_Vertical_Sconce_ROOT",
+      "collection": "A33_N04",
+      "host": "Installed04A_02_Column_Grooved_Shaft.003",
+      "location": [
+        13.19800090789795,
+        -0.4000000059604645,
+        2.0999999046325684
+      ],
+      "center_world_z": 2.4999999046325683,
+      "rotation_z_deg": -89.999995674289
+    },
+    {
+      "id": "N05",
+      "root": "A33_N05_Vertical_Sconce_ROOT",
+      "collection": "A33_N05",
+      "host": "Installed04A_11_Column_Grooved_Shaft.003",
+      "location": [
+        -6.597395420074463,
+        -20.854055404663086,
+        2.0999999046325684
+      ],
+      "center_world_z": 2.4999999046325683,
+      "rotation_z_deg": 157.50002316585702
+    },
+    {
+      "id": "N06",
+      "root": "A33_N06_Vertical_Sconce_ROOT",
+      "collection": "A33_N06",
+      "host": "Installed04A_13_Column_Grooved_Shaft.003",
+      "location": [
+        6.597395420074463,
+        -20.854055404663086,
+        2.0999999046325684
+      ],
+      "center_world_z": 2.4999999046325683,
+      "rotation_z_deg": -157.50002316585702
+    },
+    {
+      "id": "N07",
+      "root": "A33_N07_Vertical_Sconce_ROOT",
+      "collection": "A33_N07",
+      "host": "Installed04A_05_Column_Grooved_Shaft.003",
+      "location": [
+        -6.571824073791504,
+        15.86464786529541,
+        6.099999904632568
+      ],
+      "center_world_z": 6.499999904632569,
+      "rotation_z_deg": 22.50001257895059
+    },
+    {
+      "id": "N08",
+      "root": "A33_N08_Vertical_Sconce_ROOT",
+      "collection": "A33_N08",
+      "host": "Installed04A_03_Column_Grooved_Shaft.003",
+      "location": [
+        6.571824073791504,
+        15.86464786529541,
+        6.099999904632568
+      ],
+      "center_world_z": 6.499999904632569,
+      "rotation_z_deg": -22.50001257895059
+    },
+    {
+      "id": "S01",
+      "root": "A33_S01_Vertical_Sconce_ROOT",
+      "collection": "A33_S01",
+      "host": "Landing_Enclosed_Base_-1.002",
+      "location": [
+        -11.5,
+        5.501999855041504,
+        2.0999999046325684
+      ],
+      "center_world_z": 2.4999999046325683,
+      "rotation_z_deg": 179.999991348578
+    },
+    {
+      "id": "S02",
+      "root": "A33_S02_Vertical_Sconce_ROOT",
+      "collection": "A33_S02",
+      "host": "Landing_Enclosed_Base_1.002",
+      "location": [
+        11.5,
+        5.501999855041504,
+        2.0999999046325684
+      ],
+      "center_world_z": 2.4999999046325683,
+      "rotation_z_deg": 179.999991348578
+    }
+  ],
+  "unexpected_mesh_intersections": []
+}

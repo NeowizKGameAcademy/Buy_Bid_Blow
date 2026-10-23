@@ -1,0 +1,86 @@
+[
+  {
+    "key": "Walnut",
+    "material": "BBB_Seating_Walnut",
+    "textures": {
+      "baseColor": "Walnut_BaseColor.png",
+      "normal": "Walnut_Normal.png"
+    },
+    "baseColorLinear": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "metallic": 0,
+    "roughness": 0.36,
+    "normalScale": 0.18
+  },
+  {
+    "key": "Brass",
+    "material": "BBB_Seating_Brass",
+    "textures": {},
+    "baseColorLinear": [
+      0.6499999761581421,
+      0.38999998569488525,
+      0.0949999988079071,
+      1.0
+    ],
+    "metallic": 0.88,
+    "roughness": 0.27,
+    "normalScale": 0
+  },
+  {
+    "key": "BurgundyVelvet",
+    "material": "BBB_Seating_BurgundyVelvet",
+    "textures": {
+      "baseColor": "BurgundyVelvet_BaseColor.png",
+      "normal": "Velvet_Normal.png"
+    },
+    "baseColorLinear": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "metallic": 0,
+    "roughness": 0.72,
+    "normalScale": 0.12
+  },
+  {
+    "key": "TealVelvet",
+    "material": "BBB_Seating_TealVelvet",
+    "textures": {
+      "baseColor": "TealVelvet_BaseColor.png",
+      "normal": "Velvet_Normal.png"
+    },
+    "baseColorLinear": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "metallic": 0,
+    "roughness": 0.72,
+    "normalScale": 0.12
+  },
+  {
+    "key": "OxbloodLeather",
+    "material": "BBB_Seating_OxbloodLeather",
+    "textures": {
+      "baseColor": "OxbloodLeather_BaseColor.png",
+      "normal": "OxbloodLeather_Normal.png",
+      "roughness": "OxbloodLeather_Roughness.png",
+      "metallicSmoothness": "OxbloodLeather_MetallicSmoothness.png"
+    },
+    "baseColorLinear": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "metallic": 0,
+    "roughness": null,
+    "normalScale": 0.24
+  }
+]

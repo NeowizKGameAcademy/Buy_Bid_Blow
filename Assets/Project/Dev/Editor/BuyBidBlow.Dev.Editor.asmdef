@@ -1,0 +1,5 @@
+{
+  "name": "BuyBidBlow.Dev.Editor",
+  "references": ["BuyBidBlow.Dev", "BuyBidBlow.Game", "BuyBidBlow.Systems", "CueAudio.Runtime", "CueAudio.Editor", "Mirror", "Mirror.Components", "Mirror.Transports", "kcp2k", "Unity.InputSystem", "Unity.TextMeshPro", "UnityEngine.UI", "Unity.RenderPipelines.Core.Runtime", "Unity.RenderPipelines.Universal.Runtime"],
+  "includePlatforms": ["Editor"]
+}

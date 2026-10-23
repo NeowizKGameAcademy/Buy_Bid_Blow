@@ -1,0 +1,35 @@
+Lounge accessories — static environment props
+
+Current Blender source: Docs/Arts/Props/Models/BBB_Lounge_Accessories_BlenderKit.blend
+Previous procedural-material version: BBB_Lounge_Accessories_GameReady.blend
+Unity prefabs: Assets/Project/Content/Props/LoungeAccessories/Prefabs
+Preview scene: Assets/Project/Dev/Sandbox/LoungeAccessories/SC_LoungeAccessories.unity
+
+Each FBX contains LOD0 and LOD1. One metre units; floor-centred pivot; Unity front is +Z.
+LOD screen-height thresholds: 0.14 (LOD0), 0.018 (LOD1), culled below 0.018.
+Shared 1024x1024 base-colour, metallic/smoothness and normal atlases.
+Glass uses a separate 512x512 smudge metallic/smoothness mask.
+Metallic is red; smoothness is alpha. Base colour is sRGB; the mask is linear.
+Each opaque prop is one mesh/material. Cabinet glass is a separate transparent mesh shared by both LODs.
+Simple box collider per prefab. No runtime behaviour, moving doors, or interaction scripts.
+Models are supplied separately; they have not been placed into the hall.
+
+Unity vertex counts include UV/normal splits; see BBB_Lounge_Accessories_Unity_Budget.txt.
+Blender topology counts are in BBB_Lounge_Accessories_Budget.json.
+Validated: Unity import/build, material rendering including front-facing leaflets, metre scale,
+floor pivot, LOD references, and zero-area triangle cleanup. No target-device FPS benchmark.
+
+BlenderKit material update (2026-10-19):
+- Polished Walnut Wood — Vaishakh Vinod, 46de7336-6072-4b85-8b99-ac2438829a08
+- Brass/gold stratched metal — ydd 3D, 8bda36cd-a636-4959-ae72-d9bf30d50f80
+- Glass Clear Simple — James Middleton, de7860a2-bb0f-44ae-bad0-6ee6229eb6da
+All three catalog entries report royalty_free, free and canDownload=true.
+Full source metadata and packed original materials: Docs/Arts/Props/MaterialSources/LoungeAccessories.
+Wood and brass retain the downloaded PBR maps, repacked into the existing UV atlas.
+Glass retains its source smudge pattern; transmission is approximated by alpha for URP.
+Printed catalogue/watch artwork and the fabric/ceramic colour tiles remain from v1.
+Vertex counts, triangles, LOD geometry and colliders are unchanged.
+
+Rebuild workflow: build_lounge_prop_atlas.py (v1 graphics), pack_lounge_blenderkit_materials.py,
+then apply_lounge_blenderkit.py inside Blender after geometry creation.
+Unity: BuyBidBlow/Props/Build Lounge Accessories, or LoungeAccessoriesBuilder.BuildBatch for preview.

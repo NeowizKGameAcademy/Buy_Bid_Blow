@@ -1,0 +1,1 @@
+PASS: UI prefab construction, 21 specimen states and screenshots. Runtime keyboard checks are separate. Production scenes/build settings not modified.

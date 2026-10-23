@@ -1,0 +1,1 @@
+PASS: actual Play startup, HUD cash, buy/sell, bet/cancel, trade lock/restore, auction panels, bid/exit/charge, secret cancel, final results. Notebook empty/owned cells, scrolling, lock/restore passed. No runtime exception during checks.

@@ -1,0 +1,1 @@
+Complete. Lighting baked, saved and visually verified. See A93_Final_Validation.txt.

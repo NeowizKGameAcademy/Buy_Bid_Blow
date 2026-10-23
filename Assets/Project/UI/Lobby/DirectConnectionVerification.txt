@@ -1,0 +1,3 @@
+PASS: UI + controller saved; endpoint and capacity policy validated. UDP play tests running.
+PASS: independent UDP KCP peer admitted, nickname synchronized; 6 unique seats; seventh rejected as full; version mismatch rejected; disconnect/rejoin frees reservation.
+PASS: host close delivered to remote peers; timeout; cancel cleanup; host restart. Full second-client rendering and separate-PC LAN test remain manual.

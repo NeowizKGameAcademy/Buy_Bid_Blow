@@ -1,0 +1,1 @@
+PASS: 12 sprites, editable native Text/Image, 8 visible rows / 17 rounds, owned info only, unknown cells blank, current/past status, scroll limits, movement lock/restore, scene and 3 prefabs saved. Notebook preview uses labeled editor sample data; runtime uses actual owned Info records.

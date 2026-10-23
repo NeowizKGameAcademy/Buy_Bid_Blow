@@ -1,0 +1,1 @@
+Baking=True progress=0.2562177 elapsed=50.0157473

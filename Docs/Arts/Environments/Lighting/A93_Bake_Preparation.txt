@@ -1,0 +1,3 @@
+Lightmap receivers: 107
+GI contributors: 333
+Unique unwrapped copies: 107

@@ -1,0 +1,4 @@
+PASS: Oxanium font and license imported. Three linked boards: left timer, center overview, right rotating company.
+PASS: one active display group per board; no interactive raycast targets.
+Preview uses explicit sample values; production assets contain waiting placeholders only.
+PASS: 7 EditMode tests and 1 PlayMode integration test. Covers public-only history, final close, SyncList receive, countdown, percent change, company cycling, match replacement and disconnect reset. No separate multi-process client session was run.

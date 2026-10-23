@@ -1,0 +1,62 @@
+{
+  "tool": "built-in image_gen",
+  "base": "Create one professional 3D game prop concept design sheet with EXACTLY TWO distinct complete variants side by side, left A and right B, large and equally readable with ample separation. Plain warm light gray studio background, soft contact shadows, no environment. Consistent 3/4 view, entire objects uncropped, no inset views. Stylized polished low-poly aesthetic, beveled readable shapes, moderate detail suitable for modeling in Blender for a luxurious auction house with teal walls, warm walnut and antique brass. No photoreal clutter. Small simple labels 'A' and 'B' below respective objects, no other text. This is a paired design comparison sheet, not a room scene. ",
+  "pairs": [
+    [
+      "01_Rope_Barrier",
+      "Access restriction barrier set. A: polished brass round stanchions with burgundy velvet rope and heavy circular bases. B: dark walnut square posts with brass finials and teal braided rope. Each variant show a complete three-post two-rope short barrier."
+    ],
+    [
+      "02_Bench",
+      "Backless upholstered benches. A: burgundy tufted cushion, walnut straight legs, brass feet. B: deep teal smooth cushion on elegantly curved walnut frame with subtle brass trim."
+    ],
+    [
+      "03_Chair",
+      "Individual chairs. A: burgundy upholstered armless auction chair, walnut tall rectangular back, brass corner caps. B: teal upholstered reading armchair with slim walnut arms and modest carved back. Human scale."
+    ],
+    [
+      "04_Sofa",
+      "Sofas. A: three-seat curved teal velvet sofa with walnut base and brass feet. B: two-seat burgundy Chesterfield leather sofa, tufted back and rolled arms."
+    ],
+    [
+      "05_Planter",
+      "Potted plants including vessels. A: full graceful indoor palm in round dark teal glazed pot with brass rim. B: neatly shaped broadleaf indoor tree in square paneled walnut planter with brass feet. Both plants entirely visible."
+    ],
+    [
+      "06_Round_Table",
+      "Large round tables. A: walnut circular salon table on ornate central pedestal, brass edge. B: circular dark green marble-top table on four walnut legs joined by curved stretcher, brass caps. Table surfaces empty."
+    ],
+    [
+      "07_Side_Table",
+      "Small round side tables. A: compact round walnut end table on three splayed legs with small lower shelf and brass trim. B: compact round ivory marble top on elegant brass tripod with round lower stretcher. Surfaces empty."
+    ],
+    [
+      "08_Service_Trolley",
+      "Wheeled service trolleys. A: two-tier polished brass tea trolley with walnut trays, four caster wheels and curved push handle. B: compact dark walnut three-tier serving cart with brass railings and side handle. Empty trays so geometry is readable."
+    ],
+    [
+      "09_Picture_Light",
+      "Wall-mounted picture lights. A: long cylindrical antique brass horizontal picture lamp on two short curved wall arms with mounting plates. B: slim dark bronze rectangular horizontal shade with brass interior on a central angled arm and wall plate. Show fixtures alone, no paintings, no walls. Both plausible mount and downward illumination direction."
+    ],
+    [
+      "10_Cushion",
+      "Decorative cushions. A: square teal velvet cushion embroidered with a gold botanical medallion and gold piping. B: burgundy rectangular lumbar cushion with subtle gold diamond pattern and short corner tassels."
+    ],
+    [
+      "11_Table",
+      "Rectangular tables. A: walnut low rectangular coffee table, brass border and lower shelf, rounded corners. B: full-height walnut reading/appraisal table with dark green inset felt top and two shallow drawers, brass pulls. Empty surfaces."
+    ],
+    [
+      "12_Bookcase",
+      "Freestanding bookcases. A: tall walnut bookcase with three open shelves of antique books and two closed lower cabinet doors, brass handles. B: wide lower walnut library bookcase with open cubbies, books and central glass-front compartment. Entire furniture visible."
+    ],
+    [
+      "13_Shelf",
+      "Display shelving. A: freestanding narrow walnut and brass open étagère with four empty shelves, delicate arched top. B: wall-mounted three-level walnut display shelves on ornate brass brackets, no wall rendered. Shelves empty."
+    ],
+    [
+      "14_Ornament",
+      "Collectible decorative tabletop ornaments. A: antique brass armillary sphere mounted on square walnut base, coherent nested rings and central globe. B: small bronze rearing horse sculpture on dark green marble plinth, elegant readable silhouette."
+    ]
+  ]
+}

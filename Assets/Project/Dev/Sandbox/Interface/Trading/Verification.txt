@@ -1,0 +1,6 @@
+BG_TradingGlass.png: 1239x1269, transparent exterior 20.8%, trim 1077x1187.
+BG_CompanyPlaque.png: 2172x724, transparent exterior 34.2%, trim 2150x494.
+BG_CompanyMedallion.png: 1254x1254, transparent exterior 26.7%, trim 1222x1217.
+BTN_QuantityKey.png: 1254x1254, transparent exterior 26.8%, trim 1108x1079.
+BTN_ConfirmBrass.png: 2098x750, transparent exterior 41.3%, trim 2079x463.
+PASS: 29 editable Text components, 7 Buttons with explicit navigation, ColorTint states, empty onClick. Base prefab plus 3 variants. Static example scene and 3 preview renders. No gameplay binding.

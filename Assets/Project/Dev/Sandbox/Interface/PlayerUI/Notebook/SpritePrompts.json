@@ -1,0 +1,53 @@
+{
+  "generator": "built-in image_gen",
+  "assets": [
+    {
+      "id": "BG_NotebookLeather",
+      "prompt": "Create ONE production Unity UI sprite: brown leather notebook cover BACKING only, front-facing orthographic flat scan, approximately square slightly taller than wide. Rich dark warm brown leather, slim stitched double edge, subtly worn corners, matching an upscale but simple low-poly auction game. Entire center is a uniform plain dark brown leather backing, no paper/page insert, no rings, no metal clasps, no writing, no icons, no shadows outside silhouette. Rounded rectangular silhouette with thin stitched perimeter, strong clean corner definition suitable for 9-slicing; moderate restrained material detail, not ornate. Fill most of canvas with 3% transparent padding. Real transparent alpha outside cover, no white or colored matte, no checkerboard. This is the separate lowest layer of a hand-sketched investment notebook UI. No other objects."
+    },
+    {
+      "id": "BG_NotebookPaper",
+      "prompt": "ONE standalone Unity UI sprite: blank warm ivory notebook paper sheet, front-facing orthographic scan, approximately square slightly taller than wide. Rounded gently worn corners, subtle rough cold-pressed paper fiber grain and very faint natural cream mottling, clean bright readable center. Thin layered paper edge. NO lines, NO text, NO grids, NO icons, NO bindings, NO leather, NO holes, no objects. Suitable for 9-slicing, border restrained, no strong vignette. Entire sheet nearly fills canvas, outside silhouette is genuine transparent alpha with 3% padding; no checkerboard/matte. Hand-drawn investment notebook background separate paper layer. Minimal realistic detail, subtle texture under eventual dark writing."
+    },
+    {
+      "id": "DEC_BrassRing",
+      "prompt": "ONE isolated brass notebook binder ring sprite on genuine transparent alpha. A single short horizontal oval C-shaped gold/brass binding loop viewed almost front-on with slight top-down depth, like the hardware looping through the left margin of a leather ledger. Both rounded ends visible, warm worn brass, restrained beveled highlights and darker underside, stylized game UI appearance. Horizontal 3:2 aspect silhouette centered, large with generous transparent padding. No paper, no leather, no punched holes, no other rings, no writing, no shadow outside object, no extra elements. Must be usable as one repeated notebook binding hardware Image."
+    },
+    {
+      "id": "IC_StrawPencil",
+      "prompt": "ONE standalone company icon sprite: a small tied sheaf of wheat/straw in rich golden ochre and dark brown graphite outlines. Very rough hand-drawn COLORED PENCIL and wax crayon appearance: heavy crosshatched strokes, broken pigment, slightly doubled sketch contours, uneven pressure, transparent paper flecks. Bold recognizable compact silhouette readable at 55 pixels, single centered wheat sheaf only. Straight-on simple drawing, not realistic photo, not smooth vector, not 3D. True transparent background, no paper square, no border, no text, no letters, no UI plate, no detached doodles or drop shadow. Occupy 80% of square canvas."
+    },
+    {
+      "id": "IC_TimberPencil",
+      "prompt": "ONE standalone Unity company icon sprite: one chunky short timber log, angled diagonally, green bark with beige circular cut end and dark brown growth rings. Match a rough hand-drawn colored-pencil investment notebook icon. Dense dark forest-green crosshatching and visible coarse wax-pencil strokes, broken pigment with transparent paper flecks, irregular doubled charcoal outlines, handmade, high contrast but dark midtones. Bold compact recognizable silhouette readable at 55px. Centered on genuine transparent alpha square background, no paper rectangle, no text, no border, no badge, no shadows, no surrounding objects. Not 3D, not vector, no smooth gradients. Occupy 80 percent canvas."
+    },
+    {
+      "id": "IC_BrickPencil",
+      "prompt": "ONE standalone Unity company icon sprite: compact stack of three red clay bricks (two at base one on top), isometric hand sketch. Rough brick-red and dark burgundy colored pencil with visible dense crosshatched strokes, uneven pressure, broken waxy pigment and transparent paper flecks, doubled dark charcoal outlines. Bold legible compact silhouette at 55 pixels, matching coarse golden wheat and forest-green timber notebook sketches. Centered on genuine transparent alpha square canvas. No paper square, no lettering, no badge, no frame, no ground shadow or surrounding objects. Not photoreal, not smooth vector, not 3D."
+    },
+    {
+      "id": "FR_PencilCell",
+      "prompt": "ONE Unity UI sprite: an EMPTY wide rectangular table cell outline hand drawn in medium-dark graphite pencil, approximately 3:1 width-to-height. All four edges fully visible, slightly uneven thin scratchy double pencil strokes, graphite grain, small overshot corner strokes. Line weight restrained enough for a notebook table, flat front-facing orthographic. Transparent INSIDE and OUTSIDE rectangle, absolutely no paper or white fill, genuine alpha. Center 85% of image is empty transparency; only perimeter pencil marks. Generous 8 percent transparent padding. Suitable for nine-slice scaling: straight mostly uniform central edge stretches and distinctive small corners. No rounded UI button appearance, no text, no icons, no shadow, no extra lines. This is one table-cell border for a rough hand-drawn investor notebook."
+    },
+    {
+      "id": "MK_RiseRed",
+      "prompt": "ONE isolated broad horizontal scribbled marker / colored-pencil swash for a game notebook UI. Muted dark dusty brick red and terracotta, lower brightness and dark midtones, NOT pink, NOT yellow, NOT fluorescent. Very rough manual overlapping diagonal pencil strokes, visibly broken pigment, irregular jagged ends, semi-transparent gaps and grain. Flat annotation underline patch, about 4:1 width-to-height, thin broad fill readable under dark burgundy text later. Genuine transparent background everywhere except actual pigment; center pigment alpha moderately translucent. NO text, no arrows, no paper, no border, no shadow, no glow, no other objects. One compact red highlighter patch only, mostly uniform midtone inside, hand-scribbled appearance."
+    },
+    {
+      "id": "MK_FallBlue",
+      "prompt": "ONE isolated broad horizontal scribbled colored-pencil / marker swash, 4:1 width-to-height. Muted darker slate blue / denim blue, low brightness midtones, NOT electric cyan, NOT fluorescent, NOT pastel. Coarse visible overlapping diagonal strokes, uneven pressure, broken wax pigment grain, irregular ends, translucent gaps. Broad annotation fill beneath dark navy lettering later. Genuine transparent alpha background, no paper or colored matte. NO text, arrows, symbols, borders, shadow, glow or extra elements. Only one rough flat blue horizontal highlighter patch."
+    },
+    {
+      "id": "MK_FlatGraphite",
+      "prompt": "ONE isolated broad horizontal hand-scribbled pencil shading swash, 4:1 width-to-height, neutral medium charcoal-gray graphite with a hint of warm brown. Coarse overlapping diagonal strokes, broken pigment flecks, uneven grain and irregular staggered ends. Subdued semi-transparent gray annotation fill for a stock-price UNCHANGED state. Genuine transparent alpha outside and small gaps in pencil marks, NO paper, no text, no arrows, no frame, no glow, no shadow, no additional objects. Flat scan, one pencil swash only."
+    },
+    {
+      "id": "MK_CurrentRow",
+      "prompt": "ONE standalone Unity notebook UI sprite: a VERY WIDE thin horizontal band of pale desaturated sea-green / teal pencil shading, about 8:1 width-to-height. Hand scribbled in overlapping slightly diagonal strokes with obvious rough graphite/wax pigment grain, uneven pressure, broken translucent gaps and ragged ends. This sits UNDER a full current-round row of text and boxes, so pale lightly translucent pigment, not opaque or dark; no text or arrows. Genuine transparent alpha background, no paper, no frame, no glowing edge, no shadow, no extra objects. One continuous wide handmade teal row highlight band."
+    },
+    {
+      "id": "IC_CurrentBookmark",
+      "prompt": "ONE tiny standalone UI icon: a right-pointing triangular bookmark marker, dark deep teal, hand scribbled with coarse colored-pencil strokes and dark graphite outlines. Simple filled right-pointing triangle silhouette slightly taller than wide, rough uneven edges and broken wax pencil grain, readable at 25x42 pixels. Genuine transparent background, no paper, no text, no border plate, no glowing highlights, no shadows or extra objects. Bold compact shape, centered with padding."
+    }
+  ]
+}

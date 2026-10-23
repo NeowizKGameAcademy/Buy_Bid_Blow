@@ -1,0 +1,70 @@
+[
+  {
+    "object": "LoungeBK_WoodSource",
+    "material": "A39_BK_DarkWalnut",
+    "textures": [
+      {
+        "name": "Polished Walnut Wood_Displacement.jpg",
+        "path": "C:/course/unity/BuyBidBlow/Docs/Arts/Props/MaterialSources/LoungeAccessories/Polished Walnut Wood_Displacement.png",
+        "colorspace": "Non-Color"
+      },
+      {
+        "name": "Polished Walnut Wood_BaseColor.jpg",
+        "path": "C:/course/unity/BuyBidBlow/Docs/Arts/Props/MaterialSources/LoungeAccessories/Polished Walnut Wood_BaseColor.png",
+        "colorspace": "sRGB"
+      },
+      {
+        "name": "Polished Walnut Wood_Roughness.jpg",
+        "path": "C:/course/unity/BuyBidBlow/Docs/Arts/Props/MaterialSources/LoungeAccessories/Polished Walnut Wood_Roughness.png",
+        "colorspace": "Non-Color"
+      },
+      {
+        "name": "Polished Walnut Wood_Normal.jpg",
+        "path": "C:/course/unity/BuyBidBlow/Docs/Arts/Props/MaterialSources/LoungeAccessories/Polished Walnut Wood_Normal.png",
+        "colorspace": "Non-Color"
+      }
+    ]
+  },
+  {
+    "object": "LoungeBK_BrassSource",
+    "material": "Brass/gold stratched metal",
+    "textures": [
+      {
+        "name": "metal_height.jpg",
+        "path": "C:/course/unity/BuyBidBlow/Docs/Arts/Props/MaterialSources/LoungeAccessories/metal_height.png",
+        "colorspace": "Non-Color"
+      },
+      {
+        "name": "metal_diffuse.jpg",
+        "path": "C:/course/unity/BuyBidBlow/Docs/Arts/Props/MaterialSources/LoungeAccessories/metal_diffuse.png",
+        "colorspace": "sRGB"
+      },
+      {
+        "name": "metal_metalness.jpg",
+        "path": "C:/course/unity/BuyBidBlow/Docs/Arts/Props/MaterialSources/LoungeAccessories/metal_metalness.png",
+        "colorspace": "Non-Color"
+      },
+      {
+        "name": "metal_roughness.jpg",
+        "path": "C:/course/unity/BuyBidBlow/Docs/Arts/Props/MaterialSources/LoungeAccessories/metal_roughness.png",
+        "colorspace": "Non-Color"
+      },
+      {
+        "name": "metal_normal.jpg",
+        "path": "C:/course/unity/BuyBidBlow/Docs/Arts/Props/MaterialSources/LoungeAccessories/metal_normal.png",
+        "colorspace": "Non-Color"
+      }
+    ]
+  },
+  {
+    "object": "LoungeBK_GlassSource",
+    "material": "Glass Clear Simple",
+    "textures": [
+      {
+        "name": "metal-smudge-smoothness-4.jpg",
+        "path": "C:/course/unity/BuyBidBlow/Docs/Arts/Props/MaterialSources/LoungeAccessories/metal-smudge-smoothness-4.png",
+        "colorspace": "sRGB"
+      }
+    ]
+  }
+]

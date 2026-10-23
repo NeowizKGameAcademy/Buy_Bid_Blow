@@ -1,0 +1,98 @@
+using System;
+using System.Text;
+using BuyBidBlow.Systems.Market;
+using BuyBidBlow.Systems.Match;
+
+namespace BuyBidBlow.Dev.Editor
+{
+    // Preview only. Not the server's Match state or trading/betting implementation.
+    public sealed class MatchPriceSimulation
+    {
+        public const int HistoryRoundCount = PriceChangeGenerator.HistoryRoundCount;
+        public int Seed;
+        public int[] StartingPrices;
+        // Six prices at -5..0, five forward changes. Index 5 is the real match start.
+        public int[][] HistoryPrices;
+        public int[][] HistoryChanges;
+        public PriceRoundPreview[] Rounds;
+
+        public static MatchPriceSimulation Generate(MatchSettings settings, int seed)
+        {
+            settings.Validate();
+            var random = new Random(seed);
+            var result = new MatchPriceSimulation {
+                Seed = seed, StartingPrices = settings.RollStartingPrices(random),
+                Rounds = new PriceRoundPreview[settings.RoundCount]
+            };
+            var prices = (int[])result.StartingPrices.Clone();
+            int elapsed = 0;
+            for (int round = 1; round <= settings.RoundCount; round++)
+            {
+                int seconds = settings.GetRoundSeconds(round);
+                elapsed += seconds;
+                var raw = PriceChangeGenerator.Generate(settings.PriceChange, random);
+                var row = new PriceRoundPreview {
+                    Round = round, Seconds = seconds, ClosesAtSeconds = elapsed,
+                    HasAuctions = settings.IsAuctionRound(round),
+                    Prices = new int[prices.Length], RawChanges = new int[prices.Length],
+                    AppliedChanges = new int[prices.Length]
+                };
+                for (int i = 0; i < prices.Length; i++)
+                {
+                    row.RawChanges[i] = raw[i].Amount;
+                    row.Prices[i] = Math.Max(settings.MinPrice, prices[i] + raw[i].Amount);
+                    row.AppliedChanges[i] = row.Prices[i] - prices[i];
+                    prices[i] = row.Prices[i];
+                }
+                result.Rounds[round - 1] = row;
+            }
+            // Independent stream: enabling history must never consume the match's random draws.
+            result.HistoryPrices = PriceChangeGenerator.GenerateHistory(settings.PriceChange, result.StartingPrices, settings.MinPrice, seed);
+            result.HistoryChanges = new int[HistoryRoundCount][];
+            for (int i = 0; i < HistoryRoundCount; i++)
+            {
+                result.HistoryChanges[i] = new int[result.StartingPrices.Length];
+                for (int c = 0; c < result.StartingPrices.Length; c++)
+                    result.HistoryChanges[i][c] = result.HistoryPrices[i + 1][c] - result.HistoryPrices[i][c];
+            }
+            return result;
+        }
+
+        public string ToCsv()
+        {
+            var csv = new StringBuilder("Seed,Phase,Round,Seconds,ClosesAtSeconds,HasAuctions,Straw,Timber,Brick,StrawRaw,TimberRaw,BrickRaw,StrawApplied,TimberApplied,BrickApplied\n");
+            for (int i = 0; i <= HistoryRoundCount; i++)
+            {
+                // Historical indices are relative closes, not extra elapsed match time.
+                csv.Append(Seed).Append(i == HistoryRoundCount ? ",Start," : ",History,")
+                    .Append(i - HistoryRoundCount).Append(",0,0,false");
+                foreach (int value in HistoryPrices[i]) csv.Append(',').Append(value);
+                for (int repeat = 0; repeat < 2; repeat++)
+                    for (int c = 0; c < StartingPrices.Length; c++)
+                        csv.Append(',').Append(i == 0 ? 0 : HistoryChanges[i - 1][c]);
+                csv.AppendLine();
+            }
+            foreach (var row in Rounds)
+            {
+                csv.Append(Seed).Append(",Match,").Append(row.Round).Append(',').Append(row.Seconds).Append(',')
+                    .Append(row.ClosesAtSeconds).Append(',').Append(row.HasAuctions ? "true" : "false");
+                foreach (int value in row.Prices) csv.Append(',').Append(value);
+                foreach (int value in row.RawChanges) csv.Append(',').Append(value);
+                foreach (int value in row.AppliedChanges) csv.Append(',').Append(value);
+                csv.AppendLine();
+            }
+            return csv.ToString();
+        }
+    }
+
+    public sealed class PriceRoundPreview
+    {
+        public int Round;
+        public int Seconds;
+        public int ClosesAtSeconds;
+        public bool HasAuctions;
+        public int[] Prices;
+        public int[] RawChanges;
+        public int[] AppliedChanges;
+    }
+}

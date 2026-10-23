@@ -1,0 +1,145 @@
+[
+  {
+    "source": "나무 발소리.wav",
+    "destination": "Movement/SFX_Footsteps_Wood.wav",
+    "action": "copied unchanged",
+    "source_sha256": "58a28ed19914abdc5fed3ffe91f88a3519bd68391ec233f0dbe34c5727048418",
+    "output_sha256": "58a28ed19914abdc5fed3ffe91f88a3519bd68391ec233f0dbe34c5727048418",
+    "audio": "Stream #0:0: Audio: pcm_s16le ([1][0][0][0] / 0x0001), 48000 Hz, mono, s16, 768 kb/s",
+    "max_sample_difference": 0.0,
+    "verification": "PASS",
+    "license": "Not supplied"
+  },
+  {
+    "source": "결정.mp3",
+    "destination": "UI/SFX_UI_Confirm.wav",
+    "action": "converted to pcm_f32le",
+    "source_sha256": "7753f88cb365aab723c60397949e6dadec1d634ac4d955cf41f939e2a1e76db5",
+    "output_sha256": "cc656df502ec3e4fdb5701ee296a48acad9fbc59b65da8a7697cfe232f1fdd72",
+    "audio": "Stream #0:0: Audio: pcm_f32le ([3][0][0][0] / 0x0003), 44100 Hz, stereo, flt, 2822 kb/s",
+    "max_sample_difference": 0.0,
+    "verification": "PASS",
+    "license": "Not supplied"
+  },
+  {
+    "source": "뒤로·닫기.wav",
+    "destination": "UI/SFX_UI_BackClose.wav",
+    "action": "copied unchanged",
+    "source_sha256": "6486ca05896f2c82284a682a475fddd270bc7b9a63350ddc80b4d96e53a1f851",
+    "output_sha256": "6486ca05896f2c82284a682a475fddd270bc7b9a63350ddc80b4d96e53a1f851",
+    "audio": "Stream #0:0: Audio: pcm_s16le ([1][0][0][0] / 0x0001), 44100 Hz, mono, s16, 705 kb/s",
+    "max_sample_difference": 0.0,
+    "verification": "PASS",
+    "license": "Not supplied"
+  },
+  {
+    "source": "선택 이동.aiff",
+    "destination": "UI/SFX_UI_Navigate.wav",
+    "action": "converted to pcm_s16le",
+    "source_sha256": "d11fe3679082666af952790ba57939f804b90838cd32b059d7a0483a24f93e2d",
+    "output_sha256": "78fd114aa6c8741865d47fa812a736c08f3221baf77fa5eccc3d25efa56ae181",
+    "audio": "Stream #0:0: Audio: pcm_s16le ([1][0][0][0] / 0x0001), 44100 Hz, stereo, s16, 1411 kb/s",
+    "max_sample_difference": 0.0,
+    "verification": "PASS",
+    "license": "Not supplied"
+  },
+  {
+    "source": "페이지 넘김.wav",
+    "destination": "UI/SFX_UI_PageTurn.wav",
+    "action": "copied unchanged",
+    "source_sha256": "6f38a61ad943901c4c99f41da386e289bb886eee7bfbc36abb52b24a777d838f",
+    "output_sha256": "6f38a61ad943901c4c99f41da386e289bb886eee7bfbc36abb52b24a777d838f",
+    "audio": "Stream #0:0: Audio: pcm_f32le ([3][0][0][0] / 0x0003), 44100 Hz, stereo, flt, 2822 kb/s",
+    "max_sample_difference": 0.0,
+    "verification": "PASS",
+    "license": "Not supplied"
+  },
+  {
+    "source": "수첩 열기·닫기.wav",
+    "destination": "UI/SFX_UI_Notebook.wav",
+    "action": "copied unchanged",
+    "source_sha256": "f507bb987b6ac1061b46b3d99ede594521187bce9525097ba37b426cece7d600",
+    "output_sha256": "f507bb987b6ac1061b46b3d99ede594521187bce9525097ba37b426cece7d600",
+    "audio": "Stream #0:0: Audio: pcm_s24le ([1][0][0][0] / 0x0001), 48000 Hz, stereo, s32 (24 bit), 2304 kb/s",
+    "max_sample_difference": 0.0,
+    "verification": "PASS",
+    "license": "Not supplied"
+  },
+  {
+    "source": "수량조절.aiff",
+    "destination": "UI/SFX_UI_Quantity.wav",
+    "action": "converted to pcm_s16le",
+    "source_sha256": "d2b20cb5eba38a445260d752e34e3286f083851aedce1e52a9127332cdf6fd4a",
+    "output_sha256": "2f6674f96bc15410a130faa966264f1c0e63495e4519bd5234fb2c0ed483d7a8",
+    "audio": "Stream #0:0: Audio: pcm_s16le ([1][0][0][0] / 0x0001), 44100 Hz, stereo, s16, 1411 kb/s",
+    "max_sample_difference": 0.0,
+    "verification": "PASS",
+    "license": "Not supplied"
+  },
+  {
+    "source": "매수,매도 완료.wav",
+    "destination": "Market/SFX_Trade_Complete.wav",
+    "action": "copied unchanged",
+    "source_sha256": "2a113525058ef66dfdbc04bd8f5345707156531fae17a2630f801508ca5358e6",
+    "output_sha256": "2a113525058ef66dfdbc04bd8f5345707156531fae17a2630f801508ca5358e6",
+    "audio": "Stream #0:0: Audio: pcm_s24le ([1][0][0][0] / 0x0001), 44100 Hz, stereo, s32 (24 bit), 2116 kb/s",
+    "max_sample_difference": 0.0,
+    "verification": "PASS",
+    "license": "Not supplied"
+  },
+  {
+    "source": "베팅 참여.wav",
+    "destination": "Market/SFX_Bet_Place.wav",
+    "action": "copied unchanged",
+    "source_sha256": "53d4dc6881f710b1079e93fba3afbd127ae87f4e050bf563edea4451bc5f31ab",
+    "output_sha256": "53d4dc6881f710b1079e93fba3afbd127ae87f4e050bf563edea4451bc5f31ab",
+    "audio": "Stream #0:0: Audio: pcm_s24le ([1][0][0][0] / 0x0001), 44100 Hz, stereo, s32 (24 bit), 2116 kb/s",
+    "max_sample_difference": 0.0,
+    "verification": "PASS",
+    "license": "Not supplied"
+  },
+  {
+    "source": "마감 임박.wav",
+    "destination": "Auction/SFX_Auction_ClosingSoon.wav",
+    "action": "copied unchanged",
+    "source_sha256": "af426d845835833e7cfd0a471d940524e4f107a2fd1e860f2a5999fa1f6109ab",
+    "output_sha256": "af426d845835833e7cfd0a471d940524e4f107a2fd1e860f2a5999fa1f6109ab",
+    "audio": "Stream #0:0: Audio: pcm_s16le ([1][0][0][0] / 0x0001), 48000 Hz, stereo, s16, 1536 kb/s",
+    "max_sample_difference": 0.0,
+    "verification": "PASS",
+    "license": "Not supplied"
+  },
+  {
+    "source": "낙찰.wav",
+    "destination": "Auction/SFX_Auction_Gavel.wav",
+    "action": "copied unchanged",
+    "source_sha256": "5498f19f6854207655af0e8a8ebe2ab5430f3ae2c7ac8472d86ff5cf12fd7902",
+    "output_sha256": "5498f19f6854207655af0e8a8ebe2ab5430f3ae2c7ac8472d86ff5cf12fd7902",
+    "audio": "Stream #0:0: Audio: pcm_s16le ([1][0][0][0] / 0x0001), 44100 Hz, stereo, s16, 1411 kb/s",
+    "max_sample_difference": 0.0,
+    "verification": "PASS",
+    "license": "Not supplied"
+  },
+  {
+    "source": "경매 시작.wav",
+    "destination": "Auction/SFX_Auction_Start.wav",
+    "action": "copied unchanged",
+    "source_sha256": "d88b45708354df35f0529002b4e6d962274147cd81744881a982a80af7148d15",
+    "output_sha256": "d88b45708354df35f0529002b4e6d962274147cd81744881a982a80af7148d15",
+    "audio": "Stream #0:0: Audio: pcm_s16le ([1][0][0][0] / 0x0001), 44100 Hz, stereo, s16, 1411 kb/s",
+    "max_sample_difference": 0.0,
+    "verification": "PASS",
+    "license": "Not supplied"
+  },
+  {
+    "source": "새 시세 공개.wav",
+    "destination": "Market/SFX_Market_PriceReveal.wav",
+    "action": "copied unchanged",
+    "source_sha256": "2f6e90670ee71e7a0b6f6b54e4b9c03c5c28df9403a32e63f9c937e45edfa717",
+    "output_sha256": "2f6e90670ee71e7a0b6f6b54e4b9c03c5c28df9403a32e63f9c937e45edfa717",
+    "audio": "Stream #0:0: Audio: pcm_s16le ([1][0][0][0] / 0x0001), 48000 Hz, mono, s16, 768 kb/s",
+    "max_sample_difference": 0.0,
+    "verification": "PASS",
+    "license": "Not supplied"
+  }
+]

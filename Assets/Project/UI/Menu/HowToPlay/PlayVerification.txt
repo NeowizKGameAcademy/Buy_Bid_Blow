@@ -1,0 +1,1 @@
+PASS: Play mode; actual HowToPlay button; keyboard arrows all 7 pages and both boundaries; Esc close; menu isolation; restored focus; reopen resets page.

@@ -1,0 +1,11 @@
+Seating AB / Unity URP Lit material settings
+
+BaseColor PNG: sRGB enabled, Base Map, tint white.
+Normal PNG: Texture Type Normal Map, tangent-space OpenGL. Use normalScale in Material_Manifest.json.
+MetallicSmoothness PNG: sRGB disabled, Metallic Map; R=metallic, A=smoothness. For OxbloodLeather set Smoothness=1 to use the packed alpha.
+For other materials use the scalar metallic and 1-roughness values in the manifest.
+Brass has a constant base color (baseColorLinear in the manifest), with metallic 0.88 and smoothness 0.73.
+Textures use UV tiling already encoded in the mesh; set material tiling to 1,1.
+Blender velvet sheen and coat are preview shading features; URP Lit uses the supplied PBR maps and will differ slightly with lighting.
+
+The FBX UVs, material slots, texture references and triangle counts have passed Blender reimport checks. No Unity editor import has been performed for this material revision.

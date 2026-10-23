@@ -1,0 +1,138 @@
+{
+  "status": "proposal_not_applied",
+  "units": "m",
+  "source_plans": [
+    "A21_Interior_Layout_Proposal_A",
+    "A23_Reception_Zoning_Plan"
+  ],
+  "checked_model": "BBB_Hall_A30_StaffMedallion.blend",
+  "sconce": "BBB_Vertical_Wall_Sconce.blend",
+  "placements": [
+    {
+      "id": "L01",
+      "floor": 1,
+      "wall_reference_x": 14,
+      "wall_reference_y": -2,
+      "center_world_z": 2.5,
+      "root_world_z": 2.1,
+      "note": "벽 기준점 제안. 실제 패널 표면 및 몰딩 간격에 맞춰 위치/회전 조정."
+    },
+    {
+      "id": "L02",
+      "floor": 1,
+      "wall_reference_x": 14,
+      "wall_reference_y": -9.5,
+      "center_world_z": 2.5,
+      "root_world_z": 2.1,
+      "note": "벽 기준점 제안. 실제 패널 표면 및 몰딩 간격에 맞춰 위치/회전 조정."
+    },
+    {
+      "id": "L03",
+      "floor": 1,
+      "wall_reference_x": 14,
+      "wall_reference_y": -12,
+      "center_world_z": 2.5,
+      "root_world_z": 2.1,
+      "note": "벽 기준점 제안. 실제 패널 표면 및 몰딩 간격에 맞춰 위치/회전 조정."
+    },
+    {
+      "id": "L04",
+      "floor": 1,
+      "wall_reference_x": -14,
+      "wall_reference_y": -2,
+      "center_world_z": 2.5,
+      "root_world_z": 2.1,
+      "note": "벽 기준점 제안. 실제 패널 표면 및 몰딩 간격에 맞춰 위치/회전 조정."
+    },
+    {
+      "id": "L05",
+      "floor": 1,
+      "wall_reference_x": -14,
+      "wall_reference_y": -9.5,
+      "center_world_z": 2.5,
+      "root_world_z": 2.1,
+      "note": "벽 기준점 제안. 실제 패널 표면 및 몰딩 간격에 맞춰 위치/회전 조정."
+    },
+    {
+      "id": "L06",
+      "floor": 1,
+      "wall_reference_x": -14,
+      "wall_reference_y": -12,
+      "center_world_z": 2.5,
+      "root_world_z": 2.1,
+      "note": "벽 기준점 제안. 실제 패널 표면 및 몰딩 간격에 맞춰 위치/회전 조정."
+    },
+    {
+      "id": "L07",
+      "floor": 1,
+      "wall_reference_x": 3.3,
+      "wall_reference_y": -22.447,
+      "center_world_z": 2.5,
+      "root_world_z": 2.1,
+      "note": "벽 기준점 제안. 실제 패널 표면 및 몰딩 간격에 맞춰 위치/회전 조정."
+    },
+    {
+      "id": "L08",
+      "floor": 1,
+      "wall_reference_x": -3.3,
+      "wall_reference_y": -22.447,
+      "center_world_z": 2.5,
+      "root_world_z": 2.1,
+      "note": "벽 기준점 제안. 실제 패널 표면 및 몰딩 간격에 맞춰 위치/회전 조정."
+    },
+    {
+      "id": "U01",
+      "floor": 2,
+      "wall_reference_x": 13.276,
+      "wall_reference_y": 9.604,
+      "center_world_z": 6.5,
+      "root_world_z": 6.1,
+      "note": "벽 기준점 제안. 실제 패널 표면 및 몰딩 간격에 맞춰 위치/회전 조정."
+    },
+    {
+      "id": "U02",
+      "floor": 2,
+      "wall_reference_x": 10.776,
+      "wall_reference_y": 13.684,
+      "center_world_z": 6.5,
+      "root_world_z": 6.1,
+      "note": "벽 기준점 제안. 실제 패널 표면 및 몰딩 간격에 맞춰 위치/회전 조정."
+    },
+    {
+      "id": "U03",
+      "floor": 2,
+      "wall_reference_x": 4.495,
+      "wall_reference_y": 17.238,
+      "center_world_z": 6.5,
+      "root_world_z": 6.1,
+      "note": "벽 기준점 제안. 실제 패널 표면 및 몰딩 간격에 맞춰 위치/회전 조정."
+    },
+    {
+      "id": "U04",
+      "floor": 2,
+      "wall_reference_x": -4.495,
+      "wall_reference_y": 17.238,
+      "center_world_z": 6.5,
+      "root_world_z": 6.1,
+      "note": "벽 기준점 제안. 실제 패널 표면 및 몰딩 간격에 맞춰 위치/회전 조정."
+    },
+    {
+      "id": "U05",
+      "floor": 2,
+      "wall_reference_x": -10.776,
+      "wall_reference_y": 13.684,
+      "center_world_z": 6.5,
+      "root_world_z": 6.1,
+      "note": "벽 기준점 제안. 실제 패널 표면 및 몰딩 간격에 맞춰 위치/회전 조정."
+    },
+    {
+      "id": "U06",
+      "floor": 2,
+      "wall_reference_x": -13.276,
+      "wall_reference_y": 9.604,
+      "center_world_z": 6.5,
+      "root_world_z": 6.1,
+      "note": "벽 기준점 제안. 실제 패널 표면 및 몰딩 간격에 맞춰 위치/회전 조정."
+    }
+  ]
+}

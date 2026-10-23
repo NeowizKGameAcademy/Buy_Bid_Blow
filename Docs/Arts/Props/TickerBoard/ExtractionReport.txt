@@ -1,0 +1,9 @@
+PASS: three linked TickerBoard instances in SC_ExchangeFurnished and the hall prefab.
+PASS: original screen/body world-space geometry and materials preserved (position tolerance 0.1 mm).
+All three instances use exactly the same prefab and six mesh assets. No variants. UVs and bevel normals are shared from the center board.
+WallMountExtension is a separate child: center depth 0.566486 m, side depth 2.174050 m. Only its local position/depth scale are overridden per placement.
+PASS: baked hall lighting and colliders retained; no duplicate merged TV renderers.
+Prefab: Assets/Project/Content/Props/TickerBoard/TickerBoard.prefab
+Per board: 38368 vertices, 18800 triangles, 6 renderers.
+Pivot: screen center. Local front: +Z; up: +Y; scale: 1 Unity unit = 1 meter. Screen is a separate child.
+Five dedicated materials were moved with their GUIDs preserved. No runtime price UI or networking was added.

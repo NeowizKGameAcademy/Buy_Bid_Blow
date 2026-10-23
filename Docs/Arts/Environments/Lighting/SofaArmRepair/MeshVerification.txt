@@ -1,0 +1,1 @@
+PASS: 3395 triangle windings and 3075 vertex normals reversed. Positions, UV0 and tangent axes unchanged.

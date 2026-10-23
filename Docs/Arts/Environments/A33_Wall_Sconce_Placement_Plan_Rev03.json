@@ -1,0 +1,177 @@
+{
+  "status": "proposal_not_applied",
+  "units": "m",
+  "source_plans": [
+    "A21_Interior_Layout_Proposal_A",
+    "A23_Reception_Zoning_Plan"
+  ],
+  "base_model": "BBB_Hall_A31_WallSconces.blend",
+  "revision": "User annotated plan Rev03 with inner stair wall pair",
+  "remove_ids": [
+    "L01",
+    "L02",
+    "L04",
+    "L05",
+    "L07",
+    "L08",
+    "U02",
+    "U03",
+    "U04",
+    "U05"
+  ],
+  "sconce": "BBB_Vertical_Wall_Sconce.blend",
+  "placements": [
+    {
+      "id": "L03",
+      "floor": 1,
+      "wall_reference_x": 14,
+      "wall_reference_y": -12,
+      "center_world_z": 2.5,
+      "root_world_z": 2.1,
+      "note": "벽 기준점 제안. 실제 패널 표면 및 몰딩 간격에 맞춰 위치/회전 조정.",
+      "status": "retain",
+      "mount": "wall"
+    },
+    {
+      "id": "L06",
+      "floor": 1,
+      "wall_reference_x": -14,
+      "wall_reference_y": -12,
+      "center_world_z": 2.5,
+      "root_world_z": 2.1,
+      "note": "벽 기준점 제안. 실제 패널 표면 및 몰딩 간격에 맞춰 위치/회전 조정.",
+      "status": "retain",
+      "mount": "wall"
+    },
+    {
+      "id": "U01",
+      "floor": 2,
+      "wall_reference_x": 13.276,
+      "wall_reference_y": 9.604,
+      "center_world_z": 6.5,
+      "root_world_z": 6.1,
+      "note": "벽 기준점 제안. 실제 패널 표면 및 몰딩 간격에 맞춰 위치/회전 조정.",
+      "status": "retain",
+      "mount": "wall"
+    },
+    {
+      "id": "U06",
+      "floor": 2,
+      "wall_reference_x": -13.276,
+      "wall_reference_y": 9.604,
+      "center_world_z": 6.5,
+      "root_world_z": 6.1,
+      "note": "벽 기준점 제안. 실제 패널 표면 및 몰딩 간격에 맞춰 위치/회전 조정.",
+      "status": "retain",
+      "mount": "wall"
+    },
+    {
+      "id": "N01",
+      "floor": 1,
+      "status": "new",
+      "mount": "column_room_facing_surface",
+      "column_center_x": -6.695,
+      "column_center_y": 16.162,
+      "center_world_z": 2.5,
+      "root_world_z": 2.1,
+      "note": "기둥 위치 표시. 실제 부착점은 실내를 향한 기둥 표면에서 결정."
+    },
+    {
+      "id": "N02",
+      "floor": 1,
+      "status": "new",
+      "mount": "column_room_facing_surface",
+      "column_center_x": 6.695,
+      "column_center_y": 16.162,
+      "center_world_z": 2.5,
+      "root_world_z": 2.1,
+      "note": "기둥 위치 표시. 실제 부착점은 실내를 향한 기둥 표면에서 결정."
+    },
+    {
+      "id": "N03",
+      "floor": 1,
+      "status": "new",
+      "mount": "column_room_facing_surface",
+      "column_center_x": -13.52,
+      "column_center_y": -0.4,
+      "center_world_z": 2.5,
+      "root_world_z": 2.1,
+      "note": "기둥 위치 표시. 실제 부착점은 실내를 향한 기둥 표면에서 결정."
+    },
+    {
+      "id": "N04",
+      "floor": 1,
+      "status": "new",
+      "mount": "column_room_facing_surface",
+      "column_center_x": 13.52,
+      "column_center_y": -0.4,
+      "center_world_z": 2.5,
+      "root_world_z": 2.1,
+      "note": "기둥 위치 표시. 실제 부착점은 실내를 향한 기둥 표면에서 결정."
+    },
+    {
+      "id": "N05",
+      "floor": 1,
+      "status": "new",
+      "mount": "column_room_facing_surface",
+      "column_center_x": -6.695,
+      "column_center_y": -21.162,
+      "center_world_z": 2.5,
+      "root_world_z": 2.1,
+      "note": "기둥 위치 표시. 실제 부착점은 실내를 향한 기둥 표면에서 결정."
+    },
+    {
+      "id": "N06",
+      "floor": 1,
+      "status": "new",
+      "mount": "column_room_facing_surface",
+      "column_center_x": 6.695,
+      "column_center_y": -21.162,
+      "center_world_z": 2.5,
+      "root_world_z": 2.1,
+      "note": "기둥 위치 표시. 실제 부착점은 실내를 향한 기둥 표면에서 결정."
+    },
+    {
+      "id": "N07",
+      "floor": 2,
+      "status": "new",
+      "mount": "column_room_facing_surface",
+      "column_center_x": -6.695,
+      "column_center_y": 16.162,
+      "center_world_z": 6.5,
+      "root_world_z": 6.1,
+      "note": "기둥 위치 표시. 실제 부착점은 실내를 향한 기둥 표면에서 결정."
+    },
+    {
+      "id": "N08",
+      "floor": 2,
+      "status": "new",
+      "mount": "column_room_facing_surface",
+      "column_center_x": 6.695,
+      "column_center_y": 16.162,
+      "center_world_z": 6.5,
+      "root_world_z": 6.1,
+      "note": "기둥 위치 표시. 실제 부착점은 실내를 향한 기둥 표면에서 결정."
+    },
+    {
+      "id": "S01",
+      "floor": 1,
+      "status": "new",
+      "mount": "inner_stair_wall",
+      "schematic_reference_x": -11.5,
+      "schematic_reference_y": 5.5,
+      "center_height_above_adjacent_floor": 2.5,
+      "note": "사용자 표시한 계단 안쪽 벽면. 도면의 기준점이며 실제 부착점/바닥 높이는 모델 적용 시 확인."
+    },
+    {
+      "id": "S02",
+      "floor": 1,
+      "status": "new",
+      "mount": "inner_stair_wall",
+      "schematic_reference_x": 11.5,
+      "schematic_reference_y": 5.5,
+      "center_height_above_adjacent_floor": 2.5,
+      "note": "사용자 표시한 계단 안쪽 벽면. 도면의 기준점이며 실제 부착점/바닥 높이는 모델 적용 시 확인."
+    }
+  ]
+}

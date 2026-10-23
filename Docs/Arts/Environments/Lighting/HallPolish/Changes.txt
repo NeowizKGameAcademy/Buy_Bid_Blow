@@ -1,0 +1,2 @@
+Additional lightmap receivers: 363. New unwrapped mesh assets: 298. Material sources mapped to approved/polished variants: 67.
+Bake completed in 152.7 seconds.

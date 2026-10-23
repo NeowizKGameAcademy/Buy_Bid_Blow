@@ -1,0 +1,72 @@
+Desk_STRAW_ROOT: 60/60 solid surface samples covered
+Desk_WOOD_ROOT: 60/60 solid surface samples covered
+Desk_BRICK_ROOT: 60/60 solid surface samples covered
+End_-1_ROOT: 54/54 solid surface samples covered
+Staff_Gate_-1_HINGE: 24/24 solid surface samples covered
+End_1_ROOT: 54/54 solid surface samples covered
+Staff_Gate_1_HINGE: 24/24 solid surface samples covered
+01_Auction_Rostrum_ROOT: 108/108 solid surface samples covered
+BBB_Areca_Card_Planter_ROOT_Left: 6/6 solid surface samples covered
+BBB_Areca_Card_Planter_ROOT: 6/6 solid surface samples covered
+Round_Table_B_ROOT: 54/54 solid surface samples covered
+Round_Table_A_ROOT: 18/18 solid surface samples covered
+02_Lot_Pedestal_ROOT: 96/96 solid surface samples covered
+A86_Direction_Sign_ROOT: 24/24 solid surface samples covered
+Existing lounge collider: A90_InformationBoard_A BoxCollider enabled=True trigger=False size=(0.14, 1.71, 0.15)
+Existing lounge collider: A90_InformationBoard_A BoxCollider enabled=True trigger=False size=(0.37, 0.11, 0.48)
+Existing lounge collider: A90_InformationBoard_A BoxCollider enabled=True trigger=False size=(0.14, 1.71, 0.15)
+Existing lounge collider: A90_InformationBoard_A BoxCollider enabled=True trigger=False size=(0.37, 0.11, 0.48)
+Existing lounge collider: A90_InformationBoard_A BoxCollider enabled=True trigger=False size=(0.68, 1.13, 0.39)
+Existing lounge collider: A90_ServiceTrolley_A BoxCollider enabled=True trigger=False size=(0.46, 0.07, 0.78)
+Existing lounge collider: A90_ServiceTrolley_A BoxCollider enabled=True trigger=False size=(0.46, 0.07, 0.78)
+Existing lounge collider: A90_ServiceTrolley_A BoxCollider enabled=True trigger=False size=(0.46, 0.80, 0.78)
+Existing lounge collider: A90_Table_A BoxCollider enabled=True trigger=False size=(0.07, 0.42, 0.07)
+Existing lounge collider: A90_Table_A BoxCollider enabled=True trigger=False size=(0.07, 0.42, 0.07)
+Existing lounge collider: A90_Table_A BoxCollider enabled=True trigger=False size=(0.07, 0.42, 0.07)
+Existing lounge collider: A90_Table_A BoxCollider enabled=True trigger=False size=(0.07, 0.42, 0.07)
+Existing lounge collider: A90_Table_A BoxCollider enabled=True trigger=False size=(0.66, 0.06, 1.14)
+Existing lounge collider: A90_Table_A BoxCollider enabled=True trigger=False size=(0.58, 0.03, 1.06)
+Existing lounge collider: A90_Bookcase_A BoxCollider enabled=True trigger=False size=(1.06, 1.89, 0.80)
+Existing lounge collider: A90_Shelf_A BoxCollider enabled=True trigger=False size=(0.66, 0.04, 0.74)
+Existing lounge collider: A90_Shelf_A BoxCollider enabled=True trigger=False size=(0.66, 0.03, 0.74)
+Existing lounge collider: A90_Shelf_A BoxCollider enabled=True trigger=False size=(0.66, 0.03, 0.74)
+Existing lounge collider: A90_Shelf_A BoxCollider enabled=True trigger=False size=(0.66, 0.04, 0.74)
+Existing lounge collider: A90_Shelf_A BoxCollider enabled=True trigger=False size=(0.68, 1.60, 0.76)
+Existing lounge collider: A90_Table_B BoxCollider enabled=True trigger=False size=(0.07, 0.66, 0.07)
+Existing lounge collider: A90_Table_B BoxCollider enabled=True trigger=False size=(0.07, 0.66, 0.07)
+Existing lounge collider: A90_Table_B BoxCollider enabled=True trigger=False size=(0.07, 0.66, 0.07)
+Existing lounge collider: A90_Table_B BoxCollider enabled=True trigger=False size=(0.07, 0.66, 0.07)
+Existing lounge collider: A90_Table_B BoxCollider enabled=True trigger=False size=(1.35, 0.15, 0.66)
+Existing lounge collider: A90_Bookcase_B BoxCollider enabled=True trigger=False size=(1.66, 1.05, 0.69)
+Existing lounge collider: A90_Shelf_B BoxCollider enabled=True trigger=False size=(0.96, 0.04, 0.29)
+Existing lounge collider: A90_Shelf_B BoxCollider enabled=True trigger=False size=(0.96, 0.04, 0.29)
+Existing lounge collider: A90_Shelf_B BoxCollider enabled=True trigger=False size=(0.96, 0.03, 0.29)
+Existing lounge collider: A90_DisplayCabinet BoxCollider enabled=True trigger=False size=(1.33, 1.15, 0.90)
+Existing lounge collider: A90_InformationBoard_B BoxCollider enabled=True trigger=False size=(0.60, 0.09, 0.60)
+Existing lounge collider: A90_InformationBoard_B BoxCollider enabled=True trigger=False size=(0.12, 1.02, 0.12)
+Existing lounge collider: A90_InformationBoard_B BoxCollider enabled=True trigger=False size=(0.72, 0.40, 0.34)
+Existing lounge collider: A90_ServiceTrolley_B BoxCollider enabled=True trigger=False size=(0.46, 0.07, 0.62)
+Existing lounge collider: A90_ServiceTrolley_B BoxCollider enabled=True trigger=False size=(0.46, 0.07, 0.62)
+Existing lounge collider: A90_ServiceTrolley_B BoxCollider enabled=True trigger=False size=(0.46, 0.07, 0.62)
+Existing lounge collider: A90_ServiceTrolley_B BoxCollider enabled=True trigger=False size=(0.46, 0.80, 0.62)
+Existing lounge collider: A90_LeafletRack BoxCollider enabled=True trigger=False size=(0.57, 1.19, 0.66)
+Existing lounge collider: A90_UmbrellaStand BoxCollider enabled=True trigger=False size=(0.54, 0.97, 0.48)
+Existing lounge collider: LoungeSeatCollision BoxCollider enabled=True trigger=False size=(1.03, 1.07, 2.30)
+Existing lounge collider: LoungeSeatCollision BoxCollider enabled=True trigger=False size=(0.96, 1.13, 2.32)
+Existing lounge collider: LoungeSeatCollision BoxCollider enabled=True trigger=False size=(0.66, 0.62, 1.56)
+Existing lounge collider: LoungeSeatCollision BoxCollider enabled=True trigger=False size=(0.66, 0.62, 1.56)
+Existing lounge collider: A91_Right_Coffee_Table BoxCollider enabled=True trigger=False size=(0.07, 0.42, 0.07)
+Existing lounge collider: A91_Right_Coffee_Table BoxCollider enabled=True trigger=False size=(0.07, 0.42, 0.07)
+Existing lounge collider: A91_Right_Coffee_Table BoxCollider enabled=True trigger=False size=(0.07, 0.42, 0.07)
+Existing lounge collider: A91_Right_Coffee_Table BoxCollider enabled=True trigger=False size=(0.07, 0.42, 0.07)
+Existing lounge collider: A91_Right_Coffee_Table BoxCollider enabled=True trigger=False size=(0.66, 0.06, 1.14)
+Existing lounge collider: A91_Right_Coffee_Table BoxCollider enabled=True trigger=False size=(0.58, 0.03, 1.06)
+Existing lounge collider: A91_Rear_Library_Case BoxCollider enabled=True trigger=False size=(1.05, 1.89, 0.65)
+Existing lounge collider: A91_Right_Library_Case BoxCollider enabled=True trigger=False size=(1.56, 1.05, 1.30)
+Existing lounge collider: A91_Rear_Display_Cabinet BoxCollider enabled=True trigger=False size=(1.22, 1.15, 0.59)
+Existing lounge collider: LoungeSeatCollision BoxCollider enabled=True trigger=False size=(0.63, 1.03, 0.63)
+Existing lounge collider: A91_Left_Planter CapsuleCollider enabled=True trigger=False size=(0.53, 0.53, 0.53)
+Existing lounge collider: A91_Right_Planter CapsuleCollider enabled=True trigger=False size=(0.53, 0.53, 0.53)
+Existing lounge collider: A91_Rear_Planter CapsuleCollider enabled=True trigger=False size=(0.53, 0.53, 0.53)
+
+Pre-existing blocked seat exits: 

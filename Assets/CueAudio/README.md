@@ -9,7 +9,7 @@ Unity 6000.2용 독립 큐 오디오 모듈. 게임 코드는 큐 ID 또는 `Cue
 3. **Tools > CueAudio > Runtime Monitor**에서 활성 재생, 버스 볼륨, 최근 요청 200개와 거절 사유를 확인한다.
 4. **Tools > CueAudio > Cue Browser**에서 `CueAudioDemoCatalog`를 선택한다. 큐를 선택하고 **Find Connections**를 누르면 씬·프리팹·ScriptableObject의 연결과 코드 후보를 확인할 수 있다.
 
-샘플 씬은 `Assets/Project/Dev/Sandbox/CueAudioDemo.unity`에 있으며 빌드 씬 목록에 추가되지 않는다. 데모 음원은 직접 생성한 합성 테스트 톤이다. 실제 게임용 음원으로 교체해 사용한다. 데모 생성기는 기존 파일을 덮어쓰지 않는다.
+샘플 씬은 `Assets/Project/Dev/Sandbox/CueAudio/CueAudioDemo.unity`에 있으며 빌드 씬 목록에 추가되지 않는다. 데모 음원은 직접 생성한 합성 테스트 톤이다. 실제 게임용 음원으로 교체해 사용한다. 데모 생성기는 기존 파일을 덮어쓰지 않는다.
 
 ## 새 큐 만들기
 
@@ -76,6 +76,6 @@ public sealed class BidAudio : MonoBehaviour
 
 ## 검증
 
-Unity Test Runner에서 `CueAudio.EditMode.Tests`, `CueAudio.PlayMode.Tests`를 실행한다. 검증 항목은 JSON 오류, 쿨다운, 동시 재생 제한, 비반복 선택, 풀 재사용, 오래된 핸들, 페이드, 크로스페이드 실패, 호출 기록, 사용처 탐색, 실제 프레임 진행 중 자연 종료와 호스트/emitter 수명이다.
+Unity Test Runner에서 `BuyBidBlow.Dev.Tests.EditMode`, `BuyBidBlow.Dev.Tests.PlayMode`의 CueAudio 테스트를 실행한다. 검증 항목은 JSON 오류, 쿨다운, 동시 재생 제한, 비반복 선택, 풀 재사용, 오래된 핸들, 페이드, 크로스페이드 실패, 호출 기록, 사용처 탐색, 실제 프레임 진행 중 자연 종료와 호스트/emitter 수명이다.
 
 정밀 음악 박자 동기화, 스트리밍/Addressables 로딩, follow-target, 실시간 JSON hot reload는 현재 범위에 포함하지 않는다. `IAudioClipResolver`는 검증/클립 해석 경계를 정의하며 현재 엔진은 `CueCatalog`의 직접 참조 바인딩을 사용한다.

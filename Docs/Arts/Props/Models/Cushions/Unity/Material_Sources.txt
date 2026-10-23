@@ -1,0 +1,1 @@
+Velvet: BlenderKit Red Wine Velvet Fabric, assetBaseId 9c84b964-bc17-45f7-9009-7ea14a8be5e8, royalty_free. Teal is a recolor. Gold uses project material. FBX and PNG textures supplied; Unity material binding not tested. Embroidery is simplified geometry based on supplied concept.

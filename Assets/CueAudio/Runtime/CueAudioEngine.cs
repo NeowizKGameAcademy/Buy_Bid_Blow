@@ -66,6 +66,8 @@ namespace CueAudio
         private ulong nextGeneration;
         private bool disposed;
         private float masterVolume = 1;
+        // 3D cues already warned about for playing without a position.
+        private readonly HashSet<string> unpositioned = new HashSet<string>(StringComparer.Ordinal);
 
         public IReadOnlyList<PlaybackRecord> History => history;
         public CueCatalog Catalog => catalog;
@@ -112,7 +114,7 @@ namespace CueAudio
 
         public AudioHandle Play(string cueId, Object owner = null, float fadeInSeconds = 0,
             [CallerFilePath] string file = "", [CallerLineNumber] int line = 0) =>
-            PlayInternal(cueId, Vector3.zero, owner, fadeInSeconds, file, line);
+            PlayInternal(cueId, null, owner, fadeInSeconds, file, line);
 
         public AudioHandle PlayAt(CueReference cue, Vector3 position, Object owner = null, float fadeInSeconds = 0,
             [CallerFilePath] string file = "", [CallerLineNumber] int line = 0)
@@ -142,10 +144,12 @@ namespace CueAudio
             return next.IsPlaying ? next : previous;
         }
 
-        private AudioHandle PlayInternal(string id, Vector3 position, Object owner, float fade, string file, int line)
+        private AudioHandle PlayInternal(string id, Vector3? position, Object owner, float fade, string file, int line)
         {
             if (disposed || root == null) return Reject(id, "Engine unavailable", owner, file, line);
             if (id == null || !cues.TryGetValue(id, out var cue)) return Reject(id, "Unknown cue", owner, file, line);
+            if (position == null && cue.Definition.spatialBlend > 0 && unpositioned.Add(id))
+                Debug.LogWarning($"CueAudio: '{id}' is a 3D cue played without a position, so it sounds from the world origin. Use PlayAt. ({file}:{line})");
             if (!CueValidation.InRange(fade, 0, float.MaxValue)) return Reject(id, "Invalid fade", owner, file, line);
             if (!root.gameObject.activeInHierarchy) return Reject(id, "Host inactive", owner, file, line);
             double now = clock();
@@ -201,7 +205,7 @@ namespace CueAudio
             var settings = cue.Definition;
             var audio = target.Source;
             audio.gameObject.name = "CueAudio: " + id;
-            audio.transform.position = position;
+            audio.transform.position = position ?? Vector3.zero;
             audio.clip = clip;
             audio.loop = settings.loop;
             audio.pitch = Mathf.Lerp(settings.pitchRange.x, settings.pitchRange.y, (float)random.NextDouble());

@@ -1,0 +1,50 @@
+[
+  {
+    "asset": "Bench_A_Unity_ROOT",
+    "vertices": 7965,
+    "triangles": 15295,
+    "mesh_parts": 3,
+    "max_bound_error_m": 4.591766595840596e-06,
+    "passed": true
+  },
+  {
+    "asset": "Bench_B_Unity_ROOT",
+    "vertices": 4084,
+    "triangles": 7999,
+    "mesh_parts": 3,
+    "max_bound_error_m": 3.218574523899953e-06,
+    "passed": true
+  },
+  {
+    "asset": "Chair_A_Unity_ROOT",
+    "vertices": 6490,
+    "triangles": 12167,
+    "mesh_parts": 3,
+    "max_bound_error_m": 4.532627612352513e-06,
+    "passed": true
+  },
+  {
+    "asset": "Chair_B_Unity_ROOT",
+    "vertices": 6995,
+    "triangles": 12796,
+    "mesh_parts": 3,
+    "max_bound_error_m": 4.532627612352513e-06,
+    "passed": true
+  },
+  {
+    "asset": "Sofa_A_Unity_ROOT",
+    "vertices": 9081,
+    "triangles": 17874,
+    "mesh_parts": 3,
+    "max_bound_error_m": 3.981437683098221e-06,
+    "passed": true
+  },
+  {
+    "asset": "Sofa_B_Unity_ROOT",
+    "vertices": 17692,
+    "triangles": 33985,
+    "mesh_parts": 3,
+    "max_bound_error_m": 4.683094024682255e-06,
+    "passed": true
+  }
+]

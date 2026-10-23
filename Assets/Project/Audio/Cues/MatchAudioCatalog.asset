@@ -1,0 +1,82 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae5f3965fe1f67146800e26b849b2433, type: 3}
+  m_Name: MatchAudioCatalog
+  m_EditorClassIdentifier: CueAudio.Runtime::CueAudio.CueCatalog
+  definitions: {fileID: 4900000, guid: 782ec7f42df6cb24c8142c37a0c10035, type: 3}
+  clips:
+  - id: Assets/Project/Audio/Clips/Temp/TEMP_Match_Start.wav
+    clip: {fileID: 8300000, guid: c91833402ba9e2748ac4934842dbb583, type: 3}
+  - id: Assets/Project/Audio/Clips/Temp/TEMP_Match_End.wav
+    clip: {fileID: 8300000, guid: 35be17d62987302499030ead2f5937f4, type: 3}
+  - id: Assets/Project/Audio/Clips/CollectedSFX/Market/SFX_Market_PriceReveal.wav
+    clip: {fileID: 8300000, guid: f320a13c70d0b8748b1e416e119c7d53, type: 3}
+  - id: Assets/Project/Audio/Clips/CollectedSFX/Auction/SFX_Auction_Start.wav
+    clip: {fileID: 8300000, guid: 898ff34133083e449bf0dfd8f902f33f, type: 3}
+  - id: Assets/Project/Audio/Clips/CollectedSFX/Auction/SFX_Auction_Gavel.wav
+    clip: {fileID: 8300000, guid: 2e65cbe590ab09d4bb31bde590a4dd6c, type: 3}
+  - id: Assets/Project/Audio/Clips/CollectedSFX/Movement/SFX_Footsteps_Wood.wav
+    clip: {fileID: 8300000, guid: 9a41ee8ddcbbd5b45aecd3196f2d9458, type: 3}
+  - id: Assets/Project/Audio/Clips/CollectedSFX/Movement/SFX_Jump.wav
+    clip: {fileID: 8300000, guid: 132be9ad05884534daed2bc64731f178, type: 3}
+  - id: Assets/Project/Audio/Clips/CollectedSFX/Auction/SFX_Auction_ClosingSoon.wav
+    clip: {fileID: 8300000, guid: c004f70a4861bf54f9a227f9d18449c6, type: 3}
+  - id: Assets/Project/Audio/Clips/CollectedSFX/UI/SFX_UI_Navigate.wav
+    clip: {fileID: 8300000, guid: 3d46f2f7edc791e41bf5dab7c8d02ea3, type: 3}
+  - id: Assets/Project/Audio/Clips/CollectedSFX/UI/SFX_UI_Confirm.wav
+    clip: {fileID: 8300000, guid: e54130e503c8264429ffaad757097910, type: 3}
+  - id: Assets/Project/Audio/Clips/CollectedSFX/UI/SFX_UI_BackClose.wav
+    clip: {fileID: 8300000, guid: 3747a4f5b57651b459426232b53e42fd, type: 3}
+  - id: Assets/Project/Audio/Clips/CollectedSFX/UI/SFX_UI_Quantity.wav
+    clip: {fileID: 8300000, guid: 855f52d7d8599204fb861b83c0d3a734, type: 3}
+  - id: Assets/Project/Audio/Clips/CollectedSFX/UI/SFX_UI_Notebook.wav
+    clip: {fileID: 8300000, guid: aec9f0080a6ce6e4f8accf0d502a8306, type: 3}
+  - id: Assets/Project/Audio/Clips/CollectedSFX/UI/SFX_UI_PageTurn.wav
+    clip: {fileID: 8300000, guid: 189db9ebba6246c409a21c22b1a3fef2, type: 3}
+  - id: Assets/Project/Audio/Clips/CollectedSFX/Market/SFX_Trade_Complete.wav
+    clip: {fileID: 8300000, guid: f1853d957c9ff3a4196fcd7ee22a2bfa, type: 3}
+  - id: Assets/Project/Audio/Clips/CollectedSFX/Market/SFX_Bet_Place.wav
+    clip: {fileID: 8300000, guid: de044ec939256124f95e466318ec6c8d, type: 3}
+  - id: Assets/Project/Audio/Clips/BGM/BGM_MainMenu.mp3
+    clip: {fileID: 8300000, guid: 07bb20a8cb4c70443bea87c665e5f76f, type: 3}
+  - id: Assets/Project/Audio/Clips/BGM/BGM_InGame.mp3
+    clip: {fileID: 8300000, guid: 8c8213281ac61674d9816d3a4c53cd1d, type: 3}
+  - id: Assets/Project/Audio/Clips/CollectedSFX/Auction/SFX_Auction_Won.wav
+    clip: {fileID: 8300000, guid: 82852b3f171941842a41377a0ca81f30, type: 3}
+  - id: Assets/Project/Audio/Clips/CollectedSFX/Auction/SFX_Information_Reveal.wav
+    clip: {fileID: 8300000, guid: f7bdee8f88002884d9a8aeeb778110b9, type: 3}
+  - id: Assets/Project/Audio/Clips/CollectedSFX/UI/SFX_UI_Error.wav
+    clip: {fileID: 8300000, guid: 04e9118a80af23344aef0b7fe0db0d82, type: 3}
+  - id: Assets/Project/Audio/Clips/CollectedSFX/Emotion/SFX_Emote_Defeat.wav
+    clip: {fileID: 8300000, guid: 38d6e81b06b50c747a1e21ee7b889718, type: 3}
+  - id: Assets/Project/Audio/Clips/CollectedSFX/Emotion/SFX_Emote_Flair.wav
+    clip: {fileID: 8300000, guid: e28b2d80edb04374898f2cccd54ea41d, type: 3}
+  - id: Assets/Project/Audio/Clips/CollectedSFX/Emotion/SFX_Emote_Hadraise.wav
+    clip: {fileID: 8300000, guid: 7f5893a618251534d9031899b4452828, type: 3}
+  - id: Assets/Project/Audio/Clips/CollectedSFX/Emotion/SFX_Emote_GolfDrive.wav
+    clip: {fileID: 8300000, guid: 33e41a8119e967d4e9c4fc41317bb15b, type: 3}
+  - id: Assets/Project/Audio/Clips/CollectedSFX/Emotion/SFX_Emote_JumpingJacks.wav
+    clip: {fileID: 8300000, guid: b0be58e1c69c45446b721dca4985f8a0, type: 3}
+  - id: Assets/Project/Audio/Clips/CollectedSFX/Emotion/SFX_Emote_LayingPose.wav
+    clip: {fileID: 8300000, guid: 3efa581ce1196e34085159fdc76dfb22, type: 3}
+  - id: Assets/Project/Audio/Clips/CollectedSFX/Emotion/SFX_Emote_HurricaneKick.wav
+    clip: {fileID: 8300000, guid: 08034bb35f97e7e4d842f69d77faaaf2, type: 3}
+  buses:
+  - id: sfx
+    mixerGroup: {fileID: 0}
+    volume: 1
+  - id: music
+    mixerGroup: {fileID: 0}
+    volume: 1
+  - id: ui
+    mixerGroup: {fileID: 0}
+    volume: 1

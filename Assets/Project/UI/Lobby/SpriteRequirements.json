@@ -1,0 +1,180 @@
+{
+  "generator": "Built-in image_gen",
+  "style": "Use case: ui-mockup production game sprite asset. BUY BID BLOW lobby coherent polished stylized party-game UI: warm brass #D7A84D, deep teal #123E38, ivory #FFF0C5, warm walnut accents. Front orthographic UI artwork, subtle tactile bevels and soft highlights, clean bold silhouettes, consistent upper-left lighting. Genuine transparent PNG background with alpha; NO checkerboard pattern baked in, no scene/background, no words/letters/numbers/watermarks, no mockup screenshot, no unnecessary shadows outside silhouette. Leave generous consistent transparent padding. ",
+  "states": [
+    "Normal",
+    "Focused",
+    "Pressed",
+    "Disabled"
+  ],
+  "assets": [
+    {
+      "id": "01_LogoPlate",
+      "requirement": "Main logo ornamental plaque, wide 3.2:1 silhouette, dark teal enamel center, tasteful sculpted brass rim with tiny top central crest WITHOUT gavel. Blank center for separate title text. Single centered object.",
+      "layout": "single",
+      "slice": true,
+      "prompt": "Use case: ui-mockup production game sprite asset. BUY BID BLOW lobby coherent polished stylized party-game UI: warm brass #D7A84D, deep teal #123E38, ivory #FFF0C5, warm walnut accents. Front orthographic UI artwork, subtle tactile bevels and soft highlights, clean bold silhouettes, consistent upper-left lighting. Genuine transparent PNG background with alpha; NO checkerboard pattern baked in, no scene/background, no words/letters/numbers/watermarks, no mockup screenshot, no unnecessary shadows outside silhouette. Leave generous consistent transparent padding. Main logo ornamental plaque, wide 3.2:1 silhouette, dark teal enamel center, tasteful sculpted brass rim with tiny top central crest WITHOUT gavel. Blank center for separate title text. Single centered object. One single centered wide landscape plaque inspired by tasteful auction club signage, symmetrical simple gently scalloped silhouette, generous broad dark teal blank area for title. Restrained rim no gems no ornate filigree. No title text, no other objects. Width about85percent canvas."
+    },
+    {
+      "id": "02_Gavel",
+      "requirement": "Small auction gavel icon, diagonal hammer with matching small base, cream-gold brass, simple bold readable silhouette. Single icon.",
+      "layout": "single",
+      "slice": false,
+      "prompt": "Use case: ui-mockup production game sprite asset. BUY BID BLOW lobby coherent polished stylized party-game UI: warm brass #D7A84D, deep teal #123E38, ivory #FFF0C5, warm walnut accents. Front orthographic UI artwork, subtle tactile bevels and soft highlights, clean bold silhouettes, consistent upper-left lighting. Genuine transparent PNG background with alpha; NO checkerboard pattern baked in, no scene/background, no words/letters/numbers/watermarks, no mockup screenshot, no unnecessary shadows outside silhouette. Leave generous consistent transparent padding. Small auction gavel icon, diagonal hammer with matching small base, cream-gold brass, simple bold readable silhouette. Single icon. Single centered square canvas elegant small stylized gold auction hammer with walnut handle tilted diagonally and simple small striking block below. Cohesive teal-brass party game look, clean silhouette, no text or other objects."
+    },
+    {
+      "id": "03_SubtitlePlate",
+      "requirement": "Wide 4:1 small subtitle plaque, dark teal enamel, restrained brass rim and very small symmetrical side ears. Blank center. Single object.",
+      "layout": "single",
+      "slice": true,
+      "prompt": "Use case: ui-mockup production game sprite asset. BUY BID BLOW lobby coherent polished stylized party-game UI: warm brass #D7A84D, deep teal #123E38, ivory #FFF0C5, warm walnut accents. Front orthographic UI artwork, subtle tactile bevels and soft highlights, clean bold silhouettes, consistent upper-left lighting. Genuine transparent PNG background with alpha; NO checkerboard pattern baked in, no scene/background, no words/letters/numbers/watermarks, no mockup screenshot, no unnecessary shadows outside silhouette. Leave generous consistent transparent padding. Wide 4:1 small subtitle plaque, dark teal enamel, restrained brass rim and very small symmetrical side ears. Blank center. Single object. Single centered wide landscape small subtitle plaque, simple dark teal center and gold rim, tiny side ears only, no crown/gem or other decoration. No words no letters. Designed to sit below main title."
+    },
+    {
+      "id": "04_SmallButtonStates",
+      "requirement": "Rounded rectangular small button dark teal enamel and brass rim, aspect 2.3:1. FOUR STATES on exact 2 by 2 grid: top-left Normal, top-right Focused (bright gold rim and tight halo), bottom-left Pressed (darker inset teal and depressed rim), bottom-right Disabled (desaturated dull brass and teal). All four identical size, silhouette and position within cells. No state labels. Empty centers.",
+      "layout": "states",
+      "slice": true,
+      "prompt": "Use case: ui-mockup production game sprite asset. BUY BID BLOW lobby coherent polished stylized party-game UI: warm brass #D7A84D, deep teal #123E38, ivory #FFF0C5, warm walnut accents. Front orthographic UI artwork, subtle tactile bevels and soft highlights, clean bold silhouettes, consistent upper-left lighting. Genuine transparent PNG background with alpha; NO checkerboard pattern baked in, no scene/background, no words/letters/numbers/watermarks, no mockup screenshot, no unnecessary shadows outside silhouette. Leave generous consistent transparent padding. Rounded rectangular small button dark teal enamel and brass rim, aspect 2.3:1. FOUR STATES on exact 2 by 2 grid: top-left Normal, top-right Focused (bright gold rim and tight halo), bottom-left Pressed (darker inset teal and depressed rim), bottom-right Disabled (desaturated dull brass and teal). All four identical size, silhouette and position within cells. No state labels. Empty centers. Canvas square. Four equal square cells in a precise 2x2 grid, each asset fits centered inside its cell with at least12percent transparent safety margin. No grid lines. Buttons same width and height in every cell."
+    },
+    {
+      "id": "05_Person",
+      "requirement": "One simple cream-gold person silhouette icon, round head above rounded shoulders bust, bold and legible at24pixels.",
+      "layout": "single",
+      "slice": false,
+      "prompt": "Use case: ui-mockup production game sprite asset. BUY BID BLOW lobby coherent polished stylized party-game UI: warm brass #D7A84D, deep teal #123E38, ivory #FFF0C5, warm walnut accents. Front orthographic UI artwork, subtle tactile bevels and soft highlights, clean bold silhouettes, consistent upper-left lighting. Genuine transparent PNG background with alpha; NO checkerboard pattern baked in, no scene/background, no words/letters/numbers/watermarks, no mockup screenshot, no unnecessary shadows outside silhouette. Leave generous consistent transparent padding. One simple cream-gold person silhouette icon, round head above rounded shoulders bust, bold and legible at24pixels. One centered flat matte cream icon, square transparent canvas, generous margin, no metallic bevel or texture or decoration."
+    },
+    {
+      "id": "06_Options",
+      "requirement": "One simple cream-gold eight-tooth cogwheel icon with transparent central hole. Bold readable silhouette.",
+      "layout": "single",
+      "slice": false,
+      "prompt": "Use case: ui-mockup production game sprite asset. BUY BID BLOW lobby coherent polished stylized party-game UI: warm brass #D7A84D, deep teal #123E38, ivory #FFF0C5, warm walnut accents. Front orthographic UI artwork, subtle tactile bevels and soft highlights, clean bold silhouettes, consistent upper-left lighting. Genuine transparent PNG background with alpha; NO checkerboard pattern baked in, no scene/background, no words/letters/numbers/watermarks, no mockup screenshot, no unnecessary shadows outside silhouette. Leave generous consistent transparent padding. One simple cream-gold eight-tooth cogwheel icon with transparent central hole. Bold readable silhouette. Single centered flat matte cream icon square canvas, symmetrical eight rounded teeth with genuinely transparent round hole, no metallic bevel, generous padding."
+    },
+    {
+      "id": "07_Exit",
+      "requirement": "One cream-gold exit icon: open doorway outline with horizontal arrow pointing RIGHT out of door. Bold readable silhouette, simple front view.",
+      "layout": "single",
+      "slice": false,
+      "prompt": "Use case: ui-mockup production game sprite asset. BUY BID BLOW lobby coherent polished stylized party-game UI: warm brass #D7A84D, deep teal #123E38, ivory #FFF0C5, warm walnut accents. Front orthographic UI artwork, subtle tactile bevels and soft highlights, clean bold silhouettes, consistent upper-left lighting. Genuine transparent PNG background with alpha; NO checkerboard pattern baked in, no scene/background, no words/letters/numbers/watermarks, no mockup screenshot, no unnecessary shadows outside silhouette. Leave generous consistent transparent padding. One cream-gold exit icon: open doorway outline with horizontal arrow pointing RIGHT out of door. Bold readable silhouette, simple front view. Single centered square canvas flat matte ivory-gold icon, crisp simple geometry, doorway on left arrow pointing right, transparent gaps, no texture no decorative border."
+    },
+    {
+      "id": "08_Nameplate",
+      "requirement": "Single wide 4:1 dark teal enamel rounded capsule nameplate with thin polished brass rim. Blank center, no decorations protruding, designed for nine slicing.",
+      "layout": "single",
+      "slice": true,
+      "prompt": "Use case: ui-mockup production game sprite asset. BUY BID BLOW lobby coherent polished stylized party-game UI: warm brass #D7A84D, deep teal #123E38, ivory #FFF0C5, warm walnut accents. Front orthographic UI artwork, subtle tactile bevels and soft highlights, clean bold silhouettes, consistent upper-left lighting. Genuine transparent PNG background with alpha; NO checkerboard pattern baked in, no scene/background, no words/letters/numbers/watermarks, no mockup screenshot, no unnecessary shadows outside silhouette. Leave generous consistent transparent padding. Single wide 4:1 dark teal enamel rounded capsule nameplate with thin polished brass rim. Blank center, no decorations protruding, designed for nine slicing. Rectangular wide landscape canvas, plaque occupies80percent width, centered. Restrained thin rim, no gems or extra symbols."
+    },
+    {
+      "id": "09_HostCrown",
+      "requirement": "One charming compact golden brass three-point host crown icon, small jewel, clean bold silhouette.",
+      "layout": "single",
+      "slice": false,
+      "prompt": "Use case: ui-mockup production game sprite asset. BUY BID BLOW lobby coherent polished stylized party-game UI: warm brass #D7A84D, deep teal #123E38, ivory #FFF0C5, warm walnut accents. Front orthographic UI artwork, subtle tactile bevels and soft highlights, clean bold silhouettes, consistent upper-left lighting. Genuine transparent PNG background with alpha; NO checkerboard pattern baked in, no scene/background, no words/letters/numbers/watermarks, no mockup screenshot, no unnecessary shadows outside silhouette. Leave generous consistent transparent padding. One charming compact golden brass three-point host crown icon, small jewel, clean bold silhouette. One centered compact crown square canvas, three points, front view, polished stylized warm brass with subtle teal jewel, no text, generous padding."
+    },
+    {
+      "id": "10_LocalBadge",
+      "requirement": "One round golden brass medallion badge background. Blank center, shallow bevel, raised rim, NO symbols.",
+      "layout": "single",
+      "slice": false,
+      "prompt": "Use case: ui-mockup production game sprite asset. BUY BID BLOW lobby coherent polished stylized party-game UI: warm brass #D7A84D, deep teal #123E38, ivory #FFF0C5, warm walnut accents. Front orthographic UI artwork, subtle tactile bevels and soft highlights, clean bold silhouettes, consistent upper-left lighting. Genuine transparent PNG background with alpha; NO checkerboard pattern baked in, no scene/background, no words/letters/numbers/watermarks, no mockup screenshot, no unnecessary shadows outside silhouette. Leave generous consistent transparent padding. One round golden brass medallion badge background. Blank center, shallow bevel, raised rim, NO symbols. Single circle centered square canvas, front orthographic simple warm gold raised rim and gold face, blank smooth center for Korean text, no jewels no emblem."
+    },
+    {
+      "id": "11_StatusBadge",
+      "requirement": "One wide 3.6:1 rounded capsule status badge, neutral pale ivory/silver rim and medium light neutral gray enamel fill, completely grayscale so Unity tint can make green ready or amber customizing. Blank center. Design readable on dark backdrop, nine slice.",
+      "layout": "single",
+      "slice": true,
+      "prompt": "Use case: ui-mockup production game sprite asset. BUY BID BLOW lobby coherent polished stylized party-game UI: warm brass #D7A84D, deep teal #123E38, ivory #FFF0C5, warm walnut accents. Front orthographic UI artwork, subtle tactile bevels and soft highlights, clean bold silhouettes, consistent upper-left lighting. Genuine transparent PNG background with alpha; NO checkerboard pattern baked in, no scene/background, no words/letters/numbers/watermarks, no mockup screenshot, no unnecessary shadows outside silhouette. Leave generous consistent transparent padding. One wide 3.6:1 rounded capsule status badge, neutral pale ivory/silver rim and medium light neutral gray enamel fill, completely grayscale so Unity tint can make green ready or amber customizing. Blank center. Design readable on dark backdrop, nine slice. Single centered wide asset landscape canvas, clean simple rim and uniform neutral fill, no decorative gems. This asset must be entirely GRAYSCALE despite brand palette, to allow tinting."
+    },
+    {
+      "id": "12_Check",
+      "requirement": "One bold cream-white check mark icon, clean slightly rounded edges, flat front view, no surrounding circle or panel.",
+      "layout": "single",
+      "slice": false,
+      "prompt": "Use case: ui-mockup production game sprite asset. BUY BID BLOW lobby coherent polished stylized party-game UI: warm brass #D7A84D, deep teal #123E38, ivory #FFF0C5, warm walnut accents. Front orthographic UI artwork, subtle tactile bevels and soft highlights, clean bold silhouettes, consistent upper-left lighting. Genuine transparent PNG background with alpha; NO checkerboard pattern baked in, no scene/background, no words/letters/numbers/watermarks, no mockup screenshot, no unnecessary shadows outside silhouette. Leave generous consistent transparent padding. One bold cream-white check mark icon, clean slightly rounded edges, flat front view, no surrounding circle or panel. Single centered icon square canvas, bold clean matte ivory-white check mark, no shading no texture, generous padding."
+    },
+    {
+      "id": "13_StatusDot",
+      "requirement": "One small cream-white filled circle status dot, simple crisp circular silhouette, no panel or shadow.",
+      "layout": "single",
+      "slice": false,
+      "prompt": "Production UI sprite. One small cream-white filled circle status dot, simple crisp circular silhouette, no panel or shadow. A single perfect matte ivory filled disk centered on a square transparent canvas, diameter50percent canvas. Absolutely flat solid cream color, no bevel or lighting or texture, no additional objects. Genuine transparent PNG alpha, no background."
+    },
+    {
+      "id": "14_CategoryHighlight",
+      "requirement": "One very wide 4:1 soft rounded translucent teal glass selection strip, delicate pale gold hairline outline. Interior MUST truly partially transparent alpha, background visible through it (about30 percent opacity). No text, no icons. Nine slice.",
+      "layout": "single",
+      "slice": true,
+      "prompt": "Use case: ui-mockup production game sprite asset. BUY BID BLOW lobby coherent polished stylized party-game UI: warm brass #D7A84D, deep teal #123E38, ivory #FFF0C5, warm walnut accents. Front orthographic UI artwork, subtle tactile bevels and soft highlights, clean bold silhouettes, consistent upper-left lighting. Genuine transparent PNG background with alpha; NO checkerboard pattern baked in, no scene/background, no words/letters/numbers/watermarks, no mockup screenshot, no unnecessary shadows outside silhouette. Leave generous consistent transparent padding. One very wide 4:1 soft rounded translucent teal glass selection strip, delicate pale gold hairline outline. Interior MUST truly partially transparent alpha, background visible through it (about30 percent opacity). No text, no icons. Nine slice. Flat minimal UI strip, no metallic bevel no glass reflections. SINGLE centered landscape object, visible real alpha inside the entire teal fill, not a solid dark patch. Keep border only delicate, no icons."
+    },
+    {
+      "id": "15_CategoryChevron",
+      "requirement": "One small cream-white UPWARD pointing chevron icon, simple narrow stroke, intended to rotate180degrees for down. No stem, no surrounding background.",
+      "layout": "single",
+      "slice": false,
+      "prompt": "Use case: ui-mockup production game sprite asset. BUY BID BLOW lobby coherent polished stylized party-game UI: warm brass #D7A84D, deep teal #123E38, ivory #FFF0C5, warm walnut accents. Front orthographic UI artwork, subtle tactile bevels and soft highlights, clean bold silhouettes, consistent upper-left lighting. Genuine transparent PNG background with alpha; NO checkerboard pattern baked in, no scene/background, no words/letters/numbers/watermarks, no mockup screenshot, no unnecessary shadows outside silhouette. Leave generous consistent transparent padding. One small cream-white UPWARD pointing chevron icon, simple narrow stroke, intended to rotate180degrees for down. No stem, no surrounding background. Single centered simple icon on square canvas. Clean flat ivory-white shape, no shading, no metallic texture. Shape exactly an inverted V, symmetrical, generous padding."
+    },
+    {
+      "id": "16_Keycap",
+      "requirement": "One square keyboard keycap BACKGROUND with softly rounded corners, dark teal fill, thin cream-gold outline, subtle bevel, blank center no symbol, front orthographic.",
+      "layout": "single",
+      "slice": true,
+      "prompt": "Use case: ui-mockup production game sprite asset. BUY BID BLOW lobby coherent polished stylized party-game UI: warm brass #D7A84D, deep teal #123E38, ivory #FFF0C5, warm walnut accents. Front orthographic UI artwork, subtle tactile bevels and soft highlights, clean bold silhouettes, consistent upper-left lighting. Genuine transparent PNG background with alpha; NO checkerboard pattern baked in, no scene/background, no words/letters/numbers/watermarks, no mockup screenshot, no unnecessary shadows outside silhouette. Leave generous consistent transparent padding. One square keyboard keycap BACKGROUND with softly rounded corners, dark teal fill, thin cream-gold outline, subtle bevel, blank center no symbol, front orthographic. Single centered icon, square canvas. Keycap fills65percent canvas, simple restrained border, NO glyph or letter, no gems."
+    },
+    {
+      "id": "17_KeyboardArrow",
+      "requirement": "One simple cream-white UP arrow icon WITH vertical stem. Flat, crisp, intended to rotate for four directions. No keycap no enclosing panel.",
+      "layout": "single",
+      "slice": false,
+      "prompt": "Use case: ui-mockup production game sprite asset. BUY BID BLOW lobby coherent polished stylized party-game UI: warm brass #D7A84D, deep teal #123E38, ivory #FFF0C5, warm walnut accents. Front orthographic UI artwork, subtle tactile bevels and soft highlights, clean bold silhouettes, consistent upper-left lighting. Genuine transparent PNG background with alpha; NO checkerboard pattern baked in, no scene/background, no words/letters/numbers/watermarks, no mockup screenshot, no unnecessary shadows outside silhouette. Leave generous consistent transparent padding. One simple cream-white UP arrow icon WITH vertical stem. Flat, crisp, intended to rotate for four directions. No keycap no enclosing panel. Single centered square canvas icon, matte flat ivory-white, simple geometry, NO brass border, no shadow, no perspective. Fill about65percent canvas."
+    },
+    {
+      "id": "18_RoundButtonStates",
+      "requirement": "FOUR round gold brass button BACKGROUNDS with empty centers on exact 2 by 2 grid. Top-left Normal warm gold shallow bevel, top-right Focused brighter gold rim plus tight pale halo, bottom-left Pressed darker bronze inset and depressed bevel, bottom-right Disabled desaturated matte gray-gold. All four circles have identical size and center offsets. NO arrows or labels.",
+      "layout": "states",
+      "slice": false,
+      "prompt": "Use case: production game UI sprite edit. Image1 is round-button state sheet EDIT TARGET; image2 is style reference only for restrained polished brass and teal. Simplify image1 radically to match approved lobby: FOUR simple plain gold circular button backgrounds, absolutely NO diamonds, NO jewels, NO teal rings, NO spikes. Empty warm gold faces with single clean raised brass rim. Keep exact2x2 four-state arrangement: top-left Normal, top-right Focused bright pale rim with SMALL contained halo, bottom-left Pressed darker amber inset, bottom-right Disabled desaturated gray-gold. All circles identical diameter, silhouette and center offsets within four equal cells. Diameter only70percent of each cell to give generous transparent safety margin; keep entire focused glow inside cell, none touching canvas edge. No text or symbols. Four states of ONE coherent round button, orthographic front-facing. Genuine transparent PNG around each circle. Do not include small rectangular reference buttons in output."
+    },
+    {
+      "id": "19_SideChevron",
+      "requirement": "One bold thick dark espresso LEFT-pointing chevron icon, smooth corners, designed to overlay gold circular button. Single icon, no enclosing circle.",
+      "layout": "single",
+      "slice": false,
+      "prompt": "Use case: ui-mockup production game sprite asset. BUY BID BLOW lobby coherent polished stylized party-game UI: warm brass #D7A84D, deep teal #123E38, ivory #FFF0C5, warm walnut accents. Front orthographic UI artwork, subtle tactile bevels and soft highlights, clean bold silhouettes, consistent upper-left lighting. Genuine transparent PNG background with alpha; NO checkerboard pattern baked in, no scene/background, no words/letters/numbers/watermarks, no mockup screenshot, no unnecessary shadows outside silhouette. Leave generous consistent transparent padding. One bold thick dark espresso LEFT-pointing chevron icon, smooth corners, designed to overlay gold circular button. Single icon, no enclosing circle. Single centered square canvas, flat dark espresso #241B12, simple thick left angle bracket shape, no shading no metallic rim. Clean geometric silhouette and generous padding."
+    },
+    {
+      "id": "20_VacantNameplate",
+      "requirement": "One wide 4:1 rounded capsule vacant slot nameplate, translucent dark teal glass interior about40percent alpha, muted gray-silver outline, no brass embellishments. Blank center, nine slice.",
+      "layout": "single",
+      "slice": true,
+      "prompt": "Use case: ui-mockup production game sprite asset. BUY BID BLOW lobby coherent polished stylized party-game UI: warm brass #D7A84D, deep teal #123E38, ivory #FFF0C5, warm walnut accents. Front orthographic UI artwork, subtle tactile bevels and soft highlights, clean bold silhouettes, consistent upper-left lighting. Genuine transparent PNG background with alpha; NO checkerboard pattern baked in, no scene/background, no words/letters/numbers/watermarks, no mockup screenshot, no unnecessary shadows outside silhouette. Leave generous consistent transparent padding. One wide 4:1 rounded capsule vacant slot nameplate, translucent dark teal glass interior about40percent alpha, muted gray-silver outline, no brass embellishments. Blank center, nine slice. Single centered wide landscape canvas object, plain understated 2D UI, no heavy reflections, truly translucent interior."
+    },
+    {
+      "id": "21_VacantCircle",
+      "requirement": "One perfectly circular dashed ring composed of about20 equal pale ivory-gray dashes, thin stroke, EMPTY transparent center, no plus icon, no oval or floor perspective. Single flat UI circle.",
+      "layout": "single",
+      "slice": false,
+      "prompt": "Production game UI sprite. One perfectly circular dashed ring composed of about20 equal pale ivory-gray dashes, thin stroke, EMPTY transparent center, no plus icon, no oval or floor perspective. Single flat UI circle. One centered perfectly circular dashed ring occupying70percent square canvas, consistent flat ivory-gray color, 20 identical evenly spaced dashes, transparent center. NO texture shading glow or perspective. Genuine transparent PNG."
+    },
+    {
+      "id": "22_VacantPlus",
+      "requirement": "One simple pale ivory-gray PLUS icon, equal horizontal and vertical thick strokes, rounded ends, single flat UI icon, no circle.",
+      "layout": "single",
+      "slice": false,
+      "prompt": "Production UI sprite for teal brass auction lobby. One simple pale ivory-gray PLUS icon, equal horizontal and vertical thick strokes, rounded ends, single flat UI icon, no circle. Single centered square canvas ivory-gray matte plus, flat solid fill, generous padding, absolutely no bevel no shading no frame. Genuine transparent background."
+    },
+    {
+      "id": "23_PlayerRing",
+      "requirement": "One TOP-DOWN perfectly CIRCULAR player selection floor ring, slim polished gold outer rim, teal inner rim and gently glowing translucent teal interior at20percent alpha, strongest glow at perimeter. Transparent surroundings, no ellipse perspective baked in. No character no pedestal. Unity will place on horizontal plane.",
+      "layout": "single",
+      "slice": false,
+      "prompt": "Use case: ui-mockup production game sprite asset. BUY BID BLOW lobby coherent polished stylized party-game UI: warm brass #D7A84D, deep teal #123E38, ivory #FFF0C5, warm walnut accents. Front orthographic UI artwork, subtle tactile bevels and soft highlights, clean bold silhouettes, consistent upper-left lighting. Genuine transparent PNG background with alpha; NO checkerboard pattern baked in, no scene/background, no words/letters/numbers/watermarks, no mockup screenshot, no unnecessary shadows outside silhouette. Leave generous consistent transparent padding. One TOP-DOWN perfectly CIRCULAR player selection floor ring, slim polished gold outer rim, teal inner rim and gently glowing translucent teal interior at20percent alpha, strongest glow at perimeter. Transparent surroundings, no ellipse perspective baked in. No character no pedestal. Unity will place on horizontal plane. Single centered top-down circle square canvas, diameter75percent canvas, slender gold border, subtle restrained teal glow. Real transparent alpha center, not opaque teal disk. Flat circle not cylindrical, no base thickness."
+    },
+    {
+      "id": "24_ReadyButtonStates",
+      "requirement": "FOUR wide 3.6:1 large gold primary button BACKGROUNDS on exact 2 by 2 grid. Top-left Normal rich warm gold face with raised brass rim, top-right Focused brighter golden face and pale luminous rim, bottom-left Pressed darker amber inset with depressed bevel, bottom-right Disabled dull desaturated gray-gold. Identical silhouette and exact size/center offsets in all four cells. Empty centers: no checkmarks, no text. Suitable nine slice.",
+      "layout": "states",
+      "slice": true,
+      "prompt": "Use case: ui-mockup production game sprite asset. BUY BID BLOW lobby coherent polished stylized party-game UI: warm brass #D7A84D, deep teal #123E38, ivory #FFF0C5, warm walnut accents. Front orthographic UI artwork, subtle tactile bevels and soft highlights, clean bold silhouettes, consistent upper-left lighting. Genuine transparent PNG background with alpha; NO checkerboard pattern baked in, no scene/background, no words/letters/numbers/watermarks, no mockup screenshot, no unnecessary shadows outside silhouette. Leave generous consistent transparent padding. FOUR wide 3.6:1 large gold primary button BACKGROUNDS on exact 2 by 2 grid. Top-left Normal rich warm gold face with raised brass rim, top-right Focused brighter golden face and pale luminous rim, bottom-left Pressed darker amber inset with depressed bevel, bottom-right Disabled dull desaturated gray-gold. Identical silhouette and exact size/center offsets in all four cells. Empty centers: no checkmarks, no text. Suitable nine slice. Square canvas exact equal 2x2 cells. Center each button within its cell with generous transparent padding. Restrained simple brass frame like the approved lobby concept, no gems or diamonds or ornamental protrusions. Warm gold gradient flat broad blank faces, rounded rectangles."
+    }
+  ]
+}
