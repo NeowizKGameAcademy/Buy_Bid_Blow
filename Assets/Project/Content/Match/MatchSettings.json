@@ -21,11 +21,11 @@
     "PriceChange": {
         "Amount": { "Min": 2, "Max": 7 },
         "AmountOffsets": [
-            { "Min": 2, "Max": 5 },
-            { "Min": 0, "Max": 1 },
-            { "Min": -2, "Max": -1 }
+            { "Min": 6, "Max": 9 },
+            { "Min": 3, "Max": 4 },
+            { "Min": -1, "Max": 0 }
         ],
-        "RiseChances": [0.6, 0.7, 0.8]
+        "RiseChances": [0.35, 0.5, 0.75]
     },
     "AuctionSlots": [
         { "StartsAtSeconds": 0, "DurationSeconds": 60 },
