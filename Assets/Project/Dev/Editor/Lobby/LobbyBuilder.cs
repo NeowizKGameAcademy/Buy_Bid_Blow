@@ -30,7 +30,7 @@ namespace BuyBidBlow.Dev.Editor
                     if(root.GetComponentsInChildren<MonoBehaviour>(true).Any(b=>b && b.GetType().Name=="HallWalkthrough")) UnityEngine.Object.DestroyImmediate(root);
                     else foreach(var camera in root.GetComponentsInChildren<Camera>(true)) UnityEngine.Object.DestroyImmediate(camera.gameObject);
                 }
-                var wolf=(GameObject)PrefabUtility.InstantiatePrefab(AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Project/Characters/Player/Wolf/WolfExpressions/PF_Wolf_Character.prefab"));
+                var wolf=(GameObject)PrefabUtility.InstantiatePrefab(AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Project/Content/Characters/Wolf/WolfExpressions/PF_Wolf_Character.prefab"));
                 wolf.name="Lobby Player";
                 wolf.AddComponent<NetworkIdentity>();wolf.AddComponent<PlayerNet>();PlayerNetSync.Configure(wolf);
                 var prefab=PrefabUtility.SaveAsPrefabAsset(wolf,"Assets/Project/Characters/Player/PlayerNet.prefab");

@@ -157,15 +157,8 @@ namespace BuyBidBlow.Characters
             if (isLocalPlayer) return;
             var animator = GetComponentInChildren<Animator>(true);
             if (!animator) return;
-            animator.ResetTrigger("Defeat");
-            animator.ResetTrigger("Flair");
-            animator.ResetTrigger("Hadraise");
-            animator.ResetTrigger("HipHopDance");
-            animator.ResetTrigger("GolfDrive");
-            animator.ResetTrigger("JumpingJacks");
-            animator.ResetTrigger("LayingPose");
-            animator.ResetTrigger("HurricaneKick");
-            animator.Play(walking ? "Player_Walking" : "Player_Idle", 0, 0);
+            PlayerAnimation.ResetEmotions(animator);
+            animator.Play(walking ? PlayerAnimation.WalkingState : PlayerAnimation.IdleState, 0, 0);
         }
         void SetWalkingAnimationLocal(bool walking)
         {
@@ -184,23 +177,21 @@ namespace BuyBidBlow.Characters
         }
         [Command] void CmdPlayAnimationTrigger(string trigger)
         {
-            if (trigger != "Jump" && trigger != "Defeat" && trigger != "Flair" && trigger != "Hadraise" && trigger != "HipHopDance"
-                && trigger != "GolfDrive" && trigger != "JumpingJacks" && trigger != "LayingPose" && trigger != "HurricaneKick") return;
+            if (trigger != "Jump" && Array.IndexOf(PlayerAnimation.Emotions, trigger) < 0) return;
             RpcPlayAnimationTrigger(Animator.StringToHash(trigger));
         }
         [Command] void CmdPlayAnimationTriggerHash(int trigger)
         {
-            if (trigger != Animator.StringToHash("Jump")) return;
+            if (trigger != PlayerAnimation.JumpTrigger) return;
             RpcPlayAnimationTrigger(trigger);
         }
-        static readonly string[] Emotions = { "Defeat", "Flair", "Hadraise", "HipHopDance", "GolfDrive", "JumpingJacks", "LayingPose", "HurricaneKick" };
         [ClientRpc] void RpcPlayAnimationTrigger(int trigger)
         {
             // The accepted jump or emotion reaches the owner and observers once through the existing RPC.
             if (TryGetComponent<BuyBidBlow.Audio.PlayerActionAudio>(out var audio))
             {
-                if (trigger == Animator.StringToHash("Jump")) audio.PlayJump();
-                foreach (var emotion in Emotions)
+                if (trigger == PlayerAnimation.JumpTrigger) audio.PlayJump();
+                foreach (var emotion in PlayerAnimation.Emotions)
                     if (trigger == Animator.StringToHash(emotion)) audio.PlayEmotion(emotion);
             }
             if (isLocalPlayer) return;
@@ -249,7 +240,8 @@ namespace BuyBidBlow.Characters
             }
             foreach (var listener in GetComponentsInChildren<AudioListener>(true))
                 listener.enabled = active;
-            if (TryGetComponent(out PlayerController controller)) controller.enabled = active;
+            if (TryGetComponent(out PlayerInputHandler inputHandler)) inputHandler.enabled = active;
+            if (TryGetComponent(out PlayerAnimation localAnimation)) localAnimation.enabled = active;
             if (active && TryGetComponent(out PlayerMove localMovement))
                 SetGroundedAnimation(localMovement.IsGrounded);
             if (TryGetComponent(out PlayerMove movement))

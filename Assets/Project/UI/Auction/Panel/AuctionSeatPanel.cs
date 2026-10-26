@@ -3,12 +3,12 @@ using BuyBidBlow.Common;
 using BuyBidBlow.Systems.Types;
 using Mirror;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace BuyBidBlow.UI.Auction
 {
     // While the local player sits on a mezzanine auction chair: shows the auction panel from the public
-    // auction state on MatchNet and takes bids (A/D amount, E bid, C cancel the secret submission).
+    // auction state on MatchNet and takes bids. The keys (A/D amount, E bid, C cancel the secret
+    // submission) are read by PlayerInputHandler.
     public sealed class AuctionSeatPanel : MonoBehaviour
     {
         [SerializeField] private AuctionPanelView view;
@@ -24,7 +24,7 @@ namespace BuyBidBlow.UI.Auction
         private void OnEnable() => PlayerNet.LocalReply += ShowReply;
         private void OnDisable() => PlayerNet.LocalReply -= ShowReply;
 
-        private bool SeatedForAuction
+        public bool SeatedForAuction
         {
             get { var seat = seating ? seating.CurrentSeat : null; return seat && seat.auction; }
         }
@@ -32,15 +32,6 @@ namespace BuyBidBlow.UI.Auction
         private void Update()
         {
             if (!SeatedForAuction) { view.Present(default); return; }
-
-            var keyboard = Keyboard.current;
-            if (keyboard != null && !BuyBidBlow.UI.Notebook.NetworkNotebookController.BlocksInput)
-            {
-                if (keyboard.dKey.wasPressedThisFrame) AdjustBid(1);
-                if (keyboard.aKey.wasPressedThisFrame) AdjustBid(-1);
-                if (keyboard.eKey.wasPressedThisFrame) SubmitBid();
-                if (keyboard.cKey.wasPressedThisFrame) CancelSecret();
-            }
             view.Present(Seated());
         }
 

@@ -31,7 +31,7 @@ GameAudio는 같은 프레임 동일 UI 큐를 합친다. UIAudioFeedback은 버
 사용자 제공 파일과 Assets 내 음원의 SHA256 비교로 중복 없음을 확인했다. 원본 변경 없이 복사했다. Streaming, music 버스, 음량 .25, 루프, .8초 크로스페이드. Resources/GameAudioHost.prefab을 GameAudio가 생성하고 SceneAudioDriver가 전환한다. 기존 데모 BGM은 사용하지 않는다. 음량은 MatchAudio.json에서 조정한다.
 
 ## ④ 캐릭터 음원 호출 지점
-PlayerActionAudio.PlayFootstep(), PlayJump(), PlayEmotion(). 점프는 PlayerMove.Jumped → PlayerController → 기존 PlayerNet 애니메이션 RPC → PlayJump 경로에 연결했다. 소유자와 관찰자 모두 RPC 수신 시 한 번 재생하며 공중의 추가 입력에는 재생하지 않는다. 발소리·감정표현은 호출 지점만 준비했다. 3D 거리 1.5~18m. 연속 녹음 발소리는 보폭별 재생 전에 단발 편집/청음이 필요하다. 감정표현 전용 음원이 없어 해당 필드는 비워 두었다.
+PlayerActionAudio.PlayFootstep(), PlayJump(), PlayEmotion(). 점프는 PlayerMove.Jumped → PlayerAnimation → 기존 PlayerNet 애니메이션 RPC → PlayJump 경로에 연결했다. 소유자와 관찰자 모두 RPC 수신 시 한 번 재생하며 공중의 추가 입력에는 재생하지 않는다. 발소리·감정표현은 호출 지점만 준비했다. 3D 거리 1.5~18m. 연속 녹음 발소리는 보폭별 재생 전에 단발 편집/청음이 필요하다. 감정표현 전용 음원이 없어 해당 필드는 비워 두었다.
 
 ## 검증
 Logs/FullAudioTests.xml: 2개 Passed. 실제 Mirror 호스트에서 시세 공개 5회, 경매 시작·종료·마감 임박 각 2회, 중복 방지, 행동 호출 지점, 메뉴→게임 BGM 전환 후 이전 곡 종료, UI 선택·페이지·수첩·수량·닫기·확인, 서버 확인 거래·베팅 성공음을 검사했다. AudioSource 및 CueAudio Playing 기록을 검증하며 스피커 청음·음량 평가는 별도다.

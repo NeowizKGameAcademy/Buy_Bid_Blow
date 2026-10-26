@@ -9,11 +9,11 @@ BuyBidBlow의 게임 코드와 콘텐츠를 관리한다. 독립 오디오 엔�
 | `Systems` | 게임 규칙·상태. 순수 C#(`BuyBidBlow.Systems.asmdef`, `noEngineReferences`). 기능별 폴더 `Auction`·`Market`·`Lot`·`Portfolio`·`Round`·`Room` |
 | `Systems/Types` | 식별자·값 타입, 필요한 처리 결과·이벤트, enum. Command 인자와 동기화 값으로도 그대로 쓴다 |
 | `Network` | 코드 파일은 `GameNetworkManager.cs` 하나만 둔다. 접속·종료와 플레이어 생성을 처리하고, 서버에서 Systems의 경기 생성·관리 기능을 호출하며 경기별 Tick을 구동한다. `BuyBidBlow.Game.asmdef`가 여기 있다 |
-| `Characters` | 행위자. 내 캐릭터(입력·카메라·이동), 다른 플레이어 아바타, 입찰 팻말 |
+| `Characters` | 행위자. 내 캐릭터(카메라·이동·상호작용·네트워크), 다른 플레이어 아바타, 입찰 팻말. 조작 입력은 `Characters/Player/Input`의 `PlayerInputHandler`가 받아 각 컴포넌트로 넘긴다 |
 | `Content/Props` | 씬에 놓이는 소품. 거래 창구·시세 전광판·시계·알림판·종·회사 배너 등. 상호작용 여부로 폴더를 나누지 않는다 |
 | `UI` | 화면별 UI. `Menu`·`Lobby`·`HUD`·`Auction`·`Market`·`Portfolio`·`Lot`·`Result` |
 | `Common` | 여러 오브젝트가 함께 쓰는 컴포넌트·인터페이스 (예: `IInteractable`, 동기화 값 표시) |
-| `Content` | 게임 콘텐츠. 레벨·소품·공용 에셋을 담으며, `Content/Props`에는 소품별 동작 코드와 프리팹·에셋도 함께 둔다. 캐릭터 모델은 그 모델을 쓰는 `Characters` 폴더에 둔다(늑대 → `Characters/Player/Wolf`, 돼지 → `Characters/NPC/Pig`) |
+| `Content` | 게임 콘텐츠. 레벨·소품·공용 에셋을 담으며, `Content/Props`에는 소품별 동작 코드와 프리팹·에셋도 함께 둔다. 캐릭터 외형·애니메이션(모델·머티리얼·애니메이터·클립과 이를 구동하는 코드)은 `Content/Characters`에 둔다(늑대 → `Content/Characters/Wolf`, 돼지 → `Content/Characters/Pig`). NPC의 동작·정보 코드는 `Characters/NPC`에 둔다 |
 | `Audio/Clips`, `Audio/Cues` | 게임용 오디오 파일·JSON 큐 정의 |
 | `Scenes` | 실행 씬 |
 | `Dev` | 에디터 도구·실험·디버그·테스트 |
@@ -45,7 +45,7 @@ Content/Props/TradeCounter/
 - 호스트 모드는 동기화 누락을 숨긴다. 원격 클라이언트(에디터 + 빌드 등)로 주기적으로 확인한다.
 - 경계 실수가 잦아지면 Server·Client 어셈블리를 분리한다. Systems 경계가 유지되면 분리 비용이 작다.
 - CueAudio는 게임 폴더 경로와 게임 규칙에 의존하지 않는다. 게임 쪽에서 큐 데이터를 제공한다.
-- `Content`는 콘텐츠 분류 폴더다. `Content/Props`의 코드는 해당 폴더의 asmref로 Game 어셈블리에 포함되며, 프리팹은 필요한 컴포넌트를 참조할 수 있다.
+- `Content`는 콘텐츠 분류 폴더다. `Content/Props`·`Content/Characters`의 코드는 해당 폴더의 asmref로 Game 어셈블리에 포함되며, 프리팹은 필요한 컴포넌트를 참조할 수 있다.
 
 ## 용어
 

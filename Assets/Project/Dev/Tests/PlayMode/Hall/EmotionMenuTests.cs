@@ -147,7 +147,7 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
             var model = Object.Instantiate(source.gameObject);
             var inputHost = new GameObject("Emotion input test");
             inputHost.SetActive(false);
-            var input = inputHost.AddComponent<PlayerController>();
+            var input = inputHost.AddComponent<PlayerAnimation>();
             var playerCamera = inputHost.AddComponent<PlayerCamera>();
             var cameraObject = new GameObject("Emotion camera", typeof(Camera));
             cameraObject.transform.SetParent(inputHost.transform, false);
@@ -161,7 +161,7 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
             try
             {
                 var animator = model.GetComponent<Animator>();
-                typeof(PlayerController).GetField("playerAnimation", Private).SetValue(input, animator);
+                typeof(PlayerAnimation).GetField("animator", Private).SetValue(input, animator);
                 animator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
                 var controller = (AnimatorController)animator.runtimeAnimatorController;
                 var machine = controller.layers[0].stateMachine;
@@ -174,8 +174,7 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
                     Assert.IsFalse(clip.legacy);
                     foreach (var binding in AnimationUtility.GetCurveBindings(clip).Where(b => b.type == typeof(Transform)))
                         Assert.IsTrue(binding.path == "" || model.transform.Find(binding.path), trigger + ": " + binding.path);
-                    typeof(PlayerController).GetMethod("HandleRadialMenuSelection", Private)
-                        .Invoke(input, new object[] { System.Array.IndexOf(Triggers, trigger) + 1 });
+                    input.PlayEmotion(System.Array.IndexOf(Triggers, trigger) + 1);
                     Assert.IsTrue(playerCamera.IsEmotionView);
                     Assert.Less(cameraObject.transform.localPosition.z, -1f);
                     Assert.AreNotEqual(0, viewCamera.cullingMask & (1 << 30), "Own avatar must be visible.");
@@ -200,11 +199,10 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
                         Assert.IsTrue(bones.Where((b, i) => Quaternion.Angle(rotations[i], b.localRotation) > .1f).Any(),
                             "Looping kick must keep moving rather than hold its last pose.");
                     }
-                    typeof(PlayerController).GetMethod("StopEmotionForInput", Private)
-                        .Invoke(input, new object[] { "Player_Walking" });
+                    input.StopEmotion(true);
                     animator.Update(.01f);
                     Assert.IsTrue(animator.GetCurrentAnimatorStateInfo(0).IsName("Player_Walking"));
-                    Assert.IsFalse((bool)typeof(PlayerController).GetField("emotionPlaying", Private).GetValue(input));
+                    Assert.IsFalse(input.EmotionPlaying);
                     Assert.IsFalse(playerCamera.IsEmotionView);
                     Assert.AreEqual(originalPosition, cameraObject.transform.localPosition);
                     Assert.Less(Quaternion.Angle(originalRotation, cameraObject.transform.localRotation), .01f);

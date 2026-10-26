@@ -1,0 +1,7 @@
+PASS: 1262 ground floor triangles; world-space identity transform; upward normals; backface culling.
+Reversed source winding corrected on overlay only: 100. Original geometry unchanged.
+PASS: before/after cameras, exposure, lights and base floor materials unchanged.
+Reflection renders: 3; target=800x500
+Last CPU render-request submission: 1.54 ms (NOT isolated GPU cost or gameplay FPS).
+PASS: resize, below-floor rejection, disable/re-enable, culling and receiver state restoration.
+PASS: production scene file unchanged; no package or global pipeline changes.

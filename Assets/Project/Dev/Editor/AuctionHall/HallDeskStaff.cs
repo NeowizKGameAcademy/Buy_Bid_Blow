@@ -12,7 +12,7 @@ namespace BuyBidBlow.Dev.Editor
 {
     public static class HallDeskStaff
     {
-        const string Root = "Assets/Project/Characters/NPC/Pig";
+        const string Root = "Assets/Project/Content/Characters/Pig";
         const string GroupName = "Desk Pig Staff";
         static readonly string[] Colors = { "Yellow", "Green", "Red" };
         static readonly string[] Desks = { "STRAW", "WOOD", "BRICK" };

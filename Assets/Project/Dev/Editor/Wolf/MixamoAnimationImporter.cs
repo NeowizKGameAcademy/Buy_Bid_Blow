@@ -6,12 +6,12 @@ using UnityEditor.Animations;
 using UnityEngine;
 namespace BuyBidBlow.Dev.Editor {
  [InitializeOnLoad] public static class MixamoAnimationImporter {
- const string Root="Assets/Project/Characters/Player/Wolf/Animation/Mixamo";
+ const string Root="Assets/Project/Content/Characters/Wolf/Animation/Mixamo";
  static MixamoAnimationImporter(){EditorApplication.update+=Tick;}
  static void Tick(){if(!File.Exists("Library/WolfMixamo.request")||EditorApplication.isCompiling||EditorApplication.isUpdating)return;File.Delete("Library/WolfMixamo.request");try{Build();File.WriteAllText("Library/WolfMixamo.result","PASS");}catch(Exception ex){File.WriteAllText("Library/WolfMixamo.result",ex.ToString());Debug.LogException(ex);}}
  [MenuItem("Tools/Buy Bid Blow/Wolf/Import New Mixamo Animations")]
  public static void Build(){
- var report=new System.Text.StringBuilder();var sourcePrefab=AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Project/Characters/Player/Wolf/Wolf_Model.prefab");if(!sourcePrefab)throw new Exception("Wolf_Model missing");
+ var report=new System.Text.StringBuilder();var sourcePrefab=AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Project/Content/Characters/Wolf/Wolf_Model.prefab");if(!sourcePrefab)throw new Exception("Wolf_Model missing");
  var wolf=UnityEngine.Object.Instantiate(sourcePrefab);wolf.hideFlags=HideFlags.HideAndDontSave;
  try{
  var transforms=wolf.GetComponentsInChildren<Transform>(true);var paths=transforms.ToDictionary(t=>AnimationUtility.CalculateTransformPath(t,wolf.transform),t=>t);

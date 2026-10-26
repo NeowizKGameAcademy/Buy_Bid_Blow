@@ -34,7 +34,7 @@ namespace BuyBidBlow.Dev.Editor
                 HallSessionSetup.PositionLobbyCamera(hud.view);
                 var preview=GameObject.Find("Lobby Art Preview - Editor Only");if(preview)UnityEngine.Object.DestroyImmediate(preview);
                 preview=new GameObject("Lobby Art Preview - Editor Only");preview.tag="EditorOnly";
-                var original=AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Project/Characters/Player/Wolf/WolfExpressions/PF_Wolf_Character.prefab");
+                var original=AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Project/Content/Characters/Wolf/WolfExpressions/PF_Wolf_Character.prefab");
                 for(int i=0;i<4;i++) {
                     var wolf=(GameObject)PrefabUtility.InstantiatePrefab(original);wolf.name="Preview Wolf "+(i+1);wolf.transform.SetParent(preview.transform);
                     var animator=wolf.GetComponentInChildren<Animator>();

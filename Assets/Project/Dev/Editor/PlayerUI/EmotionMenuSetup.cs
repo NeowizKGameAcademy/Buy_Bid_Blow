@@ -12,7 +12,7 @@ namespace BuyBidBlow.Dev.Editor
     public static class EmotionMenuSetup
     {
         const string PlayerPath = "Assets/Project/Characters/Player/Player.prefab";
-        const string AnimationRoot = "Assets/Project/Characters/Player/Wolf/Animation/";
+        const string AnimationRoot = "Assets/Project/Content/Characters/Wolf/Animation/";
         static readonly string[] Names =
             { "Frustration", "Windmill", "Wave", "JoyDance", "GolfDrive", "JumpingJacks", "LayingPose", "HurricaneKick" };
 

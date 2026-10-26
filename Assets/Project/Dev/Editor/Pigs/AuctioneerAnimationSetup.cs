@@ -10,7 +10,7 @@ namespace BuyBidBlow.Dev.Editor
 {
     [InitializeOnLoad]public static class AuctioneerAnimationSetup
     {
-        const string Root="Assets/Project/Characters/NPC/Pig/Auctioneer";
+        const string Root="Assets/Project/Content/Characters/Pig/Auctioneer";
         const string Models="Assets/Project/Dev/Sandbox/Pigs/Models/";
         static AuctioneerAnimationSetup(){EditorApplication.update+=()=>{
             if(!File.Exists("Library/AuctioneerAnimationSetup.request")||EditorApplication.isPlayingOrWillChangePlaymode||EditorApplication.isCompiling||EditorApplication.isUpdating)return;

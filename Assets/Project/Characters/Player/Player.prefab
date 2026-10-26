@@ -597,6 +597,7 @@ GameObject:
   - component: {fileID: 3373021250806142367}
   - component: {fileID: 7280581282348656336}
   - component: {fileID: 8152336058180059621}
+  - component: {fileID: 5917364028461739215}
   - component: {fileID: 2187848166270705709}
   - component: {fileID: 2529118144211920738}
   - component: {fileID: 2051769963190029571}
@@ -665,12 +666,27 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 81b2f6063f518f54b85626293002ac75, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.Characters.PlayerController
+  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.Characters.PlayerInputHandler
   playerMove: {fileID: 0}
   playerInteraction: {fileID: 0}
-  playerAnimation: {fileID: 0}
+  characterAnimation: {fileID: 5917364028461739215}
+  seats: {fileID: 6560379990016136570}
+  auctionSeat: {fileID: 7665490160805135526}
   tradePanel: {fileID: 4503746201585617679}
   radialMenu: {fileID: 0}
+--- !u!114 &5917364028461739215
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3073057968163323700}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b1b2de817424cb7937ad45df49fe779, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.Characters.PlayerAnimation
+  animator: {fileID: 4783508097398214556}
 --- !u!114 &2187848166270705709
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -769,7 +785,7 @@ MonoBehaviour:
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 8152336058180059621}
-        m_TargetAssemblyTypeName: BuyBidBlow.Characters.PlayerController, BuyBidBlow.Game
+        m_TargetAssemblyTypeName: BuyBidBlow.Characters.PlayerInputHandler, BuyBidBlow.Game
         m_MethodName: OnMove
         m_Mode: 0
         m_Arguments:
@@ -785,7 +801,7 @@ MonoBehaviour:
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 8152336058180059621}
-        m_TargetAssemblyTypeName: BuyBidBlow.Characters.PlayerController, BuyBidBlow.Game
+        m_TargetAssemblyTypeName: BuyBidBlow.Characters.PlayerInputHandler, BuyBidBlow.Game
         m_MethodName: OnJump
         m_Mode: 0
         m_Arguments:
@@ -801,7 +817,7 @@ MonoBehaviour:
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 8152336058180059621}
-        m_TargetAssemblyTypeName: BuyBidBlow.Characters.PlayerController, BuyBidBlow.Game
+        m_TargetAssemblyTypeName: BuyBidBlow.Characters.PlayerInputHandler, BuyBidBlow.Game
         m_MethodName: OnRotate
         m_Mode: 0
         m_Arguments:
@@ -817,7 +833,7 @@ MonoBehaviour:
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 8152336058180059621}
-        m_TargetAssemblyTypeName: BuyBidBlow.Characters.PlayerController, BuyBidBlow.Game
+        m_TargetAssemblyTypeName: BuyBidBlow.Characters.PlayerInputHandler, BuyBidBlow.Game
         m_MethodName: OnInteract
         m_Mode: 0
         m_Arguments:
@@ -930,7 +946,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.Characters.SeatController
   seating: {fileID: 3798767778802700119}
-  model: {fileID: 4783508097398214556}
 --- !u!114 &8252176066854027278
 MonoBehaviour:
   m_ObjectHideFlags: 0

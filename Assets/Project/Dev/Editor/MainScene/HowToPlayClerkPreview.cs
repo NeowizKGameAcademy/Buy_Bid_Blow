@@ -9,7 +9,7 @@ static class HowToPlayClerkPreview {
  const string path="Assets/Project/UI/Menu/HowToPlay/Examples/Clerk.png";
  var preview=new PreviewRenderUtility();Texture2D texture=null;
  try{
- var pig=Object.Instantiate(AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Project/Characters/NPC/Pig/StandingStaff/PF_Staff_Green.prefab"));preview.AddSingleGO(pig);
+ var pig=Object.Instantiate(AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Project/Content/Characters/Pig/StandingStaff/PF_Staff_Green.prefab"));preview.AddSingleGO(pig);
  var animator=pig.GetComponent<Animator>();animator.runtimeAnimatorController.animationClips.First(c=>c.isLooping).SampleAnimation(pig,0);
  var renderers=pig.GetComponentsInChildren<Renderer>();var bounds=renderers[0].bounds;foreach(var r in renderers.Skip(1))bounds.Encapsulate(r.bounds);
  preview.camera.orthographic=true;preview.camera.orthographicSize=bounds.size.y*.34f;preview.camera.nearClipPlane=.01f;preview.camera.farClipPlane=bounds.size.y*10;

@@ -14,10 +14,13 @@ namespace BuyBidBlow.UI.Notebook
         public TradePanelController trading;
         static NetworkNotebookController current;
         static int closedFrame = -1;
-        public static bool BlocksInput => BuyBidBlow.UI.Menu.GameMenuController.BlocksInput || (current && current.view && current.view.IsOpen) || closedFrame == Time.frameCount || BuyBidBlow.UI.HUD.NetworkMatchFeedback.BlocksInput;
+        // The closing frame still blocks, so the Tab or Q that closed the notebook does not reach gameplay.
+        public static bool BlocksInput => (current && current.view && current.view.IsOpen) || closedFrame == Time.frameCount;
+        static bool IsBlocking() => BlocksInput;
         void OnEnable()
         {
             current = this;
+            PlayerInputGate.AddBlocker(IsBlocking);
             var owner=GetComponentInParent<PlayerNet>(true);
             if(owner)
             {
@@ -35,7 +38,7 @@ namespace BuyBidBlow.UI.Notebook
         {
             PlayerNet.LocalInformationChanged -= Refresh;
             if(view) view.SetOpen(false,1);
-            if(current == this) current = null;
+            if(current == this) { current = null; PlayerInputGate.RemoveBlocker(IsBlocking); }
         }
         void Update()
         {

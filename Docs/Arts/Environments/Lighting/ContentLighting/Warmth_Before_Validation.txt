@@ -1,0 +1,59 @@
+Reference: Docs/Arts/Environments/조명예시.png
+Warm concept palette with auction/trade accents; existing geometry and gameplay code retained.
+Study only: auction envelope shown for lighting review, before and after.
+Light: Lower_Lounge_Bounce_8_14.3; Baked; intensity=0.32; angle=30
+Light: Warm_Seating_Key; Mixed; intensity=18.00; angle=86
+Light: Lower_Lounge_Bounce_8_8.5; Baked; intensity=0.24; angle=30
+Light: Mezzanine_Upper_Fill_-8; Baked; intensity=0.54; angle=30
+Light: A33_L06_Vertical_Sconce_ROOT_WarmGlow; Baked; intensity=3.80; angle=30
+Light: Lounge_Character_Fill_-8.5; Realtime; intensity=0.26; angle=30
+Light: Warm_Seating_Baked_Softbox; Baked; intensity=2.60; angle=30
+Light: Waiting_Area_Softbox; Baked; intensity=2.10; angle=30
+Light: Auction_Rostrum_Softbox; Baked; intensity=1.70; angle=30
+Light: Chandelier_Character_Light; Realtime; intensity=6.00; angle=30
+Light: Lower_Lounge_Bounce_0_8.5; Baked; intensity=0.49; angle=30
+Light: A33_L03_Vertical_Sconce_ROOT_WarmGlow; Baked; intensity=3.80; angle=30
+Light: Lower_Lounge_Bounce_-8_8.5; Baked; intensity=0.24; angle=30
+Light: A33_N07_Vertical_Sconce_ROOT_WarmGlow; Baked; intensity=3.80; angle=30
+Light: Rear_Library_Key; Mixed; intensity=9.00; angle=95
+Light: A33_U06_Vertical_Sconce_ROOT_WarmGlow; Baked; intensity=3.80; angle=30
+Light: Chandelier_Broad_Downlight; Baked; intensity=4.00; angle=30
+Light: Hall_Soft_Bounce_6.5_-14; Baked; intensity=0.78; angle=30
+Light: A33_S01_Vertical_Sconce_ROOT_WarmGlow; Baked; intensity=3.80; angle=30
+Light: Vault_Indirect_Fill_-13; Baked; intensity=1.15; angle=30
+Light: Mezzanine_Upper_Fill_8; Baked; intensity=0.54; angle=30
+Light: Hall_Soft_Bounce_6.5_-3; Baked; intensity=0.96; angle=30
+Light: Rear_Library_Softbox; Baked; intensity=1.44; angle=30
+Light: Lounge_Character_Fill_0; Realtime; intensity=0.36; angle=30
+Light: A33_N01_Vertical_Sconce_ROOT_WarmGlow; Baked; intensity=3.80; angle=30
+Light: Lower_Lounge_Bounce_0_14.3; Baked; intensity=0.34; angle=30
+Light: Right_Lounge_Softbox; Baked; intensity=1.56; angle=30
+Light: A33_N02_Vertical_Sconce_ROOT_WarmGlow; Baked; intensity=3.80; angle=30
+Light: Auction_Audience_Softbox; Baked; intensity=0.90; angle=30
+Auctioneer key target: (0.00, 5.70, 5.44)
+Light: Auction_Rostrum_Key; Mixed; intensity=48.00; angle=55
+Light: Hall_Soft_Bounce_-6.5_-14; Baked; intensity=0.78; angle=30
+Light: A33_N03_Vertical_Sconce_ROOT_WarmGlow; Baked; intensity=3.80; angle=30
+Light: Lower_Lounge_Bounce_-8_14.3; Baked; intensity=0.32; angle=30
+Light: Trade_Counter_Key_6.9; Mixed; intensity=46.00; angle=44
+Light: Lounge_Character_Fill_8.5; Realtime; intensity=0.26; angle=30
+Light: A33_N04_Vertical_Sconce_ROOT_WarmGlow; Baked; intensity=3.80; angle=30
+Light: A33_N06_Vertical_Sconce_ROOT_WarmGlow; Baked; intensity=3.80; angle=30
+Light: A33_S02_Vertical_Sconce_ROOT_WarmGlow; Baked; intensity=3.80; angle=30
+Light: Mezzanine_Upper_Fill_0; Baked; intensity=0.38; angle=30
+Light: Vault_Indirect_Fill_10; Baked; intensity=1.15; angle=30
+Light: Trade_Counter_Key_0; Mixed; intensity=46.00; angle=44
+Light: Waiting_Area_Warm_Pool; Baked; intensity=8.40; angle=88
+Light: A33_N05_Vertical_Sconce_ROOT_WarmGlow; Baked; intensity=3.80; angle=30
+Light: Trade_Counter_Key_-6.9; Mixed; intensity=46.00; angle=44
+Light: Trade_Counter_Softbox; Baked; intensity=0.70; angle=30
+Light: A33_N08_Vertical_Sconce_ROOT_WarmGlow; Baked; intensity=3.80; angle=30
+Light: Vault_Indirect_Fill_-2.5; Baked; intensity=1.15; angle=30
+Light: Soft_Character_Key; Realtime; intensity=0.12; angle=30
+Light: Right_Lounge_Key; Mixed; intensity=10.80; angle=86
+Light: A33_U01_Vertical_Sconce_ROOT_WarmGlow; Baked; intensity=3.80; angle=30
+Light: Hall_Soft_Bounce_-6.5_-3; Baked; intensity=0.96; angle=30
+Lot target: (0.00, 5.44, 8.32)
+PASS: 1 lightmaps; 6 reflection probes; independent lighting data: Assets/Project/Rendering/ContentLighting/Study/SC_ContentLighting/LightingData.asset
+PASS: four matched before/after camera views; production scene, original study, source lighting/material assets unchanged.
+GPU performance and multiplayer gameplay have not been measured. This is a lighting proposal scene.

@@ -49,7 +49,7 @@ namespace BuyBidBlow.UI.HUD
 
         private void RefreshInteractionUI(bool isTradeOpen)
         {
-            if(BuyBidBlow.UI.Notebook.NetworkNotebookController.BlocksInput)
+            if(PlayerInputGate.Blocked)
             {
                 if(cursorImage)cursorImage.SetActive(false);
                 if(Prompt)Prompt.SetActive(false);

@@ -1,19 +1,14 @@
 using BuyBidBlow.Props;
 using Mirror;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace BuyBidBlow.Characters
 {
-    // The local player's chairs: E on a free seat asks to sit, Q stands up. In a match the server
-    // grants the seat first (PlayerNet.hallSeat); offline the seat is taken directly.
+    // The local player's chairs: sit and stand requests come from PlayerInteraction and PlayerInputHandler.
+    // In a match the server grants the seat first (PlayerNet.hallSeat); offline the seat is taken directly.
     public sealed class SeatController : MonoBehaviour
     {
-        const string SeatedState = "Seated";
-        const string IdleState = "Player_Idle";
-
         [SerializeField] private PlayerSeating seating;
-        [SerializeField] private Animator model;
 
         private static PlayerNet LocalNet =>
             NetworkClient.active && NetworkClient.localPlayer ? NetworkClient.localPlayer.GetComponent<PlayerNet>() : null;
@@ -22,21 +17,12 @@ namespace BuyBidBlow.Characters
 
         private void OnEnable()
         {
-            seating.onSeatedChanged.AddListener(ShowSeated);
             PlayerNet.LocalSeatChanged += OnServerSeat;
         }
 
         private void OnDisable()
         {
-            seating.onSeatedChanged.RemoveListener(ShowSeated);
             PlayerNet.LocalSeatChanged -= OnServerSeat;
-        }
-
-        private void Update()
-        {
-            if(BuyBidBlow.UI.Notebook.NetworkNotebookController.BlocksInput)return;
-            if (IsSeated && Keyboard.current != null && Keyboard.current.qKey.wasPressedThisFrame)
-                RequestStand();
         }
 
         public void RequestSit(Seat seat)
@@ -69,13 +55,6 @@ namespace BuyBidBlow.Characters
         private void Stand()
         {
             if (IsSeated && !seating.TryStand()) seating.ForceStand();
-        }
-
-        private void ShowSeated(bool seated)
-        {
-            if (!model) return;
-            model.SetBool("isWalking", false);
-            model.Play(seated ? SeatedState : IdleState, 0, 0);
         }
     }
 }

@@ -13,7 +13,7 @@ namespace BuyBidBlow.Dev.Editor
     // "Seated" state to the local and network wolf animators. Gameplay switches to it with Animator.Play.
     public static class WolfSeatedPoseBuilder
     {
-        const string Wolf = "Assets/Project/Characters/Player/Wolf";
+        const string Wolf = "Assets/Project/Content/Characters/Wolf";
         public const string StateName = "Seated";
         // Hips above the character root in the seated pose; PlayerSeating.hipHeight on Player.prefab uses it.
         public const float SeatedHipHeight = .75f;

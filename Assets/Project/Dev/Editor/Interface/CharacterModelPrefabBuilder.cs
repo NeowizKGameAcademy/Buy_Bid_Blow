@@ -11,7 +11,7 @@ namespace BuyBidBlow.Interface.Editor
 {
     public static class CharacterModelPrefabBuilder
     {
-        const string PigRoot="Assets/Project/Characters/NPC/Pig",WolfRoot="Assets/Project/Characters/Player/Wolf";
+        const string PigRoot="Assets/Project/Content/Characters/Pig",WolfRoot="Assets/Project/Content/Characters/Wolf";
         static readonly Dictionary<UnityEngine.Object,UnityEngine.Object> copies=new Dictionary<UnityEngine.Object,UnityEngine.Object>();
         static string folder;
         static T CopyObject<T>(T original,string subfolder) where T:UnityEngine.Object
@@ -83,7 +83,7 @@ namespace BuyBidBlow.Interface.Editor
                 Make("Assets/Project/Dev/Sandbox/Pigs/Models/"+file+".fbx",folder+"/PF_Pig_"+color+"_Model.prefab",report,false);
             }
             folder=WolfRoot;
-            Make("Assets/Project/Characters/Player/Wolf/WolfExpressions/PF_Wolf_Character.prefab",folder+"/PF_Wolf_Model.prefab",report,true);
+            Make("Assets/Project/Content/Characters/Wolf/WolfExpressions/PF_Wolf_Character.prefab",folder+"/PF_Wolf_Model.prefab",report,true);
             AssetDatabase.SaveAssets();
             foreach(var path in new[]{PigRoot,WolfRoot}.SelectMany(root=>Directory.GetFiles(root,"*.prefab",SearchOption.AllDirectories))) {
                 var dependencies=AssetDatabase.GetDependencies(path,true);

@@ -1,12 +1,11 @@
+using BuyBidBlow.Characters;
 using BuyBidBlow.UI.Market;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace BuyBidBlow.UI.HUD
 {
     // The only owner of the in-match cursor. It stays locked unless the trade panel or the emotion menu
-    // needs it, or the player holds Left Alt. The shared Esc game menu also unlocks the cursor.
-    // Q closes trading and stands up (SeatController).
+    // needs it, a screen blocks gameplay input (PlayerInputGate), or the player holds Left Alt.
     public class CursorController : MonoBehaviour
     {
         [SerializeField] private TradePanelController tradePanel;
@@ -18,18 +17,10 @@ namespace BuyBidBlow.UI.HUD
 
         private void Update()
         {
-            var keyboard = Keyboard.current;
-            bool panelOpen = tradePanel != null && tradePanel.IsOpen;
-            if (panelOpen && keyboard != null && keyboard.qKey.wasPressedThisFrame)
-            {
-                tradePanel.Close();
-                panelOpen = false;
-            }
-
-            bool free = panelOpen
-                || BuyBidBlow.UI.Notebook.NetworkNotebookController.BlocksInput
+            bool free = (tradePanel != null && tradePanel.IsOpen)
+                || PlayerInputGate.Blocked
                 || (radialMenu != null && radialMenu.IsOpen)
-                || (keyboard != null && keyboard.leftAltKey.isPressed);
+                || PlayerInputGate.FreeCursorHeld;
             // Reasserted every frame: the lock comes back once the game window has focus again.
             if (free) UnlockCursor();
             else LockCursor();

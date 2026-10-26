@@ -19,6 +19,7 @@ namespace BuyBidBlow.UI.Menu
         public Button displayPrevious,displayNext;
         static GameMenuController instance;
         public static bool BlocksInput=>instance&&instance.shade.activeSelf;
+        static bool IsBlocking()=>BlocksInput;
         public bool IsSettingsOpen=>settingsPanel.activeSelf;
         SettingsValues draft;int row,openedFrame;bool directSettings,leaving;
         public static GameMenuController Ensure()
@@ -31,7 +32,7 @@ namespace BuyBidBlow.UI.Menu
         }
         void Awake()
         {
-            if(instance&&instance!=this){Destroy(gameObject);return;}instance=this;
+            if(instance&&instance!=this){Destroy(gameObject);return;}instance=this;PlayerInputGate.AddBlocker(IsBlocking);
             GameSettings.Load();
             launcher.onClick.AddListener(OpenMenu);resume.onClick.AddListener(Close);
             settings.onClick.AddListener(()=>OpenSettings(false));controls.onClick.AddListener(()=>Show(controlsPanel));leave.onClick.AddListener(RequestLeave);
@@ -46,7 +47,7 @@ namespace BuyBidBlow.UI.Menu
             for(int i=0;i<5;i++){int index=i;var trigger=(i<4?sliders[i].gameObject:display.gameObject).AddComponent<EventTrigger>();var entry=new EventTrigger.Entry{eventID=EventTriggerType.PointerDown};entry.callback.AddListener(_=>{row=index;RenderValues();});trigger.triggers.Add(entry);}
             Close();
         }
-        void OnDestroy(){if(instance==this)instance=null;}
+        void OnDestroy(){if(instance==this){instance=null;PlayerInputGate.RemoveBlocker(IsBlocking);}}
         public void OpenSettings(bool direct=true)
         {Prepare();directSettings=direct;draft=GameSettings.Current;row=0;status.text="W/S 항목 · A/D 조절 · E 실행 · Esc 닫기";Show(settingsPanel);if(EventSystem.current)EventSystem.current.SetSelectedGameObject(null);RenderSettings();}
         public void OpenMenu(){Prepare();directSettings=false;row=0;Show(menuPanel);Select(resume);}

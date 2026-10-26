@@ -153,7 +153,7 @@ namespace BuyBidBlow.Interface.Editor
                 foreach(var item in roots.Where(g=>g.name=="Wolf Characters - Static Examples"))item.SetActive(false);
                 var instance=(GameObject)PrefabUtility.InstantiatePrefab(AssetDatabase.LoadAssetAtPath<GameObject>(TradingRoot+"/PF_TradingPanel_Brick.prefab"),scene);instance.transform.SetParent(hud.transform,false);
                 var camera=roots.SelectMany(g=>g.GetComponentsInChildren<Camera>()).First();camera.transform.position=new Vector3(0,1.65f,-.6f);camera.transform.LookAt(new Vector3(0,1.55f,-4.8f));camera.fieldOfView=67;
-                var pig=(GameObject)PrefabUtility.InstantiatePrefab(AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Project/Characters/NPC/Pig/PF_Pig_Red_Model.prefab"),scene);
+                var pig=(GameObject)PrefabUtility.InstantiatePrefab(AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Project/Content/Characters/Pig/PF_Pig_Red_Model.prefab"),scene);
                 pig.name="Pig Exchange Owner - Static Example";pig.transform.position=new Vector3(1.9f,0,-4.9f);pig.transform.localScale=Vector3.one*3;
                 var register=new GameObject("Trading Counter - Example");SceneManager.MoveGameObjectToScene(register,scene);
                 var wood=AssetDatabase.LoadAssetAtPath<Material>(Root+"/Materials/Wood.mat");var brass=AssetDatabase.LoadAssetAtPath<Material>(Root+"/Materials/Brass.mat");

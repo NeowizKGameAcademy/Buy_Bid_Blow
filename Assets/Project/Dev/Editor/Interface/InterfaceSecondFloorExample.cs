@@ -27,9 +27,9 @@ namespace BuyBidBlow.Interface.Editor
                 var gold=AssetDatabase.LoadAssetAtPath<Material>(Root+"/Materials/Brass.mat");
                 Cube("Auctioneer Podium",stage.transform,new Vector3(0,4.55f,-12),new Vector3(2.1f,1.1f,.7f),wood);
                 Cube("Podium Top",stage.transform,new Vector3(0,5.14f,-12),new Vector3(2.25f,.12f,.85f),gold);
-                var pig=(GameObject)PrefabUtility.InstantiatePrefab(AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Project/Characters/NPC/Pig/PF_Pig_Black_Model.prefab"),scene);
+                var pig=(GameObject)PrefabUtility.InstantiatePrefab(AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Project/Content/Characters/Pig/PF_Pig_Black_Model.prefab"),scene);
                 pig.name="Pig Auctioneer - Static Model";pig.transform.SetParent(stage.transform);pig.transform.position=new Vector3(0,4,-12.8f);pig.transform.rotation=Quaternion.identity;
-                var wolfAsset=AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Project/Characters/Player/Wolf/PF_Wolf_Model.prefab");
+                var wolfAsset=AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Project/Content/Characters/Wolf/PF_Wolf_Model.prefab");
                 foreach(float x in new[]{-2.7f,2.7f}) {
                     var wolf=(GameObject)PrefabUtility.InstantiatePrefab(wolfAsset,scene);wolf.name="Wolf Bidder - Static Example";wolf.transform.SetParent(stage.transform);wolf.transform.position=new Vector3(x,4,-8.5f);wolf.transform.rotation=Quaternion.Euler(0,x<0?205:155,0);
                 }

@@ -36,7 +36,7 @@ namespace BuyBidBlow.Dev
             {
                 var sceneCharacters = Object.FindObjectsByType<BBBWolfCharacter>(FindObjectsSortMode.None);
                 var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(
-                    "Assets/Project/Characters/Player/Wolf/WolfExpressions/PF_Wolf_Character.prefab");
+                    "Assets/Project/Content/Characters/Wolf/WolfExpressions/PF_Wolf_Character.prefab");
                 var clone = Object.Instantiate(prefab);
                 clone.transform.position += Vector3.right * 4;
                 var runner = new GameObject("Wolf Playback Checks").AddComponent<WolfAnimatorPlaybackChecks>();

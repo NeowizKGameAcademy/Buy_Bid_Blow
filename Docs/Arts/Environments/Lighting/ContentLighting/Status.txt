@@ -1,0 +1,1 @@
+PASS: lighting baked, comparison images captured, source assets unchanged.

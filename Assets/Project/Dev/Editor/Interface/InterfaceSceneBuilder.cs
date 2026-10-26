@@ -145,7 +145,7 @@ namespace BuyBidBlow.Interface.Editor
         }
         static void PlaceWolves()
         {
-            var group=new GameObject("Wolf Characters - Static Examples");var prefab=AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Project/Characters/Player/Wolf/WolfExpressions/PF_Wolf_Character.prefab");
+            var group=new GameObject("Wolf Characters - Static Examples");var prefab=AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Project/Content/Characters/Wolf/WolfExpressions/PF_Wolf_Character.prefab");
             var poses=new[]{new Vector3(3.6f,0,1.1f),new Vector3(.7f,0,-3.4f),new Vector3(-3.8f,0,-3.3f)};
             for(int i=0;i<poses.Length;i++) {
                 var wolf=(GameObject)PrefabUtility.InstantiatePrefab(prefab);wolf.name="Wolf Example "+(i+1);wolf.transform.SetParent(group.transform);

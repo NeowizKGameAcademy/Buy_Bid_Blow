@@ -31,12 +31,14 @@ namespace BuyBidBlow.UI.HUD
         public Sprite[] companyIcons;
         static NetworkMatchFeedback current;
         public static bool BlocksInput => current && ((current.auctionResult && current.auctionResult.IsOpen) || (current.results && current.results.IsOpen));
+        static bool IsBlocking() => BlocksInput;
         readonly Queue<AuctionOutcome> outcomes = new Queue<AuctionOutcome>();
         bool canRead,shownResults,host;
         UnityEngine.Events.UnityAction[] auctionClicks,resultClicks;
         void OnEnable()
         {
             current=this;
+            PlayerInputGate.AddBlocker(IsBlocking);
             var owner=GetComponentInParent<PlayerNet>(true);
             if(owner)
             {
@@ -61,7 +63,7 @@ namespace BuyBidBlow.UI.HUD
             auctionResult.ActionRequested-=OnAuctionAction;results.ActionRequested-=OnReturn;
             UnbindButtons(auctionResult,auctionClicks);UnbindButtons(results,resultClicks);
             outcomes.Clear();auctionResult.Hide();results.Hide();notices.Stack.Clear();
-            if(current==this)current=null;
+            if(current==this){current=null;PlayerInputGate.RemoveBlocker(IsBlocking);}
         }
         void Update()
         {

@@ -12,7 +12,7 @@ namespace BuyBidBlow.Dev.Editor
     // Black pig auctioneer standing behind the mezzanine rostrum, facing the auction chairs.
     public static class HallAuctioneer
     {
-        const string Folder = "Assets/Project/Characters/NPC/Pig/Auctioneer";
+        const string Folder = "Assets/Project/Content/Characters/Pig/Auctioneer";
         const string Source = "Assets/Project/Dev/Sandbox/Pigs/Models/Pig_Black_50k@Dwarf Idle.fbx";
         const string Name = "Auctioneer Pig";
         const string Rostrum = "01_Auction_Rostrum_ROOT";
@@ -47,7 +47,7 @@ namespace BuyBidBlow.Dev.Editor
             string avatarPath = Folder + "/Black_Avatar.asset";
             var avatar = AssetDatabase.LoadAssetAtPath<Avatar>(avatarPath);
             if (!avatar) { avatar = UnityEngine.Object.Instantiate(AssetDatabase.LoadAssetAtPath<GameObject>(Source).GetComponent<Animator>().avatar); AssetDatabase.CreateAsset(avatar, avatarPath); }
-            var go = (GameObject)PrefabUtility.InstantiatePrefab(AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Project/Characters/NPC/Pig/PF_Pig_Black_Model.prefab"));
+            var go = (GameObject)PrefabUtility.InstantiatePrefab(AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Project/Content/Characters/Pig/PF_Pig_Black_Model.prefab"));
             try
             {
                 var animator = go.AddComponent<Animator>(); animator.runtimeAnimatorController = controller; animator.avatar = avatar; animator.applyRootMotion = false;

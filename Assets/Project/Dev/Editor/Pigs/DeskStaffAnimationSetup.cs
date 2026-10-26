@@ -9,7 +9,7 @@ namespace BuyBidBlow.Dev.Editor
 {
     public static class DeskStaffAnimationSetup
     {
-        const string Root = "Assets/Project/Characters/NPC/Pig/StandingStaff/";
+        const string Root = "Assets/Project/Content/Characters/Pig/StandingStaff/";
         [MenuItem("Tools/Buy Bid Blow/Pigs/Connect Desk Staff Animations")]
         public static void Apply()
         {
