@@ -4,7 +4,7 @@ Self-contained URP 17 / Unity 6 prototype. No paid assets, imported packages, or
 
 ## Review
 
-Use **BuyBidBlow > Lighting > Build Free Floor Reflection Study** to copy the saved furnished exchange into `Study/SC_FreeFloorReflection.unity` and capture matched before/after views. This is a material/reflection experiment, not the newly proposed entrance-lobby layout.
+Use **BuyBidBlow > Lighting > Build Free Floor Reflection Study** to copy the saved furnished exchange into `Assets/Project/Dev/Sandbox/Rendering/PlanarFloor/SC_FreeFloorReflection.unity` and capture matched before/after views. This is a material/reflection experiment, not the newly proposed entrance-lobby layout.
 
 The builder keeps the original lightmaps, exposure, lights and base floor materials. It extracts only horizontal ground-floor wood triangles into an upward-facing, backface-culled coating mesh, leaving carpets occluded by the depth buffer. It validates winding/normals and renders a solid grey check before applying the coating. Source scene bytes are checked after the build.
 
@@ -23,3 +23,5 @@ The coating is a deliberately art-directed Fresnel blend over the existing Lit f
 ## Next lighting step
 
 Reflection does not repair the existing green wall-light spill, diffuse lighting balance, geometry normals, or lightmap density. Test those separately with existing URP lighting before considering an external solution. Keep this scene as an A/B reference until the result is approved for the production level.
+
+Study tools are in `Assets/Project/Dev/Editor/Rendering`; lighting studies and their generated assets are in `Assets/Project/Dev/Sandbox/Rendering`. This folder contains the runtime reflection component and shader.

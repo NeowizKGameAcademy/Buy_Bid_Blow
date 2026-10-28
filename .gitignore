@@ -117,3 +117,8 @@ InitTestScene*.unity*
 
 # Local work outputs (captures, renders, exports) stay untracked.
 /[Oo]utputs/
+
+# HyperFrames trailer projects (kept out of the game repo)
+/Trailer/
+/Trailer-lab/
+/Docs/Media/

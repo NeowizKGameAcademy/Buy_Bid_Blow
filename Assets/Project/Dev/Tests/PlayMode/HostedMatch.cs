@@ -50,7 +50,8 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
             net.SetReady(true);
             yield return Until(() => net.ready, "ready");
             net.CmdStartMatch();
-            yield return Until(() => MatchNet.Current && MatchNet.Current.phase == MatchNet.Phase.Playing, "round 1 open");
+            // The scene's intro runs before the preparation countdown (server fallback: 60 seconds).
+            yield return Until(() => MatchNet.Current && MatchNet.Current.phase == MatchNet.Phase.Playing, "round 1 open", 90);
         }
 
         public IEnumerator Stop()

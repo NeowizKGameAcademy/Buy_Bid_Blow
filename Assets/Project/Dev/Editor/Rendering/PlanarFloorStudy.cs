@@ -15,7 +15,7 @@ namespace BuyBidBlow.Rendering.Editor
     public static class PlanarFloorStudy
     {
         const string Source = "Assets/Project/Scenes/SC_ExchangeFurnished.unity";
-        const string Root = "Assets/Project/Rendering/PlanarFloor/Study";
+        const string Root = "Assets/Project/Dev/Sandbox/Rendering/PlanarFloor";
         const string ScenePath = Root + "/SC_FreeFloorReflection.unity";
         const string Output = "Docs/Arts/Environments/Lighting/FreeFloorReflection";
         static readonly Vector3[] Eyes = { new Vector3(7.7f, 1.65f, -3.1f), new Vector3(0, 1.65f, -5), new Vector3(-5.5f, 1.7f, 7.1f) };

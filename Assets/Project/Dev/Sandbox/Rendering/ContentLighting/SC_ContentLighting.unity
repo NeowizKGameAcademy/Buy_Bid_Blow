@@ -37405,7 +37405,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6fae1e7c8ea0d2d489302074fad41dd2, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.UI.Lobby.HallSession
+  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.Presentation.HallSession
   room: {fileID: 104497634}
   lobbyPresentation: {fileID: 1234541784}
   gameplayPresentation: {fileID: 229019511}

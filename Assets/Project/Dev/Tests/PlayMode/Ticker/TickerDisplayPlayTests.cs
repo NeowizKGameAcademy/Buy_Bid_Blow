@@ -17,7 +17,8 @@ namespace BuyBidBlow.Dev.Tests.PlayMode.Ticker
         TMP_Text Text(string path)=>board.transform.Find("Ticker UI/"+path).GetComponent<TMP_Text>();
         MatchNet NewMatch()
         {
-            var go=new GameObject("Ticker test match",typeof(NetworkIdentity),typeof(MatchNet));
+            var go=Object.Instantiate(AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Project/Common/MatchNet.prefab"));
+            go.name="Ticker test match";
             var value=go.GetComponent<MatchNet>();value.OnStartClient();return value;
         }
         static void ReceiveHistory(MatchNet client,int[] values)

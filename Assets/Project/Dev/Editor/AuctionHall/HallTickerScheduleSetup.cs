@@ -33,6 +33,11 @@ namespace BuyBidBlow.Dev.Editor
             try
             {
                 var director=go.AddComponent<TickerDirector>();director.schedule=json;director.videos=entries;
+                var welcome=AssetDatabase.LoadAssetAtPath<VideoClip>(Root+"/Video/Welcome.mp4");
+                if(!welcome)throw new Exception("Missing welcome video");
+                var serialized=new SerializedObject(director);
+                serialized.FindProperty("welcomeClip").objectReferenceValue=welcome;
+                serialized.ApplyModifiedPropertiesWithoutUndo();
                 PrefabUtility.SaveAsPrefabAsset(go,Prefab);
             }
             finally{Object.DestroyImmediate(go);}

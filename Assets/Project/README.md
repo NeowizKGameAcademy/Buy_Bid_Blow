@@ -102,13 +102,20 @@ Content/Props/TradeCounter/
 
 ## 씬과 개발 도구
 
+- `Presentation/HallSession`은 로비와 경기 사이의 화면·로컬 플레이어 활성화 전환을 담당한다. `UI/Lobby`는 로비 화면과 접속 UI를 담당하고, `MapIntroCutscene`은 카메라·자막·영상 연출을 담당한다.
+
+- 오브젝트 전용 동작은 해당 폴더에 둔다: 스피커 소리는 `Content/Props/PASpeaker`, 플레이어 행동 소리는 `Characters/Player`, 로컬 거래 연결은 `Characters/Player/Trading`이다. `Rendering`에는 실행용 렌더링 기능을 두고, 렌더링 실험 씬·전용 에셋은 `Dev/Sandbox/Rendering`, 생성·검증 도구는 `Dev/Editor/Rendering`에 둔다.
+
+- 거래소 도입 연출의 카메라·자막·진행 순서는 `Presentation/MapIntroCutscene`이 제어한다. 웰컴 영상의 재생·종료·텍스처와 전광판 표시 상태는 `Content/Props/TickerBoard`의 `TickerDirector`가 관리하고, `TickerBoardDisplay`는 세 화면에 나누어 표시한다. 영상은 같은 폴더의 `Video/Welcome.mp4`를 프리팹에서 직접 참조한다.
+
 - 실제 씬 파일은 `Scenes`, 레벨 모델·머티리얼·조립 프리팹 등은 `Content/Levels`에 둔다.
 - `Dev/Editor`에는 에디터 전용 코드를, `Dev/Tests`에는 EditMode·PlayMode 테스트를 둔다.
 - `Dev/Sandbox` 씬은 배포용 빌드 씬 목록에 넣지 않는다.
-- `Dev`의 코드는 역할별 asmdef 4개로 빌드에서 빠진다. 하위 폴더에는 asmdef를 새로 만들지 않는다.
+- `Dev`의 코드는 기본적으로 역할별 asmdef로 빌드에서 빠진다. 하위 폴더에는 asmdef를 새로 만들지 않는다. 빌드에서도 필요한 개발 도구는 `Dev/BuildTools`에 두고, 해당 폴더의 Game asmref로 게임 어셈블리에 포함한다.
   - `Dev/BuyBidBlow.Dev.asmdef`: 런타임 코드(`Sandbox`·`Debug` 등). `UNITY_EDITOR`에서만 컴파일된다.
   - `Dev/Editor/BuyBidBlow.Dev.Editor.asmdef`: `UnityEditor`를 쓰는 코드. 에디터 전용이다.
   - `Dev/Tests/EditMode`·`Dev/Tests/PlayMode`의 asmdef: 테스트 전용이다.
+- `Dev/BuildTools/TestBot.cs`는 빌드에서도 실행하는 플레이 테스트 봇이며, `-bot` 실행 인자가 있을 때만 시작한다.
 - asmdef 아래에서는 Unity의 `Editor` 폴더 규칙이 작동하지 않는다. `UnityEditor`를 쓰는 코드는 반드시 `Dev/Editor` 아래에 둔다.
 - `Dev` 아래에 `Resources` 폴더를 만들지 않는다. 안의 에셋이 참조 여부와 무관하게 빌드에 포함된다.
 - 새 패키지 참조가 필요하면 asmdef 관리자에게 요청한다.

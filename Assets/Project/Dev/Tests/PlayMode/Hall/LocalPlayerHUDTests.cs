@@ -1,3 +1,5 @@
+using System.Linq;
+using BuyBidBlow.Presentation;
 using System.Collections;
 using BuyBidBlow.Characters;
 using BuyBidBlow.UI.HUD;
@@ -15,6 +17,26 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
     {
         readonly HostedMatch match=new HostedMatch();
         [UnityTearDown]public IEnumerator Cleanup(){yield return match.Stop();}
+        [UnityTest]public IEnumerator SessionOwnsGameplayActivationAndReturnToLobby()
+        {
+            yield return match.Start(2,settings=>{settings.RoundCount=1;settings.AuctionRounds=new int[0];});
+            var session=Object.FindFirstObjectByType<HallSession>();
+            var local=NetworkClient.localPlayer.GetComponent<PlayerNet>();
+            var input=local.GetComponent<UnityEngine.InputSystem.PlayerInput>();
+            var movement=local.GetComponent<PlayerMove>();
+            Assert.IsTrue(session.IsPlaying);
+            Assert.IsFalse(session.lobbyPresentation.activeSelf);
+            Assert.IsTrue(input.enabled);Assert.IsTrue(movement.enabled);
+            Assert.IsTrue(local.GetComponentsInChildren<Camera>(true).Any(c=>c.enabled));
+            yield return HostedMatch.Until(()=>PlayerNet.LocalResults!=null,"match results",10);
+            local.CmdReturnToLobby();
+            yield return HostedMatch.Until(()=>!match.Room.ClientInMatch,"return to lobby");
+            yield return null;
+            Assert.IsFalse(session.IsPlaying);Assert.IsTrue(session.lobbyPresentation.activeSelf);
+            Assert.IsFalse(input.enabled);Assert.IsFalse(movement.enabled);
+            Assert.IsTrue(local.GetComponentsInChildren<Camera>(true).All(c=>!c.enabled));
+            Assert.IsFalse(local.ready);
+        }
         [UnityTest]public IEnumerator OnlyOwnedPlayerEnablesHUDAndUsesOwnComponents()
         {
             yield return match.Start();yield return null;

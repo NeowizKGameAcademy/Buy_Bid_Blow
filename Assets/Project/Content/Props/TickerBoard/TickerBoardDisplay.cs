@@ -11,8 +11,6 @@ namespace BuyBidBlow.UI.Ticker
     [DisallowMultipleComponent]
     public sealed class TickerBoardDisplay : MonoBehaviour
     {
-        public static Texture IntroTexture { get; set; }
-        public static bool IntroBlank { get; set; }
         public enum ScreenMode { ByPlacement, Timer, Overview, Company }
         public ScreenMode mode;
         [Min(1)] public float companySeconds=8;
@@ -91,21 +89,16 @@ namespace BuyBidBlow.UI.Ticker
         void Program(TickerDirector director,TickerShot shot)
         {
             if(!videoLayer)return;
-            if(IntroTexture)
+            if(director&&director.TryGetIntroTexture(out var introTexture))
             {
-                Show(ResolvedMode);videoLayer.enabled=true;videoLayer.texture=IntroTexture;
+                Show(ResolvedMode);videoLayer.enabled=true;videoLayer.texture=introTexture;
                 int slice=name.EndsWith("_Right",StringComparison.Ordinal)?0:name.EndsWith("_Center",StringComparison.Ordinal)?1:2;
                 videoLayer.uvRect=new Rect(slice/3f,0,1f/3f,1);cutLayer.enabled=false;
                 return;
             }
-            if(IntroBlank)
+            if(director&&director.IntroBlank)
             {
                 timerGroup.SetActive(false);overviewGroup.SetActive(false);companyGroup.SetActive(false);videoLayer.enabled=false;cutLayer.enabled=false;
-                return;
-            }
-            if(director&&director.TryGetIntroTexture(out var introTexture))
-            {
-                Show(ResolvedMode);videoLayer.enabled=true;videoLayer.texture=introTexture;videoLayer.uvRect=new Rect(0,0,1,1);cutLayer.enabled=false;
                 return;
             }
             string channel=shot.IsSet?shot.Channel.id:null;

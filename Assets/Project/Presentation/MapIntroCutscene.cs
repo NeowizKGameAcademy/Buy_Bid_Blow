@@ -6,7 +6,6 @@ using BuyBidBlow.UI.Ticker;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.Video;
 
 namespace BuyBidBlow.Presentation
 {
@@ -44,12 +43,13 @@ namespace BuyBidBlow.Presentation
         GameNetworkManager room;
         Coroutine intro;
         readonly List<GameObject> hiddenScreenUi = new List<GameObject>();
-        VideoPlayer welcomePlayer;
-        RenderTexture welcomeTexture;
-        bool welcomeFinished;
+        TickerDirector ticker;
+        Transform introCamera;
+        Vector3 savedCameraPosition;
+        Quaternion savedCameraRotation;
 
         public float SequenceDuration => exchangeDuration + auctionDuration
-            + (monitorVideoDuration > 0 ? monitorVideoDuration : fullWelcomeVideoDuration)
+            + (monitorVideoDuration > 0 ? monitorVideoDuration : (TickerDirector.Active ? TickerDirector.Active.WelcomeDuration : fullWelcomeVideoDuration))
             + transitionFadeDuration * 8f + .1f;
 
         void Start()
@@ -69,16 +69,16 @@ namespace BuyBidBlow.Presentation
             if (!room) { Debug.LogError("Map intro needs GameNetworkManager.", this); enabled = false; return; }
             room.ClientMatchIntroStarted += BeginIntro;
             room.ClientMatchReturned += RestoreScreenUi;
-            room.ClientMatchStarted += RestoreGameplay;
+            room.ClientMatchStarted += FinishPresentation;
             PlayerNet.LocalMatchIntroStarted += BeginIntro;
             if (room.ClientInIntro) BeginIntro();
         }
 
         void OnDestroy()
         {
-            if (room) { room.ClientMatchIntroStarted -= BeginIntro; room.ClientMatchReturned -= RestoreScreenUi; room.ClientMatchStarted -= RestoreGameplay; }
+            if (room) { room.ClientMatchIntroStarted -= BeginIntro; room.ClientMatchReturned -= RestoreScreenUi; room.ClientMatchStarted -= FinishPresentation; }
             PlayerNet.LocalMatchIntroStarted -= BeginIntro;
-            TickerBoardDisplay.IntroTexture = null;
+            if (ticker) ticker.EndIntro();
             RestoreScreenUi();
         }
 
@@ -96,7 +96,10 @@ namespace BuyBidBlow.Presentation
             var cameraTransform = view.transform;
             var savedPosition = cameraTransform.position;
             var savedRotation = cameraTransform.rotation;
-            TickerBoardDisplay.IntroBlank = true;
+            introCamera = cameraTransform; savedCameraPosition = savedPosition; savedCameraRotation = savedRotation;
+            ticker = TickerDirector.Active;
+            if (!ticker) { Debug.LogError("Map intro needs TickerDirector.", this); yield break; }
+            ticker.BeginIntro();
             HideScreenUi();
             CreateOverlay();
             yield return Fade(0f, 1f, transitionFadeDuration);
@@ -116,44 +119,26 @@ namespace BuyBidBlow.Presentation
             cameraTransform.SetPositionAndRotation(monitor.position, monitor.rotation);
             SetCaption(string.Empty, string.Empty);
             yield return Fade(1f, 0f, transitionFadeDuration);
-            yield return PlayWelcomeVideo();
+            yield return ticker.PlayWelcomeVideo(monitorVideoDuration);
 
             yield return Fade(0f, 1f, transitionFadeDuration);
             cameraTransform.SetPositionAndRotation(savedPosition, savedRotation);
             yield return Fade(1f, 0f, transitionFadeDuration);
+            introCamera = null;
             Destroy(overlayRoot);
             var local = Mirror.NetworkClient.localPlayer ? Mirror.NetworkClient.localPlayer.GetComponent<PlayerNet>() : null;
             if (local) local.CmdFinishMatchIntro();
             intro = null;
         }
 
-        IEnumerator PlayWelcomeVideo()
+        void OnDisable()
         {
-            var clip = Resources.Load<VideoClip>("Video/Welcome");
-            if (!clip) { Debug.LogError("Missing Resources/Video/Welcome.mp4.", this); yield return new WaitForSecondsRealtime(15f); yield break; }
-            var playerObject = new GameObject("Map intro Welcome player");
-            welcomePlayer = playerObject.AddComponent<VideoPlayer>();
-            welcomeTexture = new RenderTexture((int)clip.width, (int)clip.height, 0) { name = "Welcome intro video" };
-            var previousTarget = RenderTexture.active;
-            RenderTexture.active = welcomeTexture; GL.Clear(false, true, Color.black);
-            RenderTexture.active = previousTarget;
-            welcomePlayer.playOnAwake = false; welcomePlayer.isLooping = false; welcomePlayer.skipOnDrop = true;
-            welcomePlayer.renderMode = VideoRenderMode.RenderTexture; welcomePlayer.targetTexture = welcomeTexture;
-            welcomePlayer.audioOutputMode = VideoAudioOutputMode.None; welcomePlayer.clip = clip;
-            welcomePlayer.loopPointReached += _ => welcomeFinished = true;
-            TickerBoardDisplay.IntroTexture = welcomeTexture;
-            welcomePlayer.Prepare();
-            for (float waited = 0; !welcomePlayer.isPrepared && waited < 5f; waited += Time.unscaledDeltaTime) yield return null;
-            if (welcomePlayer.isPrepared)
-            {
-                welcomeFinished = false;
-                welcomePlayer.Play();
-                float duration = monitorVideoDuration > 0 ? monitorVideoDuration : (float)clip.length;
-                for (float elapsed = 0; !welcomeFinished && elapsed < duration; elapsed += Time.unscaledDeltaTime) yield return null;
-            }
-            else yield return new WaitForSecondsRealtime(15f);
-            TickerBoardDisplay.IntroTexture = null;
-            welcomePlayer.Stop(); Destroy(playerObject); welcomeTexture.Release(); Destroy(welcomeTexture); welcomePlayer = null; welcomeTexture = null;
+            StopAllCoroutines(); intro = null;
+            if (ticker) ticker.EndIntro();
+            if (introCamera) introCamera.SetPositionAndRotation(savedCameraPosition, savedCameraRotation);
+            introCamera = null;
+            if (overlayRoot) Destroy(overlayRoot);
+            RestoreScreenUi();
         }
 
         void HideScreenUi()
@@ -170,16 +155,11 @@ namespace BuyBidBlow.Presentation
             hiddenScreenUi.Clear();
         }
 
-        // HallSession also enables these components.  Doing it here as well makes
-        // the handoff safe if the match-start network message arrives before its UI.
-        void RestoreGameplay()
+        // Gameplay activation belongs to HallSession; the cutscene only clears its presentation.
+        void FinishPresentation()
         {
-            TickerBoardDisplay.IntroBlank = false;
+            if (ticker) ticker.EndIntro();
             RestoreScreenUi();
-            var local = Mirror.NetworkClient.localPlayer ? Mirror.NetworkClient.localPlayer.GetComponent<PlayerNet>() : null;
-            if (!local) return;
-            local.SetGameplayActive(true);
-            if (local.TryGetComponent<UnityEngine.InputSystem.PlayerInput>(out var input)) input.enabled = true;
         }
 
         IEnumerator MoveCamera(Transform cameraTransform, Transform from, Transform to, float duration)

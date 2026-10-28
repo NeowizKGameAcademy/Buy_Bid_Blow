@@ -16,9 +16,9 @@ namespace BuyBidBlow.Rendering.Editor
     // A separate lighting proposal: existing warm lobby palette, focused auction/trade lighting.
     public static class ContentLightingStudy
     {
-        const string Source = "Assets/Project/Rendering/PlanarFloor/Study/SC_FreeFloorReflection.unity";
+        const string Source = "Assets/Project/Dev/Sandbox/Rendering/PlanarFloor/SC_FreeFloorReflection.unity";
         const string Production = "Assets/Project/Scenes/SC_ExchangeFurnished.unity";
-        const string Root = "Assets/Project/Rendering/ContentLighting/Study";
+        const string Root = "Assets/Project/Dev/Sandbox/Rendering/ContentLighting";
         const string ScenePath = Root + "/SC_ContentLighting.unity";
         const string Output = "Docs/Arts/Environments/Lighting/ContentLighting";
         static readonly string[] Names = { "Auction", "Trading", "Hall", "Entrance" };

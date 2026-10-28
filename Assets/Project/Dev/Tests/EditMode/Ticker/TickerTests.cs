@@ -24,9 +24,11 @@ namespace BuyBidBlow.Dev.Tests.EditMode.Ticker
             Assert.AreEqual(game.Price(Company.Straw),game.PublishedPrice(6,Company.Straw));
             Assert.Throws<ArgumentOutOfRangeException>(()=>game.PublishedPrice(7,Company.Straw));
             game.Tick(10000);
-            Assert.AreEqual(23,game.PublishedPriceCount);
-            Assert.AreEqual(game.Price(Company.Straw),game.PublishedPrice(22,Company.Straw));
-            Assert.Throws<ArgumentOutOfRangeException>(()=>game.PublishedPrice(23,Company.Straw));
+            int finalCount=PriceChangeGenerator.HistoryRoundCount+1+game.Settings.RoundCount;
+            Assert.IsTrue(game.Complete);
+            Assert.AreEqual(finalCount,game.PublishedPriceCount);
+            Assert.AreEqual(game.Price(Company.Straw),game.PublishedPrice(finalCount-1,Company.Straw));
+            Assert.Throws<ArgumentOutOfRangeException>(()=>game.PublishedPrice(finalCount,Company.Straw));
         }
         [Test] public void ReplicatedHistoryContainsEveryRevealedSampleForLateClient()
         {

@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.UI.Ticker.TickerDirector
   schedule: {fileID: 4900000, guid: 3f8209519d379b2478848350cee47187, type: 3}
+  welcomeClip: {fileID: 32900000, guid: 6b77bd96c704a0847b9c95527195d89e, type: 3}
   videos:
   - id: roundover
     clip: {fileID: 32900000, guid: 7e7586c67f8126748a506b31bc56f41c, type: 3}

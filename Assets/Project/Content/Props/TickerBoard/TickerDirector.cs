@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using BuyBidBlow.Common;
@@ -16,6 +17,7 @@ namespace BuyBidBlow.UI.Ticker
         [Serializable] public struct VideoEntry { public string id; public VideoClip clip; }
         public TextAsset schedule;
         public VideoEntry[] videos;
+        [SerializeField] VideoClip welcomeClip;
         public static TickerDirector Active { get; private set; }
         public TickerSchedule Schedule { get; private set; }
 
@@ -29,6 +31,8 @@ namespace BuyBidBlow.UI.Ticker
         bool introPlaying;
 
         public bool IsIntroVideoPlaying => introPlaying;
+        public bool IntroBlank { get; private set; }
+        public float WelcomeDuration => welcomeClip ? (float)welcomeClip.length : 0;
 
         void Awake()
         {
@@ -40,55 +44,65 @@ namespace BuyBidBlow.UI.Ticker
             shots = new TickerShot[Schedule.BoardCount];
         }
         void OnEnable() { if (Schedule != null) Active = this; }
-        void OnDisable() { if (Active == this) Active = null; foreach (var feed in feeds.Values) feed.Player.Stop(); if (introPlayer) introPlayer.Stop(); }
+        void OnDisable() { if (Active == this) Active = null; foreach (var feed in feeds.Values) feed.Player.Stop(); EndIntro(); }
         void OnDestroy()
         {
             foreach (var feed in feeds.Values) if (feed.Texture) { feed.Texture.Release(); Destroy(feed.Texture); }
             if (introTexture) { introTexture.Release(); Destroy(introTexture); }
         }
 
-        // Local-only welcome video used by the map introduction.  The board UI asks
-        // TryGetIntroTexture each frame, so it replaces the normal ticker briefly.
-        public void PlayWelcomeVideo()
+        // The cutscene chooses when; this object owns playback, the texture and board overrides.
+        public void BeginIntro() { StopWelcomeVideo(); IntroBlank = true; }
+        public void EndIntro() { StopWelcomeVideo(); IntroBlank = false; }
+
+        public IEnumerator PlayWelcomeVideo(float maxDuration = 0)
         {
 #if UNITY_SERVER
-            return;
+            yield break;
 #else
-            var clip = Resources.Load<VideoClip>("Video/Welcome");
-            if (!clip) { Debug.LogError("Missing Resources/Video/Welcome.mp4 for the map intro.", this); return; }
-            if (!introPlayer)
+            StopWelcomeVideo();
+            if (!welcomeClip) { Debug.LogError("TickerDirector needs its welcome video reference.", this); yield break; }
+            var go = new GameObject("Map intro welcome video");
+            go.transform.SetParent(transform, false);
+            introPlayer = go.AddComponent<VideoPlayer>();
+            introPlayer.playOnAwake = false; introPlayer.isLooping = false; introPlayer.skipOnDrop = true;
+            introPlayer.renderMode = VideoRenderMode.RenderTexture;
+            introPlayer.audioOutputMode = VideoAudioOutputMode.None;
+            introPlayer.clip = welcomeClip;
+            introTexture = new RenderTexture((int)welcomeClip.width, (int)welcomeClip.height, 0) { name = "Map intro welcome video" };
+            Clear(introTexture);
+            introPlayer.targetTexture = introTexture;
+            introPlayer.loopPointReached += _ => introPlaying = false;
+            introPlayer.errorReceived += (_, message) => { introPlaying = false; Debug.LogError("Welcome video: " + message, this); };
+            introPlaying = true;
+            try
             {
-                var go = new GameObject("Map intro welcome video");
-                go.transform.SetParent(transform, false);
-                introPlayer = go.AddComponent<VideoPlayer>();
-                introPlayer.playOnAwake = false; introPlayer.isLooping = false; introPlayer.skipOnDrop = true;
-                introPlayer.renderMode = VideoRenderMode.RenderTexture;
-                introPlayer.audioOutputMode = VideoAudioOutputMode.None;
-                introPlayer.loopPointReached += _ => introPlaying = false;
+                introPlayer.Prepare();
+                float deadline = Time.realtimeSinceStartup + 5f;
+                while (introPlaying && introPlayer && !introPlayer.isPrepared && Time.realtimeSinceStartup < deadline) yield return null;
+                if (!introPlaying || !introPlayer) yield break;
+                if (!introPlayer.isPrepared) { Debug.LogError("Welcome video preparation timed out.", this); yield break; }
+                introPlayer.Play();
+                Debug.Log("[Ticker] Playing Welcome.mp4 for the map introduction.", this);
+                float duration = maxDuration > 0 ? maxDuration : WelcomeDuration;
+                deadline = Time.realtimeSinceStartup + duration + 5f;
+                while (introPlaying && introPlayer && introPlayer.time < duration && Time.realtimeSinceStartup < deadline) yield return null;
             }
-            if (!introTexture || introTexture.width != (int)clip.width || introTexture.height != (int)clip.height)
-            {
-                if (introTexture) { introTexture.Release(); Destroy(introTexture); }
-                introTexture = new RenderTexture((int)clip.width, (int)clip.height, 0) { name = "Map intro welcome video" };
-                Clear(introTexture);
-                introPlayer.targetTexture = introTexture;
-            }
-            introPlayer.Stop(); introPlayer.clip = clip; introPlaying = true; introPlayer.Prepare();
-            Debug.Log("[Ticker] Playing Welcome.mp4 for the map introduction.", this);
+            finally { StopWelcomeVideo(); }
 #endif
+        }
+
+        void StopWelcomeVideo()
+        {
+            introPlaying = false;
+            if (introPlayer) { introPlayer.Stop(); Destroy(introPlayer.gameObject); introPlayer = null; }
+            if (introTexture) { introTexture.Release(); Destroy(introTexture); introTexture = null; }
         }
 
         public bool TryGetIntroTexture(out Texture texture)
         {
-            texture = null;
-#if !UNITY_SERVER
-            if (!introPlaying || !introPlayer) return false;
-            if (introPlayer.isPrepared && !introPlayer.isPlaying) introPlayer.Play();
-            texture = introTexture;
-            return texture;
-#else
-            return false;
-#endif
+            texture = introPlaying ? introTexture : null;
+            return texture != null;
         }
 
         // False while no match timeline exists; the board then keeps its own fixed screen.
@@ -122,7 +136,6 @@ namespace BuyBidBlow.UI.Ticker
         {
             Resolve();
 #if !UNITY_SERVER
-            if (introPlaying && introPlayer && introPlayer.isPrepared && !introPlayer.isPlaying) introPlayer.Play();
             foreach (var feed in feeds.Values) feed.Used = false;
             if (resolved)
                 foreach (var shot in shots)

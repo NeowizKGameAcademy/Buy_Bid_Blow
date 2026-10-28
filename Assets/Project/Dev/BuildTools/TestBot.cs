@@ -8,7 +8,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
-namespace BuyBidBlow.Common
+namespace BuyBidBlow.Dev
 {
     // Test player for one-person playtests. Started only by the -bot argument, usually headless:
     //   BuyBidBlow.exe -batchmode -nographics -bot -name Bot1 -address 127.0.0.1 -port 7777

@@ -4,7 +4,7 @@ using Mirror;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace BuyBidBlow.UI.Lobby
+namespace BuyBidBlow.Presentation
 {
     // The lobby and match share the same loaded hall and its lighting/physics.
     // Only presentation and the local player's input are switched on match start.
