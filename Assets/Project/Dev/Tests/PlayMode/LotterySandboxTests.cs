@@ -8,6 +8,8 @@ using NUnit.Framework;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.TestTools;
 
 namespace BuyBidBlow.Dev.Tests.PlayMode
@@ -15,8 +17,12 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
     public sealed class LotterySandboxTests
     {
         GameNetworkManager room;
+        Keyboard keyboard;
+        InputSettings previousInputSettings;
         [UnityTearDown] public IEnumerator Cleanup()
         {
+            if(keyboard!=null)InputSystem.RemoveDevice(keyboard);
+            if(previousInputSettings)InputSystem.settings=previousInputSettings;
             if(room&&(NetworkServer.active||NetworkClient.active))room.StopHost();
             yield return null;if(room)Object.Destroy(room.gameObject);yield return null;
         }
@@ -39,8 +45,17 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
             var panel=Object.FindFirstObjectByType<LotterySandboxPanel>();
             player.GetComponent<PlayerInteraction>().Interact();yield return null;
             Assert.IsTrue(panel.IsOpen,"aimed device uses the production interaction path");
+            yield return null;yield return null;
+            Assert.AreEqual(CursorLockMode.None,Cursor.lockState,"production cursor must not relock the lottery panel");
+            Assert.IsTrue(Cursor.visible,"mouse must remain visible after multiple updates");
             Assert.AreEqual(100,LotterySandboxClient.State.Capacity);Assert.AreEqual(10,LotterySandboxClient.State.Limit);
-            panel.Purchase(2);
+            previousInputSettings=InputSystem.settings;
+            var settings=Object.Instantiate(previousInputSettings);
+            settings.backgroundBehavior=InputSettings.BackgroundBehavior.IgnoreFocus;
+            settings.editorInputBehaviorInPlayMode=InputSettings.EditorInputBehaviorInPlayMode.AllDeviceInputAlwaysGoesToGameView;
+            InputSystem.settings=settings;keyboard=InputSystem.AddDevice<Keyboard>();keyboard.MakeCurrent();
+            yield return Press(Key.D);Assert.AreEqual(2,panel.SelectedQuantity);
+            yield return Press(Key.Enter);
             yield return HostedMatch.Until(()=>LotterySandboxClient.State.Own==2,"server accepted tickets");
             Assert.AreEqual(190,PlayerNet.LocalPortfolio.Cash);Assert.AreEqual(40,LotterySandboxClient.State.Prize);
             if(!Application.isBatchMode){yield return new WaitForEndOfFrame();Capture("Library/LotteryPanelPreview.png");}
@@ -55,7 +70,12 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
             var cash=room.LotterySandboxEngine.Snapshot(GameNetworkManager.PlayerIdOf(NetworkServer.localConnection)).Cash;
             room.LotterySandboxEngine.Tick(room.LotterySandboxEngine.Deadline-1);
             Assert.AreEqual(cash,room.LotterySandboxEngine.Snapshot(GameNetworkManager.PlayerIdOf(NetworkServer.localConnection)).Cash);
-            panel.Close();Assert.IsFalse(panel.IsOpen);
+            yield return Press(Key.Q);Assert.IsFalse(panel.IsOpen);
+        }
+        IEnumerator Press(Key key)
+        {
+            InputSystem.QueueStateEvent(keyboard,new KeyboardState(key));yield return null;yield return null;
+            InputSystem.QueueStateEvent(keyboard,new KeyboardState());yield return null;
         }
         static void Capture(string path)
         {

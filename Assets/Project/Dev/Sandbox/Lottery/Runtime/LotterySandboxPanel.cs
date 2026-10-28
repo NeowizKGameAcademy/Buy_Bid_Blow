@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using BuyBidBlow.Characters;
 using BuyBidBlow.Common;
 using BuyBidBlow.Network;
@@ -19,16 +20,18 @@ namespace BuyBidBlow.Sandbox.Lottery
         PlayerController controller;
         PlayerMove movement;
         NetworkNotebookController notebook;
+        readonly List<BuyBidBlow.UI.HUD.CursorController> suspendedCursors = new List<BuyBidBlow.UI.HUD.CursorController>();
         bool notebookWasEnabled;
         bool inputWasActive,controllerWasEnabled;
         CursorLockMode previousLock;
         bool previousVisible;
-        int quantity=1,selectedDraw;
+        int quantity=1,selectedDraw,openedFrame;
         float nextPurchase;
         string nickname="Tester",address="127.0.0.1";
         bool quick=true;
         GUIStyle title,body,small,button,field,toggle;
         public bool IsOpen => owner;
+        public int SelectedQuantity => quantity;
 
         public bool Open(GameObject player)
         {
@@ -41,8 +44,13 @@ namespace BuyBidBlow.Sandbox.Lottery
             if(movement){movement.SetMoveInput(Vector2.zero);movement.SetJumpHeld(false);}
             if(input)input.DeactivateInput();if(controller)controller.enabled=false;
             previousLock=Cursor.lockState;previousVisible=Cursor.visible;
+            // The production cursor controller otherwise relocks on the following Update.
+            // Suspend only active controllers and restore them when this modal closes.
+            suspendedCursors.Clear();
+            foreach(var cursor in FindObjectsByType<BuyBidBlow.UI.HUD.CursorController>(FindObjectsSortMode.None))
+                if(cursor.isActiveAndEnabled){suspendedCursors.Add(cursor);cursor.enabled=false;}
             Cursor.lockState=CursorLockMode.None;Cursor.visible=true;
-            quantity=1;selectedDraw=LotterySandboxClient.State.Draw;LotterySandboxClient.Reply="";
+            quantity=1;selectedDraw=LotterySandboxClient.State.Draw;openedFrame=Time.frameCount;LotterySandboxClient.Reply="";
             return true;
         }
         public void Close()
@@ -55,6 +63,8 @@ namespace BuyBidBlow.Sandbox.Lottery
             if(input && inputWasActive && playing)input.ActivateInput();
             Cursor.lockState=playing?previousLock:CursorLockMode.None;
             Cursor.visible=playing?previousVisible:true;owner=null;
+            foreach(var cursor in suspendedCursors)if(cursor)cursor.enabled=true;
+            suspendedCursors.Clear();
         }
         void OnDisable()=>Close();
         void Start(){LotterySandboxClient.Reset();}
@@ -64,9 +74,19 @@ namespace BuyBidBlow.Sandbox.Lottery
             if(!NetworkClient.active || !MatchNet.Current || MatchNet.Current.phase!=MatchNet.Phase.Playing ||
                 NetworkNotebookController.BlocksInput || !device || Vector3.Distance(owner.transform.position,device.position)>4.5f)
             {Close();return;}
-            if(Keyboard.current!=null && (Keyboard.current.qKey.wasPressedThisFrame || Keyboard.current.escapeKey.wasPressedThisFrame))Close();
+            var keyboard=Keyboard.current;
+            if(keyboard!=null && (keyboard.qKey.wasPressedThisFrame || keyboard.escapeKey.wasPressedThisFrame)){Close();return;}
             var state=LotterySandboxClient.State;
             if(selectedDraw!=state.Draw){selectedDraw=state.Draw;quantity=1;}
+            // Do not treat the E press that opened the device as a purchase.
+            if(keyboard==null || Time.frameCount==openedFrame)return;
+            int limit=PurchaseLimit(state);
+            if(keyboard.aKey.wasPressedThisFrame || keyboard.leftArrowKey.wasPressedThisFrame)quantity=Math.Max(1,quantity-1);
+            if(keyboard.dKey.wasPressedThisFrame || keyboard.rightArrowKey.wasPressedThisFrame)quantity=Math.Min(Math.Max(1,limit),quantity+1);
+            quantity=Mathf.Clamp(quantity,1,Math.Max(1,limit));
+            if((keyboard.eKey.wasPressedThisFrame || keyboard.enterKey.wasPressedThisFrame) &&
+                !state.Finished && quantity<=limit && NetworkTime.time<state.Deadline && Time.unscaledTime>=nextPurchase)
+                Purchase(quantity);
         }
         void Styles()
         {
@@ -141,7 +161,7 @@ namespace BuyBidBlow.Sandbox.Lottery
         {
             var s=LotterySandboxClient.State;var portfolio=PlayerNet.LocalPortfolio;
             int available=portfolio?.Available??0;
-            int limit=s.Price>0?Math.Max(0,Math.Min(Math.Min(s.Capacity-s.Sold,s.Limit-s.Own),available/s.Price)):0;
+            int limit=PurchaseLimit(s);
             quantity=Mathf.Clamp(quantity,1,Math.Max(1,limit));
             Fill(new Rect(0,0,1600,1000),new Color(0,0,0,.65f));
             Box(new Rect(430,150,740,760));
@@ -152,6 +172,7 @@ namespace BuyBidBlow.Sandbox.Lottery
             GUILayout.Label($"판매 {s.Sold}/{s.Capacity}장 · 미판매 번호 {s.Capacity-s.Sold}개\n내 복권 {s.Own}/{s.Limit}장 · 당첨 확률 {(s.Capacity>0?100f*s.Own/s.Capacity:0):0.#}%\n전체 당첨 확률 {(s.Capacity>0?100f*s.Sold/s.Capacity:0):0.#}%",body);
             GUILayout.Label(s.Finished?"마지막 미당첨 잔액은 경기 종료 시 소멸":$"{s.DrawRound}R 종료 추첨 · {Math.Max(0,s.Deadline-NetworkTime.time):0}초 남음",small);
             GUILayout.Label($"사용 가능 현금 ${available} · 장당 ${s.Price}",body);
+            GUILayout.Label("마우스로 클릭 또는 A/D 수량 · E/Enter 구매 · Q 닫기",small);
             GUILayout.BeginHorizontal();
             if(GUILayout.Button("−",button))quantity=Math.Max(1,quantity-1);
             GUILayout.Label($"{quantity}장 / ${quantity*s.Price}",body);
@@ -170,6 +191,11 @@ namespace BuyBidBlow.Sandbox.Lottery
         {
             nextPurchase=Time.unscaledTime+.35f;
             NetworkClient.Send(new LotteryPurchase{Draw=LotterySandboxClient.State.Draw,Quantity=count});
+        }
+        static int PurchaseLimit(LotteryState state)
+        {
+            int available=PlayerNet.LocalPortfolio?.Available??0;
+            return state.Price>0?Math.Max(0,Math.Min(Math.Min(state.Capacity-state.Sold,state.Limit-state.Own),available/state.Price)):0;
         }
         static void Fill(Rect rect,Color color)
         {
