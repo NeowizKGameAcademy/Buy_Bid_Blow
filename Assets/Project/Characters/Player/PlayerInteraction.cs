@@ -25,6 +25,10 @@ namespace BuyBidBlow.Characters
             if (!detect.isDetected || detect.DetectedCollider == null)
                 return;
 
+            var interactable = detect.DetectedCollider.GetComponentInParent<IInteractable>();
+            if (interactable != null && interactable.CanInteract && interactable.Interact(gameObject))
+                return;
+
             var npcInfo = detect.DetectedCollider.GetComponentInParent<NPCInfo>();
             if (npcInfo != null && localTrade != null)
             {

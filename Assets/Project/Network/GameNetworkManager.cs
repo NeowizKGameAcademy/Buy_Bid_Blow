@@ -21,7 +21,7 @@ namespace BuyBidBlow.Network
     public struct MatchIntroStarting : NetworkMessage {}
     public struct MatchStarting : NetworkMessage {}
     public struct MatchReturning : NetworkMessage {}
-    public sealed class GameNetworkManager : NetworkManager
+    public sealed partial class GameNetworkManager : NetworkManager
     {
         public const int ProtocolVersion=7;
         public const string PlayScene="SC_ExchangeFurnished";
@@ -63,13 +63,13 @@ namespace BuyBidBlow.Network
         }
         public override void OnStartServer()
         {
-            base.OnStartServer();roster.Clear();EndMatch();NetworkServer.RegisterHandler<LobbyJoinRequest>(ReceiveJoin);
+            base.OnStartServer();roster.Clear();EndMatch();NetworkServer.RegisterHandler<LobbyJoinRequest>(ReceiveJoin);RegisterLotteryServer();
             Debug.Log($"[Server] Listening on UDP {(transport as kcp2k.KcpTransport)?.Port} · min players {minPlayers}");
         }
         public override void OnStopServer(){roster.Clear();EndMatch();base.OnStopServer();}
         public override void OnStartClient()
         {
-            base.OnStartClient();NetworkClient.RegisterHandler<LobbyJoinResponse>(ReceiveResponse);
+            base.OnStartClient();NetworkClient.RegisterHandler<LobbyJoinResponse>(ReceiveResponse);RegisterLotteryClient();
             NetworkClient.RegisterHandler<LobbyClosing>(_=>AdmissionRejected?.Invoke("서버가 방을 닫았습니다."));
             NetworkClient.RegisterHandler<MatchIntroStarting>(_=>{clientInIntro=true;ClientMatchIntroStarted?.Invoke();});
             NetworkClient.RegisterHandler<MatchStarting>(ReceiveMatchStarting);
@@ -158,7 +158,9 @@ namespace BuyBidBlow.Network
             var settings=JsonUtility.FromJson<MatchSettings>(matchSettingsFile.text);
             Debug.Log($"[Server] Match rules: {settings.RoundCount} rounds, ordinary {settings.RoundSeconds}s, auction {settings.AuctionRoundSeconds}s, clock override {roundSecondsOverride}s");
             double startsAt=NetworkTime.time+prepareSeconds;
-            engine=new MatchEngine(settings,randomSeed!=0?randomSeed:Environment.TickCount,players,startsAt,roundSecondsOverride);
+            int matchSeed=randomSeed!=0?randomSeed:Environment.TickCount;
+            engine=new MatchEngine(settings,matchSeed,players,startsAt,roundSecondsOverride);
+            InitializeSandboxLottery(matchSeed,startsAt);
             matchParticipants.Clear();
             foreach(var conn in NetworkServer.connections.Values)
                 if(conn.identity && conn.identity.TryGetComponent<PlayerNet>(out var p) && players.Contains(PlayerIdOf(conn)))
@@ -225,6 +227,7 @@ namespace BuyBidBlow.Network
             }
             int round=engine.Round;
             engine.Tick(now);
+            PublishLottery();
             PublishAuction(now);
             if(engine.Round==round&&!engine.Complete)return;
             // Closing Bell: publish the new prices and changes, then the next round (or the end).
@@ -376,6 +379,8 @@ namespace BuyBidBlow.Network
         {
             ClientDisconnected?.Invoke();base.OnClientDisconnect();serverMinPlayers=0;
             if(!clientInMatch)return;
+            // The optional sandbox is a self-contained scene, without the production menu in its build.
+            if(LotterySandboxEnabled){clientInMatch=false;clientInIntro=false;ClientMatchReturned?.Invoke();return;}
             // Lost the server during a match: back to the start screen. The lobby scene brings a fresh manager.
             clientInMatch=false;SceneManager.LoadScene(menuScene);Destroy(gameObject);
         }

@@ -1,0 +1,7 @@
+{
+    "TicketCount": 100,
+    "TicketPrice": 5,
+    "PerPlayerLimit": 10,
+    "InitialBasePrize": 30,
+    "BasePrizeIncrement": 20
+}

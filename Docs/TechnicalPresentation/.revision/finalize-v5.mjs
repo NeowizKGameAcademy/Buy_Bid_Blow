@@ -1,0 +1,5 @@
+import {finalizePresentation} from 'file:///C:/Users/m/.codex/plugins/cache/openai-primary-runtime/presentations/26.1022.11436/skills/presentations/container_tools/artifact_tool_utils.mjs';
+const root='C:/훈련생폴더/3. 유니티/Buy_Bid_Blow';
+const skill='C:/Users/m/.codex/plugins/cache/openai-primary-runtime/presentations/26.1022.11436/skills/presentations';
+const r=await finalizePresentation({workspaceDir:root,candidatePath:root+'/Docs/TechnicalPresentation/.revision/candidate-v5-native.pptx',finalPath:root+'/Docs/TechnicalPresentation/Output/Buy_Bid_Blow_기술문서_v5_목차추가.pptx',pythonExecutable:'C:/Users/m/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe',integrityValidatorPath:skill+'/container_tools/inspect_presentation_package_integrity.py',layoutValidatorPath:skill+'/container_tools/inspect_presentation_layout_geometry.py',layoutArgs:['--expected-slide-size-emu','12192000,6858000','--validate-heading-fit'],explicitTotalSlideCount:19,fontPolicy:{basis:'design',families:['Malgun Gothic','맑은 고딕']},verifyArtifactToolImport:false,receiptPath:root+'/Docs/TechnicalPresentation/.revision/validation-v5.json'});
+console.log(JSON.stringify(r));

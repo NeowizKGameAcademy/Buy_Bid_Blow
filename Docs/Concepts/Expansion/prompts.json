@@ -1,0 +1,36 @@
+{
+  "method": "built-in image_gen",
+  "common": "Use case: stylized-concept. Create a single landscape gameplay concept mockup for Buy Bid Blow, a playful multiplayer stock trading auction game. Cohesive stylized low-poly Unity 3D, wealthy vintage auction hall, dark emerald walls, brass and gold trim, dark wood, red Persian carpet, warm lamps, stock tickers, cute animal-headed suited player avatars. Clear readable gold-framed dark green game UI. This is a proposed feature concept, not a finished screenshot. Minimal text, Korean headings exactly as provided, no dense paragraphs. ",
+  "concepts": [
+    {
+      "file": "01_property.png",
+      "title": "부동산 집문서",
+      "prompt": "Show player obtaining an ornate property deed with wax seal and tiny mansion illustration, inventory inspection overlay on right, rare endgame item gold glow. Small rental payout coins flowing from deed into wallet, a tasteful rental property vignette behind. Heading '부동산 집문서'. UI short labels '고정 수입', '임대료 지급'. Convey high purchase cost and recurring income, not instant unlimited wealth."
+    },
+    {
+      "file": "02_liquidation.png",
+      "title": "강제 청산",
+      "prompt": "Show financial distress gameplay: falling stock chart, clearly marked debt obligation gauge reaching deadline, a gold-framed forced asset sale selection UI with three stock asset rows and property deed collateral. Player must sell assets to cover due payment. Heading '강제 청산'. Labels '납부 기한', '자산 매각', '부채 상환'. Red warning accents restrained. No claim that merely zero cash automatically triggers liquidation."
+    },
+    {
+      "file": "03_shop.png",
+      "title": "파티 아이템 상점",
+      "prompt": "Show a whimsical shop counter inside auction hall selling temporary multiplayer disruption items. Prominent leash item with brass clasp and rope, plus escape scissors counter item. In background two cute animal suited players linked by short visible loose rope, comical movement radius ring, safe nonviolent game prop. Heading '파티 아이템 상점'. labels '목줄', '해제 도구', '짧은 지속 시간'. Visible duration icon; no restraints on neck closeups."
+    },
+    {
+      "file": "04_job.png",
+      "title": "회사 기여 알바",
+      "prompt": "Show short delivery job at timber company station adjacent to trading hall: suited animal player places small wood crate at marked drop zone. Side UI progress, wage coins and modest probability boost stock chart with dotted possible paths, not guaranteed upward return. Heading '회사 기여 알바'. labels '작업 완료', '급여 지급', '상승 확률 증가'. Clearly convey time spent working instead of trading."
+    },
+    {
+      "file": "05_platform.png",
+      "title": "경매장 점프 코스",
+      "prompt": "Show wide readable low-poly auction hall platforming approach to auction podium. Two routes visible: broad safe ground walkway slightly longer and optional short elevated jumping platforms over shallow carpeted reset zone. Players jumping toward auction entrance, bidding board beyond. Heading '경매장 점프 코스'. labels '안전 경로', '지름길', '경매장'. No lethal pit, no mandatory inaccessible jump gauntlet."
+    },
+    {
+      "file": "06_recovery.png",
+      "title": "재기 지원 이벤트",
+      "prompt": "Show special comeback aid event in auction hall, struggling animal player at support desk receives modest sealed subsidy envelope. Gold-framed event UI with wealth ranking highlighting last place and eligibility icons, no huge jackpot. Heading '재기 지원 이벤트'. labels '조건부 지원', '1회 한정', '지원금 수령'. Warm hopeful lighting, other players still trading. Convey limited recovery opportunity."
+    }
+  ]
+}
