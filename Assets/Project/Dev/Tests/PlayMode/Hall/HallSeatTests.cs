@@ -6,6 +6,7 @@ using BuyBidBlow.Props;
 using BuyBidBlow.Systems.Match;
 using BuyBidBlow.UI.Auction;
 using BuyBidBlow.UI.HUD;
+using BuyBidBlow.Systems.Types;
 using Mirror;
 using NUnit.Framework;
 using UnityEngine;
@@ -111,7 +112,8 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
             seats.RequestStand();
             yield return HostedMatch.Until(() => !seating.IsSeated, "stood up");
             yield return null;
-            Assert.IsFalse(header.activeSelf, "panel hidden after standing");
+            Assert.IsTrue(header.activeSelf, "public auction remains visible after standing");
+            Assert.IsFalse(panel.transform.Find("Bid Controls - Bottom Center").gameObject.activeSelf, "standing players cannot operate bids");
         }
 
         [UnityTest]
@@ -132,7 +134,7 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
             var header = panel.transform.Find("Auction Status - Top Center").gameObject;
             var controls = panel.transform.Find("Bid Controls - Bottom Center").gameObject;
             string reply = null;
-            System.Action<string> listen = r => reply = r;
+            System.Action<RequestResult> listen = r => reply = r.Message;
             PlayerNet.LocalReply += listen;
             try
             {
@@ -156,6 +158,7 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
                 // Secret auction: the submission is private, can be cancelled, and the open win was charged.
                 yield return HostedMatch.Until(() => MatchNet.Current.auctionStage == MatchNet.AuctionStage.Secret, "secret auction");
                 yield return HostedMatch.Until(() => assets.Cash == cash - 5 && assets.Reserved == 0, "open auction won and charged");
+                Assert.AreEqual(2, PlayerNet.LocalInformation.Count, "winner receives both private information entries");
                 Assert.AreEqual(0, MatchNet.Current.highestBid, "secret bids are not public");
                 reply = null;
                 bidding.AdjustBid(2);

@@ -13,6 +13,7 @@ namespace BuyBidBlow.Characters
         [SerializeField] private LocalTradeController localTrade;
         [SerializeField] private SeatController seats;
 
+        // 바라보는 대상이 직원이면 거래 패널을, 빈 의자면 착석을 요청
         // E on what the player is aiming at: a desk clerk opens trading, a free chair seats the player.
         public void Interact()
         {

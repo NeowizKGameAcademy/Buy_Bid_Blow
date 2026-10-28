@@ -1,4 +1,5 @@
 using System;
+using BuyBidBlow.Systems.Auction;
 using BuyBidBlow.Systems.Market;
 using BuyBidBlow.Systems.Types;
 
@@ -28,6 +29,7 @@ namespace BuyBidBlow.Systems.Match
         public PriceChangeSettings PriceChange;
         public AuctionSlot[] AuctionSlots;
 
+        // 참가 인원에 따른 회사별 초기 시장 재고를 계산
         // Initial finite supply, fixed using the participant count at match start.
         public int GetInitialCompanySupply(int playerCount)
         {
@@ -36,17 +38,20 @@ namespace BuyBidBlow.Systems.Match
             return checked(playerCount * SharesPerCompanyPerPlayer);
         }
 
+        // 해당 라운드가 경매 라운드인지 확인
         public bool IsAuctionRound(int round)
         {
             return AuctionRounds != null && Array.IndexOf(AuctionRounds, round) >= 0;
         }
 
+        // 라운드 길이(초)를 반환, 경매 라운드는 별도 길이
         public int GetRoundSeconds(int round)
         {
             if (round < 1 || round > RoundCount) throw new ArgumentOutOfRangeException(nameof(round));
             return IsAuctionRound(round) ? AuctionRoundSeconds : RoundSeconds;
         }
 
+        // 회사별 시작 가격을 무작위로 정함 (최저가 이상)
         // Indexed by Company. Same Random as the rest of the match so one seed replays it.
         public int[] RollStartingPrices(Random random)
         {
@@ -56,6 +61,7 @@ namespace BuyBidBlow.Systems.Match
             return prices;
         }
 
+        // 설정 값이 올바른지 검사하고 잘못되면 예외 발생
         // JsonUtility leaves missing keys at zero, so catch typos here instead of mid-match.
         public void Validate()
         {
@@ -72,7 +78,7 @@ namespace BuyBidBlow.Systems.Match
             if ((long)AuctionDurationSeconds * 2 > AuctionRoundSeconds)
                 throw new FormatException("Both auctions must fit inside an auction round.");
             for (int i = 0; i < AuctionRounds.Length; i++)
-                if (AuctionRounds[i] < 1 || AuctionRounds[i] > RoundCount ||
+                if (AuctionRounds[i] < 1 || (long)AuctionRounds[i] + LotGenerator.RoundsPerAuction - 1 > RoundCount ||
                     Array.IndexOf(AuctionRounds, AuctionRounds[i]) != i)
                     throw new FormatException("AuctionRounds must contain unique round numbers inside the match.");
             if (StartingCash < 0 || StartingShares < 0) throw new FormatException("Starting cash and shares cannot be negative.");
@@ -87,14 +93,19 @@ namespace BuyBidBlow.Systems.Match
                 throw new FormatException($"PriceChange.RiseChances needs {companyCount} entries in Company order.");
             foreach (float chance in PriceChange.RiseChances)
                 if (chance < 0f || chance > 1f) throw new FormatException("PriceChange.RiseChances must be between 0 and 1.");
-            if (AuctionSlots == null) throw new FormatException("AuctionSlots is required.");
+            if (AuctionSlots == null || AuctionSlots.Length != 2)
+                throw new FormatException("AuctionSlots needs Open and Secret slots, in that order.");
             // In order: public, then secret. Relative to each auction round's start.
             foreach (AuctionSlot slot in AuctionSlots)
                 if (slot == null || slot.StartsAtSeconds < 0 || slot.DurationSeconds != AuctionDurationSeconds ||
                     (long)slot.StartsAtSeconds + slot.DurationSeconds > AuctionRoundSeconds)
                     throw new FormatException("Each auction slot must fit inside an auction round and use AuctionDurationSeconds.");
+            if (AuctionSlots[0].StartsAtSeconds != 0 ||
+                (long)AuctionSlots[0].StartsAtSeconds + AuctionSlots[0].DurationSeconds > AuctionSlots[1].StartsAtSeconds)
+                throw new FormatException("Open must start with the round and close before Secret starts.");
         }
 
+        // 회사별 오프셋 배열의 길이와 범위를 검사
         private static void ValidateOffsets(IntRange[] offsets, int companyCount, string name)
         {
             if (offsets == null || offsets.Length != companyCount)

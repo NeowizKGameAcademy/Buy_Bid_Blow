@@ -10,6 +10,7 @@ namespace BuyBidBlow.Systems.Round
     {
         private readonly double[] starts;
 
+        // 설정에 따라 각 라운드의 시작 시각표를 계산
         // roundSecondsOverride > 0 gives every round that length; used for quick playtests.
         public RoundClock(MatchSettings settings, double firstRoundStartsAt, int roundSecondsOverride = 0)
         {
@@ -31,18 +32,21 @@ namespace BuyBidBlow.Systems.Round
         public double FirstRoundStartsAt => starts[0];
         public double MatchEndsAt => starts[RoundCount];
 
+        // 라운드 시작 시각을 반환
         public double StartsAt(int round)
         {
             CheckRound(round);
             return starts[round - 1];
         }
 
+        // 라운드 마감 시각을 반환
         public double ClosesAt(int round)
         {
             CheckRound(round);
             return starts[round];
         }
 
+        // 주어진 시각이 속한 라운드 번호를 반환
         // 0 before the first round, 1..RoundCount while a round is open, RoundCount + 1 once the last round closed.
         public int RoundAt(double now)
         {
@@ -52,6 +56,7 @@ namespace BuyBidBlow.Systems.Round
             return RoundCount + 1;
         }
 
+        // 라운드 번호가 범위를 벗어나면 예외 발생
         private void CheckRound(int round)
         {
             if (round < 1 || round > RoundCount) throw new ArgumentOutOfRangeException(nameof(round));

@@ -29,6 +29,7 @@ namespace BuyBidBlow.Common
 
         private static bool Networked => NetworkClient.active && MatchNet.Current != null;
 
+        // 참조를 확인하고 패널·서버 이벤트를 구독한 뒤 초기 포트폴리오를 반영
         private void OnEnable()
         {
             if (tradePanel == null || assets == null)
@@ -52,6 +53,7 @@ namespace BuyBidBlow.Common
                 ResolveMatchManager(false);
         }
 
+        // 이벤트 구독을 해제하고 매치 연결 상태를 초기화
         private void OnDisable()
         {
             tradePanel.BuyRequested -= Buy;
@@ -67,6 +69,7 @@ namespace BuyBidBlow.Common
             BindMatch(null);
         }
 
+        // 거래 가능 상태면 선택 회사를 기억하고 거래 패널을 염
         public void OpenPanel(Company company)
         {
             if (Networked)
@@ -84,6 +87,7 @@ namespace BuyBidBlow.Common
             tradePanel.Open(company, PanelData(company));
         }
 
+        // 회사의 보유량·가격·재고·베팅 상태로 패널 데이터를 구성
         // What the panel shows for one company, from the server-confirmed assets and the published price.
         private TradingPanelData PanelData(Company company)
         {
@@ -95,6 +99,9 @@ namespace BuyBidBlow.Common
             };
             if (Networked)
             {
+                var snapshot = PlayerNet.LocalPortfolio;
+                data.owned = snapshot?.GetShares(company) ?? 0;
+                data.available = snapshot?.Available ?? 0;
                 data.price = match.GetPrice(company);
                 data.stock = match.GetStock(company);
                 foreach (var priceChange in match.lastChanges)
@@ -114,6 +121,7 @@ namespace BuyBidBlow.Common
             return data;
         }
 
+        // 거래 요청과 연결 상태가 유효한지 검사하고 실패 시 메시지 표시
         private bool Validate(Company requestedCompany, int quantity)
         {
             if (!tradePanel.IsOpen || !hasSelectedCompany || requestedCompany != selectedCompany || quantity <= 0)
@@ -140,10 +148,13 @@ namespace BuyBidBlow.Common
             return true;
         }
 
+        // 매수 요청을 전달
         private void Buy(Company requestedCompany, int quantity) => Request(requestedCompany, quantity, true);
 
+        // 매도 요청을 전달
         private void Sell(Company requestedCompany, int quantity) => Request(requestedCompany, quantity, false);
 
+        // 서버에 거래 명령을 보내거나 샌드박스 TradeService로 바로 거래
         private void Request(Company requestedCompany, int quantity, bool buy)
         {
             if (!Validate(requestedCompany, quantity)) return;
@@ -161,6 +172,7 @@ namespace BuyBidBlow.Common
                 : service.TrySell(CurrentPlayerId, requestedCompany, quantity));
         }
 
+        // 서버에 하락 베팅 토글 명령을 전송
         // Joining or cancelling a downside bet on the selected company (server match only).
         private void Bet(Company requestedCompany)
         {
@@ -169,19 +181,34 @@ namespace BuyBidBlow.Common
             ShowResult("베팅 요청 중...");
         }
 
+        // 패널이 열려 있으면 서버 응답 메시지를 표시
         // The server sends the new portfolio before its reply, so the panel already shows the result.
-        private void OnServerReply(string message)
+        private void OnServerReply(RequestResult result)
         {
-            if (hasSelectedCompany && tradePanel.IsOpen)
-                ShowResult(message);
+            if (hasSelectedCompany && tradePanel.IsOpen && result.Company == selectedCompany &&
+                (result.Kind == RequestKind.Buy || result.Kind == RequestKind.Sell || result.Kind == RequestKind.Bet))
+                ShowResult(result.Message);
         }
 
+        // 서버 포트폴리오를 자산에 반영하고 열린 패널을 갱신
         private void OnServerPortfolio(PortfolioSnapshot snapshot)
         {
-            assets.ApplyServerState(snapshot);
+            if (snapshot == null) { tradePanel.Close(); BindMatch(null); return; }
             RefreshOpenPanel();
         }
 
+        // Mirror finishes applying the lists before Update. Repaint once when a public revision changes.
+        private uint marketVersion;
+        private void Update()
+        {
+            if (!Networked || !tradePanel.IsOpen) return;
+            if (match != MatchNet.Current) BindMatch(MatchNet.Current);
+            if (marketVersion == match.MarketVersion) return;
+            marketVersion = match.MarketVersion;
+            RefreshOpenPanel();
+        }
+
+        // 성공한 거래 결과를 자산에 반영하고 패널과 결과 메시지를 갱신
         private void ApplyResult(TradeResult result)
         {
             // Rejections may carry no asset state, so only an accepted trade changes what is shown.
@@ -198,8 +225,10 @@ namespace BuyBidBlow.Common
             ? playerInfo.ServerId
             : new PlayerId(localPlayerId);
 
+        // 거래 패널 로그에 메시지를 표시
         private void ShowResult(string message) => tradePanel.SetLog(message);
 
+        // 샌드박스 매치를 찾아 구독하고 처음 한 번 플레이어를 참가시킴
         private bool ResolveMatchManager(bool warn = true)
         {
             if (matchManager == null)
@@ -224,6 +253,7 @@ namespace BuyBidBlow.Common
             return false;
         }
 
+        // 연결할 MatchNet을 교체하고 ClosingBell 구독을 옮김
         private void BindMatch(MatchNet value)
         {
             if (match == value) return;
@@ -232,11 +262,14 @@ namespace BuyBidBlow.Common
             if (match != null) match.ClosingBell += OnClosingBell;
         }
 
+        // 종가 확정 시 열린 패널을 갱신
         // Prices change at each Closing Bell; refresh the open panel to the new round's price.
         private void OnClosingBell(int _, PriceChange[] __) => RefreshOpenPanel();
 
+        // 샌드박스 라운드가 넘어가면 열린 패널을 갱신
         private void OnRoundAdvanced(int _, IReadOnlyList<PriceChange> __) => RefreshOpenPanel();
 
+        // 패널이 열려 있으면 선택 회사 데이터로 다시 표시
         private void RefreshOpenPanel()
         {
             if (hasSelectedCompany && tradePanel.IsOpen)

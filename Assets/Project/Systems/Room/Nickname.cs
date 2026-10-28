@@ -6,6 +6,7 @@ namespace BuyBidBlow.Systems.Room
     {
         public const int MaxLength=12;
         public const string PreferenceKey="BuyBidBlow.Lobby.Nickname";
+        // 닉네임을 다듬고 길이·금지 문자를 검사
         public static bool TryNormalize(string input,out string nickname)
         {
             nickname=(input??string.Empty).Trim();

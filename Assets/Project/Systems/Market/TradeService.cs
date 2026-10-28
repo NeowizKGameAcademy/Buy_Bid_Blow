@@ -13,6 +13,7 @@ namespace BuyBidBlow.Systems.Market
         private readonly Func<Company, int> getPrice;
         private readonly IDictionary<Company,int> inventory;
 
+        // 플레이어 자산·가격 조회 함수·시장 재고를 설정
         // inventory: shared market stock per company (finite supply); null means unlimited.
         public TradeService(IReadOnlyDictionary<PlayerId, PlayerPortfolio> playerAssets, Func<Company, int> getPrice, IDictionary<Company,int> inventory = null)
         {
@@ -21,6 +22,7 @@ namespace BuyBidBlow.Systems.Market
             this.inventory = inventory;
         }
 
+        // 플레이어의 포트폴리오 스냅샷을 반환
         public PortfolioSnapshot GetSnapshot(PlayerId playerId)
         {
             if (!playerAssets.TryGetValue(playerId, out PlayerPortfolio assets))
@@ -29,6 +31,7 @@ namespace BuyBidBlow.Systems.Market
             return assets.CreateSnapshot();
         }
 
+        // 시장 재고를 확인해 매수하고 성공 시 재고를 차감
         public TradeResult TryBuy(PlayerId playerId, Company company, int quantity)
         {
             if(!playerAssets.TryGetValue(playerId,out var assets)) return NotInMatch(company);
@@ -38,6 +41,7 @@ namespace BuyBidBlow.Systems.Market
             if(result.Succeeded && inventory != null) inventory[company]-=quantity;
             return result;
         }
+        // 매도하고 성공 시 시장 재고를 늘림
         public TradeResult TrySell(PlayerId playerId, Company company, int quantity)
         {
             if(!playerAssets.TryGetValue(playerId,out var assets)) return NotInMatch(company);
@@ -45,6 +49,7 @@ namespace BuyBidBlow.Systems.Market
             if(result.Succeeded && inventory != null) inventory[company]+=quantity;
             return result;
         }
+        // 매치 미참가 플레이어용 실패 결과를 생성
         private static TradeResult NotInMatch(Company company)
         {
             return new TradeResult(false, "경기에 참가한 플레이어가 아닙니다.", company, 0, 0, 0);

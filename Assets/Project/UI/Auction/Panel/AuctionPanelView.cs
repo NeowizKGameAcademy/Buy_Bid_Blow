@@ -29,12 +29,13 @@ namespace BuyBidBlow.UI.Auction
         [SerializeField] private GameObject controls;
         [SerializeField] private Text lotDetails;
 
+        // 좌석·경매 진행 상태에 따라 헤더/입찰 컨트롤/로트 정보를 표시
         public void Present(AuctionPanelData data)
         {
-            header.SetActive(data.seated);
+            header.SetActive(data.seated || data.live);
             controls.SetActive(data.seated && data.live);
             if (lotDetails)
-                lotDetails.transform.parent.gameObject.SetActive(data.seated && data.live);
+                lotDetails.transform.parent.gameObject.SetActive(data.live);
 
             if (data.live)
             {
@@ -63,14 +64,17 @@ namespace BuyBidBlow.UI.Auction
             }
         }
 
+        // 정보 항목을 "라운드 · 회사A / 회사B" 문자열로 변환
         private static string Describe(Info info) => $"{info.Round}R · {info.CompanyA} / {info.CompanyB}";
 
+        // 남은 초를 mm:ss 형식 문자열로 변환
         private static string TimeText(double seconds)
         {
             int n = Mathf.Max(0, (int)Math.Ceiling(seconds));
             return $"{n / 60:00}:{n % 60:00}";
         }
 
+        // 부모 아래 경로의 Text 컴포넌트에 값을 설정
         private static void Set(GameObject parent, string path, string value)
         {
             var target = parent.transform.Find(path);

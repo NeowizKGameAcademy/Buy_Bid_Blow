@@ -13,6 +13,7 @@ namespace BuyBidBlow.UI.Lobby
         public GameNetworkManager room;
         string address = "localhost";
         GUIStyle title, text, badge;
+        // IMGUI로 대기실 좌석 현황과 접속/커스터마이징/준비 UI 그리기
         void OnGUI()
         {
             if (title == null) {

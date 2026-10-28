@@ -37,6 +37,7 @@ namespace BuyBidBlow.Characters
         public event Action<bool> GroundedChanged;
         public event Action Jumped;
 
+        // 리지드바디·카메라 참조를 찾고 회전을 고정하며 머리 초기 회전 저장
         private void Awake()
         {
             if (playerRb == null)
@@ -53,12 +54,14 @@ namespace BuyBidBlow.Characters
 
         private bool IsSeated => TryGetComponent(out PlayerSeating seating) && seating.IsSeated;
 
+        // 앉아 있지 않으면 이동 처리
         private void FixedUpdate()
         {
             if (IsSeated) return;
             Move();
         }
 
+        // 일어서면 좌우 시선을 되돌리고 애니메이션 이후 머리 회전을 덮어씀
         // Animator updates bone poses before LateUpdate. Apply the look rotation afterwards
         // so animation clips cannot overwrite the mouse-controlled head rotation.
         private void LateUpdate()
@@ -73,11 +76,13 @@ namespace BuyBidBlow.Characters
                 Head.transform.localRotation = headLocalRotation;
         }
 
+        // 이동 입력 값을 저장
         public void SetMoveInput(Vector2 input)
         {
             curMoveInput = input;
         }
 
+        // 마우스 이동량으로 몸(앉아 있으면 시선)과 상하 시선을 회전
         public void Rotate(Vector2 mouseDelta)
         {
             if (playerCamera == null)
@@ -97,6 +102,7 @@ namespace BuyBidBlow.Characters
             ApplyLook();
         }
 
+        // 현재 시선 각도를 카메라와 머리 회전에 적용
         private void ApplyLook()
         {
             var look = Quaternion.Euler(currentY, seatedYaw, 0f);
@@ -104,6 +110,7 @@ namespace BuyBidBlow.Characters
             headLocalRotation = look;
         }
 
+        // 점프 키 유지 상태를 설정하고 땅에 있으면 점프 (앉아 있으면 무시)
         public void SetJumpHeld(bool isHeld)
         {
             if (IsSeated) { isJumpHeld = false; return; }
@@ -113,6 +120,7 @@ namespace BuyBidBlow.Characters
                 Jump();
         }
 
+        // 입력 방향으로 리지드바디 수평 속도를 설정
         private void Move()
         {
             Vector3 direction =
@@ -126,6 +134,7 @@ namespace BuyBidBlow.Characters
             playerRb.linearVelocity = direction;
         }
 
+        // 땅에 닿으면 착지 처리하고 점프 키 유지 중이면 다시 점프
         private void OnCollisionEnter(Collision collision)
         {
             if (!IsGroundLayer(collision.gameObject.layer))
@@ -137,6 +146,7 @@ namespace BuyBidBlow.Characters
                 Jump();
         }
 
+        // 땅에서 떨어지면 공중 상태로 전환
         private void OnCollisionExit(Collision collision)
         {
             if (!IsGroundLayer(collision.gameObject.layer))
@@ -145,11 +155,13 @@ namespace BuyBidBlow.Characters
             SetGrounded(false);
         }
 
+        // 레이어가 땅 레이어 마스크에 포함되는지 확인
         private bool IsGroundLayer(int targetLayer)
         {
             return (groundLayer.value & (1 << targetLayer)) != 0;
         }
 
+        // 수직 속도를 없애고 위로 힘을 가해 점프한 뒤 이벤트 발생
         private void Jump()
         {
             SetGrounded(false);
@@ -168,6 +180,7 @@ namespace BuyBidBlow.Characters
             Jumped?.Invoke();
         }
 
+        // 착지 상태가 바뀌면 갱신하고 변경 이벤트 발생
         private void SetGrounded(bool grounded)
         {
             if (isGround == grounded)

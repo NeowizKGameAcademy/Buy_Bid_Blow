@@ -40,6 +40,7 @@ namespace BuyBidBlow.Dev.Editor
                 copy.name = "Server Network";
                 UnityEngine.Object.DestroyImmediate(copy.GetComponent<ConnectionController>());
                 copy.GetComponent<GameNetworkManager>().headlessStartMode = HeadlessStartOptions.AutoStartServer;
+                copy.GetComponent<GameNetworkManager>().CaptureHallSeats();
                 EditorSceneManager.MoveGameObjectToScene(copy, server);
             }
             finally { EditorSceneManager.CloseScene(lobby, true); }
