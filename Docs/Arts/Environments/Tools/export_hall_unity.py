@@ -123,7 +123,7 @@ for oi,o in enumerate(visible):
   if any(k in o.name for k in ['Hall_','A18_','Landing_Enclosed','A39_']):
    cv=[convert(matrix@v.co) for v in mesh.vertices];ct=[i for t in mesh.loop_triangles for i in [t.vertices[0],t.vertices[2],t.vertices[1]]]
    if ct:collision.append((cv,ct))
-  elif len(mesh.vertices)>0:
+  elif len(mesh.vertices)>0 and not any(k in o.name for k in ('Column_Lower_Band','Column_Upper_Band','Column_Capital_Lower_Moulding','A87_Left_Table_RA_Brass_Band')):
    pts=[matrix@Vector(c) for c in o.bound_box];lo=[min(v[i] for v in pts) for i in range(3)];hi=[max(v[i] for v in pts) for i in range(3)]
    if max(hi[i]-lo[i] for i in range(3))>.35:
     g.setdefault('boxes',[]).append({'center':convert([(a+b)/2 for a,b in zip(lo,hi)]),'size':convert([b-a for a,b in zip(lo,hi)])})

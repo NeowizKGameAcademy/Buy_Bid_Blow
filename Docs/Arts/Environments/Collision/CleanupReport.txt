@@ -1,0 +1,37 @@
+Collision cleanup — 2026-10-29
+
+Scope: ExchangeFurnished; staircase collision and the custom character motor are unchanged.
+
+Applied:
+- Removed 19 decorative BoxColliders in both SC_ExchangeFurnished and AuctionHall_Furnished:
+  six column lower bands, six upper bands, six capital mouldings and one lounge table brass band.
+  Column bodies/bases, table top/legs and stair/rail collision remain.
+- Removed eight zero-area triangles from Desk_WOOD_ROOT collision and its source JSON.
+- Updated both exporters to prevent these decorations/degenerate triangles returning.
+- Updated the local cached HallImport manifest to match the removed boxes.
+
+Inspection:
+- No exact duplicate BoxCollider center/size on the same GameObject in either inspected file.
+- No identical world-space triangles between the structure and the 14 furniture collision groups
+  (coordinates rounded to 0.00001 m). This does not prove absence of partial volume overlaps.
+- Six authored moving doors already use independent hinge-owned BoxColliders. The exporter
+  excludes their owned geometry from static collision. No door restructuring was necessary.
+- Staff_Gate furniture groups remain static: these are not the six Door components.
+- All 14 furniture collision meshes have consistent adjacent winding and no face-normal
+  recalculation flips. The repaired wood mesh has no remaining zero-area triangles.
+- Structural collision remains byte-content equivalent to HEAD after newline normalization.
+  It contains four repeated-index duplicate faces, three zero-area triangles, 984 boundary edges
+  and 38 faces that change orientation under automatic recalculation. Open boundaries and
+  recalculation flips are review candidates, not automatic proof of an incorrect surface.
+  No global normal recalculation was applied because the mesh includes deferred stairs.
+- CollisionSolidFront.png and CollisionSolidRear.png show the structure/furniture triangle meshes
+  in single-color solid shading with backfaces hidden. They do not show primitive BoxColliders.
+  Original visual meshes, materials and lighting were not edited.
+
+Verification limits:
+Unity 6000.2.8f1 batch verification passed after retrying licensing initialization with the
+required system access. Compilation succeeded. All MeshCollider references resolve and all six
+door boxes follow their hinges (center displacement 1.12 to 1.37 m). 495 colliders including
+inactive objects were loaded. The verification did not save the scene.
+Custom motor traversal and partial-overlap/contact behavior still need Unity validation.
+CleanupUnityVerification.txt, MeshOrientationAudit.json and CleanupAudit.json contain details.

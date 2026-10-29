@@ -1,0 +1,137 @@
+[
+  {
+    "mesh": "Assets\\Project\\Content\\Levels\\ExchangeFurnished\\Meshes\\Hall_Structure_Collision.asset",
+    "triangles": 96170,
+    "duplicate_faces": 4,
+    "zero_area": 3,
+    "inconsistent_edges": 0,
+    "boundary_edges": 984,
+    "recalculation_flips": 38
+  },
+  {
+    "mesh": "Assets\\Project\\Content\\Levels\\ExchangeFurnished\\Collision\\Meshes\\01_Auction_Rostrum_ROOT_Collision.asset",
+    "triangles": 216,
+    "duplicate_faces": 0,
+    "zero_area": 0,
+    "inconsistent_edges": 0,
+    "boundary_edges": 0,
+    "recalculation_flips": 0
+  },
+  {
+    "mesh": "Assets\\Project\\Content\\Levels\\ExchangeFurnished\\Collision\\Meshes\\02_Lot_Pedestal_ROOT_Collision.asset",
+    "triangles": 324,
+    "duplicate_faces": 0,
+    "zero_area": 0,
+    "inconsistent_edges": 0,
+    "boundary_edges": 0,
+    "recalculation_flips": 0
+  },
+  {
+    "mesh": "Assets\\Project\\Content\\Levels\\ExchangeFurnished\\Collision\\Meshes\\A86_Direction_Sign_ROOT_Collision.asset",
+    "triangles": 56,
+    "duplicate_faces": 0,
+    "zero_area": 0,
+    "inconsistent_edges": 0,
+    "boundary_edges": 0,
+    "recalculation_flips": 0
+  },
+  {
+    "mesh": "Assets\\Project\\Content\\Levels\\ExchangeFurnished\\Collision\\Meshes\\BBB_Areca_Card_Planter_ROOT_Collision.asset",
+    "triangles": 56,
+    "duplicate_faces": 0,
+    "zero_area": 0,
+    "inconsistent_edges": 0,
+    "boundary_edges": 0,
+    "recalculation_flips": 0
+  },
+  {
+    "mesh": "Assets\\Project\\Content\\Levels\\ExchangeFurnished\\Collision\\Meshes\\BBB_Areca_Card_Planter_ROOT_Left_Collision.asset",
+    "triangles": 56,
+    "duplicate_faces": 0,
+    "zero_area": 0,
+    "inconsistent_edges": 0,
+    "boundary_edges": 0,
+    "recalculation_flips": 0
+  },
+  {
+    "mesh": "Assets\\Project\\Content\\Levels\\ExchangeFurnished\\Collision\\Meshes\\Desk_BRICK_ROOT_Collision.asset",
+    "triangles": 1404,
+    "duplicate_faces": 0,
+    "zero_area": 0,
+    "inconsistent_edges": 0,
+    "boundary_edges": 0,
+    "recalculation_flips": 0
+  },
+  {
+    "mesh": "Assets\\Project\\Content\\Levels\\ExchangeFurnished\\Collision\\Meshes\\Desk_STRAW_ROOT_Collision.asset",
+    "triangles": 1636,
+    "duplicate_faces": 0,
+    "zero_area": 0,
+    "inconsistent_edges": 0,
+    "boundary_edges": 0,
+    "recalculation_flips": 0
+  },
+  {
+    "mesh": "Assets\\Project\\Content\\Levels\\ExchangeFurnished\\Collision\\Meshes\\Desk_WOOD_ROOT_Collision.asset",
+    "triangles": 1844,
+    "duplicate_faces": 0,
+    "zero_area": 0,
+    "inconsistent_edges": 0,
+    "boundary_edges": 16,
+    "recalculation_flips": 0
+  },
+  {
+    "mesh": "Assets\\Project\\Content\\Levels\\ExchangeFurnished\\Collision\\Meshes\\End_-1_ROOT_Collision.asset",
+    "triangles": 212,
+    "duplicate_faces": 0,
+    "zero_area": 0,
+    "inconsistent_edges": 0,
+    "boundary_edges": 0,
+    "recalculation_flips": 0
+  },
+  {
+    "mesh": "Assets\\Project\\Content\\Levels\\ExchangeFurnished\\Collision\\Meshes\\End_1_ROOT_Collision.asset",
+    "triangles": 196,
+    "duplicate_faces": 0,
+    "zero_area": 0,
+    "inconsistent_edges": 0,
+    "boundary_edges": 0,
+    "recalculation_flips": 0
+  },
+  {
+    "mesh": "Assets\\Project\\Content\\Levels\\ExchangeFurnished\\Collision\\Meshes\\Round_Table_A_ROOT_Collision.asset",
+    "triangles": 2164,
+    "duplicate_faces": 0,
+    "zero_area": 0,
+    "inconsistent_edges": 0,
+    "boundary_edges": 0,
+    "recalculation_flips": 0
+  },
+  {
+    "mesh": "Assets\\Project\\Content\\Levels\\ExchangeFurnished\\Collision\\Meshes\\Round_Table_B_ROOT_Collision.asset",
+    "triangles": 1284,
+    "duplicate_faces": 0,
+    "zero_area": 0,
+    "inconsistent_edges": 0,
+    "boundary_edges": 0,
+    "recalculation_flips": 0
+  },
+  {
+    "mesh": "Assets\\Project\\Content\\Levels\\ExchangeFurnished\\Collision\\Meshes\\Staff_Gate_-1_HINGE_Collision.asset",
+    "triangles": 48,
+    "duplicate_faces": 0,
+    "zero_area": 0,
+    "inconsistent_edges": 0,
+    "boundary_edges": 0,
+    "recalculation_flips": 0
+  },
+  {
+    "mesh": "Assets\\Project\\Content\\Levels\\ExchangeFurnished\\Collision\\Meshes\\Staff_Gate_1_HINGE_Collision.asset",
+    "triangles": 48,
+    "duplicate_faces": 0,
+    "zero_area": 0,
+    "inconsistent_edges": 0,
+    "boundary_edges": 0,
+    "recalculation_flips": 0
+  }
+]
