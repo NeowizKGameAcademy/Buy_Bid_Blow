@@ -114,3 +114,8 @@ InitTestScene*.unity*
 /Docs/**/*.zip
 /Docs/**/*.fbx
 /Docs/**/*.glb
+
+# Trailer/video work (HyperFrames) and generated outputs stay local only.
+/Trailer/
+/Trailer-lab/
+/outputs/
