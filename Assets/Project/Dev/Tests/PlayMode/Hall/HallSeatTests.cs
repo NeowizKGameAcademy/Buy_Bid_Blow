@@ -38,7 +38,7 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
             var anchor = chair.sittingPoints[0];
 
             // Aim at the chair from the aisle beside it; the camera rig is detached so it holds still.
-            detect.transform.SetParent(null, true);
+            match.Detach(detect.transform);
             var eye = anchor.position + anchor.right * 1.3f + Vector3.up * .6f;
             detect.transform.SetPositionAndRotation(eye, Quaternion.LookRotation(anchor.position - eye));
             yield return null; yield return null;
@@ -80,7 +80,9 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
             var seating = seats.GetComponent<PlayerSeating>();
             var panel = Object.FindFirstObjectByType<AuctionPanelView>();
             var header = panel.transform.Find("Auction Status - Top Center").gameObject;
-            var lot = panel.transform.Find("Live Lot Details").gameObject;
+            // The lot reads as icons (lotSummary) where the panel has them, else as the text block.
+            var summary = (GameObject)typeof(AuctionPanelView).GetField("lotSummary", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).GetValue(panel);
+            var lot = summary ? summary : panel.transform.Find("Live Lot Details").gameObject;
             var seatsByName = Object.FindObjectsByType<Seat>(FindObjectsSortMode.None);
             Assert.AreEqual(7, seatsByName.Count(s => s.auction), "the seven mezzanine chairs are auction seats");
             Assert.IsFalse(header.activeSelf, "no auction panel while standing");
@@ -97,7 +99,7 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
             yield return null;
             Assert.AreEqual("1차 공개 경매", Text(header, "Stage"), "public auction stage");
             Assert.IsTrue(lot.activeSelf, "lot shown");
-            StringAssert.Contains("R · ", Text(lot, "Text"), "lot rounds and companies");
+            if (!summary) StringAssert.Contains("R · ", Text(lot, "Text"), "lot rounds and companies");
 
             seats.RequestStand();
             yield return HostedMatch.Until(() => !seating.IsSeated, "stood up");

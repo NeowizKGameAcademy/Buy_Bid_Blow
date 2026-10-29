@@ -13,6 +13,7 @@ namespace BuyBidBlow.Systems.Match
         public int DefaultPlayerCount;
         public int MaxPlayerCount;
         public int SharesPerCompanyPerPlayer;
+        public int AdditionalSharesPerCompany;
         public int RoundCount;
         public int RoundSeconds;
         public int[] AuctionRounds;
@@ -35,7 +36,7 @@ namespace BuyBidBlow.Systems.Match
         {
             if (playerCount < MinPlayerCount || playerCount > MaxPlayerCount)
                 throw new ArgumentOutOfRangeException(nameof(playerCount));
-            return checked(playerCount * SharesPerCompanyPerPlayer);
+            return checked(playerCount * SharesPerCompanyPerPlayer + AdditionalSharesPerCompany);
         }
 
         // 해당 라운드가 경매 라운드인지 확인
@@ -70,13 +71,12 @@ namespace BuyBidBlow.Systems.Match
                 throw new FormatException("Player counts must satisfy 1 <= minimum <= default <= maximum.");
             if (SharesPerCompanyPerPlayer <= 0)
                 throw new FormatException("SharesPerCompanyPerPlayer must be positive.");
+            if (AdditionalSharesPerCompany < 0) throw new FormatException("AdditionalSharesPerCompany must not be negative.");
             if (RoundCount <= 0) throw new FormatException("RoundCount must be positive.");
             if (RoundSeconds <= 0) throw new FormatException("RoundSeconds must be positive.");
             if (AuctionRounds == null) throw new FormatException("AuctionRounds is required.");
             if (AuctionRoundSeconds <= 0 || AuctionDurationSeconds <= 0)
                 throw new FormatException("Auction round and auction durations must be positive.");
-            if ((long)AuctionDurationSeconds * 2 > AuctionRoundSeconds)
-                throw new FormatException("Both auctions must fit inside an auction round.");
             for (int i = 0; i < AuctionRounds.Length; i++)
                 if (AuctionRounds[i] < 1 || (long)AuctionRounds[i] + LotGenerator.RoundsPerAuction - 1 > RoundCount ||
                     Array.IndexOf(AuctionRounds, AuctionRounds[i]) != i)
@@ -93,16 +93,14 @@ namespace BuyBidBlow.Systems.Match
                 throw new FormatException($"PriceChange.RiseChances needs {companyCount} entries in Company order.");
             foreach (float chance in PriceChange.RiseChances)
                 if (chance < 0f || chance > 1f) throw new FormatException("PriceChange.RiseChances must be between 0 and 1.");
-            if (AuctionSlots == null || AuctionSlots.Length != 2)
-                throw new FormatException("AuctionSlots needs Open and Secret slots, in that order.");
+            if (AuctionSlots == null || AuctionSlots.Length != 2) throw new FormatException("Exactly two AuctionSlots are required.");
             // In order: public, then secret. Relative to each auction round's start.
             foreach (AuctionSlot slot in AuctionSlots)
-                if (slot == null || slot.StartsAtSeconds < 0 || slot.DurationSeconds != AuctionDurationSeconds ||
+                if (slot == null || slot.StartsAtSeconds < 0 || slot.DurationSeconds <= 0 ||
                     (long)slot.StartsAtSeconds + slot.DurationSeconds > AuctionRoundSeconds)
-                    throw new FormatException("Each auction slot must fit inside an auction round and use AuctionDurationSeconds.");
-            if (AuctionSlots[0].StartsAtSeconds != 0 ||
-                (long)AuctionSlots[0].StartsAtSeconds + AuctionSlots[0].DurationSeconds > AuctionSlots[1].StartsAtSeconds)
-                throw new FormatException("Open must start with the round and close before Secret starts.");
+                    throw new FormatException("Each auction slot must have positive duration and fit inside an auction round.");
+            if ((long)AuctionSlots[0].StartsAtSeconds + AuctionSlots[0].DurationSeconds > AuctionSlots[1].StartsAtSeconds)
+                throw new FormatException("Public and secret auction slots must not overlap.");
         }
 
         // 회사별 오프셋 배열의 길이와 범위를 검사

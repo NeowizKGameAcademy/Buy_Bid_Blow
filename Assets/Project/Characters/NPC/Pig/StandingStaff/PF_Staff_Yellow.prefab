@@ -85,6 +85,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8526117575412250177, guid: a0a4efcc583cbea4897b93e9d46334ef, type: 3}
       insertIndex: -1
       addedObject: {fileID: 488052974568358677}
+    - targetCorrespondingSourceObject: {fileID: 8526117575412250177, guid: a0a4efcc583cbea4897b93e9d46334ef, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7790165810817268290}
   m_SourcePrefab: {fileID: 100100000, guid: a0a4efcc583cbea4897b93e9d46334ef, type: 3}
 --- !u!1 &2224119888079259009 stripped
 GameObject:
@@ -149,3 +152,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.Characters.NPCInfo
   company: 0
+--- !u!114 &7790165810817268290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2224119888079259009}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1aad2070829efe14ab88c55661fae19b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.Characters.DeskStaffAnimationClient
+  animator: {fileID: 2091420712106561642}
+  greeting: {fileID: 7400000, guid: 5cacda0810892354dbfe4f5142f438ee, type: 2}

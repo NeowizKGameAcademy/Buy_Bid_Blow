@@ -423,6 +423,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6165186761504678384}
   - component: {fileID: 4965851315715603256}
+  - component: {fileID: 7014567239102345678}
   m_Layer: 0
   m_Name: Wolf_Model
   m_TagString: Untagged
@@ -430,6 +431,29 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &7014567239102345678
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 847905185818343603}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dedea8577e6411043a9129dee798933e, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.Characters.BBBWolfAppearance
+  uppers:
+  - {fileID: 5057388125775548464}
+  - {fileID: 8729399912161133267}
+  - {fileID: 8279547493654172562}
+  lowers:
+  - {fileID: 7073856144002655307}
+  - {fileID: 5378878538685271163}
+  tie: {fileID: 6685608282349730567}
+  upper: 0
+  lower: 0
+  tieColor: {r: 0.54, g: 0.16, b: 0.22, a: 1}
 --- !u!4 &6165186761504678384
 Transform:
   m_ObjectHideFlags: 0

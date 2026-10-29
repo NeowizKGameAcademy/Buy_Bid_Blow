@@ -26,6 +26,8 @@ namespace BuyBidBlow.Common
         private Company selectedCompany;
         private bool hasSelectedCompany;
         private bool joined;
+        private TradingPanelData displayedData;
+        private bool hasDisplayedData;
 
         private static bool Networked => NetworkClient.active && MatchNet.Current != null;
 
@@ -44,6 +46,7 @@ namespace BuyBidBlow.Common
             tradePanel.BetRequested += Bet;
             PlayerNet.LocalReply += OnServerReply;
             PlayerNet.LocalPortfolioChanged += OnServerPortfolio;
+            MatchNet.RoundTurned += OnRoundTurned;
             // The starting portfolio may have arrived while this was still disabled.
             if (PlayerNet.LocalPortfolio != null)
                 assets.ApplyServerState(PlayerNet.LocalPortfolio);
@@ -61,6 +64,7 @@ namespace BuyBidBlow.Common
             tradePanel.BetRequested -= Bet;
             PlayerNet.LocalReply -= OnServerReply;
             PlayerNet.LocalPortfolioChanged -= OnServerPortfolio;
+            MatchNet.RoundTurned -= OnRoundTurned;
 
             if (matchManager != null)
                 matchManager.RoundAdvanced -= OnRoundAdvanced;
@@ -85,6 +89,7 @@ namespace BuyBidBlow.Common
             hasSelectedCompany = true;
 
             tradePanel.Open(company, PanelData(company));
+            hasDisplayedData=false;
         }
 
         // 회사의 보유량·가격·재고·베팅 상태로 패널 데이터를 구성
@@ -161,8 +166,8 @@ namespace BuyBidBlow.Common
 
             if (Networked)
             {
-                NetworkClient.localPlayer.GetComponent<PlayerNet>().CmdTrade(requestedCompany, quantity, buy);
                 ShowResult("거래 요청 중...");
+                NetworkClient.localPlayer.GetComponent<PlayerNet>().CmdTrade(requestedCompany, quantity, buy);
                 return;
             }
 
@@ -177,8 +182,8 @@ namespace BuyBidBlow.Common
         private void Bet(Company requestedCompany)
         {
             if (!Networked || !Validate(requestedCompany, 1)) return;
-            NetworkClient.localPlayer.GetComponent<PlayerNet>().CmdToggleBet(requestedCompany);
             ShowResult("베팅 요청 중...");
+            NetworkClient.localPlayer.GetComponent<PlayerNet>().CmdToggleBet(requestedCompany);
         }
 
         // 패널이 열려 있으면 서버 응답 메시지를 표시
@@ -197,14 +202,12 @@ namespace BuyBidBlow.Common
             RefreshOpenPanel();
         }
 
-        // Mirror finishes applying the lists before Update. Repaint once when a public revision changes.
-        private uint marketVersion;
+        // Public lists, phase and the private portfolio arrive separately; reconcile the open panel each frame.
+        // RefreshOpenPanel repaints only when what it shows changed.
         private void Update()
         {
             if (!Networked || !tradePanel.IsOpen) return;
             if (match != MatchNet.Current) BindMatch(MatchNet.Current);
-            if (marketVersion == match.MarketVersion) return;
-            marketVersion = match.MarketVersion;
             RefreshOpenPanel();
         }
 
@@ -253,18 +256,10 @@ namespace BuyBidBlow.Common
             return false;
         }
 
-        // 연결할 MatchNet을 교체하고 ClosingBell 구독을 옮김
-        private void BindMatch(MatchNet value)
-        {
-            if (match == value) return;
-            if (match != null) match.ClosingBell -= OnClosingBell;
-            match = value;
-            if (match != null) match.ClosingBell += OnClosingBell;
-        }
+        private void BindMatch(MatchNet value) => match = value;
 
-        // 종가 확정 시 열린 패널을 갱신
-        // Prices change at each Closing Bell; refresh the open panel to the new round's price.
-        private void OnClosingBell(int _, PriceChange[] __) => RefreshOpenPanel();
+        // Prices change at each Closing Bell; refresh the open panel once the new prices arrive.
+        private void OnRoundTurned(MatchNet.RoundTurn _) => RefreshOpenPanel();
 
         // 샌드박스 라운드가 넘어가면 열린 패널을 갱신
         private void OnRoundAdvanced(int _, IReadOnlyList<PriceChange> __) => RefreshOpenPanel();
@@ -273,7 +268,12 @@ namespace BuyBidBlow.Common
         private void RefreshOpenPanel()
         {
             if (hasSelectedCompany && tradePanel.IsOpen)
-                tradePanel.Present(PanelData(selectedCompany));
+            {
+                var current=PanelData(selectedCompany);
+                if(hasDisplayedData && current.Equals(displayedData))return;
+                displayedData=current;hasDisplayedData=true;
+                tradePanel.Present(current);
+            }
         }
     }
 }

@@ -60,6 +60,12 @@ namespace BuyBidBlow.UI.Lobby
             if(!Prepare(nickname,address,port,out _))return false;
             try{room.StartClient();return true;}catch(Exception){StopTo(ConnectionState.Failed,"접속을 시작하지 못했습니다. 주소와 포트를 확인하세요.");return false;}
         }
+        // 이 PC에서 방을 열고 같은 프로그램으로 입장 (Mirror host). 다른 플레이어는 이 PC의 주소로 접속한다.
+        public bool Host(string nickname,string port)
+        {
+            if(!Prepare(nickname,"127.0.0.1",port,out _))return false;
+            try{room.StartHost();return true;}catch(Exception){StopTo(ConnectionState.Failed,"방을 열지 못했습니다. 포트가 이미 사용 중인지 확인하세요.");return false;}
+        }
         // 서버 연결 시 입장 승인 대기 상태로 전환
         void Connected(){if(State==ConnectionState.Connecting)SetState(ConnectionState.Joining,"서버 입장 승인 대기 중…");}
         // 입장 승인 시 플레이어 생성 중 상태로 전환

@@ -42,6 +42,7 @@ namespace BuyBidBlow.Characters
         {
             base.OnStartLocalPlayer();RefreshAvatar();
             if(NetworkManager.singleton is GameNetworkManager room){room.NotifyLocalPlayerReady();room.SetClientMatchState(inMatch);}
+            BuyBidBlow.UI.Menu.GameMenuController.Ensure();
         }
         // The avatar model faces the root's -Z (the lobby lines them up facing the camera with no rotation),
         // so in the level it turns around to face where the local player faces.
@@ -122,6 +123,18 @@ namespace BuyBidBlow.Characters
         private readonly List<RequestResult> pendingReplies = new List<RequestResult>();
         public static IReadOnlyList<Info> LocalInformation { get; private set; } = new Info[0];
         public static event Action LocalInformationChanged;
+        // Match feedback for this client only: request notices, auction outcomes and the final standings.
+        public static event Action<BuyBidBlow.Common.MatchNotice> LocalNotice;
+        public static event Action<BuyBidBlow.Common.AuctionOutcome> LocalAuctionOutcome;
+        public static event Action LocalResultsChanged;
+        public static BuyBidBlow.Common.FinalStanding[] LocalResults { get; private set; }
+        public static int LocalResultRounds { get; private set; }
+        [TargetRpc] public void TargetNotice(BuyBidBlow.Common.MatchNotice notice) => LocalNotice?.Invoke(notice);
+        [TargetRpc] public void TargetAuctionOutcome(BuyBidBlow.Common.AuctionOutcome outcome) => LocalAuctionOutcome?.Invoke(outcome);
+        [TargetRpc] public void TargetResults(BuyBidBlow.Common.FinalStanding[] rows, int rounds)
+        { LocalResults = rows; LocalResultRounds = rounds; LocalResultsChanged?.Invoke(); }
+        [TargetRpc] public void TargetClearResults() => ClearLocalResults();
+        public static void ClearLocalResults() { LocalResults = null; LocalResultRounds = 0; LocalResultsChanged?.Invoke(); }
 
         // 서버에서 매매를 처리하고 결과를 요청한 클라이언트에 응답
         [Command] public void CmdTrade(Company company, int quantity, bool buy)
@@ -206,7 +219,7 @@ namespace BuyBidBlow.Characters
         }
 
         // 로컬 포트폴리오·베팅·입찰 정보 초기화
-        public override void OnStopLocalPlayer() { pendingReplies.Clear(); ApplyLocalState(null, null, 0, 0, new Info[0]); base.OnStopLocalPlayer(); }
+        public override void OnStopLocalPlayer() { pendingReplies.Clear(); ClearLocalResults(); ApplyLocalState(null, null, 0, 0, new Info[0]); base.OnStopLocalPlayer(); }
 
         [Command] public void CmdReturnToLobby()
         {
@@ -215,18 +228,31 @@ namespace BuyBidBlow.Characters
 
         [Command] public void CmdEmote(int number)
         {
-            if (inMatch && number >= 0 && number <= 4) RpcEmote(number);
+            if (inMatch && number >= 0 && number <= PlayerAvatar.Emotes.Length) RpcEmote(number);
         }
+        // Everyone, the owner included, hears the emote at this avatar; only others replay the animation.
         [ClientRpc] private void RpcEmote(int number)
         {
+            if (TryGetComponent(out BuyBidBlow.Audio.PlayerActionAudio audio))
+            {
+                if (number == 0) audio.StopEmotion();
+                else audio.PlayEmotion(PlayerAvatar.EmoteCues[number - 1]);
+            }
             if (isLocalPlayer || !character) return;
             if (number == 0) { character.StopAction(); character.SetSeated(IsSeated); return; }
-            var actions = new[] { BBBWolfCharacter.Action.Defeat, BBBWolfCharacter.Action.Flair,
-                BBBWolfCharacter.Action.HandRaising, BBBWolfCharacter.Action.HipHopDancing };
-            character.PlayAction(actions[number - 1]);
+            character.PlayAction(PlayerAvatar.Emotes[number - 1]);
         }
         [Command] public void CmdJump() { if (inMatch && !IsSeated) RpcJump(); }
-        [ClientRpc] private void RpcJump() { if (!isLocalPlayer && character) character.PlayAction(BBBWolfCharacter.Action.Jump); }
+        [ClientRpc] private void RpcJump()
+        {
+            if (TryGetComponent(out BuyBidBlow.Audio.PlayerActionAudio audio)) audio.PlayJump();
+            if (!isLocalPlayer && character) character.PlayAction(BBBWolfCharacter.Action.Jump);
+        }
+        [Command] public void CmdLand() { if (inMatch) RpcLand(); }
+        [ClientRpc] private void RpcLand()
+        {
+            if (!isLocalPlayer && character && character.Current == BBBWolfCharacter.Action.Jump) character.StopAction();
+        }
         [Server] public void ShowBid() => RpcBid();
         [ClientRpc] private void RpcBid() { if (character) character.PlayAction(BBBWolfCharacter.Action.Bid); }
     }

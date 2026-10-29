@@ -15,17 +15,18 @@ namespace BuyBidBlow.Dev.Tests.EditMode.Auction
         [Test]
         public void FastRounds_SettleBothAuctionsAndRetainOnlyWinnersInformation()
         {
+            // 4 s rounds scale the 120 s auction round: open 4..6, secret 6..7.
             var game = new MatchEngine(Rules(), 1234, new[] { A, B, C }, 0, 4);
             game.Tick(4);
             Assert.IsTrue(game.Bid(A, 10, false, 4).Succeeded);
-            game.Tick(5);
+            game.Tick(6);
             Assert.AreEqual(190, game.Snapshot(A).Cash);
             Assert.AreEqual(0, game.Snapshot(A).Reserved);
             Assert.AreEqual(2, game.InformationOf(A).Count);
             Assert.AreEqual(0, game.InformationOf(B).Count);
-            Assert.IsTrue(game.Bid(A, 20, false, 5).Succeeded);
-            Assert.IsTrue(game.Bid(B, 21, false, 5.1).Succeeded);
-            game.Tick(6);
+            Assert.IsTrue(game.Bid(A, 20, false, 6).Succeeded);
+            Assert.IsTrue(game.Bid(B, 21, false, 6.1).Succeeded);
+            game.Tick(7);
             Assert.AreEqual(179, game.Snapshot(B).Cash);
             Assert.AreEqual(2, game.InformationOf(B).Count);
             Assert.AreEqual(2, game.InformationOf(A).Count);
@@ -68,8 +69,8 @@ namespace BuyBidBlow.Dev.Tests.EditMode.Auction
         {
             var game = new MatchEngine(Rules(), 1234, new[] { A, B, C }, 0, 4);
             int awards = 0; game.InformationAwarded += _ => awards++;
-            game.Tick(4); game.Bid(A, 10, false, 4); game.Tick(5);
-            game.Tick(5); game.Tick(5);
+            game.Tick(4); game.Bid(A, 10, false, 4); game.Tick(6);
+            game.Tick(6); game.Tick(6);
             Assert.AreEqual(1, awards);
             Assert.AreEqual(190, game.Snapshot(A).Cash);
             Assert.AreEqual(2, game.InformationOf(A).Count);

@@ -40,6 +40,42 @@ namespace BuyBidBlow.Dev
             EditorUtility.SetDirty(controller);
         }
 
+        // The radial emotes play the gameplay clips in Animation/Emotions: items 1..4 replace the Mixamo
+        // originals' motion, 5..8 get their own states. Like the jump, none has an exit: each loops (or holds
+        // its last pose) until the player moves or lands and the character asks for Locomotion again.
+        public static void EnsureEmoteStates()
+        {
+            var controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(ControllerPath)
+                ?? throw new InvalidOperationException("Missing " + ControllerPath);
+            var machine = controller.layers[0].stateMachine;
+            foreach (var name in new[] { "Defeat", "Flair", "HandRaising", "HipHopDancing", "Jump" })
+            {
+                var state = machine.states.Select(s => s.state).Single(s => s.name == (name == "Jump" ? name : "Mixamo_" + name));
+                foreach (var exit in state.transitions) state.RemoveTransition(exit);
+                if (name == "Jump") continue;
+                state.motion = AssetDatabase.LoadAssetAtPath<AnimationClip>(Output + "/Emotions/Player_" + name + ".anim")
+                    ?? throw new InvalidOperationException("Missing emote clip: " + name);
+            }
+            var emotes = new[] { BBBWolfCharacter.Action.GolfDrive, BBBWolfCharacter.Action.JumpingJacks,
+                BBBWolfCharacter.Action.LayingPose, BBBWolfCharacter.Action.HurricaneKick };
+            for (int i = 0; i < emotes.Length; i++)
+            {
+                var name = emotes[i].ToString();
+                var existing = machine.states.Select(s => s.state).FirstOrDefault(s => s.name == name);
+                if (existing) { foreach (var exit in existing.transitions) existing.RemoveTransition(exit); continue; }
+                var clip = AssetDatabase.LoadAssetAtPath<AnimationClip>(Output + "/Emotions/Player_" + name + ".anim")
+                    ?? throw new InvalidOperationException("Missing emote clip: " + name);
+                var state = machine.AddState(name, new Vector3(1080, 80 + i * 90));
+                state.motion = clip; state.writeDefaultValues = false;
+                state.AddStateMachineBehaviour<BBBWolfActionState>();
+                AddRequestTransition(machine, state, (int)emotes[i]);
+            }
+            // Some emotes move the Armature or the hips (the windmill drops the whole body 0.2 to the floor) and
+            // idle/walk do not. Body states write defaults, so whatever a state leaves out returns to the rest pose.
+            foreach (var child in machine.states) child.state.writeDefaultValues = true;
+            EditorUtility.SetDirty(controller);
+        }
+
         [MenuItem("Tools/Buy Bid Blow/Wolf/Build Animator and Wire Character")]
         public static void Build()
         {
@@ -156,6 +192,7 @@ namespace BuyBidBlow.Dev
             }
             finally { if (opened) EditorSceneManager.CloseScene(scene, true); }
             EnsureJumpState();
+            EnsureEmoteStates();
             AssetDatabase.SaveAssets();
             Validate();
             File.WriteAllText("Library/WolfAnimatorBuild.result", "PASS: Animator, 10 body clips, idle pose, 4 expression clips, prefab and sandbox wired.");

@@ -46,21 +46,14 @@ namespace BuyBidBlow.Props
         }
         // 기준 점이 충분하면 초기화
         void Awake() { if (restPoints != null && restPoints.Length > 1) Initialize(); }
-        // 접촉 대상이 없으면 플레이어 몸 콜라이더를 지정
-        // The rope reacts to the player's body unless contacts were assigned explicitly.
-        void Start()
-        {
-            var player = GameObject.FindWithTag("Player");
-            if (contacts.Length == 0 && player && player.TryGetComponent(out CapsuleCollider body)) contacts = new[] { body };
-        }
-        // 고정 시간 간격으로 시뮬레이션 실행
         void FixedUpdate() => Simulate(Time.fixedDeltaTime);
         // 시뮬레이션을 한 스텝 진행하고 점 위치·오차를 갱신한 뒤 메시 업데이트
         public void Simulate(float dt)
         {
             if (!startAnchor || !endAnchor || restPoints == null || restPoints.Length < 2) return;
             Initialize();
-            simulation.ropeLength=ropeLength; simulation.contacts=contacts; simulation.contactRadius=radius;
+            // The rope reacts to every player's body unless contacts were assigned explicitly.
+            simulation.ropeLength=ropeLength; simulation.contacts=contacts.Length>0?contacts:PlayerContacts.Get(); simulation.contactRadius=radius;
             simulation.Step(Mathf.Min(dt,.04f));
             for(int i=0;i<points.Length;i++)points[i]=bones[i].position;
             PinError=simulation.MaxPinError;SegmentError=simulation.MaxSegmentError;

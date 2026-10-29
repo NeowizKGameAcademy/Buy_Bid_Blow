@@ -28,6 +28,7 @@ namespace BuyBidBlow.UI.Market
         private Tab tab;
         private int quantity = 1;
         private int openedFrame = -1;
+        private int confirmedFrame = -1;
         private Text feedback;
         private float feedbackUntil;
 
@@ -37,6 +38,7 @@ namespace BuyBidBlow.UI.Market
         // 회사별 패널 버튼을 바인딩하고 패널을 닫은 상태로 시작
         private void Awake()
         {
+            BuyBidBlow.Audio.UIAudioFeedback.Bind(transform.parent?transform.parent:transform);
             for (int i = 0; i < companyPanels.Length; i++)
                 if (companyPanels[i] != null)
                     BindButtons(companyPanels[i]);
@@ -59,6 +61,9 @@ namespace BuyBidBlow.UI.Market
             On("Quantity Control/Decrease", DecreaseQuantity);
             On("Payment Summary/Confirm Purchase", Confirm);
             On("Close Hint/Keycap", Close);
+            var guide=panel.transform.Find("Keyboard Guide");
+            if(guide && guide.TryGetComponent<Text>(out var guideText))
+                guideText.text="W 오른쪽 탭 · S 왼쪽 탭 · A/D 수량 · E 확인 · Q 닫기";
         }
 
         // 선택한 회사 패널을 매수 탭·수량 1로 열고 열림 이벤트 발생
@@ -89,6 +94,7 @@ namespace BuyBidBlow.UI.Market
         // 모든 패널을 숨기고 닫힘 이벤트 발생
         public void Close()
         {
+            if(IsOpen)BuyBidBlow.Audio.GameAudio.Play("ui.close",this);
             Hide();
             active = null;
             OpenStateChanged?.Invoke(false);
@@ -105,7 +111,7 @@ namespace BuyBidBlow.UI.Market
         // 피드백 만료 처리 및 키 입력으로 수량·탭 변경과 확인 처리
         private void Update()
         {
-            if (!IsOpen)
+            if (!IsOpen || BuyBidBlow.UI.Menu.GameMenuController.BlocksInput)
                 return;
 
             if (feedback && feedbackUntil > 0 && Time.unscaledTime >= feedbackUntil)
@@ -116,10 +122,10 @@ namespace BuyBidBlow.UI.Market
             if (keyboard == null || Time.frameCount == openedFrame)
                 return;
 
-            if (keyboard.rightArrowKey.wasPressedThisFrame) IncreaseQuantity();
-            if (keyboard.leftArrowKey.wasPressedThisFrame) DecreaseQuantity();
-            if (keyboard.upArrowKey.wasPressedThisFrame) SelectTab((Tab)(((int)tab + 2) % 3));
-            if (keyboard.downArrowKey.wasPressedThisFrame) SelectTab((Tab)(((int)tab + 1) % 3));
+            if (keyboard.dKey.wasPressedThisFrame) IncreaseQuantity();
+            if (keyboard.aKey.wasPressedThisFrame) DecreaseQuantity();
+            if (keyboard.wKey.wasPressedThisFrame) SelectTab((Tab)(((int)tab + 1) % 3));
+            if (keyboard.sKey.wasPressedThisFrame) SelectTab((Tab)(((int)tab + 2) % 3));
             if (keyboard.eKey.wasPressedThisFrame || keyboard.enterKey.wasPressedThisFrame) Confirm();
         }
 
@@ -127,6 +133,8 @@ namespace BuyBidBlow.UI.Market
         public void SelectTab(Tab value)
         {
             if (!IsOpen) return;
+            if(tab==value)return;
+            BuyBidBlow.Audio.GameAudio.Play("ui.navigate",this);
             tab = value;
             quantity = 1;
             Refresh();
@@ -135,23 +143,33 @@ namespace BuyBidBlow.UI.Market
         // 수량을 1 증가
         public void IncreaseQuantity()
         {
-            if (!IsOpen || quantity == int.MaxValue) return;
-            quantity++;
+            if (!IsOpen) return;
+            int limit=Mathf.Max(1,TradingPanelView.QuantityLimit(data,(int)tab));
+            int next=quantity>=limit?1:quantity+1;
+            if(next==quantity)return;
+            quantity=next;
+            BuyBidBlow.Audio.GameAudio.Play("ui.quantity",this);
             Refresh();
         }
 
         // 수량을 1 감소(최소 1)
         public void DecreaseQuantity()
         {
-            if (!IsOpen || quantity <= 1) return;
-            quantity--;
+            if (!IsOpen) return;
+            int next=quantity>1?quantity-1:Mathf.Max(1,TradingPanelView.QuantityLimit(data,(int)tab));
+            if(next==quantity)return;
+            quantity=next;
+            BuyBidBlow.Audio.GameAudio.Play("ui.quantity",this);
             Refresh();
         }
 
         // 확인 가능하면 현재 탭에 따라 매수/매도/베팅 요청
         public void Confirm()
         {
-            if (!IsOpen || !active.CanConfirm) return;
+            // Enter may arrive through both the UI module and the keyboard shortcut.
+            if (!IsOpen || !active.CanConfirm || confirmedFrame == Time.frameCount) return;
+            confirmedFrame = Time.frameCount;
+            BuyBidBlow.Audio.GameAudio.Play("ui.confirm",this);
             if (tab == Tab.Buy) RequestBuy();
             else if (tab == Tab.Sell) RequestSell();
             else BetRequested?.Invoke(selectedCompany);

@@ -99,7 +99,7 @@ namespace BuyBidBlow.Interface.Editor
             Text("Cash After Label",payment,"거래 후 현금",23,190,43,300,163);Text("Cash After",payment,"$58",35,145,43,497,163);
             var close=Group("Close Hint",panel,260,50,300,796);
             var closeKey=TradeImage("Keycap",close,Icon("BG_RoundedDim"),75,43,0,0);closeKey.type=UnityEngine.UI.Image.Type.Sliced;closeKey.color=new Color(.08f,.075f,.055f,.9f);
-            Text("Key",closeKey.transform,"ESC",23,75,43,0,0,TextAnchor.MiddleCenter);Text("Label",close,"닫기",23,110,43,92,0).color=new Color(.7f,.8f,.8f);
+            Text("Key",closeKey.transform,"Q",23,75,43,0,0,TextAnchor.MiddleCenter);Text("Label",close,"닫기",23,110,43,92,0).color=new Color(.7f,.8f,.8f);
             var closeButton=closeKey.gameObject.AddComponent<Button>();closeButton.targetGraphic=closeKey;closeKey.raycastTarget=true;buttons.Add(closeButton);
             for(int i=0;i<buttons.Count;i++) {
                 var nav=new Navigation{mode=Navigation.Mode.Explicit,selectOnLeft=buttons[(i+buttons.Count-1)%buttons.Count],selectOnRight=buttons[(i+1)%buttons.Count],selectOnUp=buttons[(i+buttons.Count-1)%buttons.Count],selectOnDown=buttons[(i+1)%buttons.Count]};buttons[i].navigation=nav;

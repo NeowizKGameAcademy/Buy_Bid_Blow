@@ -14,8 +14,8 @@ namespace BuyBidBlow.Common
 
         public static MatchNet Current { get; private set; }
 
-        // Mirror applies SyncLists first, then SyncVars in declaration order, all from the same update.
-        // So hooks see the prices and changes they announce, and the Closing Bell fires before the next round starts.
+        // When things are due is MatchTimeline's job; events here say what has happened, once its public data has
+        // arrived, so sound and screen move on the same signal.
         // First round start while preparing. Server time (NetworkTime.time).
         [SyncVar] public double firstRoundStartsAt;
         [SyncVar] public double roundClosesAt;
@@ -23,17 +23,16 @@ namespace BuyBidBlow.Common
         [SyncVar] public int minPrice;
         // Last closed round and the changes applied at its Closing Bell (0 = none yet).
         public readonly SyncList<PriceChange> lastChanges = new SyncList<PriceChange>();
-        [SyncVar(hook = nameof(OnClosingBell))] public int lastClosedRound;
+        [SyncVar] public int lastClosedRound;
         [SyncVar(hook = nameof(OnPhaseChanged))] public Phase phase;
         // 0 while preparing; stays at the last round once finished.
         [SyncVar(hook = nameof(OnRoundChanged))] public int round;
         // Current price and remaining market stock per company, indexed by Company.
         public readonly SyncList<int> prices = new SyncList<int>();
         public readonly SyncList<int> stock = new SyncList<int>();
-        // Flat rows: Straw, Timber, Brick. Initial price followed by each revealed closing price.
+        // Flat rows: Straw, Timber, Brick. Prices at -5..0 followed by each revealed closing price.
         // Replicated in full for clients that load the hall after a price update.
         public readonly SyncList<int> priceHistory = new SyncList<int>();
-        public readonly SyncList<MatchStanding> results = new SyncList<MatchStanding>();
 
         // Mezzanine auction, public part only. The lot shows rounds and companies; directions go to the winner alone.
         public enum AuctionStage { None, Open, Secret }
@@ -45,16 +44,25 @@ namespace BuyBidBlow.Common
         [SyncVar] public int highestBid;
         [SyncVar] public string highestBidder;
         [SyncVar] public string highestBidderId;
-        [SyncVar] public string auctionResult;
-        [SyncVar] public uint auctionResultVersion;
-        public uint MarketVersion { get; private set; }
         // Next round with an auction, 0 when none are left.
         [SyncVar] public int nextAuctionRound;
 
-        public event Action<Phase> PhaseChanged;
-        public event Action<int> RoundStarted;
-        // Round that just closed and the changes applied at its Closing Bell.
-        public event Action<int, PriceChange[]> ClosingBell;
+        // One round boundary: a round's Closing Bell and the next round's start happen together.
+        // Closed is 0 when the first round opens, Opened is 0 when the match ends; Changes are those applied at the bell.
+        public struct RoundTurn { public int Closed, Opened; public PriceChange[] Changes; }
+
+        // Raised on clients for changes seen while connected, never for the state a client joins into.
+        // Static so listeners subscribe once whichever match is running.
+        public static event Action<RoundTurn> RoundTurned;
+        // Previous and current stage. Going straight from Open to Secret is one change.
+        public static event Action<AuctionStage, AuctionStage> AuctionStageChanged;
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        static void ResetStatic() { Current = null; RoundTurned = null; AuctionStageChanged = null; }
+
+        // What this client has already announced.
+        int seenClosed, seenRound;
+        AuctionStage seenStage;
 
         public double SecondsLeft => Math.Max(0, (phase == Phase.Preparing ? firstRoundStartsAt : roundClosesAt) - NetworkTime.time);
         // 회사의 현재 가격을 반환
@@ -71,44 +79,46 @@ namespace BuyBidBlow.Common
             base.OnStartClient();
             DontDestroyOnLoad(gameObject);
             Current = this;
-            prices.OnChange += OnMarketChanged;
-            stock.OnChange += OnMarketChanged;
-            MarketVersion++;
+            seenClosed = lastClosedRound; seenRound = round; seenStage = auctionStage;
         }
 
         // 현재 매치 등록을 해제
         public override void OnStopClient()
         {
-            prices.OnChange -= OnMarketChanged;
-            stock.OnChange -= OnMarketChanged;
             if (Current == this) Current = null;
             base.OnStopClient();
         }
-        private void OnMarketChanged(SyncList<int>.Operation operation, int index, int value) => MarketVersion++;
 
-        // 마감된 라운드의 가격 변동을 로그로 남기고 ClosingBell 이벤트 발생
-        void OnClosingBell(int _, int closedRound)
+        // Compared here rather than in SyncVar hooks: a remote client applies fields in declaration order but the host
+        // in the server's assignment order, so a hook could see half a turn. By Update the whole server update is in.
+        void Update()
         {
-            if (closedRound <= 0) return;
-            var changes = new PriceChange[lastChanges.Count];
-            lastChanges.CopyTo(changes, 0);
-            Debug.Log($"[Match] Closing Bell R{closedRound}: {string.Join(", ", Array.ConvertAll(changes, c => $"{c.Company} {c.Amount:+0;-0;0}"))}");
-            ClosingBell?.Invoke(closedRound, changes);
+            if (!netIdentity || !isClient) return;
+            if (auctionStage != seenStage)
+            {
+                var previous = seenStage;
+                seenStage = auctionStage;
+                AuctionStageChanged?.Invoke(previous, auctionStage);
+            }
+            if (lastClosedRound == seenClosed && round == seenRound) return;
+            var turn = new RoundTurn
+            {
+                Closed = lastClosedRound != seenClosed ? lastClosedRound : 0,
+                Opened = phase == Phase.Playing && round != seenRound ? round : 0,
+                Changes = new PriceChange[lastClosedRound != seenClosed ? lastChanges.Count : 0]
+            };
+            if (turn.Closed > 0) lastChanges.CopyTo(turn.Changes, 0);
+            seenClosed = lastClosedRound; seenRound = round;
+            Debug.Log($"[Match] Round turned {turn.Closed} -> {turn.Opened}: {string.Join(", ", Array.ConvertAll(turn.Changes, c => $"{c.Company} {c.Amount:+0;-0;0}"))}");
+            RoundTurned?.Invoke(turn);
         }
 
-        // 단계 변경을 로그로 남기고 PhaseChanged 이벤트 발생
-        void OnPhaseChanged(Phase _, Phase value)
-        {
-            Debug.Log($"[Match] Phase {value}");
-            PhaseChanged?.Invoke(value);
-        }
+        void OnPhaseChanged(Phase _, Phase value) => Debug.Log($"[Match] Phase {value}");
 
         // 새 라운드 시작을 로그로 남기고 RoundStarted 이벤트 발생
         void OnRoundChanged(int _, int value)
         {
-            if (value <= 0) return;
-            Debug.Log($"[Match] Round {value} started, {SecondsLeft:F0}s left");
-            RoundStarted?.Invoke(value);
+            if (value > 0) Debug.Log($"[Match] Round {value} started, {SecondsLeft:F0}s left");
         }
     }
 }

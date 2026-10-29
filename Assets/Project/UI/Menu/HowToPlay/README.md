@@ -1,6 +1,6 @@
 # HowToPlay 파일철 패널
 
-SC_MainMenu에서 HowToPlay를 누르면 열립니다. ← / → 페이지 이동, Esc 닫기. 다시 열면 첫 페이지로 돌아갑니다. 열려 있는 동안 메인 메뉴 선택과 입력을 막고, 닫으면 HowToPlay 버튼으로 선택을 복구합니다.
+SC_MainMenu에서 HowToPlay를 누르면 열립니다. A/W 이전 · D/S 다음 페이지 이동, Esc 닫기. 하단 이전·다음, 우측 색인, 닫기 버튼은 마우스 클릭도 지원합니다. 다시 열면 첫 페이지로 돌아갑니다. 열려 있는 동안 메인 메뉴 선택과 입력을 막고, 닫으면 HowToPlay 버튼으로 선택을 복구합니다.
 
 - Prefabs/PF_HowToPlay.prefab: 패널 구조. 메인 메뉴 Canvas 하위에서 사용.
 - HowToPlayPanel.cs: 페이지와 인덱스 표시, 키 입력.
@@ -15,3 +15,5 @@ SC_MainMenu에서 HowToPlay를 누르면 열립니다. ← / → 페이지 이�
 각 Page 아래 Text·Image를 개별 수정할 수 있습니다. 텍스트는 이미지가 아닌 일반 Unity UI Text이며 Pretendard 글꼴을 사용합니다. 1920×1080 기준 Canvas Scaler를 따릅니다. 실제 게임 로직·레벨·이동 시스템은 변경하지 않습니다.
 
 시안 정렬 보완: HowToPlayStyle.cs가 큰 붉은 페이지 번호, Pretendard Black 제목, 회색 Bold 본문, 붉은 원형 단계·콜아웃, 구분선을 적용합니다. 거래 페이지는 실제 PF_TradingPanel_Straw를 복제한 편집 가능한 설명용 UI이며 버튼은 비활성화되어 실제 거래를 수행하지 않습니다. 원본 인게임 프리팹은 변경하지 않습니다.
+
+2026-10-22: All seven pages use three horizontal rows with large editable text and matching examples. E or click toggles detailed rules; Esc collapses rules before closing the tutorial. Navigation and per-page detail toggles verified in HowToPlayReviewTests. Review captures: Logs/HowToPlayReadable/Page_1.png through Page_7.png; Rules_1.png through Rules_7.png. Clerk example is rendered from PF_Staff_Green, not a replacement character illustration.

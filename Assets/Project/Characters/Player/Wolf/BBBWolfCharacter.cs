@@ -9,7 +9,8 @@ namespace BuyBidBlow.Characters
         public enum Action
         {
             Locomotion, Walk, RaiseArms, Wave, Sit, Bid,
-            MixamoWalking, Defeat, HandRaising, Flair, HipHopDancing, Jump
+            MixamoWalking, Defeat, HandRaising, Flair, HipHopDancing, Jump,
+            GolfDrive, JumpingJacks, LayingPose, HurricaneKick
         }
 
         public const string ActionParameter = "Action";
@@ -46,10 +47,14 @@ namespace BuyBidBlow.Characters
             if (animator) animator.SetFloat(MovementId, Mathf.Clamp01(value));
         }
 
+        // The action last asked for (Locomotion while seated).
+        public Action Current { get; private set; }
+
         // 재생 속도를 설정하고 지정 액션 재생 요청
         public void PlayAction(Action value)
         {
             if (!animator) return;
+            Current = value;
             animator.speed = speed;
             animator.SetInteger(ActionId, (int)value);
             holdPending = value != Action.Locomotion;
@@ -63,7 +68,7 @@ namespace BuyBidBlow.Characters
         public void SetSeated(bool seated)
         {
             if (!animator) return;
-            holdPending = false;
+            holdPending = false; Current = Action.Locomotion;
             animator.SetInteger(ActionId, seated ? Hold : (int)Action.Locomotion);
             animator.Play(seated ? "Seated" : "Locomotion", 0, 0);
         }

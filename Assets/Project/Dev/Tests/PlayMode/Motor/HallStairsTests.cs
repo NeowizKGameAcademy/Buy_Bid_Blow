@@ -35,5 +35,31 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
             Assert.Greater(Mathf.Abs(p.x), 10f, "walked off the top of the stairs");
             Assert.IsTrue(motor.IsGrounded, "standing, not falling");
         }
+
+        // The mezzanine between the staircases is open floor up to the auctioneer behind the rostrum
+        // (the railing's exported bounding plates once made a false floor and ceiling there).
+        [UnityTest]
+        public IEnumerator Mezzanine_WalksUpToTheAuctioneer()
+        {
+            yield return match.Start();
+            var motor = Object.FindFirstObjectByType<CharacterMotor>();
+            motor.GetComponent<PlayerInputReader>().enabled = false;
+            // From the mezzanine behind the right staircase, straight at the auctioneer.
+            var auctioneer = GameObject.Find("Auctioneer Pig").transform.position;
+            var start = new Vector3(6, 4.05f, 7.5f);
+            var toward = Vector3.ProjectOnPlane(auctioneer - start, Vector3.up).normalized;
+            motor.Teleport(start, Quaternion.LookRotation(toward));
+            float closest = float.MaxValue;
+            for (float end = Time.time + 2f; Time.time < end;)
+            {
+                motor.SetIntent(new CharacterIntent { Move = toward });
+                yield return null;
+                closest = Mathf.Min(closest, Vector3.ProjectOnPlane(motor.transform.position - auctioneer, Vector3.up).magnitude);
+            }
+            motor.SetIntent(default);
+            var p = motor.transform.position;
+            Assert.Less(closest, 1.2f, "came up beside the auctioneer, ended at " + p);
+            Assert.That(p.y, Is.EqualTo(4f).Within(.05f), "on the mezzanine floor itself");
+        }
     }
 }

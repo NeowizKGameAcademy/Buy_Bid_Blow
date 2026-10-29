@@ -68,6 +68,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7725623120333061051, guid: 6ada88d9dc1219442b2d7f6993b027c8, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8263509629988866871}
+    - targetCorrespondingSourceObject: {fileID: 7725623120333061051, guid: 6ada88d9dc1219442b2d7f6993b027c8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8569116052927906838}
   m_SourcePrefab: {fileID: 100100000, guid: 6ada88d9dc1219442b2d7f6993b027c8, type: 3}
 --- !u!1 &4306196893772889754 stripped
 GameObject:
@@ -165,8 +168,24 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 1
   syncInterval: 0
-  Notice: 
-  NoticeVersion: 0
+--- !u!114 &8569116052927906838
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4306196893772889754}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff14bd68f111c8f40aaa98bb435a3371, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.Audio.PlayerActionAudio
+  footstep:
+    catalog: {fileID: 11400000, guid: 7417b44d9862ec845b72a6794ae585e0, type: 2}
+    id: player.footstep
+  jump:
+    catalog: {fileID: 11400000, guid: 7417b44d9862ec845b72a6794ae585e0, type: 2}
+    id: player.jump
 --- !u!4 &4427548469439754501 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7891869873154946084, guid: 6ada88d9dc1219442b2d7f6993b027c8, type: 3}

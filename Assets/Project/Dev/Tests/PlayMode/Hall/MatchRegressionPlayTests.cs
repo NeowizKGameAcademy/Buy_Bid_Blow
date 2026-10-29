@@ -7,6 +7,8 @@ using BuyBidBlow.Props;
 using BuyBidBlow.Systems.Types;
 using BuyBidBlow.UI.HUD;
 using BuyBidBlow.UI.Lobby;
+using BuyBidBlow.UI.Notebook;
+using BuyBidBlow.UI.Result;
 using Mirror;
 using NUnit.Framework;
 using UnityEngine;
@@ -29,8 +31,9 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
             Assert.IsNotNull(EventSystem.current);
             Assert.IsTrue(EventSystem.current.isActiveAndEnabled, "lobby hiding must not disable gameplay UI input");
             var hud = Object.FindFirstObjectByType<HUDController>();
-            Assert.IsNotNull(hud.Notebook);
-            Assert.IsNotNull(hud.Results);
+            var notebook = Object.FindFirstObjectByType<NetworkNotebookController>();
+            Assert.IsNotNull(notebook, "the Network Player HUD is in the local Player");
+            Assert.IsNotNull(Object.FindFirstObjectByType<NetworkMatchFeedback>());
             var local = NetworkClient.localPlayer.GetComponent<PlayerNet>();
             Assert.AreEqual(SyncMode.Owner, local.GetComponent<PlayerAssetsNet>().syncMode);
             var assets = Object.FindFirstObjectByType<PlayerAssetStatus>();
@@ -40,22 +43,23 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
             local.CmdTrade(Company.Straw, 1, true);
             yield return HostedMatch.Until(() => assets.Cash == cash - price, "asset update independent of trading UI");
             Assert.AreEqual(1, assets.GetShares(Company.Straw));
-            hud.Notebook.SetOpen(true, MatchNet.Current.round);
+            notebook.Open();
             Assert.IsTrue(hud.ModalOpen);
-            hud.Notebook.SetOpen(false, MatchNet.Current.round);
+            notebook.Close();
+            yield return null;
             Assert.IsFalse(hud.ModalOpen);
         }
 
         [UnityTest]
-        public IEnumerator EscapeFromNotebook_DoesNotAlsoStandUp()
+        public IEnumerator QFromNotebook_DoesNotAlsoStandUp()
         {
             yield return match.Start();
-            var hud = Object.FindFirstObjectByType<HUDController>();
+            var notebook = Object.FindFirstObjectByType<NetworkNotebookController>();
             var local = NetworkClient.localPlayer.GetComponent<PlayerNet>();
             var chair = Object.FindObjectsByType<Seat>(FindObjectsSortMode.None).First(s => s.auction);
             local.CmdSit(chair.Id, 0);
             yield return HostedMatch.Until(() => local.IsSeated, "seated before reading information");
-            hud.Notebook.SetOpen(true, 1);
+            notebook.Open();
             var background = InputSystem.settings.backgroundBehavior;
             var updateMode = InputSystem.settings.updateMode;
             var editorInput = InputSystem.settings.editorInputBehaviorInPlayMode;
@@ -66,16 +70,16 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
             try
             {
                 keyboard.MakeCurrent();
-                InputSystem.QueueStateEvent(keyboard, new KeyboardState(Key.Escape));
+                InputSystem.QueueStateEvent(keyboard, new KeyboardState(Key.Q));
                 InputSystem.Update();
-                Assert.IsTrue(keyboard.escapeKey.wasPressedThisFrame, "synthetic key reached the input system");
+                Assert.IsTrue(keyboard.qKey.wasPressedThisFrame, "synthetic key reached the input system");
                 // Batch mode has no focused Game view. Keep one input update alive for one game frame.
                 yield return null;
                 InputSystem.QueueStateEvent(keyboard, new KeyboardState());
                 InputSystem.Update();
                 yield return new WaitForSeconds(.1f);
-                Assert.IsFalse(hud.Notebook.IsOpen);
-                Assert.IsTrue(local.IsSeated, "one Escape consumes the notebook action only");
+                Assert.IsFalse(notebook.view.IsOpen);
+                Assert.IsTrue(local.IsSeated, "one Q consumes the notebook action only");
             }
             finally
             {
@@ -123,16 +127,16 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
         public IEnumerator FinishedMatch_ShowsAuthoritativeResultsReturnsAndStartsAgain()
         {
             yield return match.Start(roundSeconds: 1, tweak: rules => { rules.RoundCount = 2; rules.AuctionRounds = new int[0]; });
-            var hud = Object.FindFirstObjectByType<HUDController>();
+            var results = Object.FindFirstObjectByType<NetworkMatchFeedback>().results;
             var local = NetworkClient.localPlayer.GetComponent<PlayerNet>();
             var hall = Object.FindFirstObjectByType<HallSession>();
-            yield return HostedMatch.Until(() => MatchNet.Current.phase == MatchNet.Phase.Finished && hud.Results.IsOpen, "final results shown");
-            Assert.AreEqual(1, MatchNet.Current.results.Count);
-            Assert.AreEqual(local.playerId, MatchNet.Current.results[0].PlayerId);
-            Assert.AreEqual(200, MatchNet.Current.results[0].TotalAssets);
-            Assert.AreEqual("2 / 2 ROUND", hud.Results.Body.text);
-            Assert.IsTrue(hud.Results.Buttons[0].interactable, "host can return through the result screen");
-            hud.Results.Buttons[0].onClick.Invoke();
+            yield return HostedMatch.Until(() => MatchNet.Current.phase == MatchNet.Phase.Finished && results.IsOpen, "final results shown");
+            Assert.AreEqual(1, PlayerNet.LocalResults.Length);
+            Assert.IsTrue(PlayerNet.LocalResults[0].Own);
+            Assert.AreEqual(200, PlayerNet.LocalResults[0].Total);
+            Assert.AreEqual("2 / 2 ROUND", results.Body.text);
+            Assert.IsTrue(results.Buttons[0].interactable, "host can return through the result screen");
+            results.GetComponentInChildren<DetailedResultsView>().returnButton.onClick.Invoke();
             yield return HostedMatch.Until(() => !local.inMatch && !hall.IsPlaying && !MatchNet.Current, "back in reusable lobby");
             Assert.IsFalse(local.ready);
             Assert.IsNull(PlayerNet.LocalPortfolio);

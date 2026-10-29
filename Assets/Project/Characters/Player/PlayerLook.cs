@@ -27,6 +27,8 @@ namespace BuyBidBlow.Characters
         // 마우스 이동량으로 몸(앉아 있으면 시선)과 상하 시선을 회전
         public void Look(Vector2 delta)
         {
+            // The options menu scales mouse sensitivity (GameSettings).
+            delta *= BuyBidBlow.UI.Menu.GameSettings.LookMultiplier;
             float yaw = delta.x * sensitivity;
             if (IsSeated) seatedYaw = Mathf.Clamp(seatedYaw + yaw, -seatedYawLimit, seatedYawLimit);
             else transform.Rotate(0, yaw, 0);

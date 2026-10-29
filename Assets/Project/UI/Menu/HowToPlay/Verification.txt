@@ -1,1 +1,2 @@
 PASS: 7 editable pages, actual UI screenshots, 6 imported sprite assets, panel prefab and main menu scene saved; page boundary and single-page visibility checked. Keyboard Play check separate.
+2026-10-22: Auction chair interaction captured from actual hall and cropped full width; all seven page titles/step headings/bodies enlarged to 64/43/31 px and Pretendard Black. Build/captures PASS.

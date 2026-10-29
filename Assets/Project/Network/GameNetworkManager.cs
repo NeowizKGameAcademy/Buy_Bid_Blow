@@ -8,6 +8,7 @@ using BuyBidBlow.Props;
 using BuyBidBlow.Systems.Auction;
 using BuyBidBlow.Systems.Match;
 using BuyBidBlow.Systems.Room;
+using BuyBidBlow.Systems.Round;
 using BuyBidBlow.Systems.Types;
 using Mirror;
 using UnityEngine;
@@ -25,7 +26,7 @@ namespace BuyBidBlow.Network
 
     public sealed class GameNetworkManager : NetworkManager
     {
-        public const int ProtocolVersion = 5;
+        public const int ProtocolVersion = 8;
         public const string PlayScene = "SC_ExchangeFurnished";
         [Header("Match")]
         [SerializeField, Min(1)] private int minPlayers = 3;
@@ -50,7 +51,7 @@ namespace BuyBidBlow.Network
 
         private sealed class Participant
         {
-            public string Id, Token, Name, Notice = "";
+            public string Id, Token, Name;
             public int Seat, Top, Bottom, Tie;
             public bool InMatch;
             public NetworkConnectionToClient Connection;
@@ -76,6 +77,10 @@ namespace BuyBidBlow.Network
             string Arg(string name) { int i = Array.IndexOf(args, name); return i >= 0 && i + 1 < args.Length ? args[i + 1] : null; }
             if (ushort.TryParse(Arg("-port"), out var port) && transport is kcp2k.KcpTransport kcp) kcp.Port = port;
             if (int.TryParse(Arg("-minPlayers"), out var min) && min > 0) minPlayers = min;
+#if UNITY_EDITOR
+            // Editor playtests can start alone; builds keep the scene's minimum unless -minPlayers says otherwise.
+            else minPlayers = 1;
+#endif
             if (int.TryParse(Arg("-roundSeconds"), out var seconds) && seconds > 0) roundSecondsOverride = seconds;
         }
 
@@ -177,13 +182,16 @@ namespace BuyBidBlow.Network
             if (!matchNetPrefab) { Debug.LogError("Missing MatchNet prefab.", this); return false; }
             rules = JsonUtility.FromJson<MatchSettings>(matchSettingsFile.text); rules.Validate();
             if (players.Count > rules.MaxPlayerCount) return false;
+            Debug.Log($"[Server] Match rules: {rules.RoundCount} rounds, ordinary {rules.RoundSeconds}s, auction {rules.AuctionRoundSeconds}s, clock override {roundSecondsOverride}s");
             double startsAt = NetworkTime.time + prepareSeconds;
             engine = new MatchEngine(rules, randomSeed != 0 ? randomSeed : Environment.TickCount, players, startsAt, roundSecondsOverride);
             engine.PublicResolved += PublicResolved;
             engine.SecretResolved += SecretResolved;
+            engine.BetSettled += BetSettled;
             var go = Instantiate(matchNetPrefab); matchNet = go.GetComponent<MatchNet>();
             matchNet.totalRounds = rules.RoundCount; matchNet.minPrice = rules.MinPrice;
             matchNet.phase = MatchNet.Phase.Preparing; matchNet.firstRoundStartsAt = startsAt; matchNet.roundClosesAt = engine.Deadline;
+            go.GetComponent<MatchTimeline>().Publish(MatchSchedule.Build(rules, startsAt - prepareSeconds, startsAt, roundSecondsOverride));
             PublishMarket(); PublishAuction(NetworkTime.time);
             NetworkServer.Spawn(go);
             return true;
@@ -191,13 +199,14 @@ namespace BuyBidBlow.Network
 
         private void EndMatch()
         {
-            if (engine != null) { engine.PublicResolved -= PublicResolved; engine.SecretResolved -= SecretResolved; }
+            if (engine != null) { engine.PublicResolved -= PublicResolved; engine.SecretResolved -= SecretResolved; engine.BetSettled -= BetSettled; }
             foreach (var player in Players)
             {
                 player.StandUp(); player.ready = false; player.inMatch = false;
                 player.GetComponent<PlayerAssetsNet>().ClearState();
+                player.TargetClearResults();
             }
-            foreach (var participant in credentials.Values) { participant.InMatch = false; participant.Notice = ""; }
+            foreach (var participant in credentials.Values) participant.InMatch = false;
             foreach (var token in credentials.Where(p => p.Value.Connection == null).Select(p => p.Key).ToArray()) credentials.Remove(token);
             if (matchNet && NetworkServer.active) NetworkServer.Destroy(matchNet.gameObject);
             matchNet = null; engine = null; MatchStarted = false;
@@ -231,17 +240,25 @@ namespace BuyBidBlow.Network
             PublishMarket(); matchNet.lastChanges.Clear();
             foreach (var company in Companies) if (engine.LastChange(company) != 0) matchNet.lastChanges.Add(new PriceChange(company, engine.LastChange(company)));
             matchNet.lastClosedRound = engine.Complete ? rules.RoundCount : engine.Round - 1;
-            if (engine.Complete)
-            {
-                matchNet.results.Clear();
-                foreach (var entry in engine.GetStandings())
-                {
-                    var row = entry; row.Nickname = NicknameOf(new PlayerId(row.PlayerId)); matchNet.results.Add(row);
-                }
-                matchNet.phase = MatchNet.Phase.Finished;
-            }
+            if (engine.Complete) matchNet.phase = MatchNet.Phase.Finished;
             else { matchNet.roundClosesAt = engine.Deadline; matchNet.round = engine.Round; }
             SendPortfolios();
+            if (engine.Complete) PublishResults();
+        }
+
+        // Each participant gets the final table with the full breakdown of every row.
+        private void PublishResults()
+        {
+            var standings = engine.GetStandings();
+            foreach (var recipient in Players.Where(p => p.inMatch))
+                recipient.TargetResults(standings.Select(row =>
+                {
+                    var id = new PlayerId(row.PlayerId); var snapshot = engine.Snapshot(id);
+                    return new FinalStanding { Rank = row.Rank, Total = row.TotalAssets, Nickname = NicknameOf(id), Own = row.PlayerId == recipient.playerId,
+                        Cash = snapshot.Cash, StockValue = row.TotalAssets - snapshot.Cash, Shares = Companies.Sum(c => snapshot.GetShares(c)),
+                        CompanyShares = Companies.Select(c => snapshot.GetShares(c)).ToArray(), FinalPrices = Companies.Select(c => engine.Price(c)).ToArray(),
+                        AssetHistory = engine.AssetHistory(id) };
+                }).ToArray(), rules.RoundCount);
         }
 
         private Participant ParticipantOf(PlayerId id) => credentials.Values.FirstOrDefault(p => p.Id == id.Value);
@@ -251,23 +268,33 @@ namespace BuyBidBlow.Network
             var participant = ParticipantOf(id);
             if (participant?.Connection?.identity && participant.Connection.identity.TryGetComponent<PlayerNet>(out var player)) SendPortfolio(participant.Connection, player);
         }
+        private PlayerNet NetOf(PlayerId id)
+        {
+            var participant = ParticipantOf(id);
+            return participant?.Connection?.identity ? participant.Connection.identity.GetComponent<PlayerNet>() : null;
+        }
         private void PublicResolved(AuctionResult result)
         {
-            matchNet.auctionResult = result.Sold ? $"공개 낙찰 · {NicknameOf(result.Winner)} · ${result.Price}" : "공개 경매 유찰";
-            matchNet.auctionResultVersion++;
+            foreach (var player in Players.Where(p => p.inMatch))
+                player.TargetAuctionOutcome(new AuctionOutcome { Sold = result.Sold, Won = result.Sold && result.Winner.Value == player.playerId,
+                    Winner = result.Sold ? NicknameOf(result.Winner) : "", Amount = result.Price });
             if (result.Sold) SendPortfolio(result.Winner);
         }
+        // Only a bidder learns their own outcome; losers never get the winner or the winning price.
         private void SecretResolved(SecretResult result)
         {
             foreach (var id in result.Players)
             {
-                var participant = ParticipantOf(id);
-                if (participant == null) continue;
-                participant.Notice = result.Result.Sold && result.Result.Winner.Equals(id) ? "비공개 경매 낙찰 성공 · I 내 정보" : "비공개 경매 낙찰 실패";
-                if (participant.Connection?.identity)
-                    participant.Connection.identity.GetComponent<PlayerAssetsNet>().ShowNotice(participant.Notice);
+                var player = NetOf(id);
+                if (player) player.TargetAuctionOutcome(new AuctionOutcome { Secret = true, Sold = result.Result.Sold,
+                    Won = result.Result.Sold && result.Result.Winner.Equals(id), Amount = engine.Auction.Secret.GetSubmitted(id) });
                 SendPortfolio(id);
             }
+        }
+        private void BetSettled(PlayerId id, Company company, int stake, int payout)
+        {
+            var player = NetOf(id);
+            if (player) player.TargetNotice(new MatchNotice { Kind = MatchNoticeKind.BetSettled, Company = (int)company, Amount = stake, Payout = payout, Won = payout > 0 });
         }
 
         private void PublishAuction(double now)
@@ -318,21 +345,36 @@ namespace BuyBidBlow.Network
         [Server]
         public RequestResult Trade(NetworkConnectionToClient conn, Company company, int quantity, bool buy)
         {
+            int before = engine != null ? engine.Snapshot(PlayerIdOf(conn)).Cash : 0;
             var result = Request(conn, buy ? RequestKind.Buy : RequestKind.Sell, () => engine.Trade(PlayerIdOf(conn), company, quantity, buy, NetworkTime.time));
-            result.Company = company; return result;
+            result.Company = company;
+            int after = result.Succeeded ? engine.Snapshot(PlayerIdOf(conn)).Cash : before;
+            Notify(conn, new MatchNotice { Kind = result.Succeeded ? MatchNoticeKind.Trade : MatchNoticeKind.Rejected, Company = (int)company,
+                Quantity = quantity, Amount = Math.Abs(after - before), Buy = buy, Message = result.Message });
+            return result;
         }
         [Server]
         public RequestResult ToggleBet(NetworkConnectionToClient conn, Company company)
         {
-            var result = Request(conn, RequestKind.Bet, () => engine.ToggleBet(PlayerIdOf(conn), company, NetworkTime.time));
-            result.Company = company; return result;
+            var id = PlayerIdOf(conn);
+            bool before = engine != null && engine.HasBet(id); int stake = engine != null ? engine.BetStake(id) : 0;
+            var result = Request(conn, RequestKind.Bet, () => engine.ToggleBet(id, company, NetworkTime.time));
+            result.Company = company;
+            bool after = engine != null && engine.HasBet(id);
+            Notify(conn, new MatchNotice { Kind = before && !after ? MatchNoticeKind.BetCancelled : !before && after ? MatchNoticeKind.BetJoined : MatchNoticeKind.Rejected,
+                Company = (int)company, Amount = after ? engine.BetStake(id) : stake, Message = result.Message });
+            return result;
         }
         [Server]
         public RequestResult Bid(NetworkConnectionToClient conn, int amount, bool cancel)
         {
             if (conn?.identity == null || !conn.identity.TryGetComponent<PlayerNet>(out var player) || !player.IsSeated ||
                 !seatsById.TryGetValue(player.hallSeat, out var seat) || !seat.Auction || player.hallSeatSlot < 0 || player.hallSeatSlot >= seat.Slots)
-                return new RequestResult(RequestKind.Bid, false, "객석에 앉아야 입찰할 수 있습니다.");
+            {
+                var refused = new RequestResult(RequestKind.Bid, false, "객석에 앉아야 입찰할 수 있습니다.");
+                Notify(conn, new MatchNotice { Kind = MatchNoticeKind.Rejected, Message = refused.Message });
+                return refused;
+            }
             var previous = engine?.Auction?.Open;
             PlayerId outbid = previous != null && previous.HasBid ? previous.HighestBidder : new PlayerId("");
             var result = Request(conn, RequestKind.Bid, () => engine.Bid(PlayerIdOf(conn), amount, cancel, NetworkTime.time));
@@ -345,7 +387,12 @@ namespace BuyBidBlow.Network
                 }
                 PublishAuction(NetworkTime.time);
             }
+            Notify(conn, new MatchNotice { Kind = result.Succeeded ? MatchNoticeKind.Accepted : MatchNoticeKind.Rejected, Message = result.Message });
             return result;
+        }
+        private static void Notify(NetworkConnectionToClient conn, MatchNotice notice)
+        {
+            if (conn?.identity && conn.identity.TryGetComponent<PlayerNet>(out var player)) player.TargetNotice(notice);
         }
         private RequestResult Request(NetworkConnectionToClient conn, RequestKind kind, Func<RequestResult> apply)
         {
@@ -448,10 +495,7 @@ namespace BuyBidBlow.Network
             player.inMatch = MatchStarted && participant.InMatch;
             NetworkServer.AddPlayerForConnection(conn, go);
             if (player.inMatch)
-            {
                 SendPortfolio(conn, player);
-                if (!string.IsNullOrEmpty(participant.Notice)) player.GetComponent<PlayerAssetsNet>().ShowNotice(participant.Notice);
-            }
         }
         public override void OnServerDisconnect(NetworkConnectionToClient conn)
         {

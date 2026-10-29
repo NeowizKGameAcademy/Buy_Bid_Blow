@@ -14,6 +14,10 @@ public sealed class MatchEngine {
  readonly Dictionary<Company,int> inventory=new Dictionary<Company,int>();
  readonly Dictionary<PlayerId,Bet> bets=new Dictionary<PlayerId,Bet>();
  private readonly Dictionary<PlayerId,List<Info>> information=new Dictionary<PlayerId,List<Info>>();
+ readonly int[][] history;
+ readonly Dictionary<PlayerId,List<int>> assetHistory=new Dictionary<PlayerId,List<int>>();
+ public int[] AssetHistory(PlayerId player)=>assetHistory[player].ToArray();
+ void RecordAssets(int priceIndex){foreach(var entry in assets){var snapshot=Snapshot(entry.Key);int total=snapshot.Cash;foreach(Company c in Enum.GetValues(typeof(Company)))total=checked(total+snapshot.GetShares(c)*prices[priceIndex][(int)c]);assetHistory[entry.Key].Add(total);}}
  readonly List<int[]> prices=new List<int[]>();readonly LotGenerator lots;
  public readonly TradeService Trades;
  public AuctionRound Auction {get;private set;}
@@ -21,18 +25,20 @@ public sealed class MatchEngine {
  public double Deadline {get;private set;}
  public bool Complete {get;private set;}
  public event Action Changed;
+ public event Action<PlayerId,Company,int,int> BetSettled;
  public event Action<AuctionResult> InformationAwarded; public event Action<AuctionResult> PublicResolved; public event Action<SecretResult> SecretResolved;
  readonly int roundSecondsOverride;
  // 설정을 검증하고 자산·재고·전체 라운드 가격·경매 물건을 미리 만든 뒤 1라운드 시작
  // now: when round 1 opens. roundSecondsOverride > 0 makes every round that long (playtests).
  public MatchEngine(MatchSettings settings,int seed,IReadOnlyList<PlayerId> players,double now,int roundSecondsOverride=0){
- settings.Validate();Settings=settings;this.roundSecondsOverride=roundSecondsOverride;// Servers may start with fewer players for playtests (-minPlayers); they get the smallest table's supply.
- int supply=settings.GetInitialCompanySupply(Math.Max(players.Count,settings.MinPlayerCount));
+ settings.Validate();Settings=settings;this.roundSecondsOverride=roundSecondsOverride;// Servers may start with fewer players for playtests (-minPlayers); supply still uses the actual starting player count.
+ int supply=checked(players.Count*settings.SharesPerCompanyPerPlayer+settings.AdditionalSharesPerCompany);
  foreach(var p in players){if(assets.ContainsKey(p))throw new ArgumentException("Duplicate player");assets.Add(p,new PlayerPortfolio(settings.StartingCash,settings.StartingShares));information.Add(p,new List<Info>());}
  foreach(Company c in Enum.GetValues(typeof(Company)))inventory[c]=supply;
  var rng=new Random(seed);prices.Add(settings.RollStartingPrices(rng));
  for(int i=0;i<settings.RoundCount;i++){var next=(int[])prices[i].Clone();foreach(var change in PriceChangeGenerator.Generate(settings.PriceChange,rng))next[(int)change.Company]=Math.Max(settings.MinPrice,next[(int)change.Company]+change.Amount);prices.Add(next);}
- lots=new LotGenerator(settings.AuctionRounds,prices,rng);Trades=new TradeService(assets,Price,inventory);StartRound(now);
+ history=PriceChangeGenerator.GenerateHistory(settings.PriceChange,prices[0],settings.MinPrice,seed);
+ lots=new LotGenerator(settings.AuctionRounds,prices,rng);Trades=new TradeService(assets,Price,inventory);foreach(var p in players)assetHistory[p]=new List<int>();RecordAssets(0);StartRound(now);
  }
  int PriceIndex=>Complete?Settings.RoundCount:Round-1;
  // 현재 공개된 회사 가격을 반환
@@ -40,10 +46,8 @@ public sealed class MatchEngine {
  // 직전 라운드 대비 회사 가격 변동을 반환
  public int LastChange(Company c)=>PriceIndex==0?0:prices[PriceIndex][(int)c]-prices[PriceIndex-1][(int)c];
  // Public chart history stops at the currently revealed price, never the precomputed future.
- public int PublishedPriceCount=>PriceIndex+1;
- // 공개된 가격 기록에서 특정 시점의 회사 가격을 반환
- public int PublishedPrice(int sample,Company company){if(sample<0||sample>=PublishedPriceCount)throw new ArgumentOutOfRangeException(nameof(sample));return prices[sample][(int)company];}
- // 회사의 남은 시장 재고를 반환
+ public int PublishedPriceCount=>PriceChangeGenerator.HistoryRoundCount+PriceIndex+1;
+ public int PublishedPrice(int sample,Company company){if(sample<0||sample>=PublishedPriceCount)throw new ArgumentOutOfRangeException(nameof(sample));return sample<PriceChangeGenerator.HistoryRoundCount?history[sample][(int)company]:prices[sample-PriceChangeGenerator.HistoryRoundCount][(int)company];}
  public int Stock(Company c)=>inventory[c];
  // 플레이어의 포트폴리오 스냅샷을 반환
  public PortfolioSnapshot Snapshot(PlayerId p)=>Trades.GetSnapshot(p);
@@ -88,7 +92,7 @@ public sealed class MatchEngine {
  }}
  void Award(AuctionResult result){information[result.Winner].Add(result.Lot.First);information[result.Winner].Add(result.Lot.Second);InformationAwarded?.Invoke(result);}
  // 마감 시각이 지난 라운드를 닫아 베팅을 정산하고 다음 라운드로 진행하거나 매치 종료
- public void Tick(double now){if(Complete)return;bool changed=false;while(!Complete&&now>=Deadline){Auction?.Tick(Deadline);int closing=Round;foreach(var entry in bets){var b=entry.Value;if(prices[closing][(int)b.Company]<prices[closing-1][(int)b.Company])assets[entry.Key].Credit(b.Stake*2);}bets.Clear();double boundary=Deadline;if(Round==Settings.RoundCount){Complete=true;Auction=null;}else{Round++;StartRound(boundary);}changed=true;}Auction?.Tick(now);if(changed)Changed?.Invoke();}
+ public void Tick(double now){if(Complete)return;bool changed=false;while(!Complete&&now>=Deadline){Auction?.Tick(Deadline);int closing=Round;foreach(var entry in bets){var b=entry.Value;int payout=prices[closing][(int)b.Company]<prices[closing-1][(int)b.Company]?b.Stake*2:0;if(payout>0)assets[entry.Key].Credit(payout);BetSettled?.Invoke(entry.Key,b.Company,b.Stake,payout);}bets.Clear();RecordAssets(closing);double boundary=Deadline;if(Round==Settings.RoundCount){Complete=true;Auction=null;}else{Round++;StartRound(boundary);}changed=true;}Auction?.Tick(now);if(changed)Changed?.Invoke();}
  // 현금과 보유 주식 평가액을 합한 총자산을 계산
  public int Total(PlayerId p){var s=Snapshot(p);int total=s.Cash;foreach(Company c in Enum.GetValues(typeof(Company)))total=checked(total+s.GetShares(c)*Price(c));return total;}
  // 총자산·보유 주식 수로 순위를 매겨 문자열로 반환

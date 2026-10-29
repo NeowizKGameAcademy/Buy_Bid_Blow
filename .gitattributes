@@ -44,6 +44,12 @@
 LightingData.asset binary
 NavMesh.asset      binary
 TerrainData*.asset binary
+
+# TMP SDF 폰트 에셋은 아틀라스 텍스처가 수 MB짜리 한 줄로 들어 있어서,
+# 텍스트 diff를 그리면 소스트리 같은 GUI가 멈춘다. text·merge 속성은
+# 위 *.asset 규칙을 그대로 받고 diff만 끈다("Binary files differ"로 표시).
+*SDF*.asset        -diff
+
 *.mask             text merge=unityyamlmerge
 *.playable         text merge=unityyamlmerge
 *.signal           text merge=unityyamlmerge

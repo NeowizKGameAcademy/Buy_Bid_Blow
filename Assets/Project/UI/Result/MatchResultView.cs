@@ -11,6 +11,7 @@ namespace BuyBidBlow.UI.Result
         public int Rank, TotalAssets, Cash, StockValue, TotalShares;
         public string Nickname;
         public bool IsLocal;
+        public int[] CompanyShares, FinalPrices, AssetHistory;
     }
     public sealed class MatchResultView : ModalView
     {
@@ -36,6 +37,13 @@ namespace BuyBidBlow.UI.Result
             Winner.text = string.Join(" · ", entries.Where(e => e.Rank == 1).Select(e => e.Nickname));
             SetButtons("로비로 돌아가기"); EscapeEnabled = false;
             Show("최종 결과", $"{totalRounds} / {totalRounds} ROUND"); SetButtonEnabled(0, canReturn);
+            var details=GetComponentInChildren<DetailedResultsView>(true);
+            if(!details){var prefab=Resources.Load<GameObject>("BBB_DetailedResults");if(prefab)details=Instantiate(prefab,transform).GetComponent<DetailedResultsView>();}
+            if(details){
+                // Keep the legacy ModalView callbacks, but do not draw its table behind the new translucent art.
+                if(Title && Title.transform.parent!=transform)Title.transform.parent.gameObject.SetActive(false);
+                details.gameObject.SetActive(true);details.transform.SetAsLastSibling();details.Present(this,entries.ToArray(),canReturn,totalRounds);
+            }
             Footer.text = canReturn ? "총자산 동점 → 보유 주식 수 비교 → 동일하면 공동 순위" : "방장의 로비 복귀를 기다리고 있습니다.";
         }
     }

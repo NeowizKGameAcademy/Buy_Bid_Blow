@@ -63,7 +63,8 @@ namespace BuyBidBlow.Characters
 
             if (jump.WasPressedThisFrame()) jumpPressedAt = Time.time;
             var input = uiOpen ? Vector2.zero : move.ReadValue<Vector2>();
-            bool wantsJump = !uiOpen && Time.time - jumpPressedAt <= jumpBuffer;
+            // Holding the button jumps again on every landing.
+            bool wantsJump = !uiOpen && (jump.IsPressed() || Time.time - jumpPressedAt <= jumpBuffer);
             motor.SetIntent(new CharacterIntent { Move = transform.right * input.x + transform.forward * input.y, Jump = wantsJump });
 
             if (!uiOpen && Cursor.lockState == CursorLockMode.Locked && look) look.Look(lookAction.ReadValue<Vector2>());

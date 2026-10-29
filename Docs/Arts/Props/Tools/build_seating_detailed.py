@@ -247,6 +247,8 @@ def sofaB():
                 vs.append((sg*(1.0+rr*cos(a)),y,.92+rr*sin(a)))
         for i in range(N):
             for j in range(K):fs.append((i*K+j,i*K+(j+1)%K,(i+1)*K+(j+1)%K,(i+1)*K+j))
+        # Mirroring X changes handedness. Keep both rolls facing outward.
+        if sg > 0:fs=[tuple(reversed(face)) for face in fs]
         mesh('SB_Quilted_Rolled_Arm',vs,fs,r,'cloth',True)
         # Front arm ends, broad scroll outline and individual nail heads.
         outline=[(sg*.905,-.455,.23),(sg*1.105,-.455,.23),(sg*1.105,-.455,.79)]
@@ -255,6 +257,7 @@ def sofaB():
         outline.extend([(sg*.905,-.455,.78),(sg*.905,-.455,.23)])
         vs2=outline+[(x,y+.055,z) for x,y,z in outline];L=len(outline)
         faces=[tuple(range(L-1,-1,-1)),tuple(range(L,2*L))]+[(i,(i+1)%L,(i+1)%L+L,i+L) for i in range(L)]
+        if sg > 0:faces=[tuple(reversed(face)) for face in faces]
         bevel(mesh('SB_Scroll_Arm_Face',vs2,faces,r,'cloth'),.012,4)
         tube('SB_Arm_Edge_Piping',outline,r,.004,'seam')
         for a,b in zip(outline,outline[1:]):

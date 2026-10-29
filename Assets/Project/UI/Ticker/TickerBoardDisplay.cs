@@ -1,5 +1,6 @@
 using System;
 using BuyBidBlow.Common;
+using BuyBidBlow.Systems.Market;
 using Mirror;
 using TMPro;
 using UnityEngine;
@@ -10,6 +11,8 @@ namespace BuyBidBlow.UI.Ticker
     [DisallowMultipleComponent]
     public sealed class TickerBoardDisplay : MonoBehaviour
     {
+        public static Texture IntroTexture { get; set; }
+        public static bool IntroBlank { get; set; }
         public enum ScreenMode { ByPlacement, Timer, Overview, Company }
         public ScreenMode mode;
         [Min(1)] public float companySeconds=8;
@@ -27,6 +30,11 @@ namespace BuyBidBlow.UI.Ticker
         [SerializeField] Image latestBadge;
         [SerializeField] TickerPlot largePlot;
         MatchNet source;
+        // Runtime layers over the screens: the scheduled video and the short black cut between channels.
+        RawImage videoLayer;
+        Image cutLayer;
+        string shownChannel;
+        float cutUntil;
         int cachedCount=-1, cachedCompany=-1;
         int[] history=Array.Empty<int>();
         static readonly Color White=new Color(.96f,.94f,.86f);
@@ -38,9 +46,10 @@ namespace BuyBidBlow.UI.Ticker
             name.EndsWith("_Left",StringComparison.Ordinal)?ScreenMode.Timer:
             name.EndsWith("_Right",StringComparison.Ordinal)?ScreenMode.Company:ScreenMode.Overview;
 
-        // 화면 모드를 적용하고 대기 상태 표시
-        void Awake(){ApplyMode();ShowWaiting();}
-        // 캐시 개수를 무효화해 다시 그리도록 함
+        // The scheduled channel id, or null while the board shows its fixed screen.
+        public string CurrentChannel=>shownChannel;
+
+        void Awake(){EnsureLayers();ApplyMode();ShowWaiting();}
         void OnEnable(){cachedCount=-1;}
         // 매치 가격 기록 변화를 폴링해 개요·회사 화면과 타이머 갱신
         void Update()
@@ -51,6 +60,10 @@ namespace BuyBidBlow.UI.Ticker
                 source=current;cachedCount=-1;cachedCompany=-1;
                 history=Array.Empty<int>();ShowWaiting();
             }
+            var director=TickerDirector.Active;
+            TickerShot shot=default;
+            bool scheduled=director&&director.TryGetShot(name,out shot);
+            Program(director,shot);
             if(!current||!surface)return;
             // Poll after Mirror's message application, not in a partially applied SyncList callback.
             int count=current.priceHistory.Count;
@@ -62,18 +75,67 @@ namespace BuyBidBlow.UI.Ticker
                 PresentOverview(history);
             }
             double elapsed=Math.Max(0,NetworkTime.time-current.firstRoundStartsAt);
-            int company=(int)(elapsed/Math.Max(1,companySeconds))%3;
-            if(company!=cachedCompany){PresentCompany(history,company);cachedCompany=company;}
+            int company=scheduled&&shot.Channel.screen=="Company"?shot.Company:(int)(elapsed/Math.Max(1,companySeconds))%3;
+            if(company!=cachedCompany){PresentCompany(history,company,-PriceChangeGenerator.HistoryRoundCount);cachedCompany=company;}
             SetClock(current.phase==MatchNet.Phase.Finished?0:current.SecondsLeft);
         }
 
-        // 해석된 화면 모드에 맞는 그룹만 활성화
-        public void ApplyMode()
+        public void ApplyMode()=>Show(ResolvedMode);
+        void Show(ScreenMode screen)
         {
             if(!timerGroup)return;
-            timerGroup.SetActive(ResolvedMode==ScreenMode.Timer);
-            overviewGroup.SetActive(ResolvedMode==ScreenMode.Overview);
-            companyGroup.SetActive(ResolvedMode==ScreenMode.Company);
+            timerGroup.SetActive(screen==ScreenMode.Timer);
+            overviewGroup.SetActive(screen==ScreenMode.Overview);
+            companyGroup.SetActive(screen==ScreenMode.Company);
+        }
+        // Shows the director's channel for this board, or the fixed screen when nothing is scheduled.
+        void Program(TickerDirector director,TickerShot shot)
+        {
+            if(!videoLayer)return;
+            if(IntroTexture)
+            {
+                Show(ResolvedMode);videoLayer.enabled=true;videoLayer.texture=IntroTexture;
+                int slice=name.EndsWith("_Right",StringComparison.Ordinal)?0:name.EndsWith("_Center",StringComparison.Ordinal)?1:2;
+                videoLayer.uvRect=new Rect(slice/3f,0,1f/3f,1);cutLayer.enabled=false;
+                return;
+            }
+            if(IntroBlank)
+            {
+                timerGroup.SetActive(false);overviewGroup.SetActive(false);companyGroup.SetActive(false);videoLayer.enabled=false;cutLayer.enabled=false;
+                return;
+            }
+            if(director&&director.TryGetIntroTexture(out var introTexture))
+            {
+                Show(ResolvedMode);videoLayer.enabled=true;videoLayer.texture=introTexture;videoLayer.uvRect=new Rect(0,0,1,1);cutLayer.enabled=false;
+                return;
+            }
+            string channel=shot.IsSet?shot.Channel.id:null;
+            if(channel!=shownChannel)
+            {
+                if(shownChannel!=null&&channel!=null)cutUntil=Time.unscaledTime+director.Schedule.Data.cutSeconds;
+                shownChannel=channel;
+            }
+            bool video=shot.IsSet&&!string.IsNullOrEmpty(shot.Channel.video);
+            if(!shot.IsSet)Show(ResolvedMode);
+            else if(!video)Show((ScreenMode)Enum.Parse(typeof(ScreenMode),shot.Channel.screen));
+            var texture=video?director.VideoTexture(shot.Channel.video):null;
+            videoLayer.enabled=texture;
+            if(texture)
+            {
+                float slices=director.Schedule.BoardCount;
+                videoLayer.texture=texture;
+                videoLayer.uvRect=shot.Slot>=0&&shot.Channel.wide?new Rect(shot.Slot/slices,0,1/slices,1):new Rect(0,0,1,1);
+            }
+            cutLayer.enabled=Time.unscaledTime<cutUntil;
+        }
+        void EnsureLayers()
+        {
+            if(!surface||videoLayer)return;
+            videoLayer=Node(surface,"Video feed",0,0,1280,720).gameObject.AddComponent<RawImage>();
+            videoLayer.raycastTarget=false;videoLayer.enabled=false;
+            cutLayer=Panel(surface,"Channel cut",0,0,1280,720,Color.black);cutLayer.enabled=false;
+            // The LED grid stays on top of everything shown.
+            var grid=surface.Find("Subtle LED grid");if(grid)grid.SetAsLastSibling();
         }
         // 가격·차트·눈금을 비우고 대기 상태 표시
         public void ShowWaiting()
@@ -124,8 +186,7 @@ namespace BuyBidBlow.UI.Ticker
                 smallPlots[c].Present(Series(data,c),tint);
             }
         }
-        // 선택 회사의 가격·변동·대형 차트·눈금·최신가 배지 표시
-        void PresentCompany(int[] data,int c)
+        void PresentCompany(int[] data,int c,int firstRound=0)
         {
             int end=data.Length-3,prior=Math.Max(0,end-3);
             int value=data[end+c],previous=data[prior+c];var tint=ChangeColor(value,previous);
@@ -139,7 +200,8 @@ namespace BuyBidBlow.UI.Ticker
             {
                 if(i>=ticks){roundTicks[i].text="";continue;}
                 int sample=ticks==1?0:Mathf.RoundToInt((float)i*(series.Length-1)/(ticks-1));
-                roundTicks[i].text=sample==0?"START":"R"+sample;
+                int round=firstRound+sample;
+                roundTicks[i].text=round==0?"START":"R"+round;
                 var p=roundTicks[i].rectTransform.anchoredPosition;
                 p.x=58+(series.Length==1?0:(float)sample/(series.Length-1))*1050-38;
                 roundTicks[i].rectTransform.anchoredPosition=p;

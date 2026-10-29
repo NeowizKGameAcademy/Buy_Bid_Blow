@@ -1,6 +1,7 @@
 using UnityEngine;
 using BuyBidBlow.Common;
 using BuyBidBlow.Systems.Types;
+using BuyBidBlow.UI.Market;
 
 namespace BuyBidBlow.Characters
 {
@@ -19,6 +20,8 @@ namespace BuyBidBlow.Characters
             var trade = player ? player.GetComponentInChildren<LocalTradeController>() : null;
             if (!trade) return false;
             trade.OpenPanel(company);
+            var panel = player.GetComponentInChildren<TradePanelController>();
+            if (panel && panel.IsOpen && TryGetComponent(out DeskStaffAnimationClient staff)) staff.PlayGreeting();
             return true;
         }
     }

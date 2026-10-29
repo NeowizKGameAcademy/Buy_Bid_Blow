@@ -16,17 +16,14 @@ public sealed class InformationNotebookView : MonoBehaviour {
  public event Action<bool> OpenChanged;
  public bool IsOpen {get;private set;}
  public int FirstRound {get;private set;}=1;
- int currentRound=1,totalRounds=17;
+ int currentRound=1,totalRounds=13;
  readonly Dictionary<int,Direction> known=new Dictionary<int,Direction>();
  static readonly Color Ink=new Color(.04f,.18f,.18f),Past=new Color(.43f,.41f,.37f);
- // 노트 열기/닫기 상태를 바꾸고 시작 라운드 조정 후 다시 그리기
- public void SetOpen(bool open,int round){
- if(open==IsOpen)return;IsOpen=open;if(open)FirstRound=Mathf.Clamp(round-2,1,Mathf.Max(1,totalRounds-7));
+ public void SetOpen(bool open,int round,string openingCue="ui.notebook"){
+ if(open==IsOpen)return;BuyBidBlow.Audio.GameAudio.Play(open?openingCue:"ui.notebook",this);IsOpen=open;if(open)FirstRound=Mathf.Clamp(round-2,1,Mathf.Max(1,totalRounds-7));
  overlay.SetActive(open);OpenChanged?.Invoke(open);RenderRows();
  }
- // 표시 시작 라운드를 스크롤해 다시 그리기
- public void Scroll(int rows){FirstRound=Mathf.Clamp(FirstRound+rows,1,Mathf.Max(1,totalRounds-7));RenderRows();}
- // 현재 라운드·총 라운드와 획득한 방향 정보를 저장하고 갱신
+ public void Scroll(int rows){int before=FirstRound;FirstRound=Mathf.Clamp(FirstRound+rows,1,Mathf.Max(1,totalRounds-7));if(before!=FirstRound)BuyBidBlow.Audio.GameAudio.Play("ui.page",this);RenderRows();}
  public void Present(int round,int total,IReadOnlyList<Info> information){currentRound=round;totalRounds=total;known.Clear();foreach(var entry in information){known[entry.Round*3+(int)entry.CompanyA]=entry.DirectionA;known[entry.Round*3+(int)entry.CompanyB]=entry.DirectionB;}FirstRound=Mathf.Clamp(FirstRound,1,Mathf.Max(1,totalRounds-7));if(IsOpen)RenderRows();}
  // 라운드별 행과 회사별 방향 칸, 스크롤바 위치 렌더링
  void RenderRows(){if(roundNumbers==null||roundNumbers.Length==0)return;int end=Mathf.Min(totalRounds,FirstRound+roundNumbers.Length-1);pageRange.text=$"{FirstRound}–{end} / {totalRounds}R";

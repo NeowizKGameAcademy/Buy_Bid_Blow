@@ -4943,7 +4943,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u2191\u2193 \uC2A4\uD06C\uB864 \xB7 I / Esc \uB2EB\uAE30"
+  m_Text: "W / S \uC2A4\uD06C\uB864 \xB7 Q / Tab \uB2EB\uAE30"
 --- !u!1 &4169024445056453336
 GameObject:
   m_ObjectHideFlags: 0
@@ -8184,7 +8184,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2737aa7cd0afe5d4785582b57e207bed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: BuyBidBlow.Dev::BuyBidBlow.PlayerUISandbox.InformationNotebookView
-  owner: {fileID: 0}
   overlay: {fileID: 6149602504300150842}
   pageRange: {fileID: 772439150106022498}
   roundNumbers:
@@ -11056,7 +11055,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "1\u20138 / 17R"
+  m_Text: "1\u20138 / 13R"
 --- !u!1 &8733350026140327542
 GameObject:
   m_ObjectHideFlags: 0

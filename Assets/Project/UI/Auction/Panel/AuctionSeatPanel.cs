@@ -8,7 +8,7 @@ using UnityEngine.InputSystem;
 namespace BuyBidBlow.UI.Auction
 {
     // While the local player sits on a mezzanine auction chair: shows the auction panel from the public
-    // auction state on MatchNet and takes bids (←→ amount, E bid, C cancel the secret submission).
+    // auction state on MatchNet and takes bids (A/D amount, E bid, C cancel the secret submission).
     public sealed class AuctionSeatPanel : MonoBehaviour
     {
         [SerializeField] private AuctionPanelView view;
@@ -36,18 +36,18 @@ namespace BuyBidBlow.UI.Auction
         {
             var keyboard = Keyboard.current;
             var hud = GetComponentInParent<BuyBidBlow.UI.HUD.HUDController>();
-            if (keyboard != null && SeatedForAuction && (!hud || !hud.ModalOpen))
+            if (keyboard != null && SeatedForAuction && (!hud || !hud.ModalOpen) && !BuyBidBlow.UI.Notebook.NetworkNotebookController.BlocksInput)
             {
-                if (keyboard.rightArrowKey.wasPressedThisFrame) AdjustBid(1);
-                if (keyboard.leftArrowKey.wasPressedThisFrame) AdjustBid(-1);
+                if (keyboard.dKey.wasPressedThisFrame) AdjustBid(1);
+                if (keyboard.aKey.wasPressedThisFrame) AdjustBid(-1);
                 if (keyboard.eKey.wasPressedThisFrame) SubmitBid();
                 if (keyboard.cKey.wasPressedThisFrame) CancelSecret();
             }
             view.Present(Seated());
         }
 
-        // 입찰 금액을 증감하되 최소 입찰가 미만으로 내려가지 않게 함
-        public void AdjustBid(int delta) => bidAmount = Mathf.Max(MinimumBid(), bidAmount + delta);
+        public void AdjustBid(int delta)
+        {int before=bidAmount;bidAmount=Mathf.Max(MinimumBid(),bidAmount+delta);if(before!=bidAmount)BuyBidBlow.Audio.GameAudio.Play("ui.quantity",this);}
 
         // 경매 진행 중이면 현재 금액으로 입찰 전송
         public void SubmitBid()
@@ -65,7 +65,7 @@ namespace BuyBidBlow.UI.Auction
         private void Send(int amount, bool cancel)
         {
             var local = NetworkClient.localPlayer ? NetworkClient.localPlayer.GetComponent<PlayerNet>() : null;
-            if (local) local.CmdBid(amount, cancel);
+            if (local){BuyBidBlow.Audio.GameAudio.Play(cancel?"ui.close":"ui.confirm",this);local.CmdBid(amount, cancel);}
         }
 
         // 착석 중이면 입찰 응답 메시지를 일정 시간 표시하도록 저장
@@ -124,6 +124,7 @@ namespace BuyBidBlow.UI.Auction
             data.ownSubmitted = data.secret ? PlayerNet.LocalSecretBid : 0;
             var local = NetworkClient.localPlayer ? NetworkClient.localPlayer.GetComponent<PlayerNet>() : null;
             data.ownHighest = data.hasBid && local && match.highestBidderId == local.playerId;
+            if(data.ownHighest)data.ownSubmitted=data.highestBid;
             return data;
         }
     }

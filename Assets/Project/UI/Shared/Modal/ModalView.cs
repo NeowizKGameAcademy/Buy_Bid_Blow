@@ -26,6 +26,7 @@ namespace BuyBidBlow.UI.Shared
         // 이전 선택을 기억하고 제목·본문·원인 설정 후 모달 열기
         public virtual void Show(string title, string body, string cause = "")
         {
+            BuyBidBlow.Audio.UIAudioFeedback.Bind(transform);
             if (!gameObject.activeSelf) previousSelection = EventSystem.current ? EventSystem.current.currentSelectedGameObject : null;
             Title.text = title ?? ""; Body.text = body ?? "";
             if (Cause) Cause.text = cause ?? "";
@@ -61,6 +62,7 @@ namespace BuyBidBlow.UI.Shared
         public void Submit(int index)
         {
             if (index >= 0 && (index >= Buttons.Length || !Buttons[index].gameObject.activeSelf || !Buttons[index].interactable)) return;
+            BuyBidBlow.Audio.GameAudio.Play(index<0?"ui.close":"ui.confirm",this);
             if (CloseOnAction) Hide();
             ActionRequested?.Invoke(index);
         }
@@ -87,6 +89,7 @@ namespace BuyBidBlow.UI.Shared
         // 키 입력으로 취소·선택 이동·제출 처리
         protected virtual void Update()
         {
+            if(BuyBidBlow.UI.Menu.GameMenuController.BlocksInput)return;
             if (Time.frameCount == openedFrame) return;
             var k = Keyboard.current; if (k == null) return;
             if (k.escapeKey.wasPressedThisFrame) { Cancel(); return; }

@@ -27,7 +27,7 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
         [UnityTest]
         public IEnumerator EachDeskClerkOpensItsCompanyAndTradesThroughTheServer()
         {
-            yield return match.Start();
+            yield return match.Start(port: 27995);
             Assert.NotNull(PlayerNet.LocalPortfolio, "starting portfolio sent to the owner");
 
             var interaction = UnityEngine.Object.FindFirstObjectByType<PlayerInteraction>();
@@ -39,7 +39,7 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
 
             // Aim from the customer side of the desk at eye height; the camera rig is detached so it holds still.
             float eye = detect.transform.position.y - interaction.transform.position.y;
-            detect.transform.SetParent(null, true);
+            match.Detach(detect.transform);
 
             foreach (var (staffName, company) in Desks)
             {
@@ -47,6 +47,10 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
                 Assert.NotNull(staff, staffName);
                 var body = staff.GetComponent<CapsuleCollider>();
                 Assert.NotNull(body, staffName + " collider");
+                var greeting = staff.GetComponent<DeskStaffAnimationClient>();
+                Assert.NotNull(greeting); Assert.IsFalse(greeting.IsGreeting);
+                Assert.IsFalse(greeting.greeting.isLooping);
+                var originalPosition = staff.transform.position;
                 Vector3 target = body.bounds.center;
                 Vector3 eyePos = staff.transform.position + staff.transform.forward * 2.2f + Vector3.up * eye;
                 detect.transform.SetPositionAndRotation(eyePos, Quaternion.LookRotation(target - eyePos));
@@ -57,6 +61,7 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
 
                 interaction.Interact();
                 Assert.IsTrue(panel.IsOpen, staffName + " opens the trade panel");
+                Assert.IsTrue(greeting.IsGreeting);
 
                 int cash = assets.Cash, shares = assets.GetShares(company), price = MatchNet.Current.GetPrice(company);
                 var view = UnityEngine.Object.FindObjectsByType<TradingPanelView>(FindObjectsSortMode.None).Single();
@@ -102,6 +107,11 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
                 }
                 finally { PlayerNet.LocalReply -= listen; }
                 panel.Close();
+                yield return HostedMatch.Until(() => !greeting.IsGreeting, staffName + " returns to idle", 8);
+                Assert.Less(Vector3.Distance(originalPosition, staff.transform.position), .001f);
+                interaction.Interact();
+                Assert.IsTrue(panel.IsOpen); Assert.IsTrue(greeting.IsGreeting, "every visit replays locally");
+                panel.Close();
             }
         }
 
@@ -110,13 +120,16 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
         {
             yield return match.Start(roundSeconds: 1);
             int bells = 0;
-            MatchNet.Current.ClosingBell += (_, __) => bells++;
-            yield return HostedMatch.Until(() => MatchNet.Current.phase == MatchNet.Phase.Finished, "match finished", 40);
-            Assert.AreEqual(17, MatchNet.Current.lastClosedRound, "last Closing Bell is round 17");
-            Assert.AreEqual(17, MatchNet.Current.round, "round stays at the last one");
-            Assert.GreaterOrEqual(bells, 16, "a Closing Bell per round");
+            System.Action<MatchNet.RoundTurn> count = turn => { if (turn.Closed > 0) bells++; };
+            MatchNet.RoundTurned += count;
+            try { yield return HostedMatch.Until(() => MatchNet.Current.phase == MatchNet.Phase.Finished, "match finished", 40); }
+            finally { MatchNet.RoundTurned -= count; }
+            Assert.AreEqual(13, MatchNet.Current.lastClosedRound, "last Closing Bell is round 13");
+            Assert.AreEqual(13, MatchNet.Current.round, "round stays at the last one");
+            Assert.GreaterOrEqual(bells, 12, "a Closing Bell per round");
         }
 
         static string Label(TradingPanelView view, string path) => view.transform.Find(path).GetComponent<UnityEngine.UI.Text>().text;
     }
 }
+

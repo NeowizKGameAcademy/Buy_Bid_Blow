@@ -24,6 +24,12 @@ namespace BuyBidBlow.Dev.Editor
             foreach (var renderer in renderers.Skip(1)) bounds.Encapsulate(renderer.bounds);
             return bounds;
         }
+
+        // Height of the soles: the lowest foot or toe bone. Skinned renderer bounds reach below the feet, so
+        // standing a pig on them leaves it floating.
+        internal static float SoleY(GameObject go) => go.GetComponentsInChildren<Transform>(true)
+            .Where(t => t.name.Contains("Foot") || t.name.Contains("Toe")).Select(t => t.position.y)
+            .DefaultIfEmpty(BoundsOf(go).min.y).Min();
         static GameObject MakeStaff(string color)
         {
             string folder = Root + "/StandingStaff";
@@ -97,7 +103,7 @@ namespace BuyBidBlow.Dev.Editor
                 var bounds = BoundsOf(go);
                 var target = chair.position + forward * .65f;
                 target.y = BoundsOf(chair.gameObject).min.y;
-                go.transform.position += target - new Vector3(bounds.center.x, bounds.min.y, bounds.center.z);
+                go.transform.position += target - new Vector3(bounds.center.x, SoleY(go), bounds.center.z);
                 Debug.Log("STAFF " + go.name + " bounds=" + BoundsOf(go));
             }
         }
@@ -141,7 +147,7 @@ namespace BuyBidBlow.Dev.Editor
         {
             var right = Vector3.Cross(Vector3.up, forward).normalized;
             var bounds = BoundsOf(go);
-            var feet = new Vector3(bounds.center.x, bounds.min.y, bounds.center.z);
+            var feet = new Vector3(bounds.center.x, SoleY(go), bounds.center.z);
             var floor = chair.position; floor.y = BoundsOf(chair.gameObject).min.y;
             var scale = go.transform.lossyScale;
             float radius = capsule.radius * Mathf.Max(scale.x, scale.z) - .02f, half = Mathf.Max(0, capsule.height * scale.y / 2 - radius);
@@ -156,8 +162,9 @@ namespace BuyBidBlow.Dev.Editor
             {
                 var root = go.transform.position + (target - feet);
                 var center = root + go.transform.rotation * Vector3.Scale(capsule.center, scale);
-                // Lift the bottom a little so the floor itself does not count.
-                var bottom = center + Vector3.down * (half - .05f); var top = center + Vector3.up * half;
+                // Keep the checked capsule's bottom just above the floor itself, which never counts.
+                var bottom = center + Vector3.down * half; bottom.y = Mathf.Max(bottom.y, target.y + radius + .05f);
+                var top = center + Vector3.up * half; if (top.y < bottom.y) top = bottom;
                 if (!Physics.OverlapCapsule(bottom, top, radius, Physics.AllLayers, QueryTriggerInteraction.Ignore).Any(furniture.Contains)) return root;
             }
             throw new InvalidOperationException("No clear spot beside " + chair.name);
@@ -201,6 +208,7 @@ namespace BuyBidBlow.Dev.Editor
         {
             try {
                 var staff = Colors.Select(MakeStaff).ToArray();
+                DeskStaffAnimationSetup.Apply();
                 string path = HallLevelBuilder.Root + "/AuctionHall_Furnished.prefab";
                 var hall = PrefabUtility.LoadPrefabContents(path);
                 try { Place(hall, staff); PrefabUtility.SaveAsPrefabAsset(hall, path); } finally { PrefabUtility.UnloadPrefabContents(hall); }

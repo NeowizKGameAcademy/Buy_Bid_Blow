@@ -12,8 +12,8 @@ using UnityEngine.TestTools;
 
 namespace BuyBidBlow.Dev.Tests.PlayMode
 {
-    // The cursor comes back locked after Esc closes the trade panel or stands the player up, even when
-    // something else (the Editor does this on Esc) releases the lock a frame later.
+    // Q closes the trade panel and stands the player up with the cursor locked again, even when something
+    // else (the Editor's Game view, for one) drops the lock; holding Left Alt frees it until released.
     public sealed class CursorLockTests
     {
         readonly HostedMatch match = new HostedMatch();
@@ -42,10 +42,10 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
             yield return null;
             Assert.AreEqual(CursorLockMode.Locked, Cursor.lockState, "locked while playing");
 
-            // Trade panel: open shows the cursor, Esc closes it and the lock comes back.
+            // Trade panel: open shows the cursor, Q closes it and the lock comes back.
             var staff = GameObject.Find("Staff_STRAW_Yellow");
             float eye = detect.transform.position.y - interaction.transform.position.y;
-            detect.transform.SetParent(null, true);
+            match.Detach(detect.transform);
             var eyePos = staff.transform.position + staff.transform.forward * 2.2f + Vector3.up * eye;
             detect.transform.SetPositionAndRotation(eyePos, Quaternion.LookRotation(staff.GetComponent<Collider>().bounds.center - eyePos));
             yield return null; yield return null;
@@ -55,26 +55,30 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
             Assert.AreEqual(CursorLockMode.None, Cursor.lockState, "cursor free while the panel is open");
             Assert.IsTrue(Cursor.visible, "cursor shown while the panel is open");
 
-            yield return Press(Key.Escape);
-            Assert.IsFalse(panel.IsOpen, "Esc closed the panel");
+            yield return Press(Key.Q);
+            Assert.IsFalse(panel.IsOpen, "Q closed the panel");
             yield return ReleasedLikeTheEditor();
             Assert.AreEqual(CursorLockMode.Locked, Cursor.lockState, "locked again after closing the panel");
             Assert.IsFalse(Cursor.visible, "cursor hidden after closing the panel");
 
-            // Seat: Esc stands up and keeps the cursor locked.
+            // Seat: Q stands up and keeps the cursor locked.
             seats.RequestSit(Object.FindObjectsByType<Seat>(FindObjectsSortMode.None).First(s => s.auction));
             yield return HostedMatch.Until(() => seating.IsSeated, "seated");
-            yield return Press(Key.Escape);
-            yield return HostedMatch.Until(() => !seating.IsSeated, "Esc stood the player up");
+            yield return Press(Key.Q);
+            yield return HostedMatch.Until(() => !seating.IsSeated, "Q stood the player up");
             yield return ReleasedLikeTheEditor();
             Assert.AreEqual(CursorLockMode.Locked, Cursor.lockState, "locked again after standing up");
             Assert.IsFalse(Cursor.visible, "cursor hidden after standing up");
 
-            // Esc with nothing open still hands the cursor to the player, and it stays free.
-            yield return Press(Key.Escape);
+            // Holding Left Alt frees the cursor; releasing it locks again.
+            InputSystem.QueueStateEvent(keyboard, new KeyboardState(Key.LeftAlt));
             yield return null; yield return null;
-            Assert.AreEqual(CursorLockMode.None, Cursor.lockState, "Esc while walking frees the cursor");
-            Assert.IsTrue(Cursor.visible, "cursor shown after Esc while walking");
+            Assert.AreEqual(CursorLockMode.None, Cursor.lockState, "Alt held frees the cursor");
+            Assert.IsTrue(Cursor.visible, "cursor shown while Alt is held");
+            InputSystem.QueueStateEvent(keyboard, new KeyboardState());
+            yield return null; yield return null;
+            Assert.AreEqual(CursorLockMode.Locked, Cursor.lockState, "locked again after releasing Alt");
+            Assert.IsFalse(Cursor.visible, "cursor hidden after releasing Alt");
         }
 
         IEnumerator Press(Key key)

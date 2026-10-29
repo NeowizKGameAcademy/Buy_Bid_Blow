@@ -35,3 +35,16 @@ door boxes follow their hinges (center displacement 1.12 to 1.37 m). 495 collide
 inactive objects were loaded. The verification did not save the scene.
 Custom motor traversal and partial-overlap/contact behavior still need Unity validation.
 CleanupUnityVerification.txt, MeshOrientationAudit.json and CleanupAudit.json contain details.
+
+Mezzanine and stairs — 2026-10-29 (later)
+
+- Removed two invisible BoxCollider plates round the auction rostrum, in both SC_ExchangeFurnished and
+  AuctionHall_Furnished: Static_-1_0_0 (7.14 x 0.14 x 2.91 m, top 4.32 m, a false floor) and Static_0_0_1
+  (7.18 x 0.13 x 2.93 m at 4.97-5.10 m, a false ceiling about 1 m above the mezzanine that stopped players
+  walking to the auctioneer). They are the curved railing's bounding plates; the railing posts stay.
+  Tool: Tools/Buy Bid Blow/Hall/Remove Phantom Collision (thin, wide boxes under 25% filled by visible meshes;
+  every other candidate measured 100%).
+- Added StairRamp_Left/Right BoxColliders on the nosings of both staircases (29.7 deg) so the motor climbs a
+  smooth slope instead of 24 steps of 0.167 m. Tool: Tools/Buy Bid Blow/Hall/Add Stair Ramps; HallLevelBuilder
+  adds them on rebuilds.
+- PlayMode HallStairsTests covers both: climbing each staircase and walking up to the auctioneer.

@@ -54,8 +54,7 @@ namespace BuyBidBlow.UI.Lobby
         Button pressed;
         float pressedUntil;
         public int SelectedCategory=>category;
-        public bool OptionsOpen=>optionPanel.activeSelf;
-        // 레이아웃·접속 패널·세션·EventSystem을 준비하고 버튼 리스너 연결
+        public bool OptionsOpen=>BuyBidBlow.UI.Menu.GameMenuController.Ensure()?.IsSettingsOpen==true;
         void Awake()
         {
             var preview=GameObject.Find("Lobby Art Preview - Editor Only");if(preview)Destroy(preview);
@@ -68,11 +67,12 @@ namespace BuyBidBlow.UI.Lobby
                 var go=new GameObject("UI EventSystem",typeof(EventSystem),typeof(InputSystemUIInputModule));
                 var module=go.GetComponent<InputSystemUIInputModule>();module.AssignDefaultActions();module.move=null;module.submit=null;module.cancel=null;
             }
+            RefreshCustomizationKeyHints();
             EnsureTextInput();
             ready.onClick.AddListener(ToggleReady);options.onClick.AddListener(ToggleOptions);exit.onClick.AddListener(Leave);
             CreateStartButton();
-            HideHostButton();
             previous.onClick.AddListener(()=>ChangeVariant(-1));next.onClick.AddListener(()=>ChangeVariant(1));
+            connection.transform.Find("Host").GetComponent<Button>().onClick.AddListener(Host);
             connection.transform.Find("Join").GetComponent<Button>().onClick.AddListener(Join);
             connection.transform.Find("Cancel").GetComponent<Button>().onClick.AddListener(()=>session.Cancel());
             optionPanel.SetActive(false);
@@ -87,6 +87,7 @@ namespace BuyBidBlow.UI.Lobby
         // Rendering remains entirely uGUI; this method draws no IMGUI controls.
         void OnGUI()
         {
+            if(BuyBidBlow.UI.Menu.GameMenuController.BlocksInput)return;
             var e=Event.current;
             if(e.type==EventType.KeyUp){heldKeys.Remove(e.keyCode);return;}
             if(e.type!=EventType.KeyDown||e.control||e.alt||e.command||e.keyCode==KeyCode.None)return;
@@ -112,18 +113,33 @@ namespace BuyBidBlow.UI.Lobby
             }
             if(key==KeyCode.O){ToggleOptions();e.Use();return;}
             if(session.CanConnect) {
+                if(key==KeyCode.H){Host();e.Use();}
                 if(key==KeyCode.J){FocusInput(address);e.Use();}
                 if(key==KeyCode.N){FocusInput(nickname);e.Use();}
                 if(key==KeyCode.Tab){FocusConnection((connectionFocus+(e.shift?4:1)+5)%5);e.Use();}
-                if(enter){if(connectionFocus==4)Join();else FocusInput(nickname);e.Use();}return;
+                if(enter){if(connectionFocus==4)Join();else if(connectionFocus==3)Host();else FocusInput(nickname);e.Use();}return;
             }
             if(key==KeyCode.Escape){Leave();e.Use();return;}
             if(key==KeyCode.Tab){focus=(focus+1)%3;e.Use();return;}
             if(enter||key==KeyCode.Space){if(focus==0)ToggleReady();else if(focus==1)ToggleOptions();else Leave();e.Use();return;}
-            if(key==KeyCode.UpArrow){SelectCategory(-1);e.Use();}
-            if(key==KeyCode.DownArrow){SelectCategory(1);e.Use();}
-            if(key==KeyCode.LeftArrow){ChangeVariant(-1);e.Use();}
-            if(key==KeyCode.RightArrow){ChangeVariant(1);e.Use();}
+            if(key==KeyCode.W){SelectCategory(-1);e.Use();}
+            if(key==KeyCode.S){SelectCategory(1);e.Use();}
+            if(key==KeyCode.A){ChangeVariant(-1);e.Use();}
+            if(key==KeyCode.D){ChangeVariant(1);e.Use();}
+        }
+        void RefreshCustomizationKeyHints()
+        {
+            for(int i=0;i<2;i++) {
+                var cap=selector.Find("Key "+i); if(!cap)continue;
+                var arrow=cap.Find("Arrow");if(arrow)arrow.gameObject.SetActive(false);
+                var label=cap.Find("Key Label");
+                if(label)label.GetComponent<Text>().text=i==0?"W":"S";
+                else Text("Key Label",cap,i==0?"W":"S",17,new Vector2(24,24),Vector2.zero,C);
+            }
+            foreach(var button in new[]{previous,next}) {
+                if(button.transform.Find("Key Hint"))continue;
+                Text("Key Hint",button.transform,button==previous?"A":"D",18,new Vector2(40,24),new Vector2(0,-42),C);
+            }
         }
         // EventSystem에 IME 지원 입력 브리지를 붙이고 입력 모듈에 연결
         static void EnsureTextInput()
@@ -154,19 +170,9 @@ namespace BuyBidBlow.UI.Lobby
         }
         // 로컬 플레이어로 매치 시작 명령 전송
         public void StartMatch(){var p=Local();if(p&&NetworkClient.ready){p.CmdStartMatch();Pulse(start);}}
-        // 방 만들기 버튼을 숨기고 도움말에서 해당 안내 제거
-        // Clients only join; the dedicated server is a separate console build.
-        void HideHostButton()
-        {
-            connection.transform.Find("Host").gameObject.SetActive(false);
-            var help=connection.transform.Find("Help").GetComponent<Text>();
-            help.text=help.text.Replace(" · H: 방 만들기","").Replace("  ·  H: 방 만들기","");
-        }
         // 로컬 플레이어 준비 상태 토글
         public void ToggleReady(){var p=Local();if(p&&NetworkClient.ready){p.SetReady(!p.ready);Pulse(ready);}}
-        // 옵션 패널 열기/닫기 토글
-        public void ToggleOptions(){optionPanel.SetActive(!optionPanel.activeSelf);optionRow=0;RefreshOptions();}
-        // 옵션 항목(음량·전체화면·닫기) 텍스트와 선택 표시 갱신
+        public void ToggleOptions(){BuyBidBlow.UI.Menu.GameMenuController.Ensure()?.OpenSettings();}
         void RefreshOptions()
         {
             var rows=new[]{"음량  "+Mathf.RoundToInt(AudioListener.volume*100)+"%   ← →","전체화면  "+(Screen.fullScreen?"켜짐":"꺼짐")+"   Enter","닫기   Esc"};
@@ -184,7 +190,6 @@ namespace BuyBidBlow.UI.Lobby
         void FocusConnection(int index)
         {
             if(index<3){FocusInput(index==0?nickname:index==1?address:port);return;}
-            if(index==3)index=4;
             StopTyping();connectionFocus=index;
             if(EventSystem.current)EventSystem.current.SetSelectedGameObject(connection.transform.Find(index==3?"Host":"Join").gameObject);
         }
@@ -196,9 +201,9 @@ namespace BuyBidBlow.UI.Lobby
         }
         // 입력값으로 접속 시도 후 성공하면 입력 모드 종료
         public void Join(){if(session.Join(nickname.text,address.text,port.text))StopTyping();}
-        // 세션에서 대기실 나가기
-        public void Leave()=>session.Leave();
-        // 버튼 눌림 효과를 잠시 표시하도록 기록
+        // 이 PC에서 방을 열고 방장으로 입장
+        public void Host(){if(session.Host(nickname.text,port.text))StopTyping();}
+        public void Leave()=>BuyBidBlow.UI.Menu.GameMenuController.Ensure()?.RequestLeave();
         void Pulse(Button b){pressed=b;pressedUntil=Time.unscaledTime+.15f;}
         // ID로 로비 스프라이트 검색
         Sprite S(string id)=>library.Find(id);
@@ -330,6 +335,7 @@ namespace BuyBidBlow.UI.Lobby
             var field=Image("Host Address",panel.transform,"14_CategoryHighlight",new Vector2(360,42),new Vector2(0,20),C,true);field.raycastTarget=true;address=field.gameObject.AddComponent<InputField>();address.targetGraphic=field;address.textComponent=Text("Address",field.transform,"localhost",21,new Vector2(332,36),Vector2.zero,C);address.text="localhost";address.characterLimit=128;
             Button("Host",panel.transform,"04_SmallButtonStates","H  방 만들기",new Vector2(220,48),new Vector2(-125,-42),C);Button("Join",panel.transform,"04_SmallButtonStates","J  접속",new Vector2(220,48),new Vector2(125,-42),C);Text("Help",panel.transform,"J: 주소 입력 → Enter 접속   ·   H: 호스트",17,new Vector2(550,30),new Vector2(0,-89),C);
             var dialog=Image("Options Dialog",root.transform,"08_Nameplate",new Vector2(520,340),Vector2.zero,C,true);optionPanel=dialog.gameObject;Text("Title",dialog.transform,"옵션",32,new Vector2(460,50),new Vector2(0,112),C);optionRows=Text("Rows",dialog.transform,"",23,new Vector2(460,210),new Vector2(0,-20),C);RefreshOptions();optionPanel.SetActive(false);
+            RefreshCustomizationKeyHints();
             UpgradeConnectionPanel();
             Canvas.ForceUpdateCanvases();Refresh(!Application.isPlaying);
         }

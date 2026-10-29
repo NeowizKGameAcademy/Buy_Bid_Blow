@@ -14,8 +14,6 @@ namespace BuyBidBlow.Characters
         public readonly SyncList<Info> Information = new SyncList<Info>();
         [SyncVar(hook = nameof(OnRevisionChanged))] private uint revision;
         public uint Revision => revision;
-        [SyncVar] public string Notice;
-        [SyncVar] public uint NoticeVersion;
 
         private void Awake() => syncMode = SyncMode.Owner;
         public override void OnStartLocalPlayer() { base.OnStartLocalPlayer(); ApplyLocal(); }
@@ -54,13 +52,10 @@ namespace BuyBidBlow.Characters
         }
 
         [Server]
-        public void ShowNotice(string message) { Notice = message; NoticeVersion++; }
-
-        [Server]
         public void ClearState()
         {
             received = false; cash = reserved = betStake = secretBid = 0; bet = -1;
-            Shares.Clear(); Information.Clear(); Notice = ""; NoticeVersion = 0; revision++;
+            Shares.Clear(); Information.Clear(); revision++;
         }
     }
 }
