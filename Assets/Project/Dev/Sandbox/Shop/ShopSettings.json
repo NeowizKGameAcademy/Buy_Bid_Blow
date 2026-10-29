@@ -1,0 +1,14 @@
+{
+    "Items": [
+        { "Id": 1, "Name": "목줄", "Description": "상대에게 채우면 내 주변 2m 안에서만 움직일 수 있다.", "Price": 200, "SellPrice": -1, "Effect": 1 },
+        { "Id": 2, "Name": "가위", "Description": "내게 채워진 목줄을 끊는다.", "Price": 50, "SellPrice": -1, "Effect": 2 },
+        { "Id": 3, "Name": "집문서", "Description": "보유하면 매 라운드 $50. 상점에 $500에 되팔 수 있다.", "Price": 50, "SellPrice": 500, "Effect": 3 }
+    ],
+    "ShopColumns": 4,
+    "ShopRows": 2,
+    "InventorySlots": 4,
+    "DeedIncome": 50,
+    "LeashRadius": 2.0,
+    "LeashReach": 3.0,
+    "LeashSeconds": 0.0
+}

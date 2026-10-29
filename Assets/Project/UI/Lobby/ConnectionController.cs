@@ -54,6 +54,12 @@ namespace BuyBidBlow.UI.Lobby
             if(!Prepare(nickname,address,port,out _))return false;
             try{room.StartClient();return true;}catch(Exception){StopTo(ConnectionState.Failed,"접속을 시작하지 못했습니다. 주소와 포트를 확인하세요.");return false;}
         }
+        // Sandbox/solo tests only: this PC runs the server and joins it. The production lobby only joins.
+        public bool Host(string nickname,string port)
+        {
+            if(!Prepare(nickname,"localhost",port,out _))return false;
+            try{room.StartHost();return true;}catch(Exception){StopTo(ConnectionState.Failed,"호스트를 시작하지 못했습니다. 같은 포트를 쓰는 서버가 켜져 있는지 확인하세요.");return false;}
+        }
         void Connected(){if(State==ConnectionState.Connecting)SetState(ConnectionState.Joining,"서버 입장 승인 대기 중…");}
         void Approved(){if(State==ConnectionState.Connecting||State==ConnectionState.Joining)SetState(ConnectionState.Joining,"승인 완료 · 플레이어 생성 중…");}
         void PlayerReady(){if(State==ConnectionState.Joining)SetState(ConnectionState.InRoom,"대기실 입장 완료");}
@@ -73,7 +79,8 @@ namespace BuyBidBlow.UI.Lobby
         void StopTo(ConnectionState result,string message)
         {
             if(stopping)return;stopping=true;stopResult=result;stopMessage=message;SetState(ConnectionState.Stopping,"연결 정리 중…");
-            if(NetworkClient.active)room.StopClient();
+            if(NetworkServer.active&&NetworkClient.active)room.StopHost();
+            else if(NetworkClient.active)room.StopClient();
             FinishStop();
         }
         void FinishStop(){if(stopping&&!NetworkClient.active&&!NetworkServer.active){stopping=false;SetState(stopResult,stopMessage);}}

@@ -14,7 +14,9 @@ namespace BuyBidBlow.UI.Notebook
         public TradePanelController trading;
         static NetworkNotebookController current;
         static int closedFrame = -1;
-        public static bool BlocksInput => BuyBidBlow.UI.Menu.GameMenuController.BlocksInput || (current && current.view && current.view.IsOpen) || closedFrame == Time.frameCount || BuyBidBlow.UI.HUD.NetworkMatchFeedback.BlocksInput;
+        // Sandbox panels (e.g. Shop) that need the cursor and must stop movement/look. Null in the production scene.
+        public static System.Func<bool> SandboxBlocksInput;
+        public static bool BlocksInput => BuyBidBlow.UI.Menu.GameMenuController.BlocksInput || (current && current.view && current.view.IsOpen) || closedFrame == Time.frameCount || BuyBidBlow.UI.HUD.NetworkMatchFeedback.BlocksInput || (SandboxBlocksInput != null && SandboxBlocksInput());
         void OnEnable()
         {
             current = this;

@@ -8,7 +8,7 @@ using BuyBidBlow.Systems.Portfolio;
 namespace BuyBidBlow.Systems.Match {
 // Match rules authority: the dedicated server runs one per match, the PlayerUI sandbox one locally.
 // UI receives snapshots and submits requests only.
-public sealed class MatchEngine {
+public sealed partial class MatchEngine {
  public readonly MatchSettings Settings;
  readonly Dictionary<PlayerId,PlayerPortfolio> assets=new Dictionary<PlayerId,PlayerPortfolio>();
  readonly Dictionary<Company,int> inventory=new Dictionary<Company,int>();

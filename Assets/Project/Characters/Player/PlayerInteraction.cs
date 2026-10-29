@@ -35,8 +35,17 @@ namespace BuyBidBlow.Characters
             }
 
             var seat = detect.DetectedCollider.GetComponentInParent<Seat>();
-            if (seat != null && seats != null && seat.CanInteract)
-                seats.RequestSit(seat);
+            if (seat != null)
+            {
+                if (seats != null && seat.CanInteract)
+                    seats.RequestSit(seat);
+                return;
+            }
+
+            // Other scene objects (doors, sandbox props) handle E themselves.
+            var target = detect.DetectedCollider.GetComponentInParent<IInteractable>();
+            if (target != null && target.CanInteract)
+                target.Interact(gameObject);
         }
     }
 }

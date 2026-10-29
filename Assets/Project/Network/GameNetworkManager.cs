@@ -21,7 +21,7 @@ namespace BuyBidBlow.Network
     public struct MatchIntroStarting : NetworkMessage {}
     public struct MatchStarting : NetworkMessage {}
     public struct MatchReturning : NetworkMessage {}
-    public sealed class GameNetworkManager : NetworkManager
+    public sealed partial class GameNetworkManager : NetworkManager
     {
         public const int ProtocolVersion=7;
         public const string PlayScene="SC_ExchangeFurnished";
