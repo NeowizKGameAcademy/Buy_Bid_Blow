@@ -1,0 +1,11 @@
+{
+    "host": "127.0.0.1",
+    "port": 3306,
+    "database": "buybidblow",
+    "user": "bbb_login",
+    "password": "여기에_비밀번호",
+    "table": "accounts",
+    "autoCreateTable": true,
+    "connectTimeoutSeconds": 5,
+    "sslMode": "None"
+}
