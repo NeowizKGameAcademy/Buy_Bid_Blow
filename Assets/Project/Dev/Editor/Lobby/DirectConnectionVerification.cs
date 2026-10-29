@@ -209,7 +209,7 @@ namespace BuyBidBlow.Dev.Editor
 
 namespace BuyBidBlow.Dev.Editor
 {
-    // These lobby checks predate the dedicated server; they still drive an in-process host.
+    // These lobby checks drive an in-process host.
     static class LobbyTestHost
     {
         public static bool Start(UI.Lobby.ConnectionController session,ushort port)

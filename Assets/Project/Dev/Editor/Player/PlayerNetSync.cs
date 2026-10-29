@@ -32,7 +32,7 @@ namespace BuyBidBlow.Dev.Editor
 
         public static void ConfigureAndBuild()
         {
-            try { ConfigurePrefab(); GameBuild.Build(); GameBuild.BuildClient(); EditorApplication.Exit(0); }
+            try { ConfigurePrefab(); GameBuild.BuildClient(); EditorApplication.Exit(0); }
             catch (System.Exception e) { Debug.LogException(e); EditorApplication.Exit(1); }
         }
     }

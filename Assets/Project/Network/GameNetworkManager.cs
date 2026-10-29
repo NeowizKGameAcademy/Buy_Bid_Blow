@@ -45,9 +45,7 @@ namespace BuyBidBlow.Network
         private readonly Dictionary<string, Participant> credentials = new Dictionary<string, Participant>();
         private static readonly Company[] Companies = (Company[])Enum.GetValues(typeof(Company));
 
-        [Serializable]
-        public struct HallSeat { public string Id; public int Slots; public bool Auction; }
-        [SerializeField] private HallSeat[] hallSeats = new HallSeat[0];
+        private struct HallSeat { public string Id; public int Slots; public bool Auction; }
         private readonly Dictionary<string, HallSeat> seatsById = new Dictionary<string, HallSeat>();
 
         private sealed class Participant
@@ -98,19 +96,18 @@ namespace BuyBidBlow.Network
             EndMatch(); roster.Clear(); admitted.Clear(); credentials.Clear(); base.OnStopServer();
         }
 
-        // Hosts read the loaded hall. Dedicated builds serialize the same catalog while generating SC_Server.
-        public void CaptureHallSeats()
+        // The host reads the seats of the loaded hall.
+        private void CaptureHallSeats()
         {
             var loaded = FindObjectsByType<Seat>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-            if (loaded.Length > 0) hallSeats = loaded.Select(s => new HallSeat { Id = s.Id, Slots = s.sittingPoints?.Length ?? 0, Auction = s.auction }).ToArray();
             seatsById.Clear();
-            foreach (var seat in hallSeats)
+            foreach (var seat in loaded.Select(s => new HallSeat { Id = s.Id, Slots = s.sittingPoints?.Length ?? 0, Auction = s.auction }))
             {
                 if (string.IsNullOrEmpty(seat.Id) || seat.Slots < 1 || seatsById.ContainsKey(seat.Id))
                     throw new InvalidOperationException("The hall seat catalog has missing/duplicate IDs or no slots.");
                 seatsById.Add(seat.Id, seat);
             }
-            if (seatsById.Count == 0) throw new InvalidOperationException("Server scene has no hall seat catalog. Regenerate it through GameBuild.");
+            if (seatsById.Count == 0) throw new InvalidOperationException("The loaded hall has no seats.");
         }
 
         public override void OnStartClient()
