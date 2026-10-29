@@ -32,7 +32,7 @@ namespace BuyBidBlow.Sandbox.Shop
         {
             NetworkClient.ReplaceHandler<ShopAvailable>(_ => { });
             NetworkClient.ReplaceHandler<ShopReply>(_ => { });
-            NetworkClient.ReplaceHandler<ShopLeashState>(_ => { });
+            NetworkClient.ReplaceHandler<ShopEffectPlay>(_ => { });
         }
     }
 }

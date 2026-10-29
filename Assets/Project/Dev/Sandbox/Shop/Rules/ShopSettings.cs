@@ -3,24 +3,26 @@ using System.Collections.Generic;
 
 namespace BuyBidBlow.Systems.Shop
 {
-    // 상점이 효과를 아는 아이템 종류. 새 효과를 만들 때만 늘린다(값은 저장·통신에 쓰이므로 바꾸지 않는다).
+    // 상점이 효과를 아는 아이템 종류. 모두 표현용이며 주가·주식·이동·입찰에는 영향이 없다.
+    // 새 효과를 만들 때만 늘린다(값은 JSON·통신에 쓰인다).
     public enum ShopEffect
     {
         None = 0,
-        Leash = 1,    // 다른 플레이어에게 채우면 그 플레이어는 사용자 반경 안에서만 움직인다.
-        Scissors = 2, // 내게 채워진 목줄을 끊는다.
-        Deed = 3      // 보유만으로 라운드가 넘어갈 때마다 수입. 상점에 되팔 수 있다.
+        Confetti = 1, // 내 주변에 색종이 폭죽
+        Bubbles = 2,  // 내 주변에 비눗방울
+        Emote = 3     // 내 머리 위에 이모티콘(Emotes 중 하나를 골라 사용)
     }
 
     // 판매 품목 하나. ShopSettings.json의 Items 배열 순서대로 판매창 칸(4×2)을 채운다.
+    // 모두 일회용이며 되팔 수 없고, 경기가 끝나면 남은 것은 사라진다.
     [Serializable]
     public sealed class ShopItemDef
     {
         public int Id;            // 1부터. 가방·통신에 쓰는 고유 번호.
         public string Name;
         public string Description;
-        public int Price;         // 구매가(달러)
-        public int SellPrice = -1; // 되팔기 가격. -1이면 되팔 수 없다.
+        public int Price;         // 구매가(달러, 인게임 현금)
+        public float Seconds = 2.5f; // 효과 지속 시간(초)
         public ShopEffect Effect;
     }
 
@@ -30,21 +32,21 @@ namespace BuyBidBlow.Systems.Shop
     {
         public ShopItemDef[] Items =
         {
-            new ShopItemDef { Id = 1, Name = "목줄", Description = "상대에게 채우면 내 주변 2m 안에서만 움직일 수 있다.", Price = 200, Effect = ShopEffect.Leash },
-            new ShopItemDef { Id = 2, Name = "가위", Description = "내게 채워진 목줄을 끊는다.", Price = 50, Effect = ShopEffect.Scissors },
-            new ShopItemDef { Id = 3, Name = "집문서", Description = "보유하면 매 라운드 $50. 상점에 $500에 되팔 수 있다.", Price = 500, SellPrice = 500, Effect = ShopEffect.Deed },
+            new ShopItemDef { Id = 1, Name = "색종이 폭죽", Description = "내 주변에 색종이가 터진다.", Price = 3, Seconds = 2.5f, Effect = ShopEffect.Confetti },
+            new ShopItemDef { Id = 2, Name = "비눗방울", Description = "내 주변에 비눗방울이 떠오른다.", Price = 3, Seconds = 3f, Effect = ShopEffect.Bubbles },
+            new ShopItemDef { Id = 3, Name = "이모티콘", Description = "머리 위에 고른 이모티콘을 띄운다.", Price = 2, Seconds = 3f, Effect = ShopEffect.Emote },
         };
+        // 이모티콘 아이템으로 고를 수 있는 글자. Pretendard에 있는 글자만 쓴다.
+        public string[] Emotes = { "^_^", "ㅠㅠ", "!!", "??", "ㅋㅋㅋ", "GG" };
         public int ShopColumns = 4;
         public int ShopRows = 2;
-        public int InventorySlots = 4;
-        // 집문서 1장당 라운드 수입(달러).
-        public int DeedIncome = 50;
-        // 목줄 반경(m): 묶인 사람은 채운 사람에게서 이 거리 안에서만 움직인다.
-        public float LeashRadius = 2f;
-        // 목줄을 채울 수 있는 거리(m).
-        public float LeashReach = 3f;
-        // 목줄 지속 시간(초). 0이면 가위로 끊거나 경기가 끝날 때까지.
-        public float LeashSeconds = 0f;
+        // 최대 보유 수(칸마다 1개).
+        public int InventorySlots = 3;
+        // 아이템 사용 간격(초). 종류와 관계없이 한 사람 기준.
+        public float UseCooldown = 10f;
+
+        public const float MaxEffectSeconds = 10f;
+        public const int MaxEmoteLength = 8;
 
         public int ShopSlots => ShopColumns * ShopRows;
 
@@ -54,15 +56,17 @@ namespace BuyBidBlow.Systems.Shop
             if (ShopColumns <= 0 || ShopRows <= 0) throw new ArgumentException("Shop grid must be at least 1x1.");
             if (Items.Length > ShopSlots) throw new ArgumentException($"Items ({Items.Length}) exceed shop slots ({ShopSlots}).");
             if (InventorySlots <= 0) throw new ArgumentException("InventorySlots must be positive.");
-            if (DeedIncome < 0) throw new ArgumentException("DeedIncome must not be negative.");
-            if (LeashRadius <= 0 || LeashReach <= 0 || LeashSeconds < 0) throw new ArgumentException("Leash values are out of range.");
+            if (UseCooldown < 0) throw new ArgumentException("UseCooldown must not be negative.");
+            if (Emotes == null || Emotes.Length == 0) throw new ArgumentException("Emotes needs at least one entry.");
+            foreach (var emote in Emotes)
+                if (string.IsNullOrWhiteSpace(emote) || emote.Length > MaxEmoteLength) throw new ArgumentException($"Emotes must be 1~{MaxEmoteLength} characters.");
             var ids = new HashSet<int>();
             foreach (var item in Items)
             {
                 if (item == null || item.Id <= 0 || !ids.Add(item.Id)) throw new ArgumentException("Item ids must be positive and unique.");
                 if (item.Price <= 0) throw new ArgumentException($"Item {item.Id} needs a positive price.");
-                if (item.SellPrice < -1) throw new ArgumentException($"Item {item.Id} SellPrice must be -1 or more.");
-                if (!Enum.IsDefined(typeof(ShopEffect), item.Effect)) throw new ArgumentException($"Item {item.Id} has an unknown effect.");
+                if (item.Seconds <= 0 || item.Seconds > MaxEffectSeconds) throw new ArgumentException($"Item {item.Id} Seconds must be in (0, {MaxEffectSeconds}].");
+                if (item.Effect == ShopEffect.None || !Enum.IsDefined(typeof(ShopEffect), item.Effect)) throw new ArgumentException($"Item {item.Id} has an unknown effect.");
             }
         }
 

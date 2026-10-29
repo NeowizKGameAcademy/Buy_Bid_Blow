@@ -1,30 +1,20 @@
 using System.Collections.Generic;
-using System.Linq;
 using BuyBidBlow.Systems.Types;
 
 namespace BuyBidBlow.Systems.Shop
 {
-    // 경기 하나의 상점 상태: 플레이어별 가방, 목줄 관계, 집문서 수입 정산 라운드.
-    // 돈은 다루지 않는다(MatchEngine.Shop이 자산과 함께 처리).
+    // 경기 하나의 상점 상태: 플레이어별 가방과 마지막 사용 시각.
+    // 돈은 다루지 않는다(MatchEngine.Shop이 자산과 함께 처리). 경기마다 새로 만들어지므로 남은 아이템은 경기가 끝나면 사라진다.
     public sealed class ShopBoard
     {
         public readonly ShopSettings Settings;
         readonly Dictionary<PlayerId, int[]> bags = new Dictionary<PlayerId, int[]>();
-        readonly Dictionary<PlayerId, Leash> leashes = new Dictionary<PlayerId, Leash>(); // 묶인 사람 → 목줄
-        int paidRound;
+        readonly Dictionary<PlayerId, double> lastUse = new Dictionary<PlayerId, double>();
 
-        public readonly struct Leash
-        {
-            public readonly PlayerId Holder;
-            public readonly double Until; // 0이면 무기한
-            public Leash(PlayerId holder, double until) { Holder = holder; Until = until; }
-        }
-
-        public ShopBoard(ShopSettings settings, int currentRound)
+        public ShopBoard(ShopSettings settings)
         {
             settings.Validate();
             Settings = settings;
-            paidRound = currentRound;
         }
 
         // ---- 가방 ----
@@ -35,6 +25,8 @@ namespace BuyBidBlow.Systems.Shop
         }
 
         public int[] BagCopy(PlayerId player) => (int[])Bag(player).Clone();
+
+        public bool HasRoom(PlayerId player) => System.Array.IndexOf(Bag(player), 0) >= 0;
 
         public bool TryAdd(PlayerId player, int itemId)
         {
@@ -52,40 +44,15 @@ namespace BuyBidBlow.Systems.Shop
 
         public void RemoveAt(PlayerId player, int slot) => Bag(player)[slot] = 0;
 
-        public int Count(PlayerId player, ShopEffect effect) =>
-            Bag(player).Count(id => id != 0 && Settings.Find(id)?.Effect == effect);
-
-        // ---- 목줄 ----
-        public bool IsLeashed(PlayerId target) => leashes.ContainsKey(target);
-
-        public void AddLeash(PlayerId holder, PlayerId target, double now) =>
-            leashes[target] = new Leash(holder, Settings.LeashSeconds > 0 ? now + Settings.LeashSeconds : 0);
-
-        public bool RemoveLeash(PlayerId target) => leashes.Remove(target);
-
-        public IEnumerable<KeyValuePair<PlayerId, Leash>> Leashes => leashes;
-
-        // 시간이 다 된 목줄과, present에 없는(나간) 플레이어가 걸린 목줄을 푼다. 바뀌었으면 true.
-        public bool ExpireLeashes(double now, System.Func<PlayerId, bool> present)
+        // ---- 사용 간격 ----
+        // 다시 쓸 수 있을 때까지 남은 초. 0이면 지금 쓸 수 있다.
+        public double CooldownLeft(PlayerId player, double now)
         {
-            var gone = leashes.Where(e => (e.Value.Until > 0 && now >= e.Value.Until) || !present(e.Key) || !present(e.Value.Holder))
-                .Select(e => e.Key).ToList();
-            foreach (var target in gone) leashes.Remove(target);
-            return gone.Count > 0;
+            if (!lastUse.TryGetValue(player, out var at)) return 0;
+            double left = at + Settings.UseCooldown - now;
+            return left > 0 ? left : 0;
         }
 
-        public void ClearLeashes() => leashes.Clear();
-
-        // ---- 집문서 ----
-        // 지난 정산 이후 새로 시작된 라운드 수. 호출하면 정산한 것으로 기록한다.
-        public int TakeNewRounds(int currentRound)
-        {
-            int rounds = currentRound - paidRound;
-            if (rounds <= 0) return 0;
-            paidRound = currentRound;
-            return rounds;
-        }
-
-        public IEnumerable<PlayerId> Owners => bags.Keys;
+        public void MarkUsed(PlayerId player, double now) => lastUse[player] = now;
     }
 }

@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using BuyBidBlow.Characters;
 using BuyBidBlow.Common;
 using BuyBidBlow.Network;
@@ -13,15 +12,15 @@ using UnityEngine.InputSystem;
 
 namespace BuyBidBlow.Sandbox.Shop
 {
-    // 상점 Sandbox의 씬 진입점: 메시지 핸들러 연결, 내 가방·목줄 상태, 목줄 이동 제한, 임시 IMGUI(상점창·아이템창).
+    // 상점 Sandbox의 씬 진입점: 메시지 핸들러 연결, 내 가방·사용 간격, 파티 효과 재생, 임시 IMGUI(상점창·아이템창).
     // 원본 씬에는 이 컴포넌트가 없으므로 상점 기능이 꺼져 있다.
     public sealed class ShopSite : MonoBehaviour
     {
         public TextAsset settingsJson;
         public Font font;
-        // 상점 판매대. 서버는 이 위치로 구매·판매 거리를 검증한다. Build Shop 메뉴가 연결한다.
+        // 상점 판매대. 서버는 이 위치로 구매 거리를 검증한다. Build Shop 메뉴가 연결한다.
         public Transform counter;
-        // 판매대에서 이 거리(m) 안에서만 사고팔 수 있다. 벗어나면 상점창이 닫힌다.
+        // 판매대에서 이 거리(m) 안에서만 살 수 있다. 벗어나면 상점창이 닫힌다.
         public float shopReach = 4f;
 
         public static ShopSite Instance { get; private set; }
@@ -34,8 +33,8 @@ namespace BuyBidBlow.Sandbox.Shop
         // ---- 내 상태(클라이언트) ----
         int[] bag;
         bool shopOpen, inventoryOpen;
-        int armedSlot = -1;                                      // 목줄을 골라 대상 지정 중인 칸
-        readonly Dictionary<uint, uint> leashes = new Dictionary<uint, uint>(); // 묶인 사람 netId → 채운 사람 netId
+        int emoteSlot = -1;          // 이모티콘을 고르는 중인 칸
+        float cooldownUntil;         // Time.unscaledTime 기준
         MatchNet lastMatch;
         string message;
         float messageUntil;
@@ -44,10 +43,7 @@ namespace BuyBidBlow.Sandbox.Shop
         // ---- 서버 ----
         bool serverHooked, clientHooked;
         readonly HashSet<int> announced = new HashSet<int>();
-        ShopLeashState lastSent;
 
-        readonly List<LineRenderer> ropes = new List<LineRenderer>();
-        Material ropeMaterial;
         GUIStyle label, small, title, toastLabel, button, cell, soloButton;
 
         ShopSettings ParseSettings()
@@ -72,13 +68,12 @@ namespace BuyBidBlow.Sandbox.Shop
             {
                 NetworkClient.UnregisterHandler<ShopReply>();
                 NetworkClient.UnregisterHandler<ShopAvailable>();
-                NetworkClient.UnregisterHandler<ShopLeashState>();
+                NetworkClient.UnregisterHandler<ShopEffectPlay>();
             }
             serverHooked = clientHooked = false;
             ServerReady = false;
             ResetLocal();
-            foreach (var rope in ropes) if (rope) Destroy(rope.gameObject);
-            ropes.Clear();
+            ShopPartyEffect.ClearAll();
         }
 
         bool PanelOpen() => shopOpen || inventoryOpen;
@@ -94,7 +89,7 @@ namespace BuyBidBlow.Sandbox.Shop
                 {
                     NetworkClient.RegisterHandler<ShopReply>(OnClientReply);
                     NetworkClient.RegisterHandler<ShopAvailable>(_ => ServerReady = true);
-                    NetworkClient.RegisterHandler<ShopLeashState>(OnLeashState);
+                    NetworkClient.RegisterHandler<ShopEffectPlay>(OnEffectPlay);
                     clientHooked = true;
                 }
             }
@@ -102,28 +97,22 @@ namespace BuyBidBlow.Sandbox.Shop
 
             var local = LocalPlayer;
             var match = MatchNet.Current;
+            // 새 경기면 가방을 비운다(서버도 경기마다 새 ShopBoard를 만든다).
             if (match != lastMatch) { lastMatch = match; ResetLocal(); }
             if (!local || !local.inMatch || !match || match.phase == MatchNet.Phase.Finished)
             {
                 CloseAll();
-                armedSlot = -1;
-                if (!local || !local.inMatch) leashes.Clear();
-                UpdateRopes();
                 return;
             }
 
-            HandleKeys(local);
+            HandleKeys();
             if (PanelOpen() && local.TryGetComponent(out PlayerMove move))
             {
                 move.SetMoveInput(Vector2.zero);
                 move.SetJumpHeld(false);
             }
             if (shopOpen && counter && Vector3.Distance(local.transform.position, counter.position) > shopReach + 1f) shopOpen = false;
-            UpdateRopes();
         }
-
-        void FixedUpdate() => ApplyLeash();
-        void LateUpdate() => ApplyLeash();
 
         static PlayerNet LocalPlayer =>
             NetworkClient.localPlayer ? NetworkClient.localPlayer.GetComponent<PlayerNet>() : null;
@@ -132,29 +121,19 @@ namespace BuyBidBlow.Sandbox.Shop
         void ServerUpdate()
         {
             if (!NetworkServer.active) { serverHooked = false; return; }
-            if (!serverHooked) { NetworkServer.RegisterHandler<ShopRequest>(OnServerRequest); serverHooked = true; announced.Clear(); lastSent = default; }
+            if (!serverHooked) { NetworkServer.RegisterHandler<ShopRequest>(OnServerRequest); serverHooked = true; announced.Clear(); }
             if (!(NetworkManager.singleton is GameNetworkManager manager)) return;
 
             manager.ShopServerTick(Settings);
-            var state = manager.ShopLeashSnapshot();
-            bool changed = !SameState(state, lastSent);
-            if (changed) lastSent = state;
-
             foreach (var conn in NetworkServer.connections.Values)
             {
                 if (!conn.identity || !conn.identity.TryGetComponent<PlayerNet>(out var player) || !player.inMatch) continue;
-                bool fresh = announced.Add(conn.connectionId);
-                if (fresh) conn.Send(new ShopAvailable());
-                if (fresh || changed) conn.Send(state);
+                if (announced.Add(conn.connectionId)) conn.Send(new ShopAvailable());
             }
             // 경기에서 빠진 연결은 다음 경기에 다시 알린다.
             announced.RemoveWhere(id => !NetworkServer.connections.TryGetValue(id, out var c) || !c.identity
                 || !c.identity.TryGetComponent<PlayerNet>(out var p) || !p.inMatch);
         }
-
-        static bool SameState(ShopLeashState a, ShopLeashState b) =>
-            (a.Targets ?? new uint[0]).SequenceEqual(b.Targets ?? new uint[0])
-            && (a.Holders ?? new uint[0]).SequenceEqual(b.Holders ?? new uint[0]);
 
         void OnServerRequest(NetworkConnectionToClient conn, ShopRequest request)
         {
@@ -174,15 +153,23 @@ namespace BuyBidBlow.Sandbox.Shop
 
         void OnClientReply(ShopReply reply)
         {
-            if (reply.Bag != null && reply.Bag.Length > 0) bag = reply.Bag;
+            if (reply.Bag != null && reply.Bag.Length > 0)
+            {
+                bag = reply.Bag;
+                cooldownUntil = Time.unscaledTime + Mathf.Max(0, reply.Cooldown);
+            }
             Show(reply.Message, reply.Good);
         }
 
-        void OnLeashState(ShopLeashState state)
+        void OnEffectPlay(ShopEffectPlay play)
         {
-            leashes.Clear();
-            if (state.Targets == null || state.Holders == null) return;
-            for (int i = 0; i < state.Targets.Length && i < state.Holders.Length; i++) leashes[state.Targets[i]] = state.Holders[i];
+            var item = Settings.Find(play.ItemId);
+            if (item == null || !NetworkClient.spawned.TryGetValue(play.Player, out var owner) || !owner) return;
+            string emote = play.Emote >= 0 && play.Emote < Settings.Emotes.Length ? Settings.Emotes[play.Emote] : "";
+            bool mine = owner.isLocalPlayer;
+            ShopPartyEffect.Play(owner.transform, item.Effect, emote, Mathf.Min(play.Seconds, ShopSettings.MaxEffectSeconds), font, mine);
+            // 1인칭이라 내 머리 위 이모티콘은 내게 보이지 않으므로 글자로 알려 준다.
+            if (mine && item.Effect == ShopEffect.Emote) Show($"머리 위에 '{emote}' 표시 중", true);
         }
 
         public void Show(string text, bool good = false)
@@ -196,14 +183,20 @@ namespace BuyBidBlow.Sandbox.Shop
         void ResetLocal()
         {
             bag = null;
-            armedSlot = -1;
-            leashes.Clear();
+            emoteSlot = -1;
+            cooldownUntil = 0;
             CloseAll();
         }
 
-        void CloseAll() => shopOpen = inventoryOpen = false;
+        void CloseAll()
+        {
+            shopOpen = inventoryOpen = false;
+            emoteSlot = -1;
+        }
 
         int[] Bag => bag != null && bag.Length == Settings.InventorySlots ? bag : bag = new int[Settings.InventorySlots];
+
+        float CooldownLeft => Mathf.Max(0, cooldownUntil - Time.unscaledTime);
 
         // 판매대에서 E (ShopCounter).
         public bool OpenShop()
@@ -214,129 +207,40 @@ namespace BuyBidBlow.Sandbox.Shop
                 Show("경기 중에만 이용할 수 있습니다.");
                 return false;
             }
-            armedSlot = -1;
             inventoryOpen = false;
+            emoteSlot = -1;
             shopOpen = true;
             return true;
         }
 
-        void HandleKeys(PlayerNet local)
+        void HandleKeys()
         {
             var keyboard = Keyboard.current;
             if (keyboard == null || BuyBidBlow.UI.Menu.GameMenuController.BlocksInput) return;
 
             if (keyboard.iKey.wasPressedThisFrame)
             {
-                armedSlot = -1;
+                emoteSlot = -1;
                 if (inventoryOpen) inventoryOpen = false;
                 else if (!shopOpen) inventoryOpen = true;
             }
             if (PanelOpen() && keyboard.qKey.wasPressedThisFrame) CloseAll();
-
-            if (armedSlot < 0 || PanelOpen()) return;
-            if (Mouse.current != null && Mouse.current.rightButton.wasPressedThisFrame) { armedSlot = -1; Show("목줄 사용 취소"); return; }
-            if (!keyboard.eKey.wasPressedThisFrame) return;
-            var target = FindLeashTarget(local);
-            if (!target) { Show($"{Settings.LeashReach:0.#}m 안의 상대를 바라보고 E를 누르세요."); return; }
-            Request(new ShopRequest { Action = ShopAction.Use, Slot = armedSlot, Target = target.netId });
-            armedSlot = -1;
-        }
-
-        // 바라보는 방향에서 가장 가까운 각도의, 목줄 거리 안의 다른 플레이어.
-        PlayerNet FindLeashTarget(PlayerNet local)
-        {
-            var view = local.TryGetComponent(out PlayerCamera playerCamera) ? playerCamera.CameraTransform
-                : Camera.main ? Camera.main.transform : local.transform;
-            PlayerNet best = null;
-            float bestAngle = 40f;
-            foreach (var identity in NetworkClient.spawned.Values)
-            {
-                if (!identity || identity == local.netIdentity || !identity.TryGetComponent<PlayerNet>(out var other) || !other.inMatch) continue;
-                var chest = other.transform.position + Vector3.up;
-                if (Vector3.Distance(local.transform.position, other.transform.position) > Settings.LeashReach) continue;
-                float angle = Vector3.Angle(view.forward, chest - view.position);
-                if (angle < bestAngle) { bestAngle = angle; best = other; }
-            }
-            return best;
         }
 
         void UseSlot(int slot)
         {
             var item = Settings.Find(Bag[slot]);
             if (item == null) return;
-            switch (item.Effect)
-            {
-                case ShopEffect.Leash:
-                    armedSlot = slot;
-                    inventoryOpen = false;
-                    Show($"목줄 준비 · 상대를 바라보고 E (우클릭 취소)", true);
-                    break;
-                case ShopEffect.Scissors:
-                    Request(new ShopRequest { Action = ShopAction.Use, Slot = slot });
-                    break;
-                default:
-                    Show($"{item.Name}은(는) 가지고 있기만 하면 효과가 있습니다.");
-                    break;
-            }
+            if (CooldownLeft > 0) { Show($"{Mathf.CeilToInt(CooldownLeft)}초 뒤에 다시 쓸 수 있습니다."); return; }
+            if (item.Effect == ShopEffect.Emote) { emoteSlot = slot; return; }
+            Request(new ShopRequest { Action = ShopAction.Use, Slot = slot });
         }
 
-        // ---- 목줄 ----
-        // 묶인 내 플레이어를 채운 사람 반경 안으로 되돌린다. 내 위치는 클라이언트 권한이라 여기서 옮기면 서버로 동기화된다.
-        void ApplyLeash()
+        void UseEmote(int emote)
         {
-            var local = LocalPlayer;
-            if (!local || !local.inMatch || !leashes.TryGetValue(local.netId, out var holderId)) return;
-            if (!NetworkClient.spawned.TryGetValue(holderId, out var holder) || !holder) return;
-            var anchor = holder.transform.position;
-            var offset = local.transform.position - anchor;
-            float radius = Settings.LeashRadius;
-            if (offset.sqrMagnitude <= radius * radius) return;
-            var outward = offset.normalized;
-            var clamped = anchor + outward * radius;
-            if (local.TryGetComponent(out Rigidbody body))
-            {
-                var velocity = body.linearVelocity;
-                float away = Vector3.Dot(velocity, outward);
-                if (away > 0) body.linearVelocity = velocity - outward * away;
-                body.position = clamped;
-            }
-            local.transform.position = clamped;
-        }
-
-        void UpdateRopes()
-        {
-            int used = 0;
-            foreach (var pair in leashes)
-            {
-                if (!NetworkClient.spawned.TryGetValue(pair.Key, out var target) || !target) continue;
-                if (!NetworkClient.spawned.TryGetValue(pair.Value, out var holder) || !holder) continue;
-                var rope = Rope(used++);
-                rope.SetPosition(0, holder.transform.position + Vector3.up * 1.1f);
-                rope.SetPosition(1, target.transform.position + Vector3.up * 1.3f);
-            }
-            for (int i = 0; i < ropes.Count; i++) ropes[i].gameObject.SetActive(i < used);
-        }
-
-        LineRenderer Rope(int index)
-        {
-            while (ropes.Count <= index)
-            {
-                var go = new GameObject("Shop Leash Rope");
-                go.transform.SetParent(transform, false);
-                var line = go.AddComponent<LineRenderer>();
-                line.positionCount = 2;
-                line.widthMultiplier = .04f;
-                line.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-                if (!ropeMaterial)
-                {
-                    var shader = Shader.Find("Universal Render Pipeline/Unlit") ?? Shader.Find("Sprites/Default");
-                    ropeMaterial = new Material(shader) { color = new Color(.75f, .15f, .15f) };
-                }
-                line.sharedMaterial = ropeMaterial;
-                ropes.Add(line);
-            }
-            ropes[index].gameObject.SetActive(true);
-            return ropes[index];
+            if (emoteSlot < 0) return;
+            Request(new ShopRequest { Action = ShopAction.Use, Slot = emoteSlot, Emote = emote });
+            emoteSlot = -1;
         }
 
         // ---- Temporary HUD ----
@@ -347,7 +251,7 @@ namespace BuyBidBlow.Sandbox.Shop
             if (!local || !local.inMatch) return;
             EnsureStyles();
 
-            DrawStatus(local);
+            DrawStatus();
             if (shopOpen) DrawShop();
             if (inventoryOpen) DrawInventory();
             if (Time.unscaledTime < messageUntil)
@@ -357,17 +261,11 @@ namespace BuyBidBlow.Sandbox.Shop
             }
         }
 
-        void DrawStatus(PlayerNet local)
+        void DrawStatus()
         {
-            var lines = new List<string>();
-            if (leashes.TryGetValue(local.netId, out var holderId))
-            {
-                string holderName = NetworkClient.spawned.TryGetValue(holderId, out var h) && h.TryGetComponent<PlayerNet>(out var hp) ? hp.nickname : "?";
-                lines.Add($"<color=#ff8080><b>목줄</b></color> {holderName}님에게 묶여 있습니다 · 가위로 끊기");
-            }
-            if (armedSlot >= 0) lines.Add("<color=#ffd24d><b>목줄 준비</b></color> 상대를 바라보고 E · 우클릭 취소");
-            if (!PanelOpen()) lines.Add("<size=13>I 아이템창</size>");
-            GUI.Label(new Rect(16, Screen.height - 40 - 26 * lines.Count, 520, 26 * lines.Count + 10), string.Join("\n", lines), label);
+            if (PanelOpen()) return;
+            string text = CooldownLeft > 0 ? $"<size=13>I 아이템창 · 다음 사용까지 {Mathf.CeilToInt(CooldownLeft)}초</size>" : "<size=13>I 아이템창</size>";
+            GUI.Label(new Rect(16, Screen.height - 50, 520, 36), text, label);
         }
 
         void DrawShop()
@@ -380,9 +278,10 @@ namespace BuyBidBlow.Sandbox.Shop
             GUI.Box(area, GUIContent.none);
             GUI.Box(area, GUIContent.none);
             int cash = PlayerNet.LocalPortfolio != null ? PlayerNet.LocalPortfolio.Available : 0;
-            GUI.Label(new Rect(area.x + 16, area.y + 10, width - 32, 34), $"<b>상점</b>   사용 가능 현금 <b>${cash}</b>", title);
+            GUI.Label(new Rect(area.x + 16, area.y + 10, width - 32, 34), $"<b>파티 상점</b>   사용 가능 현금 <b>${cash}</b>", title);
             if (GUI.Button(new Rect(area.xMax - 96, area.y + 12, 80, 30), "닫기 Q", button)) shopOpen = false;
 
+            bool full = System.Array.IndexOf(Bag, 0) < 0;
             for (int i = 0; i < columns * rows; i++)
             {
                 var rect = new Rect(area.x + gap + (i % columns) * (cellW + gap), area.y + 56 + (i / columns) * (cellH + gap), cellW, cellH);
@@ -390,32 +289,45 @@ namespace BuyBidBlow.Sandbox.Shop
                 var item = i < Settings.Items.Length ? Settings.Items[i] : null;
                 if (item == null) { GUI.Label(new Rect(rect.x, rect.y + rect.height / 2 - 12, rect.width, 24), "<color=#888>준비 중</color>", Centered(small)); continue; }
                 GUI.Label(new Rect(rect.x + 8, rect.y + 6, rect.width - 16, 26), $"<b>{item.Name}</b>", label);
-                GUI.Label(new Rect(rect.x + 8, rect.y + 32, rect.width - 16, 72), item.Description, small);
-                bool afford = cash >= item.Price;
-                GUI.enabled = afford;
+                GUI.Label(new Rect(rect.x + 8, rect.y + 32, rect.width - 16, 72), $"{item.Description}\n<color=#aaa>{item.Seconds:0.#}초</color>", small);
+                GUI.enabled = cash >= item.Price && !full;
                 if (GUI.Button(new Rect(rect.x + 8, rect.yMax - 38, rect.width - 16, 30), $"구매 ${item.Price}", button))
                     Request(new ShopRequest { Action = ShopAction.Buy, ItemId = item.Id });
                 GUI.enabled = true;
             }
 
             float bagY = area.y + 56 + rows * (cellH + gap) + 4;
-            GUI.Label(new Rect(area.x + 16, bagY, width - 32, 26), "<b>내 가방</b>  (되팔 수 있는 물건은 원가로 판매)", label);
-            DrawBag(new Rect(area.x + gap, bagY + 30, width - 2 * gap, 100), selling: true);
+            GUI.Label(new Rect(area.x + 16, bagY, width - 32, 26),
+                $"<b>내 가방</b>  (최대 {Settings.InventorySlots}개 · 일회용 · 사용 간격 {Settings.UseCooldown:0.#}초 · 경기가 끝나면 사라짐)", label);
+            DrawBag(new Rect(area.x + gap, bagY + 30, width - 2 * gap, 100), usable: false);
         }
 
         void DrawInventory()
         {
             int slots = Settings.InventorySlots;
             const float size = 120, gap = 10;
-            float width = slots * size + (slots + 1) * gap;
+            float width = Mathf.Max(slots * size + (slots + 1) * gap, 420);
             var area = new Rect((Screen.width - width) / 2, Screen.height - size - 110, width, size + 56);
             GUI.Box(area, GUIContent.none);
             GUI.Box(area, GUIContent.none);
-            GUI.Label(new Rect(area.x + 12, area.y + 6, width - 24, 26), "<b>아이템</b>  클릭해서 사용 · I 닫기", label);
-            DrawBag(new Rect(area.x + gap, area.y + 40, width - 2 * gap, size), selling: false);
+            string cooldown = CooldownLeft > 0 ? $"  <color=#ffb0b0>다음 사용까지 {Mathf.CeilToInt(CooldownLeft)}초</color>" : "";
+            GUI.Label(new Rect(area.x + 12, area.y + 6, width - 24, 26), $"<b>아이템</b>  클릭해서 사용 · I 닫기{cooldown}", label);
+            DrawBag(new Rect(area.x + gap, area.y + 40, width - 2 * gap, size), usable: true);
+            if (emoteSlot >= 0) DrawEmotePicker(new Rect(area.x, area.y - 70, width, 62));
         }
 
-        void DrawBag(Rect area, bool selling)
+        void DrawEmotePicker(Rect area)
+        {
+            GUI.Box(area, GUIContent.none);
+            GUI.Box(area, GUIContent.none);
+            var emotes = Settings.Emotes;
+            const float gap = 8;
+            float size = (area.width - gap * (emotes.Length + 1)) / emotes.Length;
+            for (int i = 0; i < emotes.Length; i++)
+                if (GUI.Button(new Rect(area.x + gap + i * (size + gap), area.y + 8, size, area.height - 16), emotes[i], button)) UseEmote(i);
+        }
+
+        void DrawBag(Rect area, bool usable)
         {
             int slots = Settings.InventorySlots;
             const float gap = 10;
@@ -425,22 +337,14 @@ namespace BuyBidBlow.Sandbox.Shop
                 var rect = new Rect(area.x + i * (size + gap), area.y, size, area.height);
                 var item = Settings.Find(Bag[i]);
                 if (item == null) { GUI.Box(rect, "<color=#777>빈 칸</color>", cell); continue; }
-                string text = $"<b>{item.Name}</b>\n<size=13>{Hint(item)}</size>";
-                if (selling)
-                {
-                    GUI.Box(rect, GUIContent.none, cell);
-                    GUI.Label(new Rect(rect.x + 6, rect.y + 6, rect.width - 12, 40), text, Centered(small));
-                    if (item.SellPrice >= 0 && GUI.Button(new Rect(rect.x + 6, rect.yMax - 36, rect.width - 12, 30), $"팔기 ${item.SellPrice}", button))
-                        Request(new ShopRequest { Action = ShopAction.Sell, Slot = i });
-                }
+                string text = $"<b>{item.Name}</b>\n<size=13>{(usable ? Hint(item) : "I 아이템창에서 사용")}</size>";
+                if (!usable) GUI.Box(rect, text, cell);
                 else if (GUI.Button(rect, new GUIContent(text, item.Description), cell)) UseSlot(i);
             }
         }
 
         static string Hint(ShopItemDef item) =>
-            item.Effect == ShopEffect.Leash ? "클릭 → 상대에게 E" :
-            item.Effect == ShopEffect.Scissors ? "클릭 → 목줄 끊기" :
-            item.Effect == ShopEffect.Deed ? "보유 효과" : "";
+            item.Effect == ShopEffect.Emote ? "클릭 → 고르기" : "클릭해서 사용";
 
         // 기본 로비는 전용 서버 참가만 지원한다. Sandbox에서는 이 PC가 서버를 겸하는 호스트로 혼자 시험한다.
         // 상점 처리는 서버 쪽에도 ShopSite가 있어야 하므로 전용 서버로는 시험할 수 없다.

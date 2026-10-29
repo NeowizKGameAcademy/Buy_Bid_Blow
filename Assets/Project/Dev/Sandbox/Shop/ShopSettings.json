@@ -1,14 +1,12 @@
 {
     "Items": [
-        { "Id": 1, "Name": "목줄", "Description": "상대에게 채우면 내 주변 2m 안에서만 움직일 수 있다.", "Price": 200, "SellPrice": -1, "Effect": 1 },
-        { "Id": 2, "Name": "가위", "Description": "내게 채워진 목줄을 끊는다.", "Price": 50, "SellPrice": -1, "Effect": 2 },
-        { "Id": 3, "Name": "집문서", "Description": "보유하면 매 라운드 $50. 상점에 $500에 되팔 수 있다.", "Price": 50, "SellPrice": 500, "Effect": 3 }
+        { "Id": 1, "Name": "색종이 폭죽", "Description": "내 주변에 색종이가 터진다.", "Price": 3, "Seconds": 2.5, "Effect": 1 },
+        { "Id": 2, "Name": "비눗방울", "Description": "내 주변에 비눗방울이 떠오른다.", "Price": 3, "Seconds": 3.0, "Effect": 2 },
+        { "Id": 3, "Name": "이모티콘", "Description": "머리 위에 고른 이모티콘을 띄운다.", "Price": 2, "Seconds": 3.0, "Effect": 3 }
     ],
+    "Emotes": ["^_^", "ㅠㅠ", "!!", "??", "ㅋㅋㅋ", "GG"],
     "ShopColumns": 4,
     "ShopRows": 2,
-    "InventorySlots": 4,
-    "DeedIncome": 50,
-    "LeashRadius": 2.0,
-    "LeashReach": 3.0,
-    "LeashSeconds": 0.0
+    "InventorySlots": 3,
+    "UseCooldown": 10.0
 }
