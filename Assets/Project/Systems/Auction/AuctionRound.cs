@@ -15,6 +15,7 @@ namespace BuyBidBlow.Systems.Auction
         private readonly double roundStart;
         private readonly IReadOnlyList<AuctionSlot> slots;
         private readonly int minBid;
+        private readonly double timeScale;
         private readonly IReadOnlyDictionary<PlayerId, PlayerPortfolio> players;
         private bool openClosed;
         private bool secretClosed;
@@ -32,9 +33,10 @@ namespace BuyBidBlow.Systems.Auction
         // Private: tell each of Players won or lost; send the lot to the winner only.
         public event Action<SecretResult> SecretClosed;
 
+        // 두 물건·시작 시각·슬롯·최소 입찰가·플레이어로 경매 라운드를 구성
         // slots[0] = Open, slots[1] = Secret, in seconds from roundStart.
         public AuctionRound(Lot firstLot, Lot secondLot, double roundStart, IReadOnlyList<AuctionSlot> slots,
-            int minBid, IReadOnlyDictionary<PlayerId, PlayerPortfolio> players)
+            int minBid, IReadOnlyDictionary<PlayerId, PlayerPortfolio> players, double timeScale = 1)
         {
             if (slots == null || slots.Count != 2)
                 throw new ArgumentException("An auction round needs exactly two slots: Open, then Secret.", nameof(slots));
@@ -45,8 +47,12 @@ namespace BuyBidBlow.Systems.Auction
             this.slots = slots;
             this.minBid = minBid;
             this.players = players;
+            if (timeScale <= 0 || double.IsNaN(timeScale) || double.IsInfinity(timeScale))
+                throw new ArgumentOutOfRangeException(nameof(timeScale));
+            this.timeScale = timeScale;
         }
 
+        // 현재 시각에 따라 공개·비밀 경매를 차례로 시작하고 마감
         // Safe to call every frame. Handles big time jumps by running every step that is due, in order.
         public void Tick(double now)
         {
@@ -75,16 +81,21 @@ namespace BuyBidBlow.Systems.Auction
             }
         }
 
+        // 공개 경매가 진행 중이면 입찰을 전달
         public AuctionError PlaceOpenBid(PlayerId player, int amount, double now)
             => Open == null || openClosed ? AuctionError.NotOpen : Open.PlaceBid(player, amount, now);
 
+        // 비밀 경매가 진행 중이면 입찰 금액 제출을 전달
         public AuctionError SubmitSecret(PlayerId player, int amount, double now)
             => Secret == null || secretClosed ? AuctionError.NotOpen : Secret.Submit(player, amount, now);
 
+        // 비밀 경매가 진행 중이면 제출 취소를 전달
         public AuctionError CancelSecret(PlayerId player, double now)
             => Secret == null || secretClosed ? AuctionError.NotOpen : Secret.Cancel(player, now);
 
-        private double SlotStart(int i) => roundStart + slots[i].StartsAtSeconds;
-        private double SlotEnd(int i) => SlotStart(i) + slots[i].DurationSeconds;
+        // 슬롯 시작 시각을 계산
+        private double SlotStart(int i) => roundStart + slots[i].StartsAtSeconds * timeScale;
+        // 슬롯 종료 시각을 계산
+        private double SlotEnd(int i) => SlotStart(i) + slots[i].DurationSeconds * timeScale;
     }
 }

@@ -34,6 +34,7 @@ namespace BuyBidBlow.UI.Market
         public bool IsOpen => active != null && active.gameObject.activeSelf;
         public Company SelectedCompany => selectedCompany;
 
+        // 회사별 패널 버튼을 바인딩하고 패널을 닫은 상태로 시작
         private void Awake()
         {
             for (int i = 0; i < companyPanels.Length; i++)
@@ -42,6 +43,7 @@ namespace BuyBidBlow.UI.Market
             Close();
         }
 
+        // 패널의 탭·수량·확인·닫기 버튼에 동작 연결
         private void BindButtons(TradingPanelView panel)
         {
             void On(string path, Action action)
@@ -59,6 +61,7 @@ namespace BuyBidBlow.UI.Market
             On("Close Hint/Keycap", Close);
         }
 
+        // 선택한 회사 패널을 매수 탭·수량 1로 열고 열림 이벤트 발생
         public void Open(Company company, TradingPanelData panelData)
         {
             Hide();
@@ -75,6 +78,7 @@ namespace BuyBidBlow.UI.Market
             OpenStateChanged?.Invoke(true);
         }
 
+        // 패널 데이터를 교체하고 다시 그리기
         // New prices or assets while the panel stays open.
         public void Present(TradingPanelData panelData)
         {
@@ -82,6 +86,7 @@ namespace BuyBidBlow.UI.Market
             Refresh();
         }
 
+        // 모든 패널을 숨기고 닫힘 이벤트 발생
         public void Close()
         {
             Hide();
@@ -89,6 +94,7 @@ namespace BuyBidBlow.UI.Market
             OpenStateChanged?.Invoke(false);
         }
 
+        // 모든 회사 패널 비활성화
         private void Hide()
         {
             foreach (var panel in companyPanels)
@@ -96,6 +102,7 @@ namespace BuyBidBlow.UI.Market
                     panel.gameObject.SetActive(false);
         }
 
+        // 피드백 만료 처리 및 키 입력으로 수량·탭 변경과 확인 처리
         private void Update()
         {
             if (!IsOpen)
@@ -116,6 +123,7 @@ namespace BuyBidBlow.UI.Market
             if (keyboard.eKey.wasPressedThisFrame || keyboard.enterKey.wasPressedThisFrame) Confirm();
         }
 
+        // 탭을 전환하고 수량을 1로 초기화
         public void SelectTab(Tab value)
         {
             if (!IsOpen) return;
@@ -124,6 +132,7 @@ namespace BuyBidBlow.UI.Market
             Refresh();
         }
 
+        // 수량을 1 증가
         public void IncreaseQuantity()
         {
             if (!IsOpen || quantity == int.MaxValue) return;
@@ -131,6 +140,7 @@ namespace BuyBidBlow.UI.Market
             Refresh();
         }
 
+        // 수량을 1 감소(최소 1)
         public void DecreaseQuantity()
         {
             if (!IsOpen || quantity <= 1) return;
@@ -138,6 +148,7 @@ namespace BuyBidBlow.UI.Market
             Refresh();
         }
 
+        // 확인 가능하면 현재 탭에 따라 매수/매도/베팅 요청
         public void Confirm()
         {
             if (!IsOpen || !active.CanConfirm) return;
@@ -146,16 +157,19 @@ namespace BuyBidBlow.UI.Market
             else BetRequested?.Invoke(selectedCompany);
         }
 
+        // 선택 회사·수량으로 매수 요청 이벤트 발생
         public void RequestBuy()
         {
             if (IsOpen) BuyRequested?.Invoke(selectedCompany, quantity);
         }
 
+        // 선택 회사·수량으로 매도 요청 이벤트 발생
         public void RequestSell()
         {
             if (IsOpen) SellRequested?.Invoke(selectedCompany, quantity);
         }
 
+        // 피드백 문구를 표시하고 일정 시간 후 지워지도록 만료 시각 설정
         public void SetLog(string message)
         {
             if (!feedback) return;
@@ -163,6 +177,7 @@ namespace BuyBidBlow.UI.Market
             feedbackUntil = string.IsNullOrEmpty(message) ? 0 : Time.unscaledTime + feedbackSeconds;
         }
 
+        // 열려 있으면 현재 데이터·탭·수량으로 패널 다시 그리기
         private void Refresh()
         {
             if (IsOpen)

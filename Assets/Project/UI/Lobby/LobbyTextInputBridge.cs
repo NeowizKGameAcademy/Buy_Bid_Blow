@@ -12,8 +12,11 @@ namespace BuyBidBlow.UI.Lobby
         string composition="";
         Vector2 cursor;
         IMECompositionMode mode=IMECompositionMode.Auto;
+        // 현재 키보드의 IME 조합 변경 이벤트 구독
         protected override void OnEnable(){base.OnEnable();keyboard=Keyboard.current;if(keyboard!=null)keyboard.onIMECompositionChange+=Changed;}
+        // IME 이벤트 구독 해제 및 조합 문자열 초기화
         protected override void OnDisable(){if(keyboard!=null)keyboard.onIMECompositionChange-=Changed;keyboard=null;composition="";base.OnDisable();}
+        // IME 조합 문자열 갱신
         void Changed(IMECompositionString value){composition=value.ToString();}
         public override string compositionString=>composition;
         public override IMECompositionMode imeCompositionMode {get=>mode;set{mode=value;keyboard?.SetIMEEnabled(value==IMECompositionMode.On);}}

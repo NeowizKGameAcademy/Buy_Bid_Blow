@@ -38,8 +38,11 @@ namespace BuyBidBlow.UI.Ticker
             name.EndsWith("_Left",StringComparison.Ordinal)?ScreenMode.Timer:
             name.EndsWith("_Right",StringComparison.Ordinal)?ScreenMode.Company:ScreenMode.Overview;
 
+        // 화면 모드를 적용하고 대기 상태 표시
         void Awake(){ApplyMode();ShowWaiting();}
+        // 캐시 개수를 무효화해 다시 그리도록 함
         void OnEnable(){cachedCount=-1;}
+        // 매치 가격 기록 변화를 폴링해 개요·회사 화면과 타이머 갱신
         void Update()
         {
             var current=MatchNet.Current;
@@ -64,6 +67,7 @@ namespace BuyBidBlow.UI.Ticker
             SetClock(current.phase==MatchNet.Phase.Finished?0:current.SecondsLeft);
         }
 
+        // 해석된 화면 모드에 맞는 그룹만 활성화
         public void ApplyMode()
         {
             if(!timerGroup)return;
@@ -71,6 +75,7 @@ namespace BuyBidBlow.UI.Ticker
             overviewGroup.SetActive(ResolvedMode==ScreenMode.Overview);
             companyGroup.SetActive(ResolvedMode==ScreenMode.Company);
         }
+        // 가격·차트·눈금을 비우고 대기 상태 표시
         public void ShowWaiting()
         {
             if(!surface)return;
@@ -86,6 +91,7 @@ namespace BuyBidBlow.UI.Ticker
             foreach(var tick in priceTicks)tick.text="";
             foreach(var tick in roundTicks)tick.text="";
         }
+        // 주어진 가격 기록 스냅샷으로 화면 표시
         // Editor preview and tests use the same presentation path as the replicated data.
         public void PresentSnapshot(int[] publicHistory,double seconds,int company)
         {
@@ -93,14 +99,18 @@ namespace BuyBidBlow.UI.Ticker
             SetClock(seconds);
             PresentOverview(publicHistory);PresentCompany(publicHistory,Mathf.Clamp(company,0,2));
         }
+        // 가격 기록에서 특정 회사의 가격 시계열 추출
         static float[] Series(int[] data,int company)
         {
             var points=new float[data.Length/3];
             for(int i=0;i<points.Length;i++)points[i]=data[i*3+company];
             return points;
         }
+        // 타이머 텍스트를 고정폭 mm:ss로 설정
         void SetClock(double seconds)=>timer.text="<mspace=0.62em>"+TickerFormat.Clock(seconds)+"</mspace>";
+        // 가격 상승/하락/보합에 따른 색 반환
         static Color ChangeColor(int current,int previous)=>current>previous?Red:current<previous?Blue:Muted;
+        // 세 회사의 최신 가격·변동·소형 차트 표시
         void PresentOverview(int[] data)
         {
             int end=data.Length-3,prior=Math.Max(0,end-3);
@@ -114,6 +124,7 @@ namespace BuyBidBlow.UI.Ticker
                 smallPlots[c].Present(Series(data,c),tint);
             }
         }
+        // 선택 회사의 가격·변동·대형 차트·눈금·최신가 배지 표시
         void PresentCompany(int[] data,int c)
         {
             int end=data.Length-3,prior=Math.Max(0,end-3);
@@ -140,6 +151,7 @@ namespace BuyBidBlow.UI.Ticker
             latestPrice.text=value.ToString();
         }
 
+        // 스크린 메시 위에 티커 UI 캔버스와 모든 요소 생성
         public void BuildSurface()
         {
             if(!numberFont)throw new InvalidOperationException("Ticker needs its Oxanium font asset.");
@@ -194,11 +206,13 @@ namespace BuyBidBlow.UI.Ticker
             }
             ApplyMode();ShowWaiting();
         }
+        // 좌상단 기준 위치·크기를 가진 RectTransform 노드 생성
         static RectTransform Node(Transform parent,string label,float x,float y,float w,float h)
         {
             var r=new GameObject(label,typeof(RectTransform)).GetComponent<RectTransform>();r.SetParent(parent,false);
             r.anchorMin=r.anchorMax=r.pivot=new Vector2(0,1);r.anchoredPosition=new Vector2(x,-y);r.sizeDelta=new Vector2(w,h);return r;
         }
+        // 지정 폰트·크기·색의 TMP 텍스트 생성
         TMP_Text Text(Transform parent,string label,string content,float x,float y,float w,float h,float size,Color tint,TextAlignmentOptions alignment=TextAlignmentOptions.Left,bool caption=false)
         {
             var text=Node(parent,label,x,y,w,h).gameObject.AddComponent<TextMeshProUGUI>();
@@ -207,15 +221,18 @@ namespace BuyBidBlow.UI.Ticker
             text.enableAutoSizing=true;text.fontSizeMin=size*.65f;text.fontSizeMax=size;text.raycastTarget=false;
             return text;
         }
+        // 단색 Image 패널 생성
         static Image Panel(Transform parent,string label,float x,float y,float w,float h,Color tint)
         {
             var image=Node(parent,label,x,y,w,h).gameObject.AddComponent<Image>();image.color=tint;image.raycastTarget=false;return image;
         }
+        // 회사 아이콘 생성
         static TickerIcon Icon(Transform parent,int company,float x,float y,float size)
         {
             var icon=Node(parent,"Company icon "+company,x,y,size,size).gameObject.AddComponent<TickerIcon>();
             icon.company=company;icon.color=White;icon.raycastTarget=false;return icon;
         }
+        // 가격 차트 TickerPlot 생성
         static TickerPlot Plot(Transform parent,string label,float x,float y,float w,float h,bool detail)
         {
             var plot=Node(parent,label,x,y,w,h).gameObject.AddComponent<TickerPlot>();plot.detailed=detail;plot.raycastTarget=false;return plot;

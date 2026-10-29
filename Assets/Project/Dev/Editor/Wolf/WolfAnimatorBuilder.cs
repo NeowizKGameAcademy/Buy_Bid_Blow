@@ -24,6 +24,22 @@ namespace BuyBidBlow.Dev
         };
         private static readonly string[] Faces = { "Happy", "Suspicious", "Shocked", "Blank" };
 
+        public static void EnsureJumpState()
+        {
+            var controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(ControllerPath);
+            var local = AssetDatabase.LoadAssetAtPath<AnimatorController>(Output + "/Player Animation.controller");
+            if (!controller || !local) throw new InvalidOperationException("Missing production wolf Animators.");
+            var machine = controller.layers[0].stateMachine;
+            if (machine.states.Any(s => s.state.name == "Jump")) return;
+            var motion = local.layers[0].stateMachine.states.Single(s => s.state.name == "Player_JoyfulJump").state.motion;
+            var jump = machine.AddState("Jump"); jump.motion = motion; jump.writeDefaultValues = false;
+            jump.AddStateMachineBehaviour<BBBWolfActionState>();
+            AddRequestTransition(machine, jump, (int)BBBWolfCharacter.Action.Jump);
+            var back = jump.AddTransition(machine.states.Single(s => s.state.name == "Locomotion").state);
+            back.hasExitTime = true; back.exitTime = 1; back.duration = .12f;
+            EditorUtility.SetDirty(controller);
+        }
+
         [MenuItem("Tools/Buy Bid Blow/Wolf/Build Animator and Wire Character")]
         public static void Build()
         {
@@ -139,6 +155,7 @@ namespace BuyBidBlow.Dev
                 if (!EditorSceneManager.SaveScene(scene)) throw new IOException("Could not save Wolf sandbox.");
             }
             finally { if (opened) EditorSceneManager.CloseScene(scene, true); }
+            EnsureJumpState();
             AssetDatabase.SaveAssets();
             Validate();
             File.WriteAllText("Library/WolfAnimatorBuild.result", "PASS: Animator, 10 body clips, idle pose, 4 expression clips, prefab and sandbox wired.");

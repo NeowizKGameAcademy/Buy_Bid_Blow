@@ -67,7 +67,7 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
                 Assert.AreEqual(stock + "주", Label(view, "Stock Availability/Market Stock"), "server market stock shown");
 
                 string reply = null;
-                Action<string> listen = r => reply = r;
+                Action<RequestResult> listen = r => reply = r.Message;
                 PlayerNet.LocalReply += listen;
                 try
                 {

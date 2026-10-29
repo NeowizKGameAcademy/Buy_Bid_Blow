@@ -142,8 +142,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Trade
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 41e2ef8d847dd594c933fa0856b394ee, type: 2}
+  m_sharedMaterial: {fileID: 4559848471176115341, guid: 41e2ef8d847dd594c933fa0856b394ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -830,6 +830,8 @@ MonoBehaviour:
   keyText: {fileID: 7002444196547756935}
   InteractionText: {fileID: 1875022425970568839}
   PlayerMoney: {fileID: 4622786541034552899}
+  notebookPrefab: {fileID: 5085732716175459853, guid: 1a9b3ff7ab3c5ee4b9ecf7c85efe9fa5, type: 3}
+  resultsPrefab: {fileID: 4890489699852514184, guid: 64db9d5bd86fc904890ae566f58d61c0, type: 3}
 --- !u!114 &4503746201585617679
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2395,6 +2397,7 @@ MonoBehaviour:
   view: {fileID: 925591918562026302}
   seating: {fileID: 3798767778802700119}
   assets: {fileID: 2051769963190029571}
+  noticeSeconds: 3
 --- !u!1001 &8295860570933467180
 PrefabInstance:
   m_ObjectHideFlags: 0

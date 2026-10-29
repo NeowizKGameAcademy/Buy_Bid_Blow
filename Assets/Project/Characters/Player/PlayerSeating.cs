@@ -22,6 +22,7 @@ namespace BuyBidBlow.Characters
         bool[] enabledBefore;
         CharacterController controller;
         bool controllerEnabled;
+        // 이전 위치를 저장하고 물리·충돌을 끈 뒤 의자 앵커에 앉힘
         public void Sit(Seat target, int index, Transform anchor)
         {
             seat = target; slot = index; point = anchor;
@@ -34,8 +35,11 @@ namespace BuyBidBlow.Characters
             controllerEnabled = controller && System.Array.IndexOf(colliders, controller) >= 0 && enabledBefore[System.Array.IndexOf(colliders, controller)];
             Snap(); onSeatedChanged.Invoke(true);
         }
+        // 앉는 앵커에서 엉덩이 높이만큼 내린 위치로 배치
         void Snap() { if (point) transform.SetPositionAndRotation(point.position - Vector3.up * hipHeight, point.rotation); }
+        // 앉아 있으면 매 프레임 앵커 위치에 고정
         void LateUpdate() { if (seat) Snap(); }
+        // 바닥과 공간이 확보된 출구 지점에 일어서기 시도
         public bool TryStand()
         {
             if (!seat) return false;
@@ -50,7 +54,9 @@ namespace BuyBidBlow.Characters
             }
             return false;
         }
+        // 앉기 전 위치로 강제로 일어서기
         public void ForceStand() { if (seat) StandAt(previousPosition, previousRotation); }
+        // 지정 위치에 세우고 충돌·물리를 복원한 뒤 좌석 해제
         void StandAt(Vector3 position, Quaternion rotation)
         {
             var oldSeat = seat; seat = null; point = null;
@@ -61,6 +67,7 @@ namespace BuyBidBlow.Characters
             if (oldSeat) oldSeat.Release(slot, this);
             onSeatedChanged.Invoke(false);
         }
+        // 비활성화 시 강제로 일어서기
         void OnDisable() => ForceStand();
     }
 }

@@ -16,6 +16,7 @@ namespace BuyBidBlow.UI.HUD
         public LayerMask detectingLayer { get; private set; }
         public Collider DetectedCollider { get; private set; }
 
+        // 전방 레이캐스트로 상호작용 대상을 감지하고 결과에 따라 커서 이미지 갱신
         private void Update()
         {
             Ray ray = new Ray(transform.position, transform.forward);
@@ -38,6 +39,7 @@ namespace BuyBidBlow.UI.HUD
             ChangeCursor(isDetected);
         }
 
+        // 감지 여부에 따라 커서 스프라이트 교체
         private void ChangeCursor(bool Detected)
         {
             if(Detected)

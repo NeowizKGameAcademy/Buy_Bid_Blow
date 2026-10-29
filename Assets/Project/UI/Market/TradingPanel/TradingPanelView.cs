@@ -7,8 +7,11 @@ public sealed class TradingPanelView : MonoBehaviour {
  readonly Dictionary<string,Text> labels=new Dictionary<string,Text>();
  public bool CanConfirm {get;private set;}
  public string Status {get;private set;}
+ // 자식 Text들을 이름별로 한 번만 캐싱
  void Bind(){if(labels.Count>0)return;foreach(var t in GetComponentsInChildren<Text>(true))if(!labels.ContainsKey(t.name))labels.Add(t.name,t);}
+ // 이름에 해당하는 라벨의 텍스트 설정
  void Set(string name,string value){Bind();if(labels.TryGetValue(name,out var t))t.text=value;}
+ // 탭별 거래 가능 수량·확인 가능 여부·상태를 계산해 패널 전체 표시 갱신
  public void Present(TradingPanelData data,int tab,ref int quantity){
  int affordable=data.available/data.price,buyable=data.stock<0?affordable:Mathf.Min(data.stock,affordable);
  int limit=tab==0?buyable:tab==1?data.owned:1;

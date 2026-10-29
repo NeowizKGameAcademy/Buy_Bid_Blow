@@ -6,6 +6,7 @@ using System.Reflection;
 using BuyBidBlow.Characters;
 using BuyBidBlow.Network;
 using BuyBidBlow.Systems.Room;
+using BuyBidBlow.Systems.Types;
 using BuyBidBlow.UI.Lobby;
 using Mirror;
 using UnityEditor;
@@ -23,19 +24,28 @@ namespace BuyBidBlow.Dev.Editor
         readonly Unbatcher unbatcher=new Unbatcher();
         public bool Accepted,Closing;
         public string Rejection="",Error="";
-        public LoopbackLobbyPeer(string nickname,int protocol=GameNetworkManager.ProtocolVersion)
+        public string Token = "";
+        public uint OwnNetId;
+        public RequestResult? LastReply;
+        public readonly Dictionary<uint, ulong> SpawnMasks = new Dictionary<uint, ulong>();
+        public readonly Dictionary<uint, int> Updates = new Dictionary<uint, int>();
+        public LoopbackLobbyPeer(string nickname,int protocol=GameNetworkManager.ProtocolVersion, string resumeToken=null, bool skipApproval=false, ushort port=17777)
         {
-            client=new kcp2k.KcpClient(()=>Send(new LobbyJoinRequest{nickname=nickname,protocol=protocol}),Receive,()=>{},(e,r)=>Error=r,new kcp2k.KcpConfig());
-            client.Connect("127.0.0.1",17777);
+            client=new kcp2k.KcpClient(()=>
+            {
+                if (skipApproval) Send(new ReadyMessage());
+                else if (!string.IsNullOrEmpty(resumeToken)) Send(new LobbyResumeRequest { nickname=nickname, protocol=protocol, token=resumeToken });
+                else Send(new LobbyJoinRequest{nickname=nickname,protocol=protocol});
+            },Receive,()=>{},(e,r)=>Error=r,new kcp2k.KcpConfig());
+            client.Connect("127.0.0.1",port);
         }
-        void Send<T>(T message) where T:struct,NetworkMessage
+        public void Send<T>(T message) where T:struct,NetworkMessage
         {
             using(var writer=NetworkWriterPool.Get()) {NetworkMessages.Pack(message,writer);batcher.AddMessage(writer.ToArraySegment(),NetworkTime.localTime);}
             using(var writer=NetworkWriterPool.Get())while(batcher.GetBatch(writer)){client.Send(writer.ToArraySegment(),kcp2k.KcpChannel.Reliable);writer.Reset();}
         }
         void Receive(ArraySegment<byte> data,kcp2k.KcpChannel channel)
         {
-            if(channel!=kcp2k.KcpChannel.Reliable)return;
             unbatcher.AddBatch(data);
             while(unbatcher.GetNextMessage(out var message,out _)) {
                 using(var reader=NetworkReaderPool.Get(message)) {
@@ -44,11 +54,42 @@ namespace BuyBidBlow.Dev.Editor
                         var response=reader.Read<LobbyJoinResponse>();Accepted=response.accepted;
                         if(Accepted){Send(new ReadyMessage());Send(new AddPlayerMessage());}else Rejection=response.reason;
                     }else if(id==NetworkMessages.GetId<LobbyClosing>())Closing=true;
+                    else if(id==NetworkMessages.GetId<LobbyCredentials>()) Token=reader.Read<LobbyCredentials>().token;
+                    else if(id==NetworkMessages.GetId<SpawnMessage>())
+                    {
+                        var spawn=reader.Read<SpawnMessage>();
+                        if(spawn.isOwner)OwnNetId=spawn.netId;
+                        using(var payload=NetworkReaderPool.Get(spawn.payload)) SpawnMasks[spawn.netId]=Compression.DecompressVarUInt(payload);
+                    }
+                    else if(id==NetworkMessages.GetId<EntityStateMessage>())
+                    {
+                        var state=reader.Read<EntityStateMessage>();
+                        Updates[state.netId]=Updates.TryGetValue(state.netId,out var count)?count+1:1;
+                    }
+                    else if(id==NetworkMessages.GetId<RpcMessage>())
+                    {
+                        var rpc=reader.Read<RpcMessage>();
+                        string replySignature="System.Void BuyBidBlow.Characters.PlayerNet::TargetReply(BuyBidBlow.Systems.Types.RequestResult)";
+                        if(rpc.functionHash==(ushort)(replySignature.GetStableHashCode()&0xffff))
+                            using(var payload=NetworkReaderPool.Get(rpc.payload)) LastReply=payload.Read<RequestResult>();
+                    }
                 }
             }
         }
         public void Tick(){client.TickIncoming();client.TickOutgoing();}
         public void Disconnect(){client.Disconnect();batcher.Clear();}
+        public int UpdateCount(uint netId)=>Updates.TryGetValue(netId,out var count)?count:0;
+        public void Command(PlayerNet player,string method,Action<NetworkWriter> write=null)
+        {
+            var info=typeof(PlayerNet).GetMethod(method);
+            string signature=info.ReturnType.FullName+" "+typeof(PlayerNet).FullName+"::"+method+"("+string.Join(",",info.GetParameters().Select(p=>p.ParameterType.FullName))+")";
+            using(var payload=NetworkWriterPool.Get())
+            {
+                write?.Invoke(payload);
+                Send(new CommandMessage { netId=player.netId,componentIndex=player.ComponentIndex,
+                    functionHash=(ushort)(signature.GetStableHashCode()&0xffff),payload=payload.ToArraySegment() });
+            }
+        }
     }
 
     [InitializeOnLoad] public static class DirectConnectionVerification

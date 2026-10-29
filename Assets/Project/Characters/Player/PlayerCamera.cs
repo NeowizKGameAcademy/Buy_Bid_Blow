@@ -12,6 +12,7 @@ namespace BuyBidBlow.Characters
 
         public Transform CameraTransform => cameraObject.transform;
 
+        // 카메라를 활성화하고 기본 로컬 위치·회전으로 초기화
         private void Awake()
         {
             cameraObject.SetActive(true);

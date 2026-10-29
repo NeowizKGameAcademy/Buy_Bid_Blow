@@ -17,6 +17,7 @@ namespace BuyBidBlow.Systems.Auction
         public double Deadline { get; }
         public int MinBid { get; }
 
+        // 물건·마감 시각·최소 입찰가·플레이어 정보를 설정
         public SecretAuction(Lot lot, double deadline, int minBid, IReadOnlyDictionary<PlayerId, PlayerPortfolio> players)
         {
             Lot = lot;
@@ -25,9 +26,11 @@ namespace BuyBidBlow.Systems.Auction
             this.players = players;
         }
 
+        // 플레이어가 제출한 비밀 입찰 금액을 반환 (없으면 0)
         // 0 when the player has nothing submitted. Only for that player's own screen.
         public int GetSubmitted(PlayerId player) => submissions.TryGetValue(player, out Submission s) ? s.Amount : 0;
 
+        // 비밀 입찰 금액을 제출·변경하고 차액만큼 현금을 예약 또는 해제
         public AuctionError Submit(PlayerId player, int amount, double now)
         {
             if (closed || now >= Deadline) return AuctionError.Closed;
@@ -52,6 +55,7 @@ namespace BuyBidBlow.Systems.Auction
             return AuctionError.None;
         }
 
+        // 제출한 비밀 입찰을 취소하고 예약금을 해제
         public AuctionError Cancel(PlayerId player, double now)
         {
             if (closed || now >= Deadline) return AuctionError.Closed;
@@ -62,6 +66,7 @@ namespace BuyBidBlow.Systems.Auction
             return AuctionError.None;
         }
 
+        // 최고가(동점이면 먼저 제출) 낙찰자를 정해 결제하고 나머지 예약을 해제
         // Highest amount wins; ties go to whoever submitted that amount first.
         // Charges the winner and releases everyone else. Players = everyone who had a submission.
         public SecretResult Close()
@@ -102,6 +107,7 @@ namespace BuyBidBlow.Systems.Auction
             public readonly int Amount;
             public readonly long Order;  // Server processing order; lower submitted first.
 
+            // 제출 금액과 처리 순서를 설정
             public Submission(int amount, long order)
             {
                 Amount = amount;
@@ -118,6 +124,7 @@ namespace BuyBidBlow.Systems.Auction
         // Everyone who had a submission at the deadline; each is told only won or lost.
         public readonly IReadOnlyList<PlayerId> Players;
 
+        // 경매 결과와 제출자 목록을 설정
         public SecretResult(AuctionResult result, IReadOnlyList<PlayerId> players)
         {
             Result = result;

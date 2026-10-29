@@ -4,6 +4,7 @@ namespace BuyBidBlow.Systems.Types
 {
     public readonly struct TradeResult
     {
+        // 거래 결과 값을 설정
         public TradeResult(bool succeeded, string message, Company company, int cash, int shares, int total)
         {
             Succeeded = succeeded;

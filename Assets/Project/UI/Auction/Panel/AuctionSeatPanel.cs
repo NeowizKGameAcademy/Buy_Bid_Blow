@@ -21,7 +21,9 @@ namespace BuyBidBlow.UI.Auction
         private string notice;
         private float noticeUntil;
 
+        // 로컬 플레이어 응답 이벤트 구독
         private void OnEnable() => PlayerNet.LocalReply += ShowReply;
+        // 로컬 플레이어 응답 이벤트 구독 해제
         private void OnDisable() => PlayerNet.LocalReply -= ShowReply;
 
         private bool SeatedForAuction
@@ -29,12 +31,12 @@ namespace BuyBidBlow.UI.Auction
             get { var seat = seating ? seating.CurrentSeat : null; return seat && seat.auction; }
         }
 
+        // 경매석 착석 시 키 입력으로 입찰 조정/제출/취소 처리 후 패널 갱신
         private void Update()
         {
-            if (!SeatedForAuction) { view.Present(default); return; }
-
             var keyboard = Keyboard.current;
-            if (keyboard != null)
+            var hud = GetComponentInParent<BuyBidBlow.UI.HUD.HUDController>();
+            if (keyboard != null && SeatedForAuction && (!hud || !hud.ModalOpen))
             {
                 if (keyboard.rightArrowKey.wasPressedThisFrame) AdjustBid(1);
                 if (keyboard.leftArrowKey.wasPressedThisFrame) AdjustBid(-1);
@@ -44,31 +46,37 @@ namespace BuyBidBlow.UI.Auction
             view.Present(Seated());
         }
 
+        // 입찰 금액을 증감하되 최소 입찰가 미만으로 내려가지 않게 함
         public void AdjustBid(int delta) => bidAmount = Mathf.Max(MinimumBid(), bidAmount + delta);
 
+        // 경매 진행 중이면 현재 금액으로 입찰 전송
         public void SubmitBid()
         {
             if (Live(out _)) Send(bidAmount, false);
         }
 
+        // 비공개 경매 진행 중이면 제출한 입찰 취소 요청
         public void CancelSecret()
         {
             if (Live(out var stage) && stage == MatchNet.AuctionStage.Secret) Send(0, true);
         }
 
+        // 로컬 플레이어를 통해 서버에 입찰/취소 명령 전송
         private void Send(int amount, bool cancel)
         {
             var local = NetworkClient.localPlayer ? NetworkClient.localPlayer.GetComponent<PlayerNet>() : null;
             if (local) local.CmdBid(amount, cancel);
         }
 
-        private void ShowReply(string message)
+        // 착석 중이면 입찰 응답 메시지를 일정 시간 표시하도록 저장
+        private void ShowReply(RequestResult result)
         {
-            if (!SeatedForAuction) return;
-            notice = message;
+            if (result.Kind != RequestKind.Bid && result.Kind != RequestKind.Seat) return;
+            notice = result.Message;
             noticeUntil = Time.unscaledTime + noticeSeconds;
         }
 
+        // 현재 경매 단계를 구하고 마감 전 진행 중인지 반환
         private static bool Live(out MatchNet.AuctionStage stage)
         {
             var match = MatchNet.Current;
@@ -76,6 +84,7 @@ namespace BuyBidBlow.UI.Auction
             return stage != MatchNet.AuctionStage.None && match.auctionClosesAt > NetworkTime.time;
         }
 
+        // 경매 단계에 맞는 최소 입찰 금액 계산
         // Open auction: above the current highest bid. Secret auction: any positive amount.
         private static int MinimumBid()
         {
@@ -83,9 +92,10 @@ namespace BuyBidBlow.UI.Auction
             return match && match.auctionStage == MatchNet.AuctionStage.Open ? match.highestBid + 1 : 1;
         }
 
+        // 매치 경매 상태로 착석 플레이어용 패널 데이터 구성
         private AuctionPanelData Seated()
         {
-            var data = new AuctionPanelData { seated = true, available = assets ? assets.Available : 0 };
+            var data = new AuctionPanelData { seated = SeatedForAuction, available = assets ? assets.Available : 0 };
             var match = MatchNet.Current;
             if (!match)
                 return data;
@@ -113,7 +123,7 @@ namespace BuyBidBlow.UI.Auction
             data.highestBidder = match.highestBidder;
             data.ownSubmitted = data.secret ? PlayerNet.LocalSecretBid : 0;
             var local = NetworkClient.localPlayer ? NetworkClient.localPlayer.GetComponent<PlayerNet>() : null;
-            data.ownHighest = data.hasBid && local && match.highestBidder == local.nickname;
+            data.ownHighest = data.hasBid && local && match.highestBidderId == local.playerId;
             return data;
         }
     }

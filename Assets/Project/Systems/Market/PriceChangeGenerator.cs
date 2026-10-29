@@ -5,6 +5,7 @@ namespace BuyBidBlow.Systems.Market
 {
     public static class PriceChangeGenerator
     {
+        // 회사별 변동 폭과 방향을 무작위로 정해 가격 변동 목록을 생성
         // One change per company, indexed by Company. The caller owns the Random so one seed replays a whole match.
         public static PriceChange[] Generate(PriceChangeSettings settings, Random random)
         {

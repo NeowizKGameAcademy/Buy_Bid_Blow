@@ -6,7 +6,9 @@ namespace BuyBidBlow.UI.Ticker
     public sealed class TickerIcon : TickerGeometry
     {
         [Range(0,2)] public int company;
+        // 회사 번호를 바꾸고 메시 갱신 요청
         public void SetCompany(int value){company=value;SetVerticesDirty();}
+        // 회사별 아이콘 모양을 선분으로 그려 메시 생성
         protected override void OnPopulateMesh(VertexHelper vh)
         {
             vh.Clear();var r=rectTransform.rect;

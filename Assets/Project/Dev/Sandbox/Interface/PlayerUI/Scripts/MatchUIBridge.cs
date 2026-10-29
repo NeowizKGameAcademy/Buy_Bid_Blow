@@ -21,10 +21,10 @@ namespace BuyBidBlow.PlayerUISandbox {
  void Update(){if(Game==null)return;AdvanceClock(Time.deltaTime*clockSpeed);}
  public void AdvanceClock(double seconds){if(Game==null||seconds<0)return;int oldRound=Game.Round;Now+=seconds;Game.Tick(Now);if((Game.Round!=oldRound||Game.Complete)&&controller.CurrentMode==PlayerUIController.Mode.Trade){controller.Close();Message("라운드 마감 · 새 주가를 확인하세요.");}Refresh();}
  public TradingPanelData TradeData(int company){var c=(Company)company;var s=Game.Snapshot(Player);return new TradingPanelData{company=c.ToString(),price=Game.Price(c),owned=s.GetShares(c),stock=Game.Stock(c),available=s.Available,change=Game.LastChange(c),hasBet=Game.HasBet(Player,c),otherBet=Game.HasBet(Player)&&!Game.HasBet(Player,c),betStake=Game.BetStake(Player),closed=Game.Complete};}
- public void ConfirmTrade(int company,int tab,int quantity){if(Game==null)return;Message(tab==2?Game.ToggleBet(Player,(Company)company,Now):Game.Trade(Player,(Company)company,quantity,tab==0,Now));Refresh();}
+ public void ConfirmTrade(int company,int tab,int quantity){if(Game==null)return;Message((tab==2?Game.ToggleBet(Player,(Company)company,Now):Game.Trade(Player,(Company)company,quantity,tab==0,Now)).Message);Refresh();}
  public void AdjustBid(int delta){BidAmount=Mathf.Max(MinimumBid(),BidAmount+delta);}
  int MinimumBid()=>Game?.Auction?.Secret!=null?1:Game?.Auction?.Open?.HasBid==true?Game.Auction.Open.HighestBid+1:1;
- public void SubmitBid(bool cancel=false){if(Game==null)return;Message(Game.Bid(Player,BidAmount,cancel,Now));Refresh();}
+ public void SubmitBid(bool cancel=false){if(Game==null)return;Message(Game.Bid(Player,BidAmount,cancel,Now).Message);Refresh();}
  public void ToggleInformation(){if(Game==null||Game.Complete)return;showInformation=!showInformation;if(controller.notebook)controller.notebook.SetOpen(showInformation,Game.Round);Refresh();}
  void Message(string message){feedback=message;feedbackUntil=Time.unscaledTime+3;}
  static string Describe(Info info)=>$"{info.Round}R · {info.CompanyA} {DirectionText(info.DirectionA)} · {info.CompanyB} {DirectionText(info.DirectionB)}";

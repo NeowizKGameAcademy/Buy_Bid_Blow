@@ -18,6 +18,7 @@ namespace BuyBidBlow.Characters
         public int Lower => lower;
         public Color TieColor => tieColor;
 
+        // 상·하의 선택 인덱스를 범위 내로 설정하고 외형 적용
         public void SetOutfit(int top, int bottom)
         {
             upper = Mathf.Clamp(top, 0, uppers == null ? 0 : Mathf.Max(0, uppers.Length - 1));
@@ -25,12 +26,14 @@ namespace BuyBidBlow.Characters
             ApplyAppearance();
         }
 
+        // 넥타이 색상을 설정하고 외형 적용
         public void SetTieColor(Color value)
         {
             tieColor = value;
             ApplyAppearance();
         }
 
+        // 선택된 상·하의만 표시하고 넥타이 색상을 머티리얼 블록으로 적용
         public void ApplyAppearance()
         {
             ApplySelection(uppers, upper);
@@ -42,6 +45,7 @@ namespace BuyBidBlow.Characters
             tie.SetPropertyBlock(block);
         }
 
+        // 선택한 인덱스의 렌더러만 활성화
         private static void ApplySelection(SkinnedMeshRenderer[] renderers, int selection)
         {
             if (renderers == null) return;
@@ -49,7 +53,9 @@ namespace BuyBidBlow.Characters
                 if (renderers[i]) renderers[i].enabled = i == selection;
         }
 
+        // 시작 시 외형 적용
         private void Awake() => ApplyAppearance();
+        // 인스펙터 값 변경 시 외형 적용
         private void OnValidate() => ApplyAppearance();
     }
 }
