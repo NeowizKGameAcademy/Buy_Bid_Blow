@@ -2,16 +2,16 @@ using BuyBidBlow.Common;
 using BuyBidBlow.UI.Notebook;
 using UnityEngine;
 
-namespace BuyBidBlow.Sandbox.Lottery
+namespace BuyBidBlow.Sandbox.StockGacha
 {
-    public sealed class LotteryDevice : MonoBehaviour, IInteractable
+    public sealed class StockGachaDevice : MonoBehaviour, IInteractable
     {
         public bool CanInteract => MatchNet.Current && MatchNet.Current.phase==MatchNet.Phase.Playing;
-        public string Prompt => "E : LOTTERY";
+        public string Prompt => "E : STOCK GACHA";
         public bool Interact(GameObject player)
         {
             if(!CanInteract || NetworkNotebookController.BlocksInput)return false;
-            var panel=FindFirstObjectByType<LotterySandboxPanel>();
+            var panel=FindFirstObjectByType<StockGachaSandboxPanel>();
             return panel && panel.Open(player);
         }
     }

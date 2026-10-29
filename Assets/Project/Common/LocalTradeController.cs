@@ -112,6 +112,9 @@ namespace BuyBidBlow.Common
             {
                 data.price = match.GetPrice(company);
                 data.stock = match.GetStock(company);
+                data.minPrice = match.minPrice;
+                data.hasRiseChance = match.riseChances.Count > (int)company;
+                if(data.hasRiseChance)data.riseChance = match.riseChances[(int)company];
                 foreach (var priceChange in match.lastChanges)
                     if (priceChange.Company == company) data.change += priceChange.Amount;
                 data.closed = match.phase != MatchNet.Phase.Playing;

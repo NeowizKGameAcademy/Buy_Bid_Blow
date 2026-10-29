@@ -12,6 +12,20 @@ namespace BuyBidBlow.Dev.Editor
         static HUDIntegrationRunner(){api=ScriptableObject.CreateInstance<TestRunnerApi>();api.RegisterCallbacks(new Report());EditorApplication.update+=Tick;}
         static void Tick()
         {
+            if(SessionState.GetString("StockGacha.TestKind","")!="")return;
+            if(File.Exists("Library/LaborPlayTests.request")&&!EditorApplication.isCompiling&&!EditorApplication.isUpdating&&!EditorApplication.isPlayingOrWillChangePlaymode)
+            {
+                File.Delete("Library/LaborPlayTests.request");SessionState.SetString("StockGacha.TestKind","LaborPlay");
+                api.Execute(new ExecutionSettings(new Filter{testMode=TestMode.PlayMode,testNames=new[]{"BuyBidBlow.Dev.Tests.PlayMode.LaborSandboxTests"}}));return;
+            }
+            foreach(var kind in new[]{"Rules","Play"})
+            {
+                string request="Library/StockGacha"+kind+"Tests.request";
+                if(!File.Exists(request)||EditorApplication.isCompiling||EditorApplication.isUpdating||EditorApplication.isPlayingOrWillChangePlaymode)continue;
+                File.Delete(request);SessionState.SetString("StockGacha.TestKind",kind);
+                api.Execute(new ExecutionSettings(new Filter{testMode=kind=="Rules"?TestMode.EditMode:TestMode.PlayMode,
+                    testNames=kind=="Rules"?new[]{"BuyBidBlow.Dev.Tests.EditMode.StockGachaTests","BuyBidBlow.Dev.Tests.EditMode.LaborTests","BuyBidBlow.Dev.Tests.EditMode.ContributionPriceTests","BuyBidBlow.Dev.Tests.EditMode.Auction","BuyBidBlow.Dev.Tests.EditMode.Round"}:new[]{"BuyBidBlow.Dev.Tests.PlayMode.StockGachaSandboxTests","BuyBidBlow.Dev.Tests.PlayMode.LaborSandboxTests"}}));return;
+            }
             foreach(var kind in new[]{"Rules","Play"}){string request="Library/GameMenu"+kind+"Tests.request";if(!File.Exists(request)||EditorApplication.isCompiling||EditorApplication.isUpdating||EditorApplication.isPlayingOrWillChangePlaymode)continue;File.Delete(request);api.Execute(new ExecutionSettings(new Filter{testMode=kind=="Rules"?TestMode.EditMode:TestMode.PlayMode,testNames=kind=="Rules"?new[]{"BuyBidBlow.Dev.Tests.EditMode.Auction.AuctionTests","BuyBidBlow.Dev.Tests.EditMode.MenuResultRulesTests"}:new[]{"BuyBidBlow.Dev.Tests.PlayMode.GameMenuResultsTests"}}));return;}
             if(File.Exists("Library/AuctioneerAnimationTests.request")&&!EditorApplication.isCompiling&&!EditorApplication.isUpdating&&!EditorApplication.isPlayingOrWillChangePlaymode)
             {
@@ -65,7 +79,7 @@ namespace BuyBidBlow.Dev.Editor
             public void RunStarted(ITestAdaptor test){}
             public void TestStarted(ITestAdaptor test){}
             public void TestFinished(ITestResultAdaptor result){}
-            public void RunFinished(ITestResultAdaptor result){TestRunnerApi.SaveResultToFile(result,"Logs/HUDIntegrationTests.xml");File.WriteAllText("Library/HUDIntegrationTests.result",result.ResultState+"\n"+result.Message);}
+            public void RunFinished(ITestResultAdaptor result){var kind=SessionState.GetString("StockGacha.TestKind","");if(kind!=""){TestRunnerApi.SaveResultToFile(result,"Library/StockGacha"+kind+"Results.xml");SessionState.EraseString("StockGacha.TestKind");}TestRunnerApi.SaveResultToFile(result,"Logs/HUDIntegrationTests.xml");File.WriteAllText("Library/HUDIntegrationTests.result",result.ResultState+"\n"+result.Message);}
         }
     }
 }

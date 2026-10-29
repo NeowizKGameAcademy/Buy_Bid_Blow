@@ -2453,14 +2453,14 @@ MonoBehaviour:
   evaluationMethod: 0
   evaluationInterval: 3
   timeInterpolationGui: 0
-  lotterySandboxSettings: {fileID: 4900000, guid: b0d41c9db7bb3d84f8be721ae6b1d75c, type: 3}
-  lotteryDevicePosition: {x: 0, y: 0, z: 5}
+  stockGachaSandboxSettings: {fileID: 4900000, guid: b0d41c9db7bb3d84f8be721ae6b1d75c, type: 3}
+  stockGachaDevicePosition: {x: 0, y: 0, z: 5}
   minPlayers: 1
   menuScene: SC_MainMenu
-  matchSettingsFile: {fileID: 4900000, guid: d501cfe0b4b4b944dbdd6eddb9288512, type: 3}
+  matchSettingsFile: {fileID: 4900000, guid: 23eda4ec81f74c588c8fb8e1c5f1ee40, type: 3}
   randomSeed: 0
   matchNetPrefab: {fileID: 6472023346010084752, guid: f1ad330f26f9967468b1c3f5d89c6c7c, type: 3}
-  prepareSeconds: 2
+  prepareSeconds: 5
 --- !u!114 &104497635
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3027,7 +3027,7 @@ GameObject:
   - component: {fileID: 131719504}
   - component: {fileID: 131719505}
   m_Layer: 0
-  m_Name: Lottery Device - 100 Numbers
+  m_Name: Stock Gacha Machine - 150 Capsules
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3071,7 +3071,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0ada4184eda819f429d7c29a40d23e07, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.Sandbox.Lottery.LotteryDevice
+  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.Sandbox.StockGacha.StockGachaDevice
 --- !u!1 &132899809
 GameObject:
   m_ObjectHideFlags: 0
@@ -25829,7 +25829,7 @@ GameObject:
   - component: {fileID: 833806366}
   - component: {fileID: 833806365}
   m_Layer: 0
-  m_Name: Lottery Sign
+  m_Name: StockGacha Sign
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -25858,9 +25858,9 @@ TextMesh:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 833806363}
-  m_Text: 'LOTTERY
+  m_Text: 'STOCK GACHA
 
-    100 NUMBERS
+    150 CAPSULES
 
     [E]'
   m_OffsetZ: 0
@@ -27970,7 +27970,7 @@ GameObject:
   - component: {fileID: 926160644}
   - component: {fileID: 926160643}
   m_Layer: 0
-  m_Name: Number Ball 6
+  m_Name: Capsule Ball 6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28390,7 +28390,7 @@ GameObject:
   - component: {fileID: 952111935}
   - component: {fileID: 952111934}
   m_Layer: 0
-  m_Name: Number Ball 5
+  m_Name: Capsule Ball 5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -31294,7 +31294,7 @@ GameObject:
   - component: {fileID: 1060106411}
   - component: {fileID: 1060106410}
   m_Layer: 0
-  m_Name: Number Ball 0
+  m_Name: Capsule Ball 0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -40170,7 +40170,7 @@ GameObject:
   - component: {fileID: 1370936525}
   - component: {fileID: 1370936524}
   m_Layer: 0
-  m_Name: Number Ball 4
+  m_Name: Capsule Ball 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44078,7 +44078,7 @@ GameObject:
   - component: {fileID: 1490579456}
   - component: {fileID: 1490579455}
   m_Layer: 0
-  m_Name: Number Ball 1
+  m_Name: Capsule Ball 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44991,7 +44991,7 @@ GameObject:
   - component: {fileID: 1523470145}
   - component: {fileID: 1523470144}
   m_Layer: 0
-  m_Name: Ticket Slot
+  m_Name: Capsule Outlet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -47535,7 +47535,7 @@ GameObject:
   - component: {fileID: 1614403896}
   - component: {fileID: 1614403895}
   m_Layer: 0
-  m_Name: Number Ball 2
+  m_Name: Capsule Ball 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -49828,6 +49828,54 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1643482468}
   m_CullTransparentMesh: 1
+--- !u!1 &1645403914
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1645403916}
+  - component: {fileID: 1645403915}
+  m_Layer: 0
+  m_Name: Labor Workshop and Door Portal
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1645403915
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1645403914}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86400d360502b4e4ea911036e58e563a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.Sandbox.Labor.LaborRoom
+  doorPosition: {x: 13.985001, y: 1.89, z: -5.44}
+  hallExit: {x: 11.18908, y: 0.33999997, z: -4.35242}
+  origin: {x: 100, y: 0, z: 0}
+  font: {fileID: 12800000, guid: 901b7c69f5704cf42abbb6f0cdd85b76, type: 3}
+--- !u!4 &1645403916
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1645403914}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1647097584
 GameObject:
   m_ObjectHideFlags: 0
@@ -63837,7 +63885,7 @@ GameObject:
   - component: {fileID: 2007127266}
   - component: {fileID: 2007127265}
   m_Layer: 0
-  m_Name: Number Ball 3
+  m_Name: Capsule Ball 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -66479,7 +66527,7 @@ GameObject:
   - component: {fileID: 2074232739}
   - component: {fileID: 2074232738}
   m_Layer: 0
-  m_Name: Lottery Sandbox Controls
+  m_Name: StockGacha Sandbox Controls
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -66496,7 +66544,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 54527b08cbc5b3c42b220159bcfbc846, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.Sandbox.Lottery.LotterySandboxPanel
+  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.Sandbox.StockGacha.StockGachaSandboxPanel
   font: {fileID: 12800000, guid: 901b7c69f5704cf42abbb6f0cdd85b76, type: 3}
   device: {fileID: 131719504}
 --- !u!4 &2074232739
@@ -69908,3 +69956,4 @@ SceneRoots:
   - {fileID: 822015510}
   - {fileID: 131719504}
   - {fileID: 2074232739}
+  - {fileID: 1645403916}

@@ -53,7 +53,12 @@ namespace BuyBidBlow.Characters
         {
             if (!IsSeated) return;
             var net = LocalNet;
-            if (net && net.inMatch) net.CmdStand();
+            if (net && net.inMatch)
+            {
+                // Recover a locally seated actor with no matching server grant (e.g. old sandbox state).
+                if (!net.IsSeated) Stand();
+                net.CmdStand();
+            }
             else Stand();
         }
 

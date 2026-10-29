@@ -15,11 +15,18 @@ namespace BuyBidBlow.UI.HUD
         public bool isDetected { get; private set; }
         public LayerMask detectingLayer { get; private set; }
         public Collider DetectedCollider { get; private set; }
+        private Transform playerRoot;
+
+        private void Awake()
+        {
+            var interaction=GetComponentInParent<BuyBidBlow.Characters.PlayerInteraction>();
+            if(interaction)playerRoot=interaction.transform;
+        }
 
         private void Update()
         {
             Ray ray = new Ray(transform.position, transform.forward);
-            RaycastHit hit;
+            RaycastHit hit=default;
 
             Debug.DrawRay(ray.origin, ray.direction * detectDistance, Color.red);
 
@@ -27,9 +34,16 @@ namespace BuyBidBlow.UI.HUD
             foreach (LayerMask layer in detectLayer)
                 mask |= layer.value;
 
-            // 벽 너머의 NPC는 감지하지 않습니다.
-            isDetected = Physics.Raycast(ray, out hit, detectDistance,
-                Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore)
+            // Looking down must not hit our own capsule. The nearest other collider still
+            // occludes interaction, so walls and other players cannot be interacted through.
+            bool found=false;float nearest=float.PositiveInfinity;
+            foreach(var candidate in Physics.RaycastAll(ray,detectDistance,Physics.DefaultRaycastLayers,QueryTriggerInteraction.Ignore))
+            {
+                if(playerRoot&&candidate.collider.transform.IsChildOf(playerRoot))continue;
+                if(candidate.distance>=nearest)continue;
+                hit=candidate;nearest=candidate.distance;found=true;
+            }
+            isDetected = found
                 && ((mask & (1 << hit.collider.gameObject.layer)) != 0
                     || hit.collider.GetComponentInParent<BuyBidBlow.Common.IInteractable>() is { CanInteract: true });
             DetectedCollider = isDetected ? hit.collider : null;

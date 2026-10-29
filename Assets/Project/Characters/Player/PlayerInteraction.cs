@@ -25,10 +25,6 @@ namespace BuyBidBlow.Characters
             if (!detect.isDetected || detect.DetectedCollider == null)
                 return;
 
-            var interactable = detect.DetectedCollider.GetComponentInParent<IInteractable>();
-            if (interactable != null && interactable.CanInteract && interactable.Interact(gameObject))
-                return;
-
             var npcInfo = detect.DetectedCollider.GetComponentInParent<NPCInfo>();
             if (npcInfo != null && localTrade != null)
             {
@@ -39,8 +35,17 @@ namespace BuyBidBlow.Characters
             }
 
             var seat = detect.DetectedCollider.GetComponentInParent<Seat>();
-            if (seat != null && seats != null && seat.CanInteract)
-                seats.RequestSit(seat);
+            if (seat != null)
+            {
+                // Seat.Interact is the offline path. Matches must wait for the server grant,
+                // otherwise CmdStand clears an already-empty SyncVar and never releases the local seat.
+                if (seats != null && seat.CanInteract) seats.RequestSit(seat);
+                return;
+            }
+
+            var interactable = detect.DetectedCollider.GetComponentInParent<IInteractable>();
+            if (interactable != null && interactable.CanInteract)
+                interactable.Interact(gameObject);
         }
     }
 }

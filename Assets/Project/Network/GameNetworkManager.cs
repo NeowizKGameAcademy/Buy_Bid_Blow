@@ -23,7 +23,7 @@ namespace BuyBidBlow.Network
     public struct MatchReturning : NetworkMessage {}
     public sealed partial class GameNetworkManager : NetworkManager
     {
-        public const int ProtocolVersion=7;
+        public const int ProtocolVersion=8;
         public const string PlayScene="SC_ExchangeFurnished";
         [Header("Match")]
         // Lower this in the Inspector to test with fewer players (e.g. one ParrelSync clone).
@@ -63,13 +63,13 @@ namespace BuyBidBlow.Network
         }
         public override void OnStartServer()
         {
-            base.OnStartServer();roster.Clear();EndMatch();NetworkServer.RegisterHandler<LobbyJoinRequest>(ReceiveJoin);RegisterLotteryServer();
+            base.OnStartServer();roster.Clear();EndMatch();NetworkServer.RegisterHandler<LobbyJoinRequest>(ReceiveJoin);RegisterStockGachaServer();RegisterLaborServer();
             Debug.Log($"[Server] Listening on UDP {(transport as kcp2k.KcpTransport)?.Port} · min players {minPlayers}");
         }
         public override void OnStopServer(){roster.Clear();EndMatch();base.OnStopServer();}
         public override void OnStartClient()
         {
-            base.OnStartClient();NetworkClient.RegisterHandler<LobbyJoinResponse>(ReceiveResponse);RegisterLotteryClient();
+            base.OnStartClient();NetworkClient.RegisterHandler<LobbyJoinResponse>(ReceiveResponse);RegisterStockGachaClient();RegisterLaborClient();
             NetworkClient.RegisterHandler<LobbyClosing>(_=>AdmissionRejected?.Invoke("서버가 방을 닫았습니다."));
             NetworkClient.RegisterHandler<MatchIntroStarting>(_=>{clientInIntro=true;ClientMatchIntroStarted?.Invoke();});
             NetworkClient.RegisterHandler<MatchStarting>(ReceiveMatchStarting);
@@ -160,7 +160,7 @@ namespace BuyBidBlow.Network
             double startsAt=NetworkTime.time+prepareSeconds;
             int matchSeed=randomSeed!=0?randomSeed:Environment.TickCount;
             engine=new MatchEngine(settings,matchSeed,players,startsAt,roundSecondsOverride);
-            InitializeSandboxLottery(matchSeed,startsAt);
+            InitializeSandboxStockGacha(matchSeed,startsAt);
             matchParticipants.Clear();
             foreach(var conn in NetworkServer.connections.Values)
                 if(conn.identity && conn.identity.TryGetComponent<PlayerNet>(out var p) && players.Contains(PlayerIdOf(conn)))
@@ -196,6 +196,8 @@ namespace BuyBidBlow.Network
 
             var go=Instantiate(matchNetPrefab);matchNet=go.GetComponent<MatchNet>();
             matchNet.totalRounds=settings.RoundCount;
+            matchNet.minPrice=settings.MinPrice;
+            foreach(var chance in settings.PriceChange.RiseChances)matchNet.riseChances.Add(chance);
             matchNet.phase=MatchNet.Phase.Preparing;matchNet.firstRoundStartsAt=startsAt;matchNet.roundClosesAt=engine.Deadline;
             go.GetComponent<MatchTimeline>().Publish(MatchSchedule.Build(settings,startsAt-prepareSeconds,startsAt,roundSecondsOverride));
             PublishMarket();PublishAuction(NetworkTime.time);
@@ -227,7 +229,7 @@ namespace BuyBidBlow.Network
             }
             int round=engine.Round;
             engine.Tick(now);
-            PublishLottery();
+            PublishStockGacha();TickLabor();
             PublishAuction(now);
             if(engine.Round==round&&!engine.Complete)return;
             // Closing Bell: publish the new prices and changes, then the next round (or the end).
@@ -380,7 +382,7 @@ namespace BuyBidBlow.Network
             ClientDisconnected?.Invoke();base.OnClientDisconnect();serverMinPlayers=0;
             if(!clientInMatch)return;
             // The optional sandbox is a self-contained scene, without the production menu in its build.
-            if(LotterySandboxEnabled){clientInMatch=false;clientInIntro=false;ClientMatchReturned?.Invoke();return;}
+            if(StockGachaSandboxEnabled){clientInMatch=false;clientInIntro=false;ClientMatchReturned?.Invoke();return;}
             // Lost the server during a match: back to the start screen. The lobby scene brings a fresh manager.
             clientInMatch=false;SceneManager.LoadScene(menuScene);Destroy(gameObject);
         }

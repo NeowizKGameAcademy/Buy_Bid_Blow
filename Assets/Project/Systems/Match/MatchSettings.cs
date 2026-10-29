@@ -23,6 +23,8 @@ namespace BuyBidBlow.Systems.Match
 
         // Shared range plus a per-company offset, indexed by Company: Straw, Timber, Brick.
         public IntRange StartingPrice;
+        // 0 (older JSON) and 1 keep the original price rolls; 2 doubles the same rolls exactly.
+        public int StartingPriceMultiplier;
         public IntRange[] StartingPriceOffsets;
         public int MinPrice;
 
@@ -53,7 +55,7 @@ namespace BuyBidBlow.Systems.Match
         {
             var prices = new int[StartingPriceOffsets.Length];
             for (int i = 0; i < prices.Length; i++)
-                prices[i] = Math.Max(MinPrice, StartingPrice.Roll(random) + StartingPriceOffsets[i].Roll(random));
+                prices[i] = Math.Max(MinPrice, checked((StartingPrice.Roll(random) + StartingPriceOffsets[i].Roll(random)) * Math.Max(1, StartingPriceMultiplier)));
             return prices;
         }
 
@@ -76,6 +78,7 @@ namespace BuyBidBlow.Systems.Match
                     Array.IndexOf(AuctionRounds, AuctionRounds[i]) != i)
                     throw new FormatException("AuctionRounds must contain unique round numbers inside the match.");
             if (StartingCash < 0 || StartingShares < 0) throw new FormatException("Starting cash and shares cannot be negative.");
+            if (StartingPriceMultiplier < 0) throw new FormatException("StartingPriceMultiplier cannot be negative.");
             if (MinPrice <= 0) throw new FormatException("MinPrice must be positive.");
             if (StartingPrice == null || !StartingPrice.IsValid) throw new FormatException("StartingPrice needs Min <= Max.");
             if (StartingPrice.Min < MinPrice) throw new FormatException("StartingPrice cannot start below MinPrice.");
