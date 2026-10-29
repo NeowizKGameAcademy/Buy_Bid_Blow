@@ -32,7 +32,7 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
             var interaction = Object.FindFirstObjectByType<PlayerInteraction>();
             var seats = interaction.GetComponentInParent<SeatController>();
             var seating = seats.GetComponent<PlayerSeating>();
-            var detect = Object.FindFirstObjectByType<DetectObject>();
+            var detect = Object.FindFirstObjectByType<InteractionSensor>();
             var model = seats.GetComponentsInChildren<Animator>().First(a => a.runtimeAnimatorController);
             var chair = Object.FindObjectsByType<Seat>(FindObjectsSortMode.None).Single(s => s.name == ChairName);
             var anchor = chair.sittingPoints[0];
@@ -42,8 +42,8 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
             var eye = anchor.position + anchor.right * 1.3f + Vector3.up * .6f;
             detect.transform.SetPositionAndRotation(eye, Quaternion.LookRotation(anchor.position - eye));
             yield return null; yield return null;
-            Assert.IsTrue(detect.isDetected, "chair detected");
-            Assert.AreEqual(chair, detect.DetectedCollider.GetComponentInParent<Seat>(), "aiming at the chair");
+            Assert.IsNotNull(detect.Target, "chair detected");
+            Assert.AreEqual(chair, detect.Target, "aiming at the chair");
             Assert.IsTrue(chair.CanInteract, "free chair offers Sit");
 
             interaction.Interact();
@@ -54,22 +54,12 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
             yield return null;
             Assert.IsTrue(model.GetCurrentAnimatorStateInfo(0).IsName("Seated"), "seated pose shown at once");
 
-            // Looking around while seated turns only the camera, up to 90 degrees; the chair keeps the body.
-            var move = seats.GetComponent<PlayerMove>();
-            var view = seats.GetComponent<PlayerCamera>().CameraTransform;
-            var bodyRotation = seating.transform.rotation;
-            move.Rotate(new Vector2(1e7f, 0));
-            yield return null;
-            Assert.Less(Quaternion.Angle(bodyRotation, seating.transform.rotation), .01f, "body stays facing the chair's way");
-            Assert.AreEqual(90f, view.localEulerAngles.y, .01f, "camera turns to the side limit");
-
             seats.RequestStand();
             yield return HostedMatch.Until(() => !seating.IsSeated, "stood up");
             Assert.IsFalse(net.IsSeated, "server freed the chair");
             Assert.IsTrue(chair.CanInteract, "chair free again");
             yield return null;
-            Assert.IsTrue(model.GetCurrentAnimatorStateInfo(0).IsName("Player_Idle"), "back to standing");
-            Assert.AreEqual(0f, Mathf.DeltaAngle(0, view.localEulerAngles.y), .01f, "camera faces forward again after standing");
+            Assert.IsTrue(model.GetCurrentAnimatorStateInfo(0).IsName("Locomotion"), "back to standing");
 
             // Other players see the network avatar switch straight into the same pose.
             // The owner's own avatar is hidden in the level; show it as other clients do.

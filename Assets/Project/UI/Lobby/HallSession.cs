@@ -13,7 +13,7 @@ namespace BuyBidBlow.UI.Lobby
         public GameNetworkManager room;
         public GameObject lobbyPresentation;
         public GameObject gameplayPresentation;
-        public PlayerMove player;
+        public PlayerSeating player;
         public bool IsPlaying { get; private set; }
 
         // 매치 시작 이벤트를 구독하고 이미 매치 중이면 바로 시작
@@ -43,7 +43,6 @@ namespace BuyBidBlow.UI.Lobby
         private void ReturnToLobby()
         {
             IsPlaying = false;
-            player.SetMoveInput(Vector2.zero); player.SetJumpHeld(false);
             gameplayPresentation.SetActive(false);
             lobbyPresentation.SetActive(true);
             Cursor.lockState = CursorLockMode.None; Cursor.visible = true;
@@ -58,11 +57,11 @@ namespace BuyBidBlow.UI.Lobby
             IsPlaying = true;
             if (EventSystem.current) EventSystem.current.SetSelectedGameObject(null);
             lobbyPresentation.SetActive(false);
-            // Start at the avatar's own waiting position, keeping the six players apart.
-            player.transform.SetPositionAndRotation(PlayerNet.SeatPosition(local.seat), Quaternion.Euler(0,180,0));
             gameplayPresentation.SetActive(true);
-            player.SetMoveInput(Vector2.zero);
-            if (player.TryGetComponent<Rigidbody>(out var body)) { body.linearVelocity=Vector3.zero; body.angularVelocity=Vector3.zero; }
+            // Start in the hall at the avatar's own slot, keeping the six players apart.
+            var start = PlayerNet.MatchStartPosition(local.seat); var facing = Quaternion.Euler(0,180,0);
+            if (player.TryGetComponent<CharacterMotor>(out var motor)) motor.Teleport(start, facing);
+            else player.transform.SetPositionAndRotation(start, facing);
             var appearance=player.GetComponentInChildren<BBBWolfAppearance>(true);
             if (appearance) { appearance.SetOutfit(local.top,local.bottom); appearance.SetTieColor(PlayerNet.Colors[Mathf.Clamp(local.tie,0,PlayerNet.Colors.Length-1)]); }
             Physics.SyncTransforms();

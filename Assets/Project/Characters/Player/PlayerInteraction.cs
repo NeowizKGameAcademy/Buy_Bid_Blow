@@ -1,38 +1,29 @@
-using BuyBidBlow.Common;
-using BuyBidBlow.Props;
 using BuyBidBlow.UI.HUD;
 using BuyBidBlow.UI.Market;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace BuyBidBlow.Characters
 {
+    // The interact key's entry point. Uses whatever the sensor sees; the target decides what happens.
     public class PlayerInteraction : MonoBehaviour
     {
-        [SerializeField] private DetectObject detect;
+        [FormerlySerializedAs("detect")]
+        [SerializeField] private InteractionSensor sensor;
         [SerializeField] private TradePanelController tradePanel;
-        [SerializeField] private LocalTradeController localTrade;
         [SerializeField] private SeatController seats;
+        private HUDController hud;
 
-        // 바라보는 대상이 직원이면 거래 패널을, 빈 의자면 착석을 요청
-        // E on what the player is aiming at: a desk clerk opens trading, a free chair seats the player.
+        // 거래 패널·모달이 열려 있거나 앉아 있으면 상호작용하지 않음
+        public bool Blocked => (tradePanel != null && tradePanel.IsOpen) || (seats != null && seats.IsSeated) || (hud != null && hud.ModalOpen);
+
+        private void Awake() => hud = GetComponentInChildren<HUDController>(true);
+
+        // 바라보는 대상에 상호작용
         public void Interact()
         {
-            if (detect == null || (tradePanel != null && tradePanel.IsOpen) || (seats != null && seats.IsSeated))
-                return;
-
-            if (!detect.isDetected || detect.DetectedCollider == null)
-                return;
-
-            var npcInfo = detect.DetectedCollider.GetComponentInParent<NPCInfo>();
-            if (npcInfo != null && localTrade != null)
-            {
-                localTrade.OpenPanel(npcInfo.Company);
-                return;
-            }
-
-            var seat = detect.DetectedCollider.GetComponentInParent<Seat>();
-            if (seat != null && seats != null && seat.CanInteract)
-                seats.RequestSit(seat);
+            var target = sensor != null && !Blocked ? sensor.Target : null;
+            if (target != null && target.CanInteract) target.Interact(gameObject);
         }
     }
 }

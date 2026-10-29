@@ -18,6 +18,12 @@ namespace BuyBidBlow.Characters
         private static readonly int ActionId = Animator.StringToHash(ActionParameter);
         private static readonly int ExpressionId = Animator.StringToHash(ExpressionParameter);
         private static readonly int MovementId = Animator.StringToHash(MovementParameter);
+        // The controller enters actions from Any State on "Action == n". Left at n, an action would restart
+        // as soon as it ends (Jump even every frame), and Action == 0 pulls any pose back to Locomotion.
+        // Once an action has started the parameter is parked on Hold, which no transition matches, so the
+        // action plays out and its own exit returns to Locomotion.
+        private const int Hold = -1;
+        private bool holdPending;
 
         public Transform model;
         public Animator animator;
@@ -46,6 +52,7 @@ namespace BuyBidBlow.Characters
             if (!animator) return;
             animator.speed = speed;
             animator.SetInteger(ActionId, (int)value);
+            holdPending = value != Action.Locomotion;
         }
 
         // 기본 이동 상태로 액션 되돌리기
@@ -55,7 +62,10 @@ namespace BuyBidBlow.Characters
         // Chair-seated pose, switched instantly with no sit-down or stand-up motion.
         public void SetSeated(bool seated)
         {
-            if (animator) animator.Play(seated ? "Seated" : "Locomotion", 0, 0);
+            if (!animator) return;
+            holdPending = false;
+            animator.SetInteger(ActionId, seated ? Hold : (int)Action.Locomotion);
+            animator.Play(seated ? "Seated" : "Locomotion", 0, 0);
         }
 
         // 애니메이션 재생 일시정지 또는 재개
@@ -90,6 +100,16 @@ namespace BuyBidBlow.Characters
             {
                 animator.speed = speed;
                 SetExpression(expression);
+            }
+        }
+
+        // 요청한 액션으로 전환이 시작되면 파라미터를 Hold로 돌려 재시작을 막음
+        private void Update()
+        {
+            if (holdPending && animator && animator.isInitialized && animator.IsInTransition(0))
+            {
+                animator.SetInteger(ActionId, Hold);
+                holdPending = false;
             }
         }
 

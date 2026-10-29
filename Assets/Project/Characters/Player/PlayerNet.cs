@@ -49,14 +49,18 @@ namespace BuyBidBlow.Characters
         public static readonly Color[] Colors = {new Color(.6f,.12f,.2f), new Color(.1f,.5f,.7f), new Color(.8f,.6f,.12f), new Color(.2f,.65f,.35f), new Color(.55f,.3f,.7f), Color.black};
         BBBWolfAppearance appearance;
         BBBWolfCharacter character;
-        PlayerMove localBody;
+        PlayerSeating localBody;
         Vector3 lastPosition;
         float walkSpeed;
-        // The furnished hall uses +Z for the under-mezzanine matching carpet.
-        public static readonly Vector3 WaitingCenter = new Vector3(0, .04f, 9.6f);
+        // Players wait in the lobby room behind the hall's LOBBY door (Content/Levels/LobbyRoom), lined up along +X.
+        public static readonly Vector3 WaitingCenter = new Vector3(20.87f, 0, -2.4f);
         public static Quaternion WaitingRotation => Quaternion.identity;
+        // The match starts on the hall's under-mezzanine carpet, keeping the six players apart.
+        public static readonly Vector3 MatchStartCenter = new Vector3(0, .04f, 9.6f);
         // 로비 대기 자리 인덱스에 해당하는 위치 계산
         public static Vector3 SeatPosition(int index)=>WaitingCenter+Vector3.right*((index-2.5f)*2.1f);
+        // 매치 시작 자리 인덱스에 해당하는 홀 위치 계산
+        public static Vector3 MatchStartPosition(int index)=>MatchStartCenter+Vector3.right*((index-2.5f)*2.1f);
         // 외형·캐릭터 컴포넌트를 찾고 루트모션을 끄며 동작과 이동 속도 초기화
         void Awake()
         {
@@ -81,7 +85,7 @@ namespace BuyBidBlow.Characters
             transform.localScale=Vector3.one;
             if(isLocalPlayer)
             {
-                if(!localBody)localBody=FindFirstObjectByType<PlayerMove>();
+                if(!localBody)localBody=FindFirstObjectByType<PlayerSeating>();
                 if(localBody)transform.SetPositionAndRotation(localBody.transform.position,Quaternion.Euler(0,localBody.transform.eulerAngles.y,0)*ModelYaw);
                 return;
             }

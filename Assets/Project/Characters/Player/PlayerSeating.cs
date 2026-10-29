@@ -22,6 +22,7 @@ namespace BuyBidBlow.Characters
         bool[] enabledBefore;
         CharacterController controller;
         bool controllerEnabled;
+        CharacterMotor motor;
         // 이전 위치를 저장하고 물리·충돌을 끈 뒤 의자 앵커에 앉힘
         public void Sit(Seat target, int index, Transform anchor)
         {
@@ -33,6 +34,8 @@ namespace BuyBidBlow.Characters
             for (int i = 0; i < colliders.Length; i++) { enabledBefore[i] = colliders[i].enabled; colliders[i].enabled = false; }
             controller = GetComponent<CharacterController>();
             controllerEnabled = controller && System.Array.IndexOf(colliders, controller) >= 0 && enabledBefore[System.Array.IndexOf(colliders, controller)];
+            // The chair holds the body: the motor stops until the player stands up.
+            if (TryGetComponent(out motor)) motor.Block(this);
             Snap(); onSeatedChanged.Invoke(true);
         }
         // 앉는 앵커에서 엉덩이 높이만큼 내린 위치로 배치
@@ -64,6 +67,7 @@ namespace BuyBidBlow.Characters
             if (colliders != null) for (int i = 0; i < colliders.Length; i++) if (colliders[i]) colliders[i].enabled = enabledBefore[i];
             if (controller) controller.enabled = controllerEnabled;
             if (body) body.isKinematic = wasKinematic;
+            if (motor) { motor.Unblock(this); motor.Teleport(position, rotation); }
             if (oldSeat) oldSeat.Release(slot, this);
             onSeatedChanged.Invoke(false);
         }

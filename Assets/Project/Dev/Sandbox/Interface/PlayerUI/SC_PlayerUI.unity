@@ -21439,7 +21439,6 @@ GameObject:
   - component: {fileID: 1094242339}
   - component: {fileID: 1094242338}
   - component: {fileID: 1094242337}
-  - component: {fileID: 1094242336}
   - component: {fileID: 1094242335}
   m_Layer: 0
   m_Name: Player UI Test Rig
@@ -21460,7 +21459,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cedc43f2c701814387a998cbf719ace, type: 3}
   m_Name: 
   m_EditorClassIdentifier: BuyBidBlow.Dev::BuyBidBlow.PlayerUISandbox.PlayerUIController
-  movement: {fileID: 1094242336}
   detection: {fileID: 1869332083}
   view: {fileID: 1869332080}
   body: {fileID: 1094242339}
@@ -21477,29 +21475,6 @@ MonoBehaviour:
   bridge: {fileID: 1994197529}
   notebook: {fileID: 1254992406}
   isLocalPreview: 1
---- !u!114 &1094242336
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1094242334}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc52d5a2710f4b542af68f2027180a1e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.Characters.PlayerMove
-  playerRb: {fileID: 1094242339}
-  playerCamera: {fileID: 1094242337}
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  moveSpeed: 5
-  jumpForce: 5
-  Head: {fileID: 1750350780}
-  rotateSpeed: 15
-  upperLimit: 60
-  lowerLimit: 40
 --- !u!114 &1094242337
 MonoBehaviour:
   m_ObjectHideFlags: 0

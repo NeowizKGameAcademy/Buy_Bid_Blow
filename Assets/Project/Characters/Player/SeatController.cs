@@ -9,11 +9,7 @@ namespace BuyBidBlow.Characters
     // grants the seat first (PlayerNet.hallSeat); offline the seat is taken directly.
     public sealed class SeatController : MonoBehaviour
     {
-        const string SeatedState = "Seated";
-        const string IdleState = "Player_Idle";
-
         [SerializeField] private PlayerSeating seating;
-        [SerializeField] private Animator model;
 
         private static PlayerNet LocalNet =>
             NetworkClient.active && NetworkClient.localPlayer ? NetworkClient.localPlayer.GetComponent<PlayerNet>() : null;
@@ -45,19 +41,20 @@ namespace BuyBidBlow.Characters
                 RequestStand();
         }
 
-        // 빈 슬롯이 있으면 매치 중엔 서버에, 오프라인이면 직접 착석 요청
-        public void RequestSit(Seat seat)
+        // 빈 슬롯이 있으면 매치 중엔 서버에, 오프라인이면 직접 착석 요청하고 요청 여부를 반환
+        public bool RequestSit(Seat seat)
         {
-            if (IsSeated || !seat) return;
+            if (IsSeated || !seat) return false;
             int slot = seat.FreeSlot();
-            if (slot < 0) return;
+            if (slot < 0) return false;
             var net = LocalNet;
             if (NetworkClient.active)
             {
-                if (net && net.inMatch) net.CmdSit(seat.Id, slot);
-                return;
+                if (!net || !net.inMatch) return false;
+                net.CmdSit(seat.Id, slot);
+                return true;
             }
-            seat.Interact(gameObject);
+            return seat.TrySit(seating);
         }
 
         // 매치 중엔 서버에 요청하고, 오프라인이면 직접 일어서기
@@ -85,14 +82,11 @@ namespace BuyBidBlow.Characters
             if (IsSeated && !seating.TryStand()) seating.ForceStand();
         }
 
-        // 착석 여부에 맞는 애니메이션 상태 재생
+        // 로컬에서 일어서면 서버 좌석도 비움 (앉은 자세는 PlayerAvatar가 표시)
         private void ShowSeated(bool seated)
         {
             var net = LocalNet;
             if (!seated && net && net.inMatch && net.IsSeated) net.CmdStand();
-            if (!model) return;
-            model.SetBool("isWalking", false);
-            model.Play(seated ? SeatedState : IdleState, 0, 0);
         }
     }
 }

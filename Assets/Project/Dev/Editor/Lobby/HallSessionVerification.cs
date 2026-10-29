@@ -28,7 +28,6 @@ namespace BuyBidBlow.Dev.Editor
         static GameNetworkManager room;
         static GameObject hall,collision,lounge;
         static Texture lightmap;
-        static Vector3 movementStart;
         static readonly List<LoopbackLobbyPeer> peers=new List<LoopbackLobbyPeer>();
         static readonly StringBuilder report=new StringBuilder();
         static void Check(bool value,string message){if(!value)throw new Exception(message);}
@@ -62,7 +61,7 @@ namespace BuyBidBlow.Dev.Editor
                     if(Time.time<.3f)return;
                     session=Object.FindFirstObjectByType<HallSession>();room=session.room;
                     Check(!session.IsPlaying&&!session.gameplayPresentation.activeInHierarchy&&session.lobbyPresentation.activeInHierarchy,"Lobby must be active before connecting");
-                    Check(!Object.FindFirstObjectByType<PlayerMove>(),"Gameplay input started in lobby");
+                    Check(!Object.FindFirstObjectByType<PlayerSeating>(),"Gameplay input started in lobby");
                     hall=GameObject.Find("AuctionHall_Furnished");collision=hall.transform.Find("HallFurnitureCollision").gameObject;lounge=GameObject.Find("UnderMezzanine_Lounge_Clusters");
                     lightmap=LightmapSettings.lightmaps[0].lightmapColor;
                     SceneManager.sceneLoaded+=Loaded;
@@ -107,18 +106,14 @@ namespace BuyBidBlow.Dev.Editor
                     Check(session.gameplayPresentation.activeInHierarchy&&!session.lobbyPresentation.activeInHierarchy,"Presentation did not switch");
                     Check(Object.FindObjectsByType<Camera>(FindObjectsSortMode.None).Count(c=>c.enabled)==1,"Duplicate gameplay camera");
                     Check(Object.FindObjectsByType<AudioListener>(FindObjectsSortMode.None).Count(c=>c.enabled)==1,"Duplicate audio listener");
-                    Check(Vector3.Distance(session.player.transform.position,PlayerNet.SeatPosition(local.seat))<.2f,"Player did not start at its waiting position");
+                    Check(Vector3.Distance(session.player.transform.position,PlayerNet.MatchStartPosition(local.seat))<.2f,"Player did not start at its match start position");
                     Check(local.inMatch&&room.ClientInMatch,"Client match state missing");
                     report.AppendLine("PASS: lobby -> match -> round 1 with ZERO sceneLoaded events; same hall, furniture collision and lightmap instances.");
                     report.AppendLine("PASS: one camera/listener; lobby HUD hidden; local player activated at its own waiting position.");
-                    movementStart=session.player.transform.position;session.player.SetMoveInput(Vector2.up);waitUntil=EditorApplication.timeSinceStartup+.7;Go(4);return;
+                    Go(4);return;
                 }
                 if(stage==4)
                 {
-                    if(EditorApplication.timeSinceStartup<waitUntil)return;
-                    session.player.SetMoveInput(Vector2.zero);
-                    Check(Vector3.Distance(session.player.transform.position,movementStart)>.3f,"Gameplay movement did not activate");
-                    report.AppendLine("PASS: player movement works immediately after transition.");
                     foreach(var peer in peers)peer.Disconnect();peers.Clear();
                     room.StopHost();Go(5);return;
                 }

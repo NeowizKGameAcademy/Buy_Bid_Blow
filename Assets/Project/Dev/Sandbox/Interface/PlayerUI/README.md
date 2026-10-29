@@ -20,7 +20,7 @@ SC_PlayerUI에서 Play하면 MatchSettings.json으로 실제 로컬 경기가 �
 | PlayerUIController | 입력, 탐색/거래/경매 전환, 카메라 착석·복원, 이동/감지 잠금 |
 | TradingPanelView (UI/Market/TradingPanel) | 전달된 데이터 표시, 예상 합계·거래 후 현금, 탭·버튼 상태. 자산 변경 없음 |
 | TradePreviewSource | 에디터 배치 캡처의 예시값. Play에서는 MatchUIBridge의 실제 데이터 사용 |
-| UIInteractionTarget / DetectObject | 창구·의자 식별 / 기존 레이캐스트와 조준점 |
+| UIInteractionTarget / InteractionSensor | 창구·의자 식별 / 기존 레이캐스트와 조준점 |
 | AuctionPanelView (UI/Auction/Panel) | 경매 헤더·입찰 조작·상품 표시. 입찰하지 않음 |
 | AuctionEnvelopeDisplay (Content/Props/AuctionEnvelope) | 월드 봉투 회전과 라운드 글자. 게임 정산과 UI 배치에 의존하지 않음 |
 | 편집 가능한 HUD 프리팹 | Text/Image/RectTransform 디자인. 3개 회사 패널과 공통 고정 HUD |
@@ -37,8 +37,7 @@ MatchPlayVerification.txt: 실제 Play에서 UI/자산/경매/모드 전환을 �
 멀티플레이 권한/동기화, 실제 플레이어 입장 수 연동, AI는 별도 작업입니다.
 ## 거래소 배치와 이동 개선
 거래소는 홀 중심 기준 180도 회전하여 반대편 벽으로 이동했습니다. 창구 3개, 시세판, 창구 상호작용 콜라이더, 창구 앞 정적 늑대 모델을 함께 옮겼습니다. 경매장은 그대로입니다.
-PlayerMove의 stableControls 옵션은 이 테스트 리그에서만 켭니다. 대각선 정규화, 지면/공중 가속, 발밑 SphereCast와 바닥 법선 검사, 점프 입력 버퍼 0.12초와 코요테 0.1초, 키를 누르는 순간만 점프, 물리 프레임 회전을 사용합니다. 마우스 감도는 0.05에서 0.15도/픽셀로 조정했습니다.
-창을 닫을 때 원래 카메라 기울기를 복원하고, 포커스나 커서 잠금이 없을 때는 탐색 이동을 입력하지 않습니다. 캡슐 마찰을 제거하여 벽에 붙어 버티는 현상을 줄였습니다.
+2026-10-29에 `PlayerMove`와 기존 플레이어 입력 구현을 제거했습니다. 이 리그의 기존 이동·점프·시점 조작 설명은 더 이상 적용되지 않습니다. UI 미리보기용 입력과 카메라 복원 처리는 남아 있습니다. 기존 Verification 파일은 당시 실행 기록이며, 조작 제거 후 현재 동작을 검증한 결과가 아닙니다.
 
 ## 정보 수첩
 Notebook/SpriteRequirements.md에 12종 스프라이트 요구사항, Notebook/SpritePrompts.json에 image_gen 제작 프롬프트를 기록했습니다. PNG 원본과 trimmed Sprite 자산(UI/Notebook/Sprites), PF_InformationNotebook과 InformationNotebookView는 UI/Notebook에 있습니다.

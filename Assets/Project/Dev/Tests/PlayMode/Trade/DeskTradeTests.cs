@@ -31,7 +31,7 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
             Assert.NotNull(PlayerNet.LocalPortfolio, "starting portfolio sent to the owner");
 
             var interaction = UnityEngine.Object.FindFirstObjectByType<PlayerInteraction>();
-            var detect = UnityEngine.Object.FindFirstObjectByType<DetectObject>();
+            var detect = UnityEngine.Object.FindFirstObjectByType<InteractionSensor>();
             var panel = UnityEngine.Object.FindFirstObjectByType<TradePanelController>(FindObjectsInactive.Include);
             var assets = interaction.GetComponentInParent<PlayerAssetStatus>(true);
             if (!assets) assets = UnityEngine.Object.FindFirstObjectByType<PlayerAssetStatus>();
@@ -52,8 +52,8 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
                 detect.transform.SetPositionAndRotation(eyePos, Quaternion.LookRotation(target - eyePos));
                 yield return null; yield return null;
 
-                Assert.IsTrue(detect.isDetected, staffName + " detected");
-                Assert.AreEqual(company, detect.DetectedCollider.GetComponentInParent<NPCInfo>().Company, staffName + " company");
+                Assert.IsNotNull(detect.Target, staffName + " detected");
+                Assert.AreEqual(company, ((NPCInfo)detect.Target).Company, staffName + " company");
 
                 interaction.Interact();
                 Assert.IsTrue(panel.IsOpen, staffName + " opens the trade panel");

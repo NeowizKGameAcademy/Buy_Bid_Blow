@@ -60,11 +60,9 @@ namespace BuyBidBlow.Dev.Editor
             {
                 module.AssignDefaultActions(); module.move = null; module.submit = null; module.cancel = null;
             }
-            Object.FindFirstObjectByType<GameNetworkManager>().CaptureHallSeats();
             EditorSceneManager.MarkSceneDirty(scene); EditorSceneManager.SaveScene(scene);
             BuyBidBlow.Dev.WolfAnimatorBuilder.EnsureJumpState();
             AssetDatabase.SaveAssets();
-            GameBuild.UpdateServerScene();
         }
 
         public static void WireMatchUIBatch()
@@ -83,7 +81,7 @@ namespace BuyBidBlow.Dev.Editor
             var existing=Object.FindFirstObjectByType<HallSession>();
             if(!existing)
             {
-                var player=Object.FindFirstObjectByType<PlayerMove>();
+                var player=Object.FindFirstObjectByType<PlayerSeating>();
                 if(!player)throw new Exception("The hall must have one local gameplay player.");
                 var gameplayCamera=player.GetComponentInChildren<Camera>(true);
                 var lightmaps=LightmapSettings.lightmaps;
@@ -131,20 +129,19 @@ namespace BuyBidBlow.Dev.Editor
             EditorBuildSettings.scenes=EditorBuildSettings.scenes
                 .Where(s=>s.path!=LobbyBuilder.LegacyScenePath).ToArray();
             AssetDatabase.SaveAssets();
-            GameBuild.UpdateServerScene();
             EditorSceneManager.OpenScene(HallLevelBuilder.ScenePath);
             Validate();
         }
 
         public static void PositionLobbyCamera(Camera camera)
         {
-            // Preserve the original lobby framing, but face the matching carpet in this hall.
+            // Preserve the original lobby framing, facing the waiting line in the lobby room.
             camera.transform.position=PlayerNet.WaitingCenter+new Vector3(0,3.26f,-9.7f);
             camera.transform.LookAt(PlayerNet.WaitingCenter+Vector3.up*1.56f);
             camera.fieldOfView=48;
         }
 
-        [MenuItem("Tools/BuyBidBlow/Lobby/Align Under Mezzanine Waiting Area")]
+        [MenuItem("Tools/BuyBidBlow/Lobby/Align Lobby Waiting Area")]
         public static void AlignWaitingArea()
         {
             if(!Application.isBatchMode&&!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo())return;
@@ -158,7 +155,7 @@ namespace BuyBidBlow.Dev.Editor
             PositionLobbyCamera(hud.view);
             hud.selectionRing.position=PlayerNet.SeatPosition(0)+Vector3.up*.02f;
             // The actual match starts at the admitted player's own seat in BeginMatch.
-            session.player.transform.SetPositionAndRotation(PlayerNet.SeatPosition(0),Quaternion.Euler(0,180,0));
+            session.player.transform.SetPositionAndRotation(PlayerNet.MatchStartPosition(0),Quaternion.Euler(0,180,0));
             PrefabUtility.RecordPrefabInstancePropertyModifications(session.player.transform);
             EditorSceneManager.MarkSceneDirty(scene);EditorSceneManager.SaveScene(scene);
             Validate();

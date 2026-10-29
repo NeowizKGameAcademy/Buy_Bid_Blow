@@ -56,10 +56,10 @@ namespace BuyBidBlow.Dev.Editor
                     {
                         var go=new GameObject("SeatTestActor");go.transform.position=seat.exitPoints[i].position;
                         var body=go.AddComponent<Rigidbody>();body.useGravity=false;go.AddComponent<CapsuleCollider>();actors[i]=go.AddComponent<PlayerSeating>();
-                        Check(seat.Interact(actors[i].gameObject) && actors[i].IsSeated,"Cannot sit: "+seat.name);
+                        Check(seat.TrySit(actors[i]) && actors[i].IsSeated,"Cannot sit: "+seat.name);
                         Check(body.isKinematic,"Seated actor physics not suspended");seatCount++;
                     }
-                    var spare=new GameObject("SpareActor").AddComponent<PlayerSeating>();Check(!seat.Interact(spare.gameObject),"Occupied seat accepted extra actor");UnityEngine.Object.DestroyImmediate(spare.gameObject);
+                    var spare=new GameObject("SpareActor").AddComponent<PlayerSeating>();Check(!seat.TrySit(spare),"Occupied seat accepted extra actor");UnityEngine.Object.DestroyImmediate(spare.gameObject);
                     foreach(var actor in actors)
                     {
                         Physics.SyncTransforms();

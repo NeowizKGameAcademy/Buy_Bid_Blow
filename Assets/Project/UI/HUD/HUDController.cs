@@ -20,13 +20,17 @@ namespace BuyBidBlow.UI.HUD
     public class HUDController : MonoBehaviour
     {
         [Header("Components")]
-        [SerializeField] private DetectObject detect;
+        [FormerlySerializedAs("detect")]
+        [SerializeField] private InteractionSensor sensor;
         [FormerlySerializedAs("wallet")]
         [SerializeField] private PlayerAssetStatus assets;
         [SerializeField] private TradePanelController tradePanel;
 
         [Header("UI")]
         [SerializeField] private GameObject cursorImage;
+        [SerializeField] private Image cursor;
+        // [0] nothing to use, [1] looking at something usable.
+        [SerializeField] private Sprite[] cursorSprites = new Sprite[2];
         [SerializeField] private GameObject Prompt;
         [SerializeField] private TextMeshProUGUI keyText;
         [SerializeField] private TextMeshProUGUI InteractionText;
@@ -39,7 +43,6 @@ namespace BuyBidBlow.UI.HUD
         public MatchResultView Results { get; private set; }
         public bool ModalOpen => (Notebook && Notebook.IsOpen) || (Results && Results.IsOpen);
         public int ModalClosedFrame { get; private set; } = -1;
-        private PlayerController input;
         private MatchNet shownResults;
         private uint privateNoticeVersion, publicNoticeVersion, resultRevision;
         private bool lastCanReturn;
@@ -48,7 +51,6 @@ namespace BuyBidBlow.UI.HUD
 
         private void Awake()
         {
-            input = GetComponentInParent<PlayerController>();
             if (notebookPrefab)
             {
                 Notebook = Instantiate(notebookPrefab, transform, false);
@@ -80,7 +82,6 @@ namespace BuyBidBlow.UI.HUD
             PlayerNet.LocalReply -= ShowReply;
             if (Notebook && Notebook.IsOpen) Notebook.SetOpen(false, 1);
             if (Results) Results.Hide();
-            if (input) input.SetModalBlocked(false);
             shownResults = null; privateNoticeVersion = publicNoticeVersion = 0;
             notice = null; noticeUntil = 0; resultRevision = 0; ModalClosedFrame = -1;
             if (tradePanel != null)
@@ -105,10 +106,9 @@ namespace BuyBidBlow.UI.HUD
             if (ModalOpen)
             {
                 if (tradePanel) tradePanel.Close();
-                var radial = input ? input.GetComponentInChildren<RadialMenuController>(true) : GetComponentInChildren<RadialMenuController>(true);
+                var radial = GetComponentInParent<PlayerSeating>()?.GetComponentInChildren<RadialMenuController>(true) ?? GetComponentInChildren<RadialMenuController>(true);
                 if (radial) radial.EndSelection(false);
             }
-            if (input) input.SetModalBlocked(ModalOpen);
         }
 
         private void ShowReply(RequestResult result)
@@ -168,7 +168,11 @@ namespace BuyBidBlow.UI.HUD
             if (cursorImage != null)
                 cursorImage.SetActive(!isTradeOpen);
 
-            var seatedActor = detect != null ? detect.GetComponentInParent<PlayerSeating>() : null;
+            var target = sensor != null ? sensor.Target : null;
+            if (cursor != null && cursorSprites != null && cursorSprites.Length == 2)
+                cursor.sprite = cursorSprites[target != null ? 1 : 0];
+
+            var seatedActor = sensor != null ? sensor.GetComponentInParent<PlayerSeating>() : null;
             if (!isTradeOpen && seatedActor != null && seatedActor.IsSeated)
             {
                 Prompt.SetActive(true);
@@ -176,34 +180,14 @@ namespace BuyBidBlow.UI.HUD
                 InteractionText.text = "Stand up";
                 return;
             }
-            if (!isTradeOpen && detect != null && detect.isDetected)
+            if (!isTradeOpen && target != null)
             {
                 Prompt.SetActive(true);
-
-                var hallTarget = detect.DetectedCollider != null
-                    ? detect.DetectedCollider.GetComponentInParent<BuyBidBlow.Common.IInteractable>() : null;
-                if (hallTarget != null && hallTarget.CanInteract)
-                {
-                    keyText.text = "E";
-                    InteractionText.text = hallTarget.Prompt;
-                    return;
-                }
-
-                switch (detect.detectingLayer)
-                {
-                    case 7:
-                        keyText.text = "E";
-                        InteractionText.text = "Trade";
-                        break;
-                    default:
-                        Prompt.SetActive(false);
-                        break;
-                }
+                keyText.text = "E";
+                InteractionText.text = target.Prompt;
+                return;
             }
-            else
-            {
-                Prompt.SetActive(false);
-            }
+            Prompt.SetActive(false);
         }
     }
 }

@@ -199,7 +199,7 @@ namespace BuyBidBlow.Dev.Editor
                         {
                             var actor = new GameObject("LoungeVerificationOccupant"); actor.AddComponent<Rigidbody>().useGravity = false; actor.AddComponent<CapsuleCollider>();
                             actors[i] = actor.AddComponent<PlayerSeating>(); actor.transform.position = seat.exitPoints[0].position;
-                            if (!seat.Interact(actor) || !actors[i].IsSeated) throw new Exception("Seat failed: " + seat.name);
+                            if (!seat.TrySit(actors[i]) || !actors[i].IsSeated) throw new Exception("Seat failed: " + seat.name);
                             occupants++;
                         }
                         foreach (var actor in actors)

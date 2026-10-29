@@ -39,12 +39,13 @@ namespace BuyBidBlow.Props
             return -1;
         }
 
-        // 플레이어에 착석 컴포넌트를 보장하고 빈 슬롯에 앉힘
-        public bool Interact(GameObject player)
+        // 플레이어의 SeatController로 착석을 요청 (매치 중엔 서버가 좌석을 배정)
+        public bool Interact(GameObject player) => player && player.TryGetComponent(out SeatController seats) && seats.RequestSit(this);
+
+        // 서버 없이 빈 슬롯에 바로 앉힘 (오프라인 플레이와 에디터 검증용)
+        public bool TrySit(PlayerSeating actor)
         {
-            if (!player) return false;
-            if (!player.TryGetComponent(out PlayerSeating actor)) actor = player.AddComponent<PlayerSeating>();
-            if (actor.IsSeated) return false;
+            if (!actor || actor.IsSeated) return false;
             int slot = FreeSlot();
             if (slot < 0) return false;
             SitAt(actor, slot);
