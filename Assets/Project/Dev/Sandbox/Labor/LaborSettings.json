@@ -1,0 +1,6 @@
+{
+    "FloorPay": [15, 30, 45],
+    "MinTripSeconds": [4, 9, 13],
+    "MaterialPayPercent": [100, 110, 120],
+    "CarrySpeed": [1.0, 0.85, 0.7]
+}

@@ -33,6 +33,9 @@ namespace BuyBidBlow.Characters
 
         private Quaternion headLocalRotation;
 
+        // 짐 운반 등으로 이동 속도를 잠시 바꿀 때 쓴다. 1 = 기본 속도.
+        public float SpeedMultiplier { get; set; } = 1f;
+
         public bool IsGrounded => isGround;
         public event Action<bool> GroundedChanged;
         public event Action Jumped;
@@ -136,7 +139,7 @@ namespace BuyBidBlow.Characters
                 transform.forward * curMoveInput.y +
                 transform.right * curMoveInput.x;
 
-            direction *= moveSpeed;
+            direction *= moveSpeed * SpeedMultiplier;
 
             direction.y = playerRb.linearVelocity.y;
 
