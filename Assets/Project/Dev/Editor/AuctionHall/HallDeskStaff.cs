@@ -54,7 +54,7 @@ namespace BuyBidBlow.Dev.Editor
             }
             finally { UnityEngine.Object.DestroyImmediate(go); }
         }
-        // E on a desk clerk opens that company's trade panel: Interactable layer + body collider + NPCInfo.
+        // E on a desk clerk opens that company's trade panel: body collider + NPCInfo (an IInteractable).
         static void MakeTradeTarget(GameObject go, Company company)
         {
             go.layer = LayerMask.NameToLayer("Interactable");
@@ -88,9 +88,8 @@ namespace BuyBidBlow.Dev.Editor
             var group = new GameObject(GroupName); group.transform.SetParent(hall.transform, false);
             for (int i = 0; i < Colors.Length; i++)
             {
-                var chair = hall.GetComponentsInChildren<Transform>(true).Single(t => t.name.StartsWith("A24_" + Desks[i] + "_05_Staff_Chair") && !t.name.EndsWith("_35") && !t.name.EndsWith("_38") && !t.name.EndsWith("_39") && !t.name.EndsWith("_44") && !t.name.EndsWith("_46"));
-                var seat = chair.Find("Seat_0");
-                Vector3 forward = seat ? seat.forward : new Vector3(i == 0 ? .2660525f : i == 2 ? -.2660525f : 0, 0, .9639586f).normalized;
+                var chair = ChairOf(hall, i);
+                var forward = ForwardOf(chair, i);
                 var go = (GameObject)PrefabUtility.InstantiatePrefab(staff[i], group.transform);
                 go.name = "Staff_" + Desks[i] + "_" + Colors[i];
                 go.transform.rotation = Quaternion.LookRotation(forward);
@@ -102,6 +101,102 @@ namespace BuyBidBlow.Dev.Editor
                 Debug.Log("STAFF " + go.name + " bounds=" + BoundsOf(go));
             }
         }
+        static Transform ChairOf(GameObject hall, int i) =>
+            hall.GetComponentsInChildren<Transform>(true).Single(t => t.name.StartsWith("A24_" + Desks[i] + "_05_Staff_Chair") && !t.name.EndsWith("_35") && !t.name.EndsWith("_38") && !t.name.EndsWith("_39") && !t.name.EndsWith("_44") && !t.name.EndsWith("_46"));
+        // The way the clerk faces: toward the customers across the counter.
+        static Vector3 ForwardOf(Transform chair, int i)
+        {
+            var seat = chair.Find("Seat_0");
+            return seat ? seat.forward : new Vector3(i == 0 ? .2660525f : i == 2 ? -.2660525f : 0, 0, .9639586f).normalized;
+        }
+
+        // Beside the staff chair and tucked behind the counter: the spot closest to the chair (then to the
+        // counter) where the clerk's capsule touches no visible furniture. Gameplay collision is too coarse
+        // for this (counters are convex hulls that fill the staff area), so the visible meshes within 3 m get
+        // temporary mesh colliders. Needs the open scene's physics.
+        static Vector3 ClearSpot(GameObject go, Transform chair, Vector3 forward)
+        {
+            var capsule = go.GetComponent<CapsuleCollider>();
+            var ownRenderers = go.GetComponentsInChildren<Renderer>(true);
+            var probes = new System.Collections.Generic.List<GameObject>();
+            try
+            {
+                foreach (var mf in UnityEngine.Object.FindObjectsByType<MeshFilter>(FindObjectsSortMode.None))
+                {
+                    var r = mf.GetComponent<Renderer>();
+                    if (!mf.sharedMesh || !r || !r.enabled || ownRenderers.Contains(r) || (r.bounds.ClosestPoint(chair.position) - chair.position).magnitude > 3) continue;
+                    var probe = new GameObject("Clear Spot Probe");
+                    probe.transform.SetPositionAndRotation(mf.transform.position, mf.transform.rotation);
+                    probe.transform.localScale = mf.transform.lossyScale;
+                    probe.AddComponent<MeshCollider>().sharedMesh = mf.sharedMesh;
+                    probes.Add(probe);
+                }
+                Physics.SyncTransforms();
+                return ClearSpot(go, capsule, chair, forward, probes.Select(p => p.GetComponent<Collider>()).ToArray());
+            }
+            finally { foreach (var p in probes) UnityEngine.Object.DestroyImmediate(p); }
+        }
+
+        static Vector3 ClearSpot(GameObject go, CapsuleCollider capsule, Transform chair, Vector3 forward, Collider[] furniture)
+        {
+            var right = Vector3.Cross(Vector3.up, forward).normalized;
+            var bounds = BoundsOf(go);
+            var feet = new Vector3(bounds.center.x, bounds.min.y, bounds.center.z);
+            var floor = chair.position; floor.y = BoundsOf(chair.gameObject).min.y;
+            var scale = go.transform.lossyScale;
+            float radius = capsule.radius * Mathf.Max(scale.x, scale.z) - .02f, half = Mathf.Max(0, capsule.height * scale.y / 2 - radius);
+            var candidates =
+                from side in new[] { 1f, -1f }
+                from lateral in new[] { .7f, .8f, .9f, 1f, 1.1f, 1.2f, 1.35f, 1.5f, 1.65f, 1.8f }
+                // Toward the counter first; behind the chair line only if the counter curves in too close.
+                from depth in new[] { .45f, .35f, .55f, .25f, .15f, .05f, -.05f, -.15f, -.25f, -.35f }
+                orderby lateral, Mathf.Abs(depth - .45f)
+                select floor + right * (side * lateral) + forward * depth;
+            foreach (var target in candidates)
+            {
+                var root = go.transform.position + (target - feet);
+                var center = root + go.transform.rotation * Vector3.Scale(capsule.center, scale);
+                // Lift the bottom a little so the floor itself does not count.
+                var bottom = center + Vector3.down * (half - .05f); var top = center + Vector3.up * half;
+                if (!Physics.OverlapCapsule(bottom, top, radius, Physics.AllLayers, QueryTriggerInteraction.Ignore).Any(furniture.Contains)) return root;
+            }
+            throw new InvalidOperationException("No clear spot beside " + chair.name);
+        }
+
+        // Moves the existing clerks beside their chairs, out of the counters, in the scene and the hall prefab.
+        [MenuItem("Tools/Buy Bid Blow/Hall/Clear Desk Staff From Counters")]
+        public static void Reposition()
+        {
+            if (!Application.isBatchMode && !EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
+            var scene = EditorSceneManager.OpenScene(HallLevelBuilder.ScenePath);
+            var hall = scene.GetRootGameObjects().Single(g => g.name == "AuctionHall_Furnished");
+            Physics.SyncTransforms();
+            var poses = new System.Collections.Generic.Dictionary<string, (Vector3, Quaternion)>();
+            for (int i = 0; i < Colors.Length; i++)
+            {
+                var go = hall.transform.Find(GroupName + "/Staff_" + Desks[i] + "_" + Colors[i]).gameObject;
+                var chair = ChairOf(hall, i);
+                go.transform.position = ClearSpot(go, chair, ForwardOf(chair, i));
+                poses[go.name] = (go.transform.localPosition, go.transform.localRotation);
+                Debug.Log("STAFF " + go.name + " moved beside " + chair.name + " to " + go.transform.position);
+            }
+            EditorSceneManager.MarkSceneDirty(scene); EditorSceneManager.SaveScene(scene);
+            string path = HallLevelBuilder.Root + "/AuctionHall_Furnished.prefab";
+            var prefab = PrefabUtility.LoadPrefabContents(path);
+            try
+            {
+                foreach (var pose in poses) prefab.transform.Find(GroupName + "/" + pose.Key).SetLocalPositionAndRotation(pose.Value.Item1, pose.Value.Item2);
+                PrefabUtility.SaveAsPrefabAsset(prefab, path);
+            }
+            finally { PrefabUtility.UnloadPrefabContents(prefab); }
+        }
+
+        public static void RepositionBatch()
+        {
+            try { Reposition(); EditorApplication.Exit(0); }
+            catch (Exception e) { Debug.LogException(e); EditorApplication.Exit(1); }
+        }
+
         public static void RunBatch()
         {
             try {
