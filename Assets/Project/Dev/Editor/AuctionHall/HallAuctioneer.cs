@@ -89,6 +89,57 @@ namespace BuyBidBlow.Dev.Editor
             EditorSceneManager.SaveScene(scene); AssetDatabase.SaveAssets();
         }
 
+        // Stands the placed auctioneer on the visible floor under its feet (the rostrum's collision base is not
+        // the floor behind it), in the scene and the hall prefab. Needs the open scene's physics.
+        [MenuItem("Tools/Buy Bid Blow/Hall/Ground Auctioneer Pig")]
+        public static void Ground()
+        {
+            if (!Application.isBatchMode && !EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
+            var scene = EditorSceneManager.OpenScene(HallLevelBuilder.ScenePath);
+            var pig = scene.GetRootGameObjects().Single(g => g.name == "AuctionHall_Furnished").transform.Find(Name);
+            var bounds = BoundsOf(pig.gameObject);
+            var feet = new Vector3(bounds.center.x, HallDeskStaff.SoleY(pig.gameObject), bounds.center.z);
+            var own = pig.GetComponentsInChildren<Renderer>(true);
+            var probes = new System.Collections.Generic.List<GameObject>();
+            float floor;
+            try
+            {
+                foreach (var mf in UnityEngine.Object.FindObjectsByType<MeshFilter>(FindObjectsSortMode.None))
+                {
+                    var r = mf.GetComponent<Renderer>();
+                    if (!mf.sharedMesh || !r || !r.enabled || own.Contains(r) || (r.bounds.ClosestPoint(feet) - feet).magnitude > 3) continue;
+                    var probe = new GameObject("Ground Probe");
+                    probe.transform.SetPositionAndRotation(mf.transform.position, mf.transform.rotation);
+                    probe.transform.localScale = mf.transform.lossyScale;
+                    probe.AddComponent<MeshCollider>().sharedMesh = mf.sharedMesh;
+                    probes.Add(probe);
+                }
+                Physics.SyncTransforms();
+                // Each toe stands on the highest visible surface right under it, probed from just above the knees.
+                // Only the probes count: gameplay boxes behind the rostrum sit above the visible floor.
+                var colliders = probes.Select(p => p.GetComponent<Collider>()).ToArray();
+                floor = pig.GetComponentsInChildren<Transform>(true).Where(t => t.name.Contains("Toe"))
+                    .Select(t => Physics.RaycastAll(t.position + Vector3.up * .6f, Vector3.down, 3, Physics.AllLayers, QueryTriggerInteraction.Ignore)
+                        .Where(h => colliders.Contains(h.collider)).Select(h => h.point.y).DefaultIfEmpty(float.NegativeInfinity).Max())
+                    .DefaultIfEmpty(float.NegativeInfinity).Max();
+                if (float.IsNegativeInfinity(floor)) throw new InvalidOperationException("No floor under the auctioneer at " + feet);
+            }
+            finally { foreach (var p in probes) UnityEngine.Object.DestroyImmediate(p); }
+            pig.position += Vector3.up * (floor - feet.y);
+            Debug.Log($"AUCTIONEER grounded by {floor - feet.y:+0.000;-0.000} m to {pig.position}");
+            EditorSceneManager.MarkSceneDirty(scene); EditorSceneManager.SaveScene(scene);
+            string path = HallLevelBuilder.Root + "/AuctionHall_Furnished.prefab";
+            var prefab = PrefabUtility.LoadPrefabContents(path);
+            try { prefab.transform.Find(Name).localPosition = pig.localPosition; PrefabUtility.SaveAsPrefabAsset(prefab, path); }
+            finally { PrefabUtility.UnloadPrefabContents(prefab); }
+        }
+
+        public static void GroundBatch()
+        {
+            try { Ground(); EditorApplication.Exit(0); }
+            catch (Exception e) { Debug.LogException(e); EditorApplication.Exit(1); }
+        }
+
         [MenuItem("BuyBidBlow/Hall/Place Auctioneer Pig")]
         static void Menu() { if (EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) Run(); }
 

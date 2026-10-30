@@ -37,6 +37,7 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
             Assert.AreEqual(3,row.CompanyShares.Length);Assert.AreEqual(3,row.FinalPrices.Length);
             Assert.AreEqual(row.Cash+row.StockValue,row.Total);
             var details=Object.FindFirstObjectByType<DetailedResultsView>();Assert.IsNotNull(details);
+            StringAssert.StartsWith("Wood",details.stockRows[1].text,"result uses the same company name as the counter");
             Assert.IsTrue(details.summaryPanel.activeSelf);Capture("Results");
             details.graphTab.onClick.Invoke();yield return null;Assert.IsTrue(details.graphPanel.activeSelf);Assert.AreEqual(14,details.graph.Entries[0].AssetHistory.Length);Capture("Graph");
             var examples=Enumerable.Range(0,6).Select(i=>new ResultEntry{Rank=i+1,Nickname="플레이어 "+(i+1),IsLocal=i==0,Cash=252-i*32,StockValue=150,TotalAssets=402-i*32,CompanyShares=new[]{2,1,1},FinalPrices=new[]{30,40,50},AssetHistory=Enumerable.Range(0,14).Select(r=>200+r*(15-i*3)+(r%3)*(i+1)*7).ToArray()}).ToArray();
@@ -50,9 +51,9 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
         }
         [UnityTest]public IEnumerator HighestBidderCanRaiseAgainThroughTheServer()
         {
-            yield return match.Start(0,s=>{s.RoundCount=5;s.RoundSeconds=2;s.AuctionRounds=new[]{2};s.AuctionRoundSeconds=16;s.AuctionDurationSeconds=7;s.AuctionSlots=new[]{new BuyBidBlow.Systems.Match.AuctionSlot{StartsAtSeconds=0,DurationSeconds=7},new BuyBidBlow.Systems.Match.AuctionSlot{StartsAtSeconds=7,DurationSeconds=7}};},27998);
+            yield return match.Start(0,s=>{s.StartingCash=200;s.RoundCount=5;s.RoundSeconds=2;s.AuctionRounds=new[]{2};s.AuctionRoundSeconds=16;s.AuctionDurationSeconds=7;s.AuctionSlots=new[]{new BuyBidBlow.Systems.Match.AuctionSlot{StartsAtSeconds=0,DurationSeconds=7},new BuyBidBlow.Systems.Match.AuctionSlot{StartsAtSeconds=7,DurationSeconds=7}};},27998);
             yield return HostedMatch.Until(()=>MatchNet.Current.auctionStage==MatchNet.AuctionStage.Open,"open auction",5);
-            var player=NetworkClient.localPlayer.GetComponent<PlayerNet>();var seats=player.GetComponent<SeatController>();seats.RequestSit(Object.FindObjectsByType<BuyBidBlow.Props.Seat>(FindObjectsSortMode.None).First(s=>s.auction));
+            var player=NetworkClient.localPlayer.GetComponent<PlayerNet>();var seats=HostedMatch.Body.GetComponent<SeatController>();seats.RequestSit(Object.FindObjectsByType<BuyBidBlow.Props.Seat>(FindObjectsSortMode.None).First(s=>s.auction));
             yield return HostedMatch.Until(()=>seats.IsSeated,"auction chair");player.CmdBid(30,false);
             yield return HostedMatch.Until(()=>PlayerNet.LocalPortfolio.Reserved==30,"first reservation");player.CmdBid(200,false);
             yield return HostedMatch.Until(()=>MatchNet.Current.highestBid==200,"own increase to all cash");yield return HostedMatch.Until(()=>PlayerNet.LocalPortfolio.Reserved==200,"difference reserved");

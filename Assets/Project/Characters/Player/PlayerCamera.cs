@@ -22,19 +22,9 @@ namespace BuyBidBlow.Characters
 
         public Transform CameraTransform => cameraObject.transform;
 
-        public void SetGameplayActive(bool active)
-        {
-            if (!active) SetEmotionView(false);
-            if (cameraObject)
-                cameraObject.SetActive(active);
-        }
-
         public void SetEmotionView(bool active)
         {
             if (active == IsEmotionView || !cameraObject)
-                return;
-            // Remote avatars must never activate a local viewing mode.
-            if (active && TryGetComponent(out PlayerNet net) && !net.isLocalPlayer)
                 return;
             if (!viewCamera) viewCamera = cameraObject.GetComponent<Camera>();
             if (!viewCamera) return;
@@ -43,7 +33,9 @@ namespace BuyBidBlow.Characters
                 savedPosition = CameraTransform.localPosition;
                 savedRotation = CameraTransform.localRotation;
                 savedCullingMask = viewCamera.cullingMask;
-                viewCamera.cullingMask |= 1 << 30; // Local avatar's HideFromMain layer.
+                // Show the body parts first person hides (UI stays on its own layer).
+                foreach (var body in GetComponentsInChildren<Renderer>(true))
+                    if (!body.GetComponentInParent<Canvas>(true)) viewCamera.cullingMask |= 1 << body.gameObject.layer;
                 IsEmotionView = true;
                 LateUpdate();
             }

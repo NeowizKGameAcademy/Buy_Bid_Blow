@@ -16,11 +16,16 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
     public sealed class HostedMatch
     {
         public GameNetworkManager Room { get; private set; }
+        // The local body (scene Player): motor, seats, trading and the match HUD. PlayerNet is only its avatar.
+        public static GameObject Body => UnityEngine.Object.FindFirstObjectByType<PlayerInputReader>(FindObjectsInactive.Include).gameObject;
         readonly System.Collections.Generic.List<GameObject> detached = new System.Collections.Generic.List<GameObject>();
 
         // Takes a rig out of the player so the test can aim it still. Stop destroys it, or it would outlive the player.
         public void Detach(Transform rig)
         {
+            // The new input reader applies even zero mouse delta to the camera each frame.
+            // Freeze only this test body while the test aims the detached sensor explicitly.
+            Body.GetComponent<PlayerInputReader>().enabled = false;
             rig.SetParent(null, true);
             detached.Add(rig.gameObject);
         }
@@ -50,8 +55,7 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
             net.SetReady(true);
             yield return Until(() => net.ready, "ready");
             net.CmdStartMatch();
-            // The scene's intro runs before the preparation countdown (server fallback: 60 seconds).
-            yield return Until(() => MatchNet.Current && MatchNet.Current.phase == MatchNet.Phase.Playing, "round 1 open", 90);
+            yield return Until(() => MatchNet.Current && MatchNet.Current.phase == MatchNet.Phase.Playing, "round 1 open");
         }
 
         public IEnumerator Stop()

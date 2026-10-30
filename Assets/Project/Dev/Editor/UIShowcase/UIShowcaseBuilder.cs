@@ -85,7 +85,7 @@ namespace BuyBidBlow.Dev.Editor
             var bg=I("Environment - visual reference only",canvas.transform,AssetDatabase.LoadAssetAtPath<Sprite>(UI+"Menu/Sprites/BG_MainHall.png"),0,0,1920,1080);Stretch(bg.rectTransform);I("Environment Dim",canvas.transform,null,0,0,1920,1080,new Color(0,0,0,.27f));
             var demo=canvas.gameObject.AddComponent<UIShowcase>();
             demo.PreviewHud=R("Reference HUD - Dev labels only",canvas.transform,0,0,1920,1080).gameObject;
-            I("Asset plate",demo.PreviewHud.transform,panel,-700,413,440,186);T("Cash",demo.PreviewHud.transform,"Total  $268\n$150     Straw 2 · Timber 2 · Brick 0",-700,420,375,120,25);
+            I("Asset plate",demo.PreviewHud.transform,panel,-700,413,440,186);T("Cash",demo.PreviewHud.transform,"Total  $268\n$150     Straw 2 · Wood 2 · Brick 0",-700,420,375,120,25);
             I("Round plate",demo.PreviewHud.transform,banner,730,444,370,110);T("Clock",demo.PreviewHud.transform,"6 / 17 ROUND     03:00",730,444,315,60,25);
             demo.Error=Modal<ModalView>(canvas.transform,"Common Error",960,590);demo.Error.SetButtons("확인");demo.Error.Show("요청을 처리할 수 없습니다","아래 원인을 확인해주세요.","오류 원인");Save(demo.Error,"Shared/Modal","PF_ErrorModal");
             var buttonSample=R("Button State Sample",canvas.transform,0,0,1320,110);for(int i=0;i<4;i++){var bt=B(buttonSample,new[]{"기본","선택","눌림","비활성"}[i],(i-1.5f)*310,0);bt.image.sprite=buttons[i];if(i==3)bt.interactable=false;}PrefabUtility.SaveAsPrefabAsset(buttonSample.gameObject,UI+"Shared/Modal/PF_ButtonStates.prefab");UnityEngine.Object.DestroyImmediate(buttonSample.gameObject);

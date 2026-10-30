@@ -19,7 +19,6 @@ namespace BuyBidBlow.UI.Menu
         public Button displayPrevious,displayNext;
         static GameMenuController instance;
         public static bool BlocksInput=>instance&&instance.shade.activeSelf;
-        static bool IsBlocking()=>BlocksInput;
         public bool IsSettingsOpen=>settingsPanel.activeSelf;
         SettingsValues draft;int row,openedFrame;bool directSettings,leaving;
         public static GameMenuController Ensure()
@@ -32,7 +31,7 @@ namespace BuyBidBlow.UI.Menu
         }
         void Awake()
         {
-            if(instance&&instance!=this){Destroy(gameObject);return;}instance=this;PlayerInputGate.AddBlocker(IsBlocking);
+            if(instance&&instance!=this){Destroy(gameObject);return;}instance=this;
             GameSettings.Load();
             launcher.onClick.AddListener(OpenMenu);resume.onClick.AddListener(Close);
             settings.onClick.AddListener(()=>OpenSettings(false));controls.onClick.AddListener(()=>Show(controlsPanel));leave.onClick.AddListener(RequestLeave);
@@ -47,13 +46,14 @@ namespace BuyBidBlow.UI.Menu
             for(int i=0;i<5;i++){int index=i;var trigger=(i<4?sliders[i].gameObject:display.gameObject).AddComponent<EventTrigger>();var entry=new EventTrigger.Entry{eventID=EventTriggerType.PointerDown};entry.callback.AddListener(_=>{row=index;RenderValues();});trigger.triggers.Add(entry);}
             Close();
         }
-        void OnDestroy(){if(instance==this){instance=null;PlayerInputGate.RemoveBlocker(IsBlocking);}}
+        void OnDestroy(){if(instance==this)instance=null;}
         public void OpenSettings(bool direct=true)
         {Prepare();directSettings=direct;draft=GameSettings.Current;row=0;status.text="W/S 항목 · A/D 조절 · E 실행 · Esc 닫기";Show(settingsPanel);if(EventSystem.current)EventSystem.current.SetSelectedGameObject(null);RenderSettings();}
         public void OpenMenu(){Prepare();directSettings=false;row=0;Show(menuPanel);Select(resume);}
         void Prepare()
         {
-            var p=NetworkClient.localPlayer;if(p){p.GetComponentInChildren<BuyBidBlow.UI.HUD.RadialMenuController>(true)?.EndSelection(false);p.GetComponentInChildren<BuyBidBlow.UI.Market.TradePanelController>(true)?.Close();p.GetComponentInChildren<BuyBidBlow.UI.Notebook.NetworkNotebookController>(true)?.Close();p.GetComponent<PlayerMove>()?.SetMoveInput(Vector2.zero);p.GetComponent<PlayerMove>()?.SetJumpHeld(false);}
+            // The local body (scene Player) stops by itself while BlocksInput (PlayerInputReader).
+            var p=FindFirstObjectByType<PlayerInputReader>();if(p){p.GetComponentInChildren<BuyBidBlow.UI.HUD.RadialMenuController>(true)?.EndSelection(false);p.GetComponentInChildren<BuyBidBlow.UI.Market.TradePanelController>(true)?.Close();p.GetComponentInChildren<BuyBidBlow.UI.Notebook.NetworkNotebookController>(true)?.Close();}
             openedFrame=Time.frameCount;
         }
         void Show(GameObject panel){shade.SetActive(true);foreach(var go in new[]{menuPanel,settingsPanel,leavePanel,controlsPanel})go.SetActive(go==panel);openedFrame=Time.frameCount;}
@@ -81,7 +81,6 @@ namespace BuyBidBlow.UI.Menu
             launcher.gameObject.SetActive(inGame);
             if(!shade.activeSelf)return;
             Cursor.lockState=CursorLockMode.None;Cursor.visible=true;
-            if(NetworkClient.localPlayer){var move=NetworkClient.localPlayer.GetComponent<PlayerMove>();if(move){move.SetMoveInput(Vector2.zero);move.SetJumpHeld(false);}}
         }
         void Update()
         {

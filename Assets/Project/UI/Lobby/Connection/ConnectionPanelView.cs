@@ -5,6 +5,7 @@ namespace BuyBidBlow.UI.Lobby
     public sealed class ConnectionPanelView : ModalView
     {
         public ConnectionPanelState State { get; private set; }
+        // 연결 상태에 맞는 제목·설명·버튼과 Esc 동작을 설정해 패널 표시
         public void ShowState(ConnectionPanelState state, string reason = "", string endpoint = "")
         {
             State = state; EscapeEnabled = state == ConnectionPanelState.Connecting || state == ConnectionPanelState.Failed;

@@ -19,6 +19,7 @@ namespace BuyBidBlow.UI.Result
         public Text[] RankLabels, NameLabels, TotalLabels, CashLabels, StockLabels, SharesLabels;
         public Image[] RowBackgrounds;
         public Text Winner;
+        // 순위별 결과 행과 우승자를 채워 최종 결과 모달 표시
         // Rank/order are supplied by the authoritative result; this view never calculates game rules.
         public void ShowResults(IReadOnlyList<ResultEntry> entries, bool revealBreakdown, bool canReturn, int totalRounds = 17)
         {

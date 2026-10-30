@@ -115,7 +115,9 @@ InitTestScene*.unity*
 /Docs/**/*.fbx
 /Docs/**/*.glb
 
-# Local work outputs (captures, renders, exports) stay untracked.
+# Trailer/video work (HyperFrames) and generated outputs stay local only.
+/Trailer/
+/Trailer-lab/
 /[Oo]utputs/
 
 # HyperFrames trailer projects (kept out of the game repo)

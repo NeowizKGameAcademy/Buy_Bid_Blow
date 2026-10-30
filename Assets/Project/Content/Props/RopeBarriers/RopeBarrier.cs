@@ -19,6 +19,7 @@ namespace BuyBidBlow.Props
         public float PinError { get; private set; }
         public float SegmentError { get; private set; }
         public Vector3 Midpoint => points == null ? transform.position : points[points.Length / 2];
+        // 로프 점·본·시뮬레이션과 런타임 튜브 메시를 한 번만 생성
         public void Initialize()
         {
             if (points != null) return;
@@ -43,8 +44,10 @@ namespace BuyBidBlow.Props
             }
             mesh.vertices = vertices; mesh.uv = uv; mesh.triangles = triangles; GetComponent<MeshFilter>().sharedMesh = mesh; UpdateMesh();
         }
+        // 기준 점이 충분하면 초기화
         void Awake() { if (restPoints != null && restPoints.Length > 1) Initialize(); }
         void FixedUpdate() => Simulate(Time.fixedDeltaTime);
+        // 시뮬레이션을 한 스텝 진행하고 점 위치·오차를 갱신한 뒤 메시 업데이트
         public void Simulate(float dt)
         {
             if (!startAnchor || !endAnchor || restPoints == null || restPoints.Length < 2) return;
@@ -56,6 +59,7 @@ namespace BuyBidBlow.Props
             PinError=simulation.MaxPinError;SegmentError=simulation.MaxSegmentError;
             UpdateMesh();
         }
+        // 로프 점을 따라 튜브 메시 정점과 법선 재계산
         void UpdateMesh()
         {
             for(int i=0;i<points.Length;i++)
@@ -66,6 +70,7 @@ namespace BuyBidBlow.Props
             }
             mesh.vertices=vertices;mesh.normals=normals;mesh.RecalculateBounds();
         }
+        // 런타임 생성 메시 파기
         void OnDestroy(){if(mesh){if(Application.isPlaying)Destroy(mesh);else DestroyImmediate(mesh);}}
     }
 }

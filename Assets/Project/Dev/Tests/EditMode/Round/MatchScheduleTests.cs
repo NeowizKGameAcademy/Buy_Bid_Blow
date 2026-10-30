@@ -68,13 +68,15 @@ namespace BuyBidBlow.Dev.Tests.EditMode.Round
         }
 
         [Test]
-        public void ShortRoundOverrideCutsSlotsAtTheClose()
+        public void ShortRoundOverrideScalesBothSlotsLikeTheEngine()
         {
             var spans = MatchSchedule.Build(Settings(), Prepare, Start, 30);
             var open = spans.Single(s => s.Kind == TimelineSpanKind.OpenAuction);
             Assert.AreEqual(Start + 30, open.StartsAt);
-            Assert.AreEqual(Start + 60, open.EndsAt);
-            Assert.IsFalse(spans.Any(s => s.Kind == TimelineSpanKind.SecretAuction), "secret slot starts after the round closed");
+            Assert.AreEqual(Start + 40, open.EndsAt);
+            var secret = spans.Single(s => s.Kind == TimelineSpanKind.SecretAuction);
+            Assert.AreEqual(Start + 40, secret.StartsAt);
+            Assert.AreEqual(Start + 50, secret.EndsAt);
         }
 
         [Test]

@@ -114,7 +114,7 @@ namespace BuyBidBlow.Dev.Editor
             var body=bodyObject.AddComponent<Rigidbody>(); body.useGravity=false;
             body.constraints=RigidbodyConstraints.FreezeRotation|RigidbodyConstraints.FreezePositionY;
             var capsule=bodyObject.AddComponent<CapsuleCollider>(); capsule.height=1.8f; capsule.radius=.3f; capsule.center=Vector3.up*.9f;
-            var colliderList=Object.FindObjectsByType<PlayerMove>(FindObjectsSortMode.None).SelectMany(p=>p.GetComponentsInChildren<Collider>()).Where(c=>c.enabled).ToArray();
+            var colliderList=Object.FindObjectsByType<PlayerSeating>(FindObjectsSortMode.None).SelectMany(p=>p.GetComponentsInChildren<Collider>()).Where(c=>c.enabled).ToArray();
             foreach(var c in colliderList)c.enabled=false;
             try
             {
@@ -217,7 +217,7 @@ namespace BuyBidBlow.Dev.Editor
                     {
                         var actor=new GameObject("SeatVerificationPlayer"); var c=actor.AddComponent<CapsuleCollider>(); c.height=1.8f;c.radius=.3f;c.center=Vector3.up*.9f;
                         actor.AddComponent<Rigidbody>().useGravity=false; var seating=actor.AddComponent<PlayerSeating>(); actors.Add(seating);
-                        Require(seat.Interact(actor),"Seat interaction failed: "+seat.name); slots++;
+                        Require(seat.TrySit(seating),"Seat interaction failed: "+seat.name); slots++;
                     }
                     foreach(var actor in actors)
                     {

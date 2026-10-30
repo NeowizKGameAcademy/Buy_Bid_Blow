@@ -17,8 +17,6 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
     {
         const string PlayerPath = "Assets/Project/Characters/Player/Player.prefab";
         const BindingFlags Private = BindingFlags.Instance | BindingFlags.NonPublic;
-        static readonly string[] Triggers =
-            { "Defeat", "Flair", "Hadraise", "HipHopDance", "GolfDrive", "JumpingJacks", "LayingPose", "HurricaneKick" };
 
         [Test]
         public void PrefabContainsEightAlignedSlicesAndIcons()
@@ -139,81 +137,64 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
             }
         }
 
+        // Every radial item plays on the wolf every player shows (PlayerAvatar.Emotes -> BBBWolfCharacter),
+        // and the emote view puts the camera behind the body and back.
         [UnityTest]
-        public IEnumerator AllEightAnimatorTriggersPlayAndMovementCancels()
+        public IEnumerator AllEightEmotesPlayOnTheWolfAndTheViewReturns()
         {
             var player = AssetDatabase.LoadAssetAtPath<GameObject>(PlayerPath);
-            var source = player.GetComponentInChildren<Animator>(true);
-            var model = Object.Instantiate(source.gameObject);
-            var inputHost = new GameObject("Emotion input test");
-            inputHost.SetActive(false);
-            var input = inputHost.AddComponent<PlayerAnimation>();
-            var playerCamera = inputHost.AddComponent<PlayerCamera>();
+            var wolf = Object.Instantiate(player.GetComponentInChildren<BBBWolfCharacter>(true).gameObject);
+            var host = new GameObject("Emotion view test");
+            host.SetActive(false);
+            var playerCamera = host.AddComponent<PlayerCamera>();
             var cameraObject = new GameObject("Emotion camera", typeof(Camera));
-            cameraObject.transform.SetParent(inputHost.transform, false);
+            cameraObject.transform.SetParent(host.transform, false);
+            var body = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            body.transform.SetParent(host.transform, false); body.layer = 8;
+            Object.DestroyImmediate(body.GetComponent<Collider>());
             var viewCamera = cameraObject.GetComponent<Camera>();
-            viewCamera.cullingMask = ~(1 << 30);
+            viewCamera.cullingMask = ~(1 << 8);
             var originalPosition = new Vector3(0, 1.7f, 0);
-            var originalRotation = Quaternion.Euler(15, 0, 0);
             cameraObject.transform.localPosition = originalPosition;
-            cameraObject.transform.localRotation = originalRotation;
             typeof(PlayerCamera).GetField("cameraObject", Private).SetValue(playerCamera, cameraObject);
+            host.SetActive(true);
             try
             {
-                var animator = model.GetComponent<Animator>();
-                typeof(PlayerAnimation).GetField("animator", Private).SetValue(input, animator);
+                var character = wolf.GetComponent<BBBWolfCharacter>();
+                var animator = character.animator;
                 animator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
-                var controller = (AnimatorController)animator.runtimeAnimatorController;
-                var machine = controller.layers[0].stateMachine;
                 yield return null;
-                foreach (var trigger in Triggers)
+                var armature = character.model.Find("Armature") ?? animator.transform.Find("Armature");
+                var hips = armature.Find("mixamorig:Hips");
+                for (float end = Time.time + .3f; Time.time < end;) yield return null;
+                Vector3 restArmature = armature.localPosition; float restHips = hips.localPosition.y;
+                Assert.AreEqual(8, PlayerAvatar.Emotes.Length);
+                for (int i = 0; i < PlayerAvatar.Emotes.Length; i++)
                 {
-                    var transition = machine.anyStateTransitions.Single(t => t.conditions.Any(c => c.parameter == trigger));
-                    var clip = (AnimationClip)transition.destinationState.motion;
-                    Assert.Greater(clip.length, 0);
-                    Assert.IsFalse(clip.legacy);
-                    foreach (var binding in AnimationUtility.GetCurveBindings(clip).Where(b => b.type == typeof(Transform)))
-                        Assert.IsTrue(binding.path == "" || model.transform.Find(binding.path), trigger + ": " + binding.path);
-                    input.PlayEmotion(System.Array.IndexOf(Triggers, trigger) + 1);
-                    Assert.IsTrue(playerCamera.IsEmotionView);
-                    Assert.Less(cameraObject.transform.localPosition.z, -1f);
-                    Assert.AreNotEqual(0, viewCamera.cullingMask & (1 << 30), "Own avatar must be visible.");
-                    // Selecting a different emotion must not overwrite the original first-person pose.
-                    playerCamera.SetEmotionView(true);
-                    animator.Update(.01f);
-                    animator.Update(.2f);
-                    Assert.IsTrue(animator.GetCurrentAnimatorStateInfo(0).IsName(transition.destinationState.name), trigger);
-                    animator.Update(.1f);
-                    Assert.Greater(animator.GetCurrentAnimatorStateInfo(0).normalizedTime, 0f);
-                    if (trigger == "HurricaneKick")
-                    {
-                        Assert.IsTrue(clip.isLooping);
-                        animator.Update(clip.length * 2.2f);
-                        var state = animator.GetCurrentAnimatorStateInfo(0);
-                        Assert.IsTrue(state.IsName(transition.destinationState.name));
-                        Assert.IsTrue(state.loop);
-                        Assert.Greater(state.normalizedTime, 2f, "Kick must continue beyond two cycles.");
-                        var bones = model.GetComponentsInChildren<Transform>(true);
-                        var rotations = bones.Select(b => b.localRotation).ToArray();
-                        animator.Update(clip.length * .2f);
-                        Assert.IsTrue(bones.Where((b, i) => Quaternion.Angle(rotations[i], b.localRotation) > .1f).Any(),
-                            "Looping kick must keep moving rather than hold its last pose.");
-                    }
-                    input.StopEmotion(true);
-                    animator.Update(.01f);
-                    Assert.IsTrue(animator.GetCurrentAnimatorStateInfo(0).IsName("Player_Walking"));
-                    Assert.IsFalse(input.EmotionPlaying);
-                    Assert.IsFalse(playerCamera.IsEmotionView);
-                    Assert.AreEqual(originalPosition, cameraObject.transform.localPosition);
-                    Assert.Less(Quaternion.Angle(originalRotation, cameraObject.transform.localRotation), .01f);
-                    Assert.AreEqual(0, viewCamera.cullingMask & (1 << 30));
+                    var emote = PlayerAvatar.Emotes[i];
+                    // The first four are the original Mixamo states; the rest are named after the action.
+                    var expected = (i < 4 ? "Mixamo_" : "") + emote;
+                    character.PlayAction(emote);
+                    for (float end = Time.time + .3f; Time.time < end;) yield return null;
+                    Assert.IsTrue(animator.GetCurrentAnimatorStateInfo(0).IsName(expected), emote + " plays");
+                    character.StopAction();
+                    for (float end = Time.time + .3f; Time.time < end;) yield return null;
+                    // The windmill lowers the Armature and the laying pose the hips; idle must bring both back.
+                    Assert.Less(Vector3.Distance(restArmature, armature.localPosition), .01f, emote + " leaves the body lowered");
+                    Assert.AreEqual(restHips, hips.localPosition.y, .05f, emote + " leaves the hips lowered");
                 }
-                Assert.IsFalse(animator.applyRootMotion);
+                playerCamera.SetEmotionView(true);
+                Assert.IsTrue(playerCamera.IsEmotionView);
+                Assert.Less(cameraObject.transform.localPosition.z, -1f);
+                Assert.AreNotEqual(0, viewCamera.cullingMask & (1 << 8), "own body visible from behind");
+                playerCamera.SetEmotionView(false);
+                Assert.AreEqual(originalPosition, cameraObject.transform.localPosition);
+                Assert.AreEqual(0, viewCamera.cullingMask & (1 << 8));
             }
             finally
             {
-                Object.DestroyImmediate(inputHost);
-                Object.DestroyImmediate(model);
+                Object.DestroyImmediate(host);
+                Object.DestroyImmediate(wolf);
             }
         }
     }

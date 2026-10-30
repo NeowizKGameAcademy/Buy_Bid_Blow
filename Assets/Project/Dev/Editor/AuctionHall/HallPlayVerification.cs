@@ -52,7 +52,7 @@ namespace BuyBidBlow.Dev.Editor
                 if(movement<.01f || pinError>.01f)throw new Exception($"Cloth motion={movement}, pin error={pinError}");
                 foreach(var rope in UnityEngine.Object.FindObjectsByType<RopeBarrier>(FindObjectsSortMode.None))
                     if(rope.PinError>.001f || !float.IsFinite(rope.Midpoint.sqrMagnitude))throw new Exception("Runtime rope unstable");
-                var player=UnityEngine.Object.FindFirstObjectByType<PlayerMove>();
+                var player=UnityEngine.Object.FindFirstObjectByType<PlayerSeating>();
                 if(player.transform.position.y<-.1f || player.transform.position.y>.3f)throw new Exception("Player did not remain on lobby floor: "+player.transform.position);
                 if(errors>0)throw new Exception("Runtime errors: "+errors);
                 File.WriteAllText("Docs/Arts/Environments/UnityVerification/Hall_Play_Verification.txt",

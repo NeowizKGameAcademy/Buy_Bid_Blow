@@ -1,0 +1,9 @@
+PASS door box follows hinge: Women_HingePivot center movement=1.22388
+PASS door box follows hinge: A25_Staff_Entry_Right_Door_Pivot_004 center movement=1.124038
+PASS door box follows hinge: Entry_Right_Door_Pivot_004 center movement=1.370777
+PASS door box follows hinge: Entry_Left_Door_Pivot_004 center movement=1.370777
+PASS door box follows hinge: A25_Staff_Entry_Left_Door_Pivot_004 center movement=1.124038
+PASS door box follows hinge: Men_HingePivot center movement=1.22388
+Colliders including inactive: 495
+PASS all MeshCollider references resolve; six moving doors retain independent boxes.
+Scene was not saved. Character motor movement and staircase behavior were not tested.

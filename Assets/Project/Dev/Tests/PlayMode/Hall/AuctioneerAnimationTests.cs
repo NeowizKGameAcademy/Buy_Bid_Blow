@@ -26,7 +26,7 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
             Assert.AreEqual("Talking",other.CurrentAction);
             var arm=actor.GetComponentsInChildren<Transform>().First(t=>t.name=="mixamorig:RightArm");var rotation=arm.localRotation;
             yield return new WaitForSeconds(.5f);Assert.Greater(Quaternion.Angle(rotation,arm.localRotation),.1f,"Talking moves the Black model bones");
-            var player=NetworkClient.localPlayer.GetComponent<PlayerNet>();var seat=player.GetComponent<SeatController>();
+            var player=NetworkClient.localPlayer.GetComponent<PlayerNet>();var seat=HostedMatch.Body.GetComponent<SeatController>();
             seat.RequestSit(Object.FindObjectsByType<BuyBidBlow.Props.Seat>(FindObjectsSortMode.None).First(s=>s.auction));
             yield return HostedMatch.Until(()=>seat.IsSeated,"auction chair");player.CmdBid(1,false);
             yield return HostedMatch.Until(()=>actor.CurrentAction=="Thankful","public bid reaction",9);Assert.AreEqual("Thankful",other.CurrentAction);

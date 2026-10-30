@@ -20,8 +20,8 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
         {
             yield return match.Start(port:27997);
             var player=NetworkClient.localPlayer.GetComponent<PlayerNet>();
-            var trader=player.GetComponent<LocalTradeController>();
-            var panel=player.GetComponentInChildren<TradePanelController>(true);
+            var trader=HostedMatch.Body.GetComponent<LocalTradeController>();
+            var panel=HostedMatch.Body.GetComponentInChildren<TradePanelController>(true);
             trader.OpenPanel(Company.Straw);yield return null;
             var view=panel.GetComponentsInChildren<TradingPanelView>(true).Single(v=>v.gameObject.activeSelf);
             string Label(string name)=>view.GetComponentsInChildren<Text>(true).First(t=>t.name==name).text;

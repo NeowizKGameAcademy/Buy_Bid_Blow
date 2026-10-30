@@ -52,6 +52,10 @@ for o in visible:
     bmesh.ops.dissolve_limit(bm, angle_limit=math.radians(1), verts=list(bm.verts), edges=list(bm.edges))
     bmesh.ops.recalc_face_normals(bm, faces=list(bm.faces))
     bmesh.ops.triangulate(bm, faces=list(bm.faces))
+    # Zero-area triangles do not define a collision surface.
+    degenerate = [f for f in bm.faces if f.calc_area() < 1e-10]
+    if degenerate:
+        bmesh.ops.delete(bm, geom=degenerate, context='FACES_ONLY')
     bm.verts.ensure_lookup_table(); bm.verts.index_update()
     offset = len(g['vertices']) // 3
     g['vertices'] += [c for v in bm.verts for c in convert(v.co)]

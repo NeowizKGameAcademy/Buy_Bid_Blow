@@ -8,10 +8,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 6007935175677043963, guid: 6ada88d9dc1219442b2d7f6993b027c8, type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: 10fad49ab759ab64bb66e9fe28b0ee7f, type: 2}
     - target: {fileID: 7725623120333061051, guid: 6ada88d9dc1219442b2d7f6993b027c8, type: 3}
       propertyPath: m_Name
       value: PlayerNet
@@ -69,6 +65,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7725623120333061051, guid: 6ada88d9dc1219442b2d7f6993b027c8, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7161881797270767614}
+    - targetCorrespondingSourceObject: {fileID: 7725623120333061051, guid: 6ada88d9dc1219442b2d7f6993b027c8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8263509629988866871}
+    - targetCorrespondingSourceObject: {fileID: 7725623120333061051, guid: 6ada88d9dc1219442b2d7f6993b027c8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8569116052927906838}
   m_SourcePrefab: {fileID: 100100000, guid: 6ada88d9dc1219442b2d7f6993b027c8, type: 3}
 --- !u!1 &4306196893772889754 stripped
 GameObject:
@@ -88,7 +90,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Mirror::Mirror.NetworkIdentity
   sceneId: 0
-  _assetId: 941297405
+  _assetId: 3536243059
   serverOnly: 0
   visibility: 0
   hasSpawned: 0
@@ -113,6 +115,7 @@ MonoBehaviour:
   bottom: 0
   tie: 0
   nickname: 
+  playerId: 
   inMatch: 0
   hallSeatSlot: 0
   hallSeat: 
@@ -150,6 +153,39 @@ MonoBehaviour:
   positionSensitivity: 0.01
   rotationSensitivity: 0.01
   scaleSensitivity: 0.01
+--- !u!114 &8263509629988866871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4306196893772889754}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8b09b698a304392ad56c68c34537b02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.Characters.PlayerAssetsNet
+  syncDirection: 0
+  syncMode: 1
+  syncInterval: 0
+--- !u!114 &8569116052927906838
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4306196893772889754}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff14bd68f111c8f40aaa98bb435a3371, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BuyBidBlow.Game::BuyBidBlow.Audio.PlayerActionAudio
+  footstep:
+    catalog: {fileID: 11400000, guid: 7417b44d9862ec845b72a6794ae585e0, type: 2}
+    id: player.footstep
+  jump:
+    catalog: {fileID: 11400000, guid: 7417b44d9862ec845b72a6794ae585e0, type: 2}
+    id: player.jump
 --- !u!4 &4427548469439754501 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7891869873154946084, guid: 6ada88d9dc1219442b2d7f6993b027c8, type: 3}

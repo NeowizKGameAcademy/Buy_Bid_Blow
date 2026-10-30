@@ -23,7 +23,7 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
             var audio=GameAudio.EnsureHost().Engine;
             Assert.IsEmpty(CueAudioHost.Instance.Catalog.Validate());
             var player=NetworkClient.localPlayer.GetComponent<BuyBidBlow.Characters.PlayerNet>();
-            var feedback=player.GetComponentInChildren<BuyBidBlow.UI.HUD.NetworkMatchFeedback>(true);
+            var feedback=HostedMatch.Body.GetComponentInChildren<BuyBidBlow.UI.HUD.NetworkMatchFeedback>(true);
             var notebook=feedback.notebook;
             notebook.Open();yield return null;notebook.Close();yield return null;
             Assert.AreEqual(2,Count(audio,"ui.notebook"));
@@ -60,12 +60,14 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
             Assert.AreEqual(2,engine.Round);
             Assert.AreEqual(120,engine.Deadline-firstClose,.001);
             var local=NetworkClient.localPlayer.GetComponent<BuyBidBlow.Characters.PlayerNet>();
-            var move=local.GetComponent<BuyBidBlow.Characters.PlayerMove>();
+            var move=Object.FindFirstObjectByType<BuyBidBlow.Characters.CharacterMotor>();
+            // Drive the motor directly; the player's own input would overwrite the intent every frame.
+            move.GetComponent<BuyBidBlow.Characters.PlayerInputReader>().enabled=false;
             yield return HostedMatch.Until(()=>move.IsGrounded,"player grounded");
             var audio=GameAudio.EnsureHost().Engine;int before=Count(audio,"player.jump");
-            move.SetJumpHeld(true);move.SetJumpHeld(false);
+            move.SetIntent(new BuyBidBlow.Characters.CharacterIntent{Jump=true});yield return null;move.SetIntent(default);
             yield return HostedMatch.Until(()=>Count(audio,"player.jump")==before+1,"actual jump RPC sound");
-            move.SetJumpHeld(true);move.SetJumpHeld(false);yield return null;yield return null;
+            move.SetIntent(new BuyBidBlow.Characters.CharacterIntent{Jump=true});yield return null;move.SetIntent(default);yield return null;
             Assert.AreEqual(before+1,Count(audio,"player.jump"),"airborne input must not replay jump sound");
         }
         [UnityTearDown]public IEnumerator Cleanup()
@@ -125,10 +127,10 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
             yield return match.Start(port:27996);yield return new WaitForSecondsRealtime(1);
             Assert.AreSame(host,CueAudioHost.Instance);Assert.AreEqual(1,Count(audio,"bgm.game"));
             Assert.AreEqual(1,audio.GetActiveVoices().Count(v=>v.CueId.StartsWith("bgm.")),"old menu music faded out");
-            var player=NetworkClient.localPlayer.GetComponent<BuyBidBlow.Characters.PlayerNet>();var notebook=player.GetComponentInChildren<BuyBidBlow.UI.Notebook.NetworkNotebookController>(true);
+            var player=NetworkClient.localPlayer.GetComponent<BuyBidBlow.Characters.PlayerNet>();var notebook=HostedMatch.Body.GetComponentInChildren<BuyBidBlow.UI.Notebook.NetworkNotebookController>(true);
             notebook.Open();yield return null;notebook.view.Scroll(1);yield return null;notebook.Close();
             Assert.AreEqual(2,Count(audio,"ui.notebook"));Assert.GreaterOrEqual(Count(audio,"ui.page"),2);
-            var trader=player.GetComponent<LocalTradeController>();var trade=player.GetComponentInChildren<BuyBidBlow.UI.Market.TradePanelController>(true);
+            var trader=HostedMatch.Body.GetComponent<LocalTradeController>();var trade=HostedMatch.Body.GetComponentInChildren<BuyBidBlow.UI.Market.TradePanelController>(true);
             trader.OpenPanel(BuyBidBlow.Systems.Types.Company.Straw);yield return null;trade.IncreaseQuantity();yield return null;trade.Confirm();
             yield return HostedMatch.Until(()=>Count(audio,"market.trade")==1,"server confirmed trade sound");
             yield return null;trade.SelectTab(BuyBidBlow.UI.Market.TradePanelController.Tab.DownsideBet);yield return null;trade.Confirm();

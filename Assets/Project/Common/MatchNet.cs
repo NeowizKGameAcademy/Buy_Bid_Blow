@@ -20,6 +20,7 @@ namespace BuyBidBlow.Common
         [SyncVar] public double firstRoundStartsAt;
         [SyncVar] public double roundClosesAt;
         [SyncVar] public int totalRounds;
+        [SyncVar] public int minPrice;
         // Last closed round and the changes applied at its Closing Bell (0 = none yet).
         public readonly SyncList<PriceChange> lastChanges = new SyncList<PriceChange>();
         [SyncVar] public int lastClosedRound;
@@ -42,6 +43,7 @@ namespace BuyBidBlow.Common
         // Open auction only (secret bids stay private): 0 = no bid yet.
         [SyncVar] public int highestBid;
         [SyncVar] public string highestBidder;
+        [SyncVar] public string highestBidderId;
         // Next round with an auction, 0 when none are left.
         [SyncVar] public int nextAuctionRound;
 
@@ -63,11 +65,15 @@ namespace BuyBidBlow.Common
         AuctionStage seenStage;
 
         public double SecondsLeft => Math.Max(0, (phase == Phase.Preparing ? firstRoundStartsAt : roundClosesAt) - NetworkTime.time);
+        // 회사의 현재 가격을 반환
         public int GetPrice(Company company) => prices[(int)company];
+        // 회사의 남은 시장 재고를 반환
         public int GetStock(Company company) => stock[(int)company];
 
+        // 서버에서 씬 전환 시 파괴되지 않도록 설정
         public override void OnStartServer() { base.OnStartServer(); DontDestroyOnLoad(gameObject); }
 
+        // 씬 전환 시 유지되도록 하고 현재 매치로 등록
         public override void OnStartClient()
         {
             base.OnStartClient();
@@ -76,6 +82,7 @@ namespace BuyBidBlow.Common
             seenClosed = lastClosedRound; seenRound = round; seenStage = auctionStage;
         }
 
+        // 현재 매치 등록을 해제
         public override void OnStopClient()
         {
             if (Current == this) Current = null;
@@ -86,7 +93,7 @@ namespace BuyBidBlow.Common
         // in the server's assignment order, so a hook could see half a turn. By Update the whole server update is in.
         void Update()
         {
-            if (!isClient) return;
+            if (!netIdentity || !isClient) return;
             if (auctionStage != seenStage)
             {
                 var previous = seenStage;
@@ -108,6 +115,7 @@ namespace BuyBidBlow.Common
 
         void OnPhaseChanged(Phase _, Phase value) => Debug.Log($"[Match] Phase {value}");
 
+        // 새 라운드 시작을 로그로 남기고 RoundStarted 이벤트 발생
         void OnRoundChanged(int _, int value)
         {
             if (value > 0) Debug.Log($"[Match] Round {value} started, {SecondsLeft:F0}s left");

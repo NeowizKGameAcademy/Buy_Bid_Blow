@@ -12,7 +12,9 @@ public sealed class TradingPanelView : MonoBehaviour {
  return tab==0?(data.stock<0?affordable:Mathf.Min(data.stock,affordable)):tab==1?data.owned:1;
  }
  void Bind(){if(labels.Count>0)return;foreach(var t in GetComponentsInChildren<Text>(true))if(!labels.ContainsKey(t.name))labels.Add(t.name,t);}
+ // 이름에 해당하는 라벨의 텍스트 설정
  void Set(string name,string value){Bind();if(labels.TryGetValue(name,out var t))t.text=value;}
+ // 탭별 거래 가능 수량·확인 가능 여부·상태를 계산해 패널 전체 표시 갱신
  public void Present(TradingPanelData data,int tab,ref int quantity){
  int buyable=QuantityLimit(data,0);
  int limit=QuantityLimit(data,tab);

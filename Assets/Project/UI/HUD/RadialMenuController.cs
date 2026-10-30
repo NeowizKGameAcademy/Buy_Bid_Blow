@@ -38,9 +38,10 @@ namespace BuyBidBlow.UI.HUD
 
         public bool IsOpen { get; private set; }
         public int SelectedIndex => selectedIndex;
-        /// <summary>Raised when Shift is released over a menu item. Value is 1 through 8.</summary>
+        /// <summary>Raised when the emote button (mouse 3) is released over a menu item. Value is 1 through 8.</summary>
         public event Action<int> SelectionConfirmed;
 
+        // 메뉴 참조 확보, 개별 머티리얼 생성, 반지름 캐시 후 메뉴 숨김
         private void Awake()
         {
             ResolveMenuReferences();
@@ -49,6 +50,7 @@ namespace BuyBidBlow.UI.HUD
             SetMenuVisible(false);
         }
 
+        // 메뉴가 열려 있는 동안 커서를 풀고 마우스 위치로 선택 항목과 반지름 애니메이션 갱신
         private void Update()
         {
             if (!IsOpen)
@@ -61,6 +63,7 @@ namespace BuyBidBlow.UI.HUD
             AnimateRadius();
         }
 
+        // 원형 메뉴를 열고 선택 상태와 반지름을 초기화한 뒤 커서 표시
         public void BeginSelection()
         {
             if (IsOpen)
@@ -81,6 +84,7 @@ namespace BuyBidBlow.UI.HUD
             SetMenuVisible(true);
         }
 
+        // 원형 메뉴를 닫고 커서를 잠근 뒤 확정 시 선택 번호(1~8) 이벤트 발생
         public void EndSelection(bool confirm)
         {
             if (!IsOpen)
@@ -97,6 +101,7 @@ namespace BuyBidBlow.UI.HUD
                 SelectionConfirmed?.Invoke(confirmedIndex + 1);
         }
 
+        // 메뉴 루트/RectTransform/캔버스/항목 이미지 참조를 찾고 레이캐스트 대상 해제
         private void ResolveMenuReferences()
         {
             if (menuRoot == null)
@@ -124,6 +129,7 @@ namespace BuyBidBlow.UI.HUD
             }
         }
 
+        // 항목마다 독립된 머티리얼 인스턴스를 생성해 적용
         private void CreateIndependentMaterials()
         {
             if (menu == null || itemMaterials != null)
@@ -143,6 +149,7 @@ namespace BuyBidBlow.UI.HUD
             }
         }
 
+        // 항목별 기본 외곽 반지름을 저장하고 현재/호버 배열 초기화
         private void CacheRadiusValues()
         {
             if (itemMaterials == null || defaultOuterRadii != null)
@@ -162,6 +169,7 @@ namespace BuyBidBlow.UI.HUD
             }
         }
 
+        // 호버 중인 항목 인덱스 갱신
         private void SetHoveredIndex(int index)
         {
             if (hoveredIndex == index)
@@ -170,6 +178,7 @@ namespace BuyBidBlow.UI.HUD
             hoveredIndex = index;
         }
 
+        // 순차 펼침 애니메이션과 호버 확대를 반영해 항목 외곽 반지름 갱신
         private void AnimateRadius()
         {
             if (itemMaterials == null || defaultOuterRadii == null || currentOuterRadii == null)
@@ -199,6 +208,7 @@ namespace BuyBidBlow.UI.HUD
             }
         }
 
+        // 모든 항목의 외곽 반지름을 내부 반지름으로 되돌리고 호버 값 초기화
         private void ResetRadiusToInnerEdge()
         {
             if (itemMaterials == null || currentOuterRadii == null)
@@ -243,11 +253,13 @@ namespace BuyBidBlow.UI.HUD
             }
         }
 
+        // 머티리얼의 내부 반지름 값 반환 (없으면 0)
         private static float GetInnerRadius(Material material)
         {
             return material.HasProperty(InnerRadiusId) ? material.GetFloat(InnerRadiusId) : 0f;
         }
 
+        // 메뉴 번호(1부터)에 해당하는 항목의 런타임 머티리얼 반환
         /// <summary>Returns this menu item's independent runtime material. Number is 1-based.</summary>
         public Material GetItemMaterial(int menuNumber)
         {
@@ -257,6 +269,7 @@ namespace BuyBidBlow.UI.HUD
                 : null;
         }
 
+        // 생성한 항목 머티리얼 인스턴스 파괴
         private void OnDestroy()
         {
             if (itemMaterials == null)
@@ -269,6 +282,7 @@ namespace BuyBidBlow.UI.HUD
             }
         }
 
+        // 메뉴 이미지 배열이 모두 비어 있는지 확인
         private bool AllEntriesAreEmpty()
         {
             foreach (var image in menu)
@@ -280,12 +294,14 @@ namespace BuyBidBlow.UI.HUD
             return true;
         }
 
+        // 메뉴 루트 활성 상태 설정
         private void SetMenuVisible(bool visible)
         {
             if (menuRoot != null)
                 menuRoot.SetActive(visible);
         }
 
+        // 화면 좌표의 각도/거리로 선택된 메뉴 항목 인덱스 계산 (없으면 -1)
         private int GetSelectedIndex(Vector2 screenPosition)
         {
             if (menuRectTransform == null || menu == null || menu.Length == 0)

@@ -7,6 +7,7 @@ namespace BuyBidBlow.UI.Ticker
     [ExecuteAlways, RequireComponent(typeof(CanvasRenderer))]
     public abstract class TickerGeometry : MaskableGraphic
     {
+        // 두 점 사이에 두께 있는 선분 사각형 추가
         protected static void Stroke(VertexHelper vh, Vector2 a, Vector2 b, float width, Color tint)
         {
             var normal = new Vector2(-(b-a).y, (b-a).x).normalized * width * .5f;
@@ -15,6 +16,7 @@ namespace BuyBidBlow.UI.Ticker
             vh.AddVert(b+normal,tint,Vector2.zero); vh.AddVert(b-normal,tint,Vector2.zero);
             vh.AddTriangle(start,start+1,start+2); vh.AddTriangle(start,start+2,start+3);
         }
+        // 지정 위치·크기의 사각형 추가
         protected static void Box(VertexHelper vh, Vector2 p, Vector2 size, Color tint)
         {
             int start=vh.currentVertCount;
@@ -29,12 +31,14 @@ namespace BuyBidBlow.UI.Ticker
         public float[] values = new float[0];
         public bool detailed;
         public float minimum, maximum=1;
+        // 차트 값·색을 설정하고 가격 범위 계산 후 메시 갱신
         public void Present(float[] points, Color tint)
         {
             values=points; color=tint;
             TickerFormat.PriceRange(points,out minimum,out maximum);
             SetVerticesDirty();
         }
+        // 격자(상세 모드), 가격 선, 최신가 점선·마커 메시 생성
         protected override void OnPopulateMesh(VertexHelper vh)
         {
             vh.Clear(); var r=rectTransform.rect;
@@ -62,13 +66,17 @@ namespace BuyBidBlow.UI.Ticker
 
     public static class TickerFormat
     {
+        // 초를 올림해 mm:ss 문자열로 변환
         public static string Clock(double seconds)
         {
             int total=(int)System.Math.Ceiling(System.Math.Max(0,seconds));
             return (total/60).ToString("00")+":"+(total%60).ToString("00");
         }
+        // 이전 대비 가격 변동을 부호 포함 문자열로 변환
         public static string Change(int current,int previous)=> (current-previous).ToString("+0;-0;0",System.Globalization.CultureInfo.InvariantCulture);
+        // 이전 대비 변동률을 부호 포함 퍼센트 문자열로 변환
         public static string Percent(int current,int previous)=>previous<=0?"—":((current-previous)*100.0/previous).ToString("+0.00;-0.00;0.00",System.Globalization.CultureInfo.InvariantCulture)+"%";
+        // 값 범위를 덮는 4칸 눈금의 최소·최대값 계산
         public static void PriceRange(float[] values,out float min,out float max)
         {
             if(values==null||values.Length==0){min=0;max=4;return;}

@@ -22,6 +22,7 @@ namespace BuyBidBlow.Props
         class Span { public Transform[] bones; public Transform a,b; public Vector3[] p,prev; }
         class Move { public Transform t; public Vector3 original; public int post; }
         Span[] spans; Move[] moves; float lastDistance=-1, lastLength=-1, clock;
+        // 배치 정보 또는 자식 리그에서 로프 구간과 이동할 기둥 목록 구성
         public void Initialize()
         {
             if (placements != null && placements.Length > 0)
@@ -47,7 +48,9 @@ namespace BuyBidBlow.Props
             foreach(var s in spans) {s.p=new Vector3[13];s.prev=new Vector3[13];}
             ResetRopes();
         }
+        // 아직 초기화되지 않았으면 초기화
         void Start() { if(spans==null) Initialize(); }
+        // 기둥 간격에 맞게 기둥을 옮기고 로프 점을 처진 곡선으로 재설정
         public void ResetRopes()
         {
             foreach(var m in moves) m.t.localPosition=m.original+m.t.parent.InverseTransformVector(Vector3.right*(postDistance-1.6f)*m.post);
@@ -56,7 +59,9 @@ namespace BuyBidBlow.Props
             }
             lastDistance=postDistance;lastLength=ropeLength;
         }
+        // 외부 구동이 아니면 시뮬레이션 스텝 실행
         void FixedUpdate() { if(!drivenExternally) Step(Time.fixedDeltaTime); }
+        // 베를레 적분·길이 제약·캡슐 충돌로 로프를 갱신하고 오차·처짐 계산
         public void Step(float dt)
         {
             if(spans==null) Initialize();
@@ -74,7 +79,7 @@ namespace BuyBidBlow.Props
                 }
                 foreach(var capsule in contacts)
                 {
-                    if(!capsule || !capsule.enabled)continue;
+                    if(!capsule || !capsule.enabled || !capsule.gameObject.activeInHierarchy)continue;
                     Vector3 axis=capsule.direction==0?Vector3.right:capsule.direction==1?Vector3.up:Vector3.forward;
                     Vector3 scale=capsule.transform.lossyScale;
                     float axial=Mathf.Abs(capsule.direction==0?scale.x:capsule.direction==1?scale.y:scale.z);
@@ -96,6 +101,7 @@ namespace BuyBidBlow.Props
                 Sag=Mathf.Max(Sag,(s.a.position.y+s.b.position.y)*.5f-s.p.Min(p=>p.y));
             }
         }
+        // 테스트 배리어에서 간격·길이·흔들림 조절 GUI를 표시하고 다른 배리어에 동기화
         void OnGUI()
         {
             if(name!="Barrier_A_Test")return;

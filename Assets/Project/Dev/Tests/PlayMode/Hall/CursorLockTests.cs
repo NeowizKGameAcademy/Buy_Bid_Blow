@@ -35,7 +35,7 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
             keyboard = InputSystem.AddDevice<Keyboard>();
             keyboard.MakeCurrent();
             var interaction = Object.FindFirstObjectByType<PlayerInteraction>();
-            var detect = Object.FindFirstObjectByType<DetectObject>();
+            var detect = Object.FindFirstObjectByType<InteractionSensor>();
             var panel = Object.FindFirstObjectByType<TradePanelController>(FindObjectsInactive.Include);
             var seats = Object.FindFirstObjectByType<SeatController>();
             var seating = seats.GetComponent<PlayerSeating>();

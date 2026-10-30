@@ -31,7 +31,7 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
             Assert.NotNull(PlayerNet.LocalPortfolio, "starting portfolio sent to the owner");
 
             var interaction = UnityEngine.Object.FindFirstObjectByType<PlayerInteraction>();
-            var detect = UnityEngine.Object.FindFirstObjectByType<DetectObject>();
+            var detect = UnityEngine.Object.FindFirstObjectByType<InteractionSensor>();
             var panel = UnityEngine.Object.FindFirstObjectByType<TradePanelController>(FindObjectsInactive.Include);
             var assets = interaction.GetComponentInParent<PlayerAssetStatus>(true);
             if (!assets) assets = UnityEngine.Object.FindFirstObjectByType<PlayerAssetStatus>();
@@ -56,8 +56,8 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
                 detect.transform.SetPositionAndRotation(eyePos, Quaternion.LookRotation(target - eyePos));
                 yield return null; yield return null;
 
-                Assert.IsTrue(detect.isDetected, staffName + " detected");
-                Assert.AreEqual(company, detect.DetectedCollider.GetComponentInParent<NPCInfo>().Company, staffName + " company");
+                Assert.IsNotNull(detect.Target, staffName + " detected");
+                Assert.AreEqual(company, ((NPCInfo)detect.Target).Company, staffName + " company");
 
                 interaction.Interact();
                 Assert.IsTrue(panel.IsOpen, staffName + " opens the trade panel");
@@ -65,14 +65,15 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
 
                 int cash = assets.Cash, shares = assets.GetShares(company), price = MatchNet.Current.GetPrice(company);
                 var view = UnityEngine.Object.FindObjectsByType<TradingPanelView>(FindObjectsSortMode.None).Single();
-                Assert.AreEqual(company.ToString(), Label(view, "Company Header/Company Name"), "company panel shown");
+                Assert.AreEqual(company.DisplayName(), Label(view, "Company Header/Company Name"), "company panel shown");
+                if (company == Company.Timber) Assert.AreEqual("Wood", Label(view, "Company Header/Company Name"), "name matches the physical WOOD counter");
                 Assert.AreEqual("$" + price, Label(view, "Company Header/Current Price"), "published price shown");
 
                 int stock = MatchNet.Current.GetStock(company);
                 Assert.AreEqual(stock + "주", Label(view, "Stock Availability/Market Stock"), "server market stock shown");
 
                 string reply = null;
-                Action<string> listen = r => reply = r;
+                Action<RequestResult> listen = r => reply = r.Message;
                 PlayerNet.LocalReply += listen;
                 try
                 {

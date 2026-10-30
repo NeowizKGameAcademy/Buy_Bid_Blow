@@ -46,7 +46,15 @@ namespace BuyBidBlow.Systems.Market
 
             for (int i = 0; i < companies.Length; i++)
             {
-                int amount = Math.Max(1, settings.Amount.Roll(random) + settings.AmountOffsets[i].Roll(random));
+                int amount;
+                if (settings.UsesAmountBands)
+                {
+                    var weights = settings.CompanyWeights[i];
+                    double roll = random.NextDouble();
+                    int band = roll < weights.Small ? 0 : roll < weights.Small + weights.Medium ? 1 : 2;
+                    amount = settings.AmountBands[band].Roll(random);
+                }
+                else amount = Math.Max(1, settings.Amount.Roll(random) + settings.AmountOffsets[i].Roll(random));
                 int direction = random.NextDouble() < settings.RiseChances[i] ? 1 : -1;
                 changes[i] = new PriceChange(companies[i], amount * direction);
             }

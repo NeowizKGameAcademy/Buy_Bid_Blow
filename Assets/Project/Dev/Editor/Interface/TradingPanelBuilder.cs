@@ -109,7 +109,7 @@ namespace BuyBidBlow.Interface.Editor
         static void TradingCompany(Transform panel,string company)
         {
             panel.name="Trading Panel - "+company;
-            panel.Find("Company Header/Company Name").GetComponent<Text>().text=company;
+            panel.Find("Company Header/Company Name").GetComponent<Text>().text=company=="Timber"?"Wood":company;
             panel.Find("Company Header/Company Icon").GetComponent<Image>().sprite=Icon("IC_"+company);
             int price=company=="Straw"?24:company=="Timber"?35:46;
             panel.Find("Company Header/Current Price").GetComponent<Text>().text="$"+price;

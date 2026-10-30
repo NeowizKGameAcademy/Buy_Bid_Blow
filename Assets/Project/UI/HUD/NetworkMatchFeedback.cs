@@ -24,32 +24,19 @@ namespace BuyBidBlow.UI.HUD
         public MatchResultView results;
         public NetworkNotebookController notebook;
         public TradePanelController trading;
-        public PlayerMove movement;
         public GameObject betStatus;
         public Text betLabel;
         public Image betIcon;
         public Sprite[] companyIcons;
         static NetworkMatchFeedback current;
         public static bool BlocksInput => current && ((current.auctionResult && current.auctionResult.IsOpen) || (current.results && current.results.IsOpen));
-        static bool IsBlocking() => BlocksInput;
         readonly Queue<AuctionOutcome> outcomes = new Queue<AuctionOutcome>();
         bool canRead,shownResults,host;
         UnityEngine.Events.UnityAction[] auctionClicks,resultClicks;
         void OnEnable()
         {
             current=this;
-            PlayerInputGate.AddBlocker(IsBlocking);
-            var owner=GetComponentInParent<PlayerNet>(true);
-            if(owner)
-            {
-                movement=owner.GetComponent<PlayerMove>();
-                trading=owner.GetComponentInChildren<TradePanelController>(true);
-            }
-            else
-            {
-                if(!movement)movement=FindFirstObjectByType<PlayerMove>(FindObjectsInactive.Include);
-                if(!trading)trading=FindFirstObjectByType<TradePanelController>(FindObjectsInactive.Include);
-            }
+            if(!trading)trading=transform.root.GetComponentInChildren<TradePanelController>(true);
             PlayerNet.LocalNotice+=OnNotice;PlayerNet.LocalAuctionOutcome+=OnOutcome;PlayerNet.LocalResultsChanged+=ShowResults;
             auctionResult.ActionRequested+=OnAuctionAction;results.ActionRequested+=OnReturn;
             auctionResult.CloseOnAction=true;results.CloseOnAction=false;
@@ -63,13 +50,12 @@ namespace BuyBidBlow.UI.HUD
             auctionResult.ActionRequested-=OnAuctionAction;results.ActionRequested-=OnReturn;
             UnbindButtons(auctionResult,auctionClicks);UnbindButtons(results,resultClicks);
             outcomes.Clear();auctionResult.Hide();results.Hide();notices.Stack.Clear();
-            if(current==this){current=null;PlayerInputGate.RemoveBlocker(IsBlocking);}
+            if(current==this)current=null;
         }
         void Update()
         {
             EnsureEventSystem();
             RefreshBet();
-            if(BlocksInput && movement){movement.SetMoveInput(Vector2.zero);movement.SetJumpHeld(false);}
             if(!shownResults && !auctionResult.IsOpen && !notebook.view.IsOpen && outcomes.Count>0)PresentOutcome(outcomes.Dequeue());
             if(shownResults && host!=IsRoomHost())ShowResults();
         }
@@ -83,7 +69,7 @@ namespace BuyBidBlow.UI.HUD
         }
         public void OnNotice(MatchNotice n)
         {
-            string company=((Company)n.Company).ToString();
+            string company=((Company)n.Company).DisplayName();
             switch(n.Kind)
             {
                 case MatchNoticeKind.Trade:BuyBidBlow.Audio.GameAudio.Play("market.trade",this);notices.TradeCompleted(company,n.Quantity,n.Buy?-n.Amount:n.Amount,n.Buy);break;

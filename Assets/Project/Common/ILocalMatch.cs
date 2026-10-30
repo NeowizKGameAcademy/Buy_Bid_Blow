@@ -10,7 +10,9 @@ namespace BuyBidBlow.Common
     public interface ILocalMatch
     {
         TradeService TradeService { get; }
+        // 회사의 현재 주가를 반환
         int GetPrice(Company company);
+        // 매치에 플레이어를 추가
         void AddPlayer(PlayerId playerId);
         event Action<int, IReadOnlyList<PriceChange>> RoundAdvanced;
     }

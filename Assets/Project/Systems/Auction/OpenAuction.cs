@@ -19,6 +19,7 @@ namespace BuyBidBlow.Systems.Auction
         public PlayerId HighestBidder { get; private set; }  // meaningful only when HasBid
         public int HighestBid { get; private set; }
 
+        // 물건·마감 시각·최소 입찰가·플레이어 정보를 설정
         public OpenAuction(Lot lot, double deadline, int minBid, IReadOnlyDictionary<PlayerId, PlayerPortfolio> players)
         {
             Lot = lot;
@@ -27,6 +28,7 @@ namespace BuyBidBlow.Systems.Auction
             this.players = players;
         }
 
+        // 조건을 검사해 입찰금을 예약하고 이전 최고 입찰자의 예약을 해제
         public AuctionError PlaceBid(PlayerId player, int amount, double now)
         {
             if (closed || now >= Deadline) return AuctionError.Closed;
@@ -48,6 +50,7 @@ namespace BuyBidBlow.Systems.Auction
             return AuctionError.None;
         }
 
+        // 경매를 마감하고 낙찰자의 예약금을 결제해 결과를 반환
         // Charges the winner. Sold is false when nobody bid.
         public AuctionResult Close()
         {
@@ -69,6 +72,7 @@ namespace BuyBidBlow.Systems.Auction
         public readonly PlayerId Winner;  // meaningful only when Sold
         public readonly int Price;
 
+        // 경매 결과 값을 설정
         public AuctionResult(Lot lot, bool sold, PlayerId winner, int price)
         {
             Lot = lot;

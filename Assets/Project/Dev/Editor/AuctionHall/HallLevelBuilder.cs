@@ -143,6 +143,7 @@ namespace BuyBidBlow.Dev.Editor
             var colliderMesh=Save(ReadMesh(Data+"/collision.bin",true),Root+"/Meshes/Hall_Structure_Collision.asset");
             var structure=new GameObject("StructuralCollision");structure.transform.SetParent(hall.transform,false);structure.layer=6;structure.AddComponent<MeshCollider>().sharedMesh=colliderMesh;
             HallFurnitureCollision.Attach(hall.transform);
+            Physics.SyncTransforms(); HallStairRamps.Attach(hall.transform);
             HallTickerBoardSetup.ReplaceMergedBoards(hall);
             PrefabUtility.SaveAsPrefabAsset(hall,Root+"/AuctionHall_Furnished.prefab");
             AddLighting();AddPlayer();

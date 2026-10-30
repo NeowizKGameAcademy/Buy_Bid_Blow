@@ -5,6 +5,11 @@ using System.Linq;
 using BuyBidBlow.Characters;
 using BuyBidBlow.Network;
 using BuyBidBlow.UI.Lobby;
+using BuyBidBlow.UI.HUD;
+using BuyBidBlow.UI.Notebook;
+using BuyBidBlow.UI.Result;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem.UI;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -17,6 +22,55 @@ namespace BuyBidBlow.Dev.Editor
     public static class HallSessionSetup
     {
         const string Backup="Logs/HallSession";
+
+        // Wire the existing production views and private player state without rebuilding the hall.
+        [MenuItem("Tools/BuyBidBlow/Lobby/Wire Match Results And Information")]
+        public static void WireMatchUI()
+        {
+            const string playerPath = "Assets/Project/Characters/Player/Player.prefab";
+            const string netPath = "Assets/Project/Characters/Player/PlayerNet.prefab";
+            var player = PrefabUtility.LoadPrefabContents(playerPath);
+            try
+            {
+                var hud = player.GetComponentInChildren<HUDController>(true);
+                if (!hud) throw new InvalidOperationException("Player prefab has no HUDController.");
+                var data = new SerializedObject(hud);
+                data.FindProperty("notebookPrefab").objectReferenceValue = AssetDatabase.LoadAssetAtPath<InformationNotebookView>("Assets/Project/UI/Notebook/PF_InformationNotebook.prefab");
+                data.FindProperty("resultsPrefab").objectReferenceValue = AssetDatabase.LoadAssetAtPath<MatchResultView>("Assets/Project/UI/Result/PF_MatchResults.prefab");
+                data.ApplyModifiedPropertiesWithoutUndo();
+                var prompt = data.FindProperty("InteractionText").objectReferenceValue as TMPro.TMP_Text;
+                if (prompt) prompt.font = AssetDatabase.LoadAssetAtPath<TMPro.TMP_FontAsset>("Assets/Font/TMP/Pretendard 500 SDF.asset");
+                PrefabUtility.SaveAsPrefabAsset(player, playerPath);
+            }
+            finally { PrefabUtility.UnloadPrefabContents(player); }
+            var net = PrefabUtility.LoadPrefabContents(netPath);
+            try
+            {
+                var state = net.GetComponent<PlayerAssetsNet>();
+                if (!state) state = net.AddComponent<PlayerAssetsNet>();
+                state.syncMode = Mirror.SyncMode.Owner;
+                PrefabUtility.SaveAsPrefabAsset(net, netPath);
+            }
+            finally { PrefabUtility.UnloadPrefabContents(net); }
+            var scene = EditorSceneManager.OpenScene(HallLevelBuilder.ScenePath);
+            var events = Object.FindFirstObjectByType<EventSystem>(FindObjectsInactive.Include);
+            if (!events) events = new GameObject("UI EventSystem", typeof(EventSystem), typeof(InputSystemUIInputModule)).GetComponent<EventSystem>();
+            events.transform.SetParent(null, true); events.gameObject.SetActive(true);
+            var module = events.GetComponent<InputSystemUIInputModule>();
+            if (module)
+            {
+                module.AssignDefaultActions(); module.move = null; module.submit = null; module.cancel = null;
+            }
+            EditorSceneManager.MarkSceneDirty(scene); EditorSceneManager.SaveScene(scene);
+            BuyBidBlow.Dev.WolfAnimatorBuilder.EnsureJumpState();
+            AssetDatabase.SaveAssets();
+        }
+
+        public static void WireMatchUIBatch()
+        {
+            try { WireMatchUI(); EditorApplication.Exit(0); }
+            catch (Exception e) { Debug.LogException(e); EditorApplication.Exit(1); }
+        }
         [MenuItem("Tools/BuyBidBlow/Lobby/Use Furnished Hall For Lobby And Match")]
         public static void Apply()
         {
@@ -28,7 +82,7 @@ namespace BuyBidBlow.Dev.Editor
             var existing=Object.FindFirstObjectByType<HallSession>();
             if(!existing)
             {
-                var player=Object.FindFirstObjectByType<PlayerMove>();
+                var player=Object.FindFirstObjectByType<PlayerSeating>();
                 if(!player)throw new Exception("The hall must have one local gameplay player.");
                 var gameplayCamera=player.GetComponentInChildren<Camera>(true);
                 var lightmaps=LightmapSettings.lightmaps;
@@ -76,20 +130,19 @@ namespace BuyBidBlow.Dev.Editor
             EditorBuildSettings.scenes=EditorBuildSettings.scenes
                 .Where(s=>s.path!=LobbyBuilder.LegacyScenePath).ToArray();
             AssetDatabase.SaveAssets();
-            GameBuild.UpdateServerScene();
             EditorSceneManager.OpenScene(HallLevelBuilder.ScenePath);
             Validate();
         }
 
         public static void PositionLobbyCamera(Camera camera)
         {
-            // Preserve the original lobby framing, but face the matching carpet in this hall.
+            // Preserve the original lobby framing, facing the waiting line in the lobby room.
             camera.transform.position=PlayerNet.WaitingCenter+new Vector3(0,3.26f,-9.7f);
             camera.transform.LookAt(PlayerNet.WaitingCenter+Vector3.up*1.56f);
             camera.fieldOfView=48;
         }
 
-        [MenuItem("Tools/BuyBidBlow/Lobby/Align Under Mezzanine Waiting Area")]
+        [MenuItem("Tools/BuyBidBlow/Lobby/Align Lobby Waiting Area")]
         public static void AlignWaitingArea()
         {
             if(!Application.isBatchMode&&!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo())return;
@@ -103,7 +156,7 @@ namespace BuyBidBlow.Dev.Editor
             PositionLobbyCamera(hud.view);
             hud.selectionRing.position=PlayerNet.SeatPosition(0)+Vector3.up*.02f;
             // The actual match starts at the admitted player's own seat in BeginMatch.
-            session.player.transform.SetPositionAndRotation(PlayerNet.SeatPosition(0),Quaternion.Euler(0,180,0));
+            session.player.transform.SetPositionAndRotation(PlayerNet.MatchStartPosition(0),Quaternion.Euler(0,180,0));
             PrefabUtility.RecordPrefabInstancePropertyModifications(session.player.transform);
             EditorSceneManager.MarkSceneDirty(scene);EditorSceneManager.SaveScene(scene);
             Validate();

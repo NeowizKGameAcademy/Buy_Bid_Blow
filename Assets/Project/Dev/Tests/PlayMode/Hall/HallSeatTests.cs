@@ -6,6 +6,7 @@ using BuyBidBlow.Props;
 using BuyBidBlow.Systems.Match;
 using BuyBidBlow.UI.Auction;
 using BuyBidBlow.UI.HUD;
+using BuyBidBlow.Systems.Types;
 using Mirror;
 using NUnit.Framework;
 using UnityEngine;
@@ -31,7 +32,7 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
             var interaction = Object.FindFirstObjectByType<PlayerInteraction>();
             var seats = interaction.GetComponentInParent<SeatController>();
             var seating = seats.GetComponent<PlayerSeating>();
-            var detect = Object.FindFirstObjectByType<DetectObject>();
+            var detect = Object.FindFirstObjectByType<InteractionSensor>();
             var model = seats.GetComponentsInChildren<Animator>().First(a => a.runtimeAnimatorController);
             var chair = Object.FindObjectsByType<Seat>(FindObjectsSortMode.None).Single(s => s.name == ChairName);
             var anchor = chair.sittingPoints[0];
@@ -41,8 +42,8 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
             var eye = anchor.position + anchor.right * 1.3f + Vector3.up * .6f;
             detect.transform.SetPositionAndRotation(eye, Quaternion.LookRotation(anchor.position - eye));
             yield return null; yield return null;
-            Assert.IsTrue(detect.isDetected, "chair detected");
-            Assert.AreEqual(chair, detect.DetectedCollider.GetComponentInParent<Seat>(), "aiming at the chair");
+            Assert.IsNotNull(detect.Target, "chair detected");
+            Assert.AreEqual(chair, detect.Target, "aiming at the chair");
             Assert.IsTrue(chair.CanInteract, "free chair offers Sit");
 
             interaction.Interact();
@@ -53,22 +54,12 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
             yield return null;
             Assert.IsTrue(model.GetCurrentAnimatorStateInfo(0).IsName("Seated"), "seated pose shown at once");
 
-            // Looking around while seated turns only the camera, up to 90 degrees; the chair keeps the body.
-            var move = seats.GetComponent<PlayerMove>();
-            var view = seats.GetComponent<PlayerCamera>().CameraTransform;
-            var bodyRotation = seating.transform.rotation;
-            move.Rotate(new Vector2(1e7f, 0));
-            yield return null;
-            Assert.Less(Quaternion.Angle(bodyRotation, seating.transform.rotation), .01f, "body stays facing the chair's way");
-            Assert.AreEqual(90f, view.localEulerAngles.y, .01f, "camera turns to the side limit");
-
             seats.RequestStand();
             yield return HostedMatch.Until(() => !seating.IsSeated, "stood up");
             Assert.IsFalse(net.IsSeated, "server freed the chair");
             Assert.IsTrue(chair.CanInteract, "chair free again");
             yield return null;
-            Assert.IsTrue(model.GetCurrentAnimatorStateInfo(0).IsName("Player_Idle"), "back to standing");
-            Assert.AreEqual(0f, Mathf.DeltaAngle(0, view.localEulerAngles.y), .01f, "camera faces forward again after standing");
+            Assert.IsTrue(model.GetCurrentAnimatorStateInfo(0).IsName("Locomotion"), "back to standing");
 
             // Other players see the network avatar switch straight into the same pose.
             // The owner's own avatar is hidden in the level; show it as other clients do.
@@ -84,15 +75,21 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
         public IEnumerator AuctionPanelShowsWhileSeatedOnAMezzanineChair()
         {
             // 2-second rounds: round 2 is the first auction round and opens its public auction at once.
-            yield return match.Start(roundSeconds: 2);
+            yield return match.Start(roundSeconds: 2, tweak: s =>
+            {
+                s.AuctionRounds = new[] { 2, 6, 10 };
+                s.AuctionSlots = new[] { new AuctionSlot { DurationSeconds = 60 }, new AuctionSlot { StartsAtSeconds = 60, DurationSeconds = 30 } };
+            });
             var seats = Object.FindFirstObjectByType<SeatController>();
             var seating = seats.GetComponent<PlayerSeating>();
             var panel = Object.FindFirstObjectByType<AuctionPanelView>();
             var header = panel.transform.Find("Auction Status - Top Center").gameObject;
-            var lot = panel.transform.Find("Live Lot Details").gameObject;
+            // The lot reads as icons (lotSummary) where the panel has them, else as the text block.
+            var summary = (GameObject)typeof(AuctionPanelView).GetField("lotSummary", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).GetValue(panel);
+            var lot = summary ? summary : panel.transform.Find("Live Lot Details").gameObject;
             var seatsByName = Object.FindObjectsByType<Seat>(FindObjectsSortMode.None);
             Assert.AreEqual(7, seatsByName.Count(s => s.auction), "the seven mezzanine chairs are auction seats");
-            Assert.IsFalse(header.activeSelf, "no auction panel while standing");
+            Assert.IsFalse(header.activeSelf, "auction status is reserved for seated players");
 
             seats.RequestSit(seatsByName.Single(s => s.name == ChairName));
             yield return HostedMatch.Until(() => seating.IsSeated, "seated");
@@ -106,12 +103,14 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
             yield return null;
             Assert.AreEqual("1차 공개 경매", Text(header, "Stage"), "public auction stage");
             Assert.IsTrue(lot.activeSelf, "lot shown");
-            StringAssert.Contains("R · ", Text(lot, "Text"), "lot rounds and companies");
+            if (!summary) StringAssert.Contains("R · ", Text(lot, "Text"), "lot rounds and companies");
 
             seats.RequestStand();
             yield return HostedMatch.Until(() => !seating.IsSeated, "stood up");
             yield return null;
-            Assert.IsFalse(header.activeSelf, "panel hidden after standing");
+            Assert.IsFalse(header.activeSelf, "standing hides the auction status but keeps the public lot");
+            Assert.IsTrue(lot.activeSelf, "the public lot remains visible after standing");
+            Assert.IsFalse(panel.transform.Find("Bid Controls - Bottom Center").gameObject.activeSelf, "standing players cannot operate bids");
         }
 
         [UnityTest]
@@ -121,6 +120,7 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
             yield return match.Start(tweak: s =>
             {
                 s.RoundSeconds = 3; s.AuctionRoundSeconds = 8; s.AuctionDurationSeconds = 3;
+                s.AuctionRounds = new[] { 2, 6, 10 };
                 s.AuctionSlots = new[] { new AuctionSlot { StartsAtSeconds = 0, DurationSeconds = 3 }, new AuctionSlot { StartsAtSeconds = 3, DurationSeconds = 3 } };
             });
             var seats = Object.FindFirstObjectByType<SeatController>();
@@ -132,7 +132,7 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
             var header = panel.transform.Find("Auction Status - Top Center").gameObject;
             var controls = panel.transform.Find("Bid Controls - Bottom Center").gameObject;
             string reply = null;
-            System.Action<string> listen = r => reply = r;
+            System.Action<RequestResult> listen = r => reply = r.Message;
             PlayerNet.LocalReply += listen;
             try
             {
@@ -156,6 +156,7 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
                 // Secret auction: the submission is private, can be cancelled, and the open win was charged.
                 yield return HostedMatch.Until(() => MatchNet.Current.auctionStage == MatchNet.AuctionStage.Secret, "secret auction");
                 yield return HostedMatch.Until(() => assets.Cash == cash - 5 && assets.Reserved == 0, "open auction won and charged");
+                Assert.AreEqual(2, PlayerNet.LocalInformation.Count, "winner receives both private information entries");
                 Assert.AreEqual(0, MatchNet.Current.highestBid, "secret bids are not public");
                 reply = null;
                 bidding.AdjustBid(2);

@@ -3,6 +3,7 @@ namespace BuyBidBlow.UI.Menu
 {
     public sealed class PauseMenuView : ModalView
     {
+        // 일시정지 메뉴 버튼을 구성하고 메뉴 모달 표시
         // No Time.timeScale, network or player movement changes are made here.
         public void OpenMenu()
         {

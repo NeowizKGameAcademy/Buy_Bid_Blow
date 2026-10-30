@@ -18,6 +18,8 @@ public sealed class CueAudioPlaybackTests
     [UnitySetUp]
     public IEnumerator SetUp()
     {
+        // A persistent game host left by an earlier match test would make this one a disabled duplicate.
+        if (CueAudioHost.Instance) { Object.Destroy(CueAudioHost.Instance.gameObject); yield return null; }
         clip = AudioClip.Create("Playback test", 4410, 1, 44100, false);
         var document = new CueDocument { cues = new List<CueDefinition>
         {

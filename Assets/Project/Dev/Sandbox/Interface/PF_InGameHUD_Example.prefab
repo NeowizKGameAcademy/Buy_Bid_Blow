@@ -5630,7 +5630,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "2R   Straw \u2191   Timber \u2193\n5R   Timber \u2191   Brick \u2192"
+  m_Text: "2R   Straw \u2191   Wood \u2193\n5R   Wood \u2191   Brick \u2192"
 --- !u!114 &2823674228358184746
 MonoBehaviour:
   m_ObjectHideFlags: 0
