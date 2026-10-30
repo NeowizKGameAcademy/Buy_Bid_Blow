@@ -32,11 +32,26 @@ namespace BuyBidBlow.Characters
         void OnInMatchChanged(bool _,bool value)
         {
             RefreshAvatar();
+            ResetPose();
             if (isLocalPlayer && NetworkManager.singleton is GameNetworkManager room) room.SetClientMatchState(value);
         }
         // 매치 중인 자신의 아바타면 자식 모델을 숨기고 아니면 표시
         // The owner already sees its own wolf through the local Player, so its avatar hides in the level.
-        void RefreshAvatar(){bool visible=!inMatch||!isLocalPlayer;foreach(Transform child in transform)child.gameObject.SetActive(visible);}
+        void RefreshAvatar(){bool visible=!inMatch||!isLocalPlayer;foreach(Transform child in transform)child.gameObject.SetActive(visible);RefreshBody();}
+        // 경기 중인 다른 플레이어의 서 있는 아바타만 충돌체를 켬
+        // Local motors collide with other players through this capsule. The owner's own avatar overlaps its body,
+        // and seated players are held by their chair, so both stay off.
+        void RefreshBody(){if(body)body.enabled=inMatch&&!isLocalPlayer&&!IsSeated;}
+        // 로비·경기 전환 시 마지막 동작(감정 표현·점프·착석)과 걷기 값을 지우고 기본 자세로 되돌림
+        // Emotes and jumps reach other clients as one-shot Rpcs, so a pose left over from the match would stay in the lobby.
+        void ResetPose()
+        {
+            walkSpeed=0;lastPosition=transform.position;
+            if(TryGetComponent(out BuyBidBlow.Audio.PlayerActionAudio audio))audio.StopEmotion();
+            // The owner's avatar is hidden in the match; Animator.Play on an inactive model only warns.
+            if(!character||!character.animator||!character.animator.isActiveAndEnabled)return;
+            character.SetSeated(false);character.SetMovementSpeed(0);
+        }
         // 아바타 표시를 갱신하고 네트워크 매니저에 로컬 플레이어 준비를 알림
         public override void OnStartLocalPlayer()
         {
@@ -50,6 +65,7 @@ namespace BuyBidBlow.Characters
         public static readonly Color[] Colors = {new Color(.6f,.12f,.2f), new Color(.1f,.5f,.7f), new Color(.8f,.6f,.12f), new Color(.2f,.65f,.35f), new Color(.55f,.3f,.7f), Color.black};
         BBBWolfAppearance appearance;
         BBBWolfCharacter character;
+        CapsuleCollider body;
         PlayerSeating localBody;
         Vector3 lastPosition;
         float walkSpeed;
@@ -69,7 +85,11 @@ namespace BuyBidBlow.Characters
             foreach (var a in GetComponentsInChildren<Animator>(true)) a.applyRootMotion = false;
             character=GetComponentInChildren<BBBWolfCharacter>(true);
             if(character) {character.StopAction();character.SetMovementSpeed(0);}
+            // Same size as the local Player's capsule (feet at the root). Kinematic: it only blocks others' motors.
+            var rb=gameObject.AddComponent<Rigidbody>();rb.isKinematic=true;rb.useGravity=false;
+            body=gameObject.AddComponent<CapsuleCollider>();body.center=new Vector3(0,BodyHeight/2,0);body.height=BodyHeight;body.radius=BodyRadius;body.enabled=false;
         }
+        const float BodyHeight=1.8f, BodyRadius=.3f;
         // 매치 중이면 따라가기, 아니면 로비 자리에 배치하고 외형 적용
         void LateUpdate()
         {
@@ -214,6 +234,7 @@ namespace BuyBidBlow.Characters
         // 로컬이면 좌석 변경 이벤트 발생, 원격이면 캐릭터 착석 자세 갱신
         void OnHallSeatChanged(string _, string seat)
         {
+            RefreshBody();
             if (isLocalPlayer) LocalSeatChanged?.Invoke(seat, hallSeatSlot);
             else if (character) character.SetSeated(!string.IsNullOrEmpty(seat));
         }

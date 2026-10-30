@@ -25,6 +25,16 @@ namespace BuyBidBlow.Characters
         // action plays out and its own exit returns to Locomotion.
         private const int Hold = -1;
         private bool holdPending;
+        // The Expression layer overrides at full weight with Write Defaults off, so the Animator keeps the last
+        // bone positions an action set (Flair lowers the Armature, LayingPose the Hips) and writes them again
+        // in the next action and after it. Once an action ends, or before another replaces it, the body goes
+        // back to its bind pose and the Animator is rebound, which drops those held values.
+        private Transform[] bones;
+        private Vector3[] bindPositions;
+        private Quaternion[] bindRotations;
+        // An action has played since the last rebind.
+        private bool posed;
+        private bool seated;
 
         public Transform model;
         public Animator animator;
@@ -54,6 +64,12 @@ namespace BuyBidBlow.Characters
         public void PlayAction(Action value)
         {
             if (!animator) return;
+            if (value != Action.Locomotion)
+            {
+                // Switching straight from one action to another: clear what the first one left.
+                if (posed) ResetBody();
+                posed = true;
+            }
             Current = value;
             animator.speed = speed;
             animator.SetInteger(ActionId, (int)value);
@@ -67,6 +83,7 @@ namespace BuyBidBlow.Characters
         // Chair-seated pose, switched instantly with no sit-down or stand-up motion.
         public void SetSeated(bool seated)
         {
+            this.seated = seated;
             if (!animator) return;
             holdPending = false; Current = Action.Locomotion;
             animator.SetInteger(ActionId, seated ? Hold : (int)Action.Locomotion);
@@ -105,6 +122,10 @@ namespace BuyBidBlow.Characters
             {
                 animator.speed = speed;
                 SetExpression(expression);
+                bones = animator.GetComponentsInChildren<Transform>(true);
+                bindPositions = new Vector3[bones.Length];
+                bindRotations = new Quaternion[bones.Length];
+                for (int i = 0; i < bones.Length; i++) { bindPositions[i] = bones[i].localPosition; bindRotations[i] = bones[i].localRotation; }
             }
         }
 
@@ -116,6 +137,32 @@ namespace BuyBidBlow.Characters
                 animator.SetInteger(ActionId, Hold);
                 holdPending = false;
             }
+        }
+
+        // 액션이 끝나 기본 이동·앉은 자세로 돌아오면 애니메이터를 다시 바인드하고, 그 자세에서는 뼈 위치를 원래대로 유지
+        // Locomotion and Seated animate no bone position other than the bind one, so the overwrite loses nothing.
+        private void LateUpdate()
+        {
+            if (!animator || bones == null || !animator.isInitialized || animator.IsInTransition(0)) return;
+            var state = animator.GetCurrentAnimatorStateInfo(0);
+            if (!state.IsName("Locomotion") && !state.IsName("Seated")) return;
+            if (posed) { ResetBody(); return; }
+            for (int i = 0; i < bones.Length; i++) if (bones[i]) bones[i].localPosition = bindPositions[i];
+        }
+
+        // 뼈를 원래 자세로 되돌린 뒤 애니메이터를 다시 바인드해 이전 액션이 남긴 값을 지우고, 표정·착석 상태를 다시 적용
+        // Rebind takes the current transforms as defaults, so the bind pose is put back first.
+        // It also resets parameters and states: the expression is set again and a seated body sits again.
+        private void ResetBody()
+        {
+            posed = false;
+            if (bones == null || !animator.isActiveAndEnabled) return;
+            for (int i = 0; i < bones.Length; i++)
+                if (bones[i]) { bones[i].localPosition = bindPositions[i]; bones[i].localRotation = bindRotations[i]; }
+            animator.Rebind();
+            animator.speed = speed;
+            animator.SetInteger(ExpressionId, (int)expression);
+            if (seated) { animator.SetInteger(ActionId, Hold); animator.Play("Seated", 0, 0); }
         }
 
         // 비활성화 시 패들 숨김

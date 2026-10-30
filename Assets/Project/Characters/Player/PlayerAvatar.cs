@@ -50,9 +50,11 @@ namespace BuyBidBlow.Characters
             if (radial) radial.SelectionConfirmed += OnEmoteSelected;
         }
 
-        // 이벤트 구독 해제
+        // 감정 표현을 끝내고 이벤트 구독 해제
+        // The hall turns this body off when the match ends; a running emote must not carry into the next match.
         private void OnDisable()
         {
+            StopEmote();
             motor.Jumped -= OnJumped;
             motor.Landed -= OnLanded;
             if (seating) seating.onSeatedChanged.RemoveListener(OnSeatedChanged);
