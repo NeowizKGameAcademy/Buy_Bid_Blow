@@ -75,7 +75,11 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
         public IEnumerator AuctionPanelShowsWhileSeatedOnAMezzanineChair()
         {
             // 2-second rounds: round 2 is the first auction round and opens its public auction at once.
-            yield return match.Start(roundSeconds: 2);
+            yield return match.Start(roundSeconds: 2, tweak: s =>
+            {
+                s.AuctionRounds = new[] { 2, 6, 10 };
+                s.AuctionSlots = new[] { new AuctionSlot { DurationSeconds = 60 }, new AuctionSlot { StartsAtSeconds = 60, DurationSeconds = 30 } };
+            });
             var seats = Object.FindFirstObjectByType<SeatController>();
             var seating = seats.GetComponent<PlayerSeating>();
             var panel = Object.FindFirstObjectByType<AuctionPanelView>();
@@ -85,7 +89,7 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
             var lot = summary ? summary : panel.transform.Find("Live Lot Details").gameObject;
             var seatsByName = Object.FindObjectsByType<Seat>(FindObjectsSortMode.None);
             Assert.AreEqual(7, seatsByName.Count(s => s.auction), "the seven mezzanine chairs are auction seats");
-            Assert.IsFalse(header.activeSelf, "no auction panel while standing");
+            Assert.IsFalse(header.activeSelf, "auction status is reserved for seated players");
 
             seats.RequestSit(seatsByName.Single(s => s.name == ChairName));
             yield return HostedMatch.Until(() => seating.IsSeated, "seated");
@@ -104,7 +108,8 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
             seats.RequestStand();
             yield return HostedMatch.Until(() => !seating.IsSeated, "stood up");
             yield return null;
-            Assert.IsTrue(header.activeSelf, "public auction remains visible after standing");
+            Assert.IsFalse(header.activeSelf, "standing hides the auction status but keeps the public lot");
+            Assert.IsTrue(lot.activeSelf, "the public lot remains visible after standing");
             Assert.IsFalse(panel.transform.Find("Bid Controls - Bottom Center").gameObject.activeSelf, "standing players cannot operate bids");
         }
 
@@ -115,6 +120,7 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
             yield return match.Start(tweak: s =>
             {
                 s.RoundSeconds = 3; s.AuctionRoundSeconds = 8; s.AuctionDurationSeconds = 3;
+                s.AuctionRounds = new[] { 2, 6, 10 };
                 s.AuctionSlots = new[] { new AuctionSlot { StartsAtSeconds = 0, DurationSeconds = 3 }, new AuctionSlot { StartsAtSeconds = 3, DurationSeconds = 3 } };
             });
             var seats = Object.FindFirstObjectByType<SeatController>();

@@ -2,16 +2,17 @@
     "MinPlayerCount": 3,
     "DefaultPlayerCount": 3,
     "MaxPlayerCount": 6,
-    "SharesPerCompanyPerPlayer": 5,
-    "AdditionalSharesPerCompany": 5,
+    "SharesPerCompanyPerPlayer": 10,
+    "AdditionalSharesPerCompany": 10,
     "RoundCount": 13,
-    "RoundSeconds": 60,
-    "AuctionRounds": [2, 6, 10],
+    "RoundSeconds": 120,
+    "AuctionRounds": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
     "AuctionRoundSeconds": 120,
     "AuctionDurationSeconds": 60,
-    "StartingCash": 200,
+    "StartingCash": 400,
     "StartingShares": 0,
     "StartingPrice": { "Min": 20, "Max": 30 },
+    "StartingPriceMultiplier": 2,
     "StartingPriceOffsets": [
         { "Min": -8, "Max": -5 },
         { "Min": -1, "Max": 1 },
@@ -19,16 +20,19 @@
     ],
     "MinPrice": 5,
     "PriceChange": {
-        "Amount": { "Min": 2, "Max": 7 },
-        "AmountOffsets": [
-            { "Min": 6, "Max": 9 },
-            { "Min": 3, "Max": 4 },
-            { "Min": -1, "Max": 0 }
+        "AmountBands": [
+            { "Min": 1, "Max": 3 },
+            { "Min": 4, "Max": 7 },
+            { "Min": 8, "Max": 12 }
+        ],
+        "CompanyWeights": [
+            { "Small": 0.10, "Medium": 0.30, "Large": 0.60 },
+            { "Small": 0.25, "Medium": 0.50, "Large": 0.25 },
+            { "Small": 0.60, "Medium": 0.30, "Large": 0.10 }
         ],
         "RiseChances": [0.35, 0.5, 0.75]
     },
     "AuctionSlots": [
-        { "StartsAtSeconds": 0, "DurationSeconds": 60 },
-        { "StartsAtSeconds": 60, "DurationSeconds": 30 }
+        { "StartsAtSeconds": 0, "DurationSeconds": 60 }
     ]
 }

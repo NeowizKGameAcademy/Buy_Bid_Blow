@@ -12,6 +12,31 @@ namespace BuyBidBlow.Dev.Editor
         static HUDIntegrationRunner(){api=ScriptableObject.CreateInstance<TestRunnerApi>();api.RegisterCallbacks(new Report());EditorApplication.update+=Tick;}
         static void Tick()
         {
+            foreach (var mode in new[] { "EditMode", "PlayMode" })
+            {
+                string request = "Library/Expansion" + mode + ".request";
+                if (!File.Exists(request) || EditorApplication.isCompiling || EditorApplication.isUpdating || EditorApplication.isPlayingOrWillChangePlaymode || SessionState.GetString("BBB.ExpansionTestReport", "").Length > 0) continue;
+                if (mode == "PlayMode" && EditorUserBuildSettings.standaloneBuildSubtarget != StandaloneBuildSubtarget.Player)
+                {
+                    EditorUserBuildSettings.standaloneBuildSubtarget = StandaloneBuildSubtarget.Player;
+                    return;
+                }
+#if UNITY_SERVER
+                if (mode == "PlayMode")
+                {
+                    UnityEditor.Compilation.CompilationPipeline.RequestScriptCompilation();
+                    return;
+                }
+#endif
+                string names = File.ReadAllText(request).Trim();
+                File.Delete(request);
+                SessionState.SetString("BBB.ExpansionTestReport", "Logs/Expansion" + mode);
+                var filter = new Filter { testMode = mode == "EditMode" ? TestMode.EditMode : TestMode.PlayMode };
+                if (names.Length > 0) filter.testNames = names.Split(';');
+                else filter.assemblyNames = new[] { "BuyBidBlow.Dev.Tests." + mode };
+                api.Execute(new ExecutionSettings(filter));
+                return;
+            }
             foreach(var kind in new[]{"Rules","Play"}){string request="Library/GameMenu"+kind+"Tests.request";if(!File.Exists(request)||EditorApplication.isCompiling||EditorApplication.isUpdating||EditorApplication.isPlayingOrWillChangePlaymode)continue;File.Delete(request);api.Execute(new ExecutionSettings(new Filter{testMode=kind=="Rules"?TestMode.EditMode:TestMode.PlayMode,testNames=kind=="Rules"?new[]{"BuyBidBlow.Dev.Tests.EditMode.Auction.AuctionTests","BuyBidBlow.Dev.Tests.EditMode.MenuResultRulesTests"}:new[]{"BuyBidBlow.Dev.Tests.PlayMode.GameMenuResultsTests"}}));return;}
             if(File.Exists("Library/AuctioneerAnimationTests.request")&&!EditorApplication.isCompiling&&!EditorApplication.isUpdating&&!EditorApplication.isPlayingOrWillChangePlaymode)
             {
@@ -65,7 +90,18 @@ namespace BuyBidBlow.Dev.Editor
             public void RunStarted(ITestAdaptor test){}
             public void TestStarted(ITestAdaptor test){}
             public void TestFinished(ITestResultAdaptor result){}
-            public void RunFinished(ITestResultAdaptor result){TestRunnerApi.SaveResultToFile(result,"Logs/HUDIntegrationTests.xml");File.WriteAllText("Library/HUDIntegrationTests.result",result.ResultState+"\n"+result.Message);}
+            public void RunFinished(ITestResultAdaptor result)
+            {
+                string report = SessionState.GetString("BBB.ExpansionTestReport", "");
+                if (report.Length > 0)
+                {
+                    TestRunnerApi.SaveResultToFile(result, report + ".xml");
+                    File.WriteAllText(report + ".result", result.ResultState + "\n" + result.Message);
+                    SessionState.EraseString("BBB.ExpansionTestReport");
+                    return;
+                }
+                TestRunnerApi.SaveResultToFile(result,"Logs/HUDIntegrationTests.xml");File.WriteAllText("Library/HUDIntegrationTests.result",result.ResultState+"\n"+result.Message);
+            }
         }
     }
 }

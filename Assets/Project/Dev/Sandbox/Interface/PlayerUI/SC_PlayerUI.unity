@@ -3216,7 +3216,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Timber
+  m_Text: Wood
 --- !u!222 &188402876
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -7789,7 +7789,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "2R   Straw \u2191   Timber \u2193\n5R   Timber \u2191   Brick \u2192"
+  m_Text: "2R   Straw \u2191   Wood \u2193\n5R   Wood \u2191   Brick \u2192"
 --- !u!222 &364543726
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -9110,7 +9110,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Timber
+  m_Text: Wood
 --- !u!222 &386920618
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -22864,7 +22864,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "Timber \xB7 E"
+  m_Text: "Wood \xB7 E"
 --- !u!222 &1198801514
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -35754,7 +35754,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Timber
+  m_Text: Wood
 --- !u!222 &2072768315
 CanvasRenderer:
   m_ObjectHideFlags: 0

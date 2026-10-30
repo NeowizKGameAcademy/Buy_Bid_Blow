@@ -41,15 +41,15 @@ namespace BuyBidBlow.Systems.Round
                 double opens = clock.StartsAt(round), closes = clock.ClosesAt(round);
                 spans.Add(new TimelineSpan(TimelineSpanKind.Round, round, opens, closes));
                 if (!settings.IsAuctionRound(round)) continue;
-                // AuctionRound runs slots[0] as Open, slots[1] as Secret. The round's close cuts a slot short
-                // (playtest overrides make rounds shorter than the slots), as it does in the engine.
+                double scale = settings.AuctionTimeScale(round, roundSecondsOverride);
                 for (int i = 0; i < settings.AuctionSlots.Length && i < 2; i++)
                 {
                     var slot = settings.AuctionSlots[i];
-                    double starts = opens + slot.StartsAtSeconds;
+                    double starts = opens + slot.StartsAtSeconds * scale;
                     if (starts >= closes) continue;
-                    var kind = i == 0 ? TimelineSpanKind.OpenAuction : TimelineSpanKind.SecretAuction;
-                    spans.Add(new TimelineSpan(kind, round, starts, Math.Min(closes, starts + slot.DurationSeconds)));
+                    var kind = (settings.SingleAuctionPerRound ? settings.IsSecretAuctionRound(round) : i == 1)
+                        ? TimelineSpanKind.SecretAuction : TimelineSpanKind.OpenAuction;
+                    spans.Add(new TimelineSpan(kind, round, starts, Math.Min(closes, starts + slot.DurationSeconds * scale)));
                 }
             }
             return spans;

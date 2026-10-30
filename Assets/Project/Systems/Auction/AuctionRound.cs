@@ -33,6 +33,16 @@ namespace BuyBidBlow.Systems.Auction
         // Private: tell each of Players won or lost; send the lot to the winner only.
         public event Action<SecretResult> SecretClosed;
 
+        // Single current-round lot. The absent auction is already finished and is never started.
+        public AuctionRound(Lot lot, bool secret, double roundStart, AuctionSlot slot,
+            int minBid, IReadOnlyDictionary<PlayerId, PlayerPortfolio> players, double timeScale = 1)
+            : this(secret ? default : lot, secret ? lot : default, roundStart,
+                new[] { slot, slot }, minBid, players, timeScale)
+        {
+            openClosed = secret;
+            secretClosed = !secret;
+        }
+
         // 두 물건·시작 시각·슬롯·최소 입찰가·플레이어로 경매 라운드를 구성
         // slots[0] = Open, slots[1] = Secret, in seconds from roundStart.
         public AuctionRound(Lot firstLot, Lot secondLot, double roundStart, IReadOnlyList<AuctionSlot> slots,
@@ -56,7 +66,7 @@ namespace BuyBidBlow.Systems.Auction
         // Safe to call every frame. Handles big time jumps by running every step that is due, in order.
         public void Tick(double now)
         {
-            if (Open == null && now >= SlotStart(0))
+            if (!openClosed && Open == null && now >= SlotStart(0))
             {
                 Open = new OpenAuction(firstLot, SlotEnd(0), minBid, players);
                 OpenStarted?.Invoke(Open);
@@ -68,7 +78,7 @@ namespace BuyBidBlow.Systems.Auction
                 OpenClosed?.Invoke(Open.Close());
             }
 
-            if (Secret == null && now >= SlotStart(1))
+            if (!secretClosed && Secret == null && now >= SlotStart(1))
             {
                 Secret = new SecretAuction(secondLot, SlotEnd(1), minBid, players);
                 SecretStarted?.Invoke(Secret);

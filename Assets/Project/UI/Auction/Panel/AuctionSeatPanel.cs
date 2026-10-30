@@ -101,6 +101,7 @@ namespace BuyBidBlow.UI.Auction
                 return data;
 
             data.complete = match.phase == MatchNet.Phase.Finished;
+            data.inMatch = match.phase == MatchNet.Phase.Playing;
             data.idleNote = match.nextAuctionRound > 0 ? $"다음 경매 {match.nextAuctionRound}R" : "남은 경매 없음";
             data.live = Live(out var stage);
             // A new auction slot starts the amount again from its minimum.
@@ -108,16 +109,16 @@ namespace BuyBidBlow.UI.Auction
             bidAmount = Mathf.Max(bidAmount, MinimumBid());
             data.bidAmount = bidAmount;
             data.notice = Time.unscaledTime < noticeUntil ? notice : null;
-            if (!data.live)
-                return data;
-
-            data.secret = stage == MatchNet.AuctionStage.Secret;
-            data.secondsLeft = match.auctionClosesAt - NetworkTime.time;
             var lot = match.auctionLot;
             // Directions are never sent; the view only shows rounds and companies.
             data.lot = new Lot(
                 new Info(lot.firstRound, (Company)lot.firstA, default, (Company)lot.firstB, default),
                 new Info(lot.secondRound, (Company)lot.secondA, default, (Company)lot.secondB, default));
+            if (!data.live)
+                return data;
+
+            data.secret = stage == MatchNet.AuctionStage.Secret;
+            data.secondsLeft = match.auctionClosesAt - NetworkTime.time;
             data.hasBid = !data.secret && match.highestBid > 0;
             data.highestBid = match.highestBid;
             data.highestBidder = match.highestBidder;

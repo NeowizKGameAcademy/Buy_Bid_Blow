@@ -21,6 +21,6 @@ namespace BuyBidBlow.Systems.Types
         }
 
         // 라운드·회사·등락을 문자열로 반환
-        public override string ToString() => $"{Round}R/{CompanyA} {DirectionA}·{CompanyB} {DirectionB}";
+        public override string ToString() => $"{Round}R/{CompanyA.DisplayName()} {DirectionA}·{CompanyB.DisplayName()} {DirectionB}";
     }
 }

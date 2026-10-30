@@ -18,7 +18,7 @@ namespace BuyBidBlow.Props
             var match = MatchNet.Current;
             bool visible = match && match.phase == MatchNet.Phase.Playing
                 && (match.auctionStage == MatchNet.AuctionStage.Open || match.auctionStage == MatchNet.AuctionStage.Secret)
-                && match.auctionLot.firstRound > 0 && match.auctionLot.secondRound > 0;
+                && match.auctionLot.firstRound > 0;
             if (visible && display) display.SetRounds(match.auctionLot.firstRound, match.auctionLot.secondRound);
             SetVisible(visible);
         }

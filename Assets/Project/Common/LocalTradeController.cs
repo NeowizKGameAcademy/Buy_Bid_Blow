@@ -98,7 +98,7 @@ namespace BuyBidBlow.Common
         {
             var data = new TradingPanelData
             {
-                company = company.ToString(),
+                company = company.DisplayName(),
                 owned = assets.GetShares(company),
                 available = assets.Available,
             };

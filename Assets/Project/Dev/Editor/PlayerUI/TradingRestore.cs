@@ -53,7 +53,7 @@ var timer=hud.transform.Find("Round Timer - Top Right");Rect(timer,-32,-24,350,1
 foreach(var text in timer.GetComponentsInChildren<Text>(true)){text.horizontalOverflow=HorizontalWrapMode.Wrap;text.verticalOverflow=VerticalWrapMode.Truncate;}
 Rect(c.prompt.transform,0,8,950,30);c.prompt.fontSize=18;
 PrefabUtility.SaveAsPrefabAsset(hud,Root+"/Prefabs/PF_PlayerHUD.prefab");PrefabUtility.SaveAsPrefabAsset(c.gameObject,Root+"/Prefabs/PF_PlayerUIRig.prefab");EditorUtility.SetDirty(c);EditorSceneManager.MarkSceneDirty(scene);EditorSceneManager.SaveScene(scene);AssetDatabase.SaveAssets();
-foreach(var panel in c.companyPanels){if(panel.GetComponentsInChildren<Image>(true).Any(i=>i.name=="Panel Background"&&!i.sprite))throw new Exception("Missing panel sprite");if(panel.GetComponentsInChildren<Text>(true).Single(t=>t.name=="Company Name").text!=panel.name.Replace("Stock Trade - ",""))throw new Exception("Company mismatch");}
+foreach(var panel in c.companyPanels){if(panel.GetComponentsInChildren<Image>(true).Any(i=>i.name=="Panel Background"&&!i.sprite))throw new Exception("Missing panel sprite");if(panel.GetComponentsInChildren<Text>(true).Single(t=>t.name=="Company Name").text!=panel.name.Replace("Stock Trade - ","").Replace("Timber","Wood"))throw new Exception("Company mismatch");}
 CaptureChecks(c);
 File.WriteAllText(Root+"/TradingRestoreVerification.txt","PASS: original five PNG assets restored from hash-verified local LFS objects; three company prefab instances linked; inactive by default; timer 350x104; trade panels below timer. Display-only quantity/payment calculation; actual transactions not connected.");
 }finally{if(close)EditorSceneManager.CloseScene(scene,true);}

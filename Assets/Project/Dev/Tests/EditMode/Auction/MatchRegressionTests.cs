@@ -10,7 +10,15 @@ namespace BuyBidBlow.Dev.Tests.EditMode.Auction
     public sealed class MatchRegressionTests
     {
         private static readonly PlayerId A = new PlayerId("a"), B = new PlayerId("b"), C = new PlayerId("c");
-        private static MatchSettings Rules() => JsonUtility.FromJson<MatchSettings>(File.ReadAllText("Assets/Project/Content/Match/MatchSettings.json"));
+        // Keep the original two-slot regression fixture independent of production balance changes.
+        private static MatchSettings Rules()
+        {
+            var rules = JsonUtility.FromJson<MatchSettings>(File.ReadAllText("Assets/Project/Content/Match/MatchSettings.json"));
+            rules.StartingCash = 200; rules.RoundSeconds = 60;
+            rules.AuctionRounds = new[] { 2, 6, 10 };
+            rules.AuctionSlots = new[] { new AuctionSlot { DurationSeconds = 60 }, new AuctionSlot { StartsAtSeconds = 60, DurationSeconds = 30 } };
+            return rules;
+        }
 
         [Test]
         public void FastRounds_SettleBothAuctionsAndRetainOnlyWinnersInformation()
@@ -58,7 +66,7 @@ namespace BuyBidBlow.Dev.Tests.EditMode.Auction
         {
             var rules = Rules(); rules.AuctionRounds = new[] { 15 };
             Assert.Throws<FormatException>(() => rules.Validate());
-            rules = Rules(); rules.AuctionSlots = new[] { rules.AuctionSlots[0] };
+            rules = Rules(); rules.AuctionSlots = new AuctionSlot[0];
             Assert.Throws<FormatException>(() => rules.Validate());
             rules = Rules(); rules.AuctionSlots[1].StartsAtSeconds = 0;
             Assert.Throws<FormatException>(() => rules.Validate());
