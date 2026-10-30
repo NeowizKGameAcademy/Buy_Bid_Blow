@@ -13,7 +13,7 @@
 | `Round` (라운드) | Match 안의 시간 구간. 길이는 경기 설정에 따르며 라운드 중 주가는 고정되고 Closing Bell로 끝난다 |
 | `Closing Bell` | 라운드 마감. 숨겨진 변동을 적용해 새 주가를 공개한다 |
 | `Player` (플레이어) | 접속한 참가자. `PlayerId`로 식별하며 연결(connection)과 구분한다 |
-| `Host` (방장) | Room 설정·시작 권한을 가진 Player. 서버 호스트가 아니다 |
+| `Host` (방장) | Room 설정·시작 권한을 가진 Player. 방장 PC가 Mirror 호스트를 겸한다 |
 | `Company` (회사) | 주식 종목. Straw·Timber·Brick |
 | `Trade` (거래) | 거래 창구에서 주식을 사고파는 행위. `Buy`(매수)·`Sell`(매도) |
 | `Auction` (경매) | Lot을 파는 경매. 한 경매에 Lot이 여러 개일 수 있다. 방식은 `Open`·`Secret`·`Dutch` |

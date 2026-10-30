@@ -1,0 +1,18 @@
+# 로컬 개발용 MariaDB. 첫 실행 때 db/migrations의 SQL을 순서대로 적용한다.
+# 스키마를 바꾼 뒤 다시 적용하려면: docker compose down -v && docker compose up -d
+services:
+  db:
+    image: mariadb:11.4
+    environment:
+      MARIADB_DATABASE: buybidblow
+      MARIADB_USER: buybidblow
+      MARIADB_PASSWORD: local-dev-only
+      MARIADB_ROOT_PASSWORD: local-dev-only
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./db/migrations:/docker-entrypoint-initdb.d:ro
+      - db-data:/var/lib/mysql
+
+volumes:
+  db-data:

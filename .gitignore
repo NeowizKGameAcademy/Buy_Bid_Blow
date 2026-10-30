@@ -47,6 +47,9 @@ ExportedObj/
 *.unityproj
 *.sln
 *.slnx
+# Backend는 Unity가 생성하지 않는 직접 관리 프로젝트다
+!/Backend/*.slnx
+!/Backend/**/*.csproj
 *.suo
 *.tmp
 *.user

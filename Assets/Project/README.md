@@ -1,6 +1,6 @@
 # Project 구조
 
-BuyBidBlow의 게임 코드와 콘텐츠를 관리한다. 독립 오디오 엔진은 `Assets/CueAudio`, 외부 DLL은 `Assets/Plugins`, Mirror는 기존 `Assets/Mirror`에 둔다.
+BuyBidBlow의 게임 코드와 콘텐츠를 관리한다. 독립 오디오 엔진은 `Assets/CueAudio`, 외부 DLL은 `Assets/Plugins`, Mirror는 기존 `Assets/Mirror`에 둔다. 백엔드 API 서버(계정·재화·상점·인벤토리·경기 기록)는 Unity 밖 레포 루트의 `Backend/`에 둔다(`Backend/README.md` 참고).
 
 ## 폴더 역할
 
@@ -13,6 +13,7 @@ BuyBidBlow의 게임 코드와 콘텐츠를 관리한다. 독립 오디오 엔�
 | `Content/Props` | 씬에 놓이는 소품. 거래 창구·시세 전광판·시계·알림판·종·회사 배너 등. 상호작용 여부로 폴더를 나누지 않는다 |
 | `UI` | 화면별 UI. `Menu`·`Lobby`·`HUD`·`Auction`·`Market`·`Portfolio`·`Lot`·`Result` |
 | `Common` | 여러 오브젝트가 함께 쓰는 컴포넌트·인터페이스 (예: `IInteractable`, 동기화 값 표시) |
+| `Backend` | 백엔드 API 호출(`BackendClient`, `UnityWebRequest`)과 로그인 토큰 보관. 요청·응답 DTO는 `Backend/Contracts`에 순수 C#으로 두고 레포 루트 `Backend/`의 서버가 같은 소스를 컴파일한다. API 연동을 시작할 때 만들며, 이 폴더의 asmref·Contracts asmdef는 asmdef 관리자와 합의한다 |
 | `Content` | 게임 콘텐츠. 레벨·소품·공용 에셋을 담으며, `Content/Props`에는 소품별 동작 코드와 프리팹·에셋도 함께 둔다. 캐릭터 모델은 그 모델을 쓰는 `Characters` 폴더에 둔다(늑대 → `Characters/Player/Wolf`, 돼지 → `Characters/NPC/Pig`) |
 | `Audio/Clips`, `Audio/Cues` | 게임용 오디오 파일·JSON 큐 정의 |
 | `Scenes` | 실행 씬 |
@@ -59,7 +60,7 @@ Content/Props/TradeCounter/
 | `*Event` | 필요한 시스템 처리 결과 이벤트 | `Systems/Types` |
 | `*Net` | 오브젝트별 Mirror NetworkBehaviour (SyncVar·Command·Rpc) | 해당 오브젝트의 `Characters/*`·`Content/Props/*`·`UI/*` 폴더 (예: `PlayerNet` → `Characters/Player`). 경기 전체 공개 상태(라운드·주가·Closing Bell 결과)는 `Common/MatchNet`이, 경기 일정(라운드·경매 구간의 시작·끝 시각)은 `Common/MatchTimeline`이 갖고, 소품·HUD는 이를 읽어 표시한다. 이벤트는 static이다: 일어난 일은 `MatchNet.RoundTurned`(라운드 마감과 다음 라운드 시작이 한 번에)·`MatchNet.AuctionStageChanged`, 미리 알아야 하는 시각은 `MatchTimeline`, 내 데이터는 `PlayerNet.Local*` |
 | `*View` | UI 컴포넌트. 로직이 커질 때만 `*Presenter`로 분리한다 | `UI/*` |
-| `*Repository` | 저장 인터페이스·구현 (저장 기능 도입 시) | 미정 |
+| `*Repository` | DB 저장 구현. Unity 쪽에는 두지 않는다 | 레포 루트 `Backend/`의 기능 폴더 |
 | `*Tests` | 테스트 클래스. 메서드 이름은 `조건_결과` 형식이다 | `Dev/Tests` |
 
 ## 씬과 개발 도구
