@@ -133,7 +133,7 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
             yield return HostedMatch.Until(() => MatchNet.Current.phase == MatchNet.Phase.Finished && results.IsOpen, "final results shown");
             Assert.AreEqual(1, PlayerNet.LocalResults.Length);
             Assert.IsTrue(PlayerNet.LocalResults[0].Own);
-            Assert.AreEqual(200, PlayerNet.LocalResults[0].Total);
+            Assert.AreEqual(400, PlayerNet.LocalResults[0].Total);
             Assert.AreEqual("2 / 2 ROUND", results.Body.text);
             Assert.IsTrue(results.Buttons[0].interactable, "host can return through the result screen");
             results.GetComponentInChildren<DetailedResultsView>().returnButton.onClick.Invoke();
@@ -143,7 +143,7 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
             Assert.AreEqual(0, PlayerNet.LocalInformation.Count);
             local.SetReady(true); local.CmdStartMatch();
             yield return HostedMatch.Until(() => local.inMatch && hall.IsPlaying && MatchNet.Current && PlayerNet.LocalPortfolio != null, "second match started");
-            Assert.AreEqual(200, PlayerNet.LocalPortfolio.Cash);
+            Assert.AreEqual(400, PlayerNet.LocalPortfolio.Cash);
         }
     }
 }

@@ -234,7 +234,7 @@ namespace BuyBidBlow.UI.Ticker
             timer.text="<mspace=0.62em>00:00</mspace>";
             overviewGroup=Node(surface,"Market overview",0,0,1280,720).gameObject;
             prices=new TMP_Text[3];changes=new TMP_Text[3];percentages=new TMP_Text[3];smallPlots=new TickerPlot[3];
-            string[] symbols={"STRW","TMBR","BRCK"};
+            string[] symbols={"STRW","WOOD","BRCK"};
             for(int c=0;c<3;c++)
             {
                 float y=20+c*226;

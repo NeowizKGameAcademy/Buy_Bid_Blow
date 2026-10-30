@@ -12749,7 +12749,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "Total  $268\n$150     Straw 2 \xB7 Timber 2 \xB7 Brick 0"
+  m_Text: "Total  $268\n$150     Straw 2 \xB7 Wood 2 \xB7 Brick 0"
 --- !u!222 &1308004365
 CanvasRenderer:
   m_ObjectHideFlags: 0

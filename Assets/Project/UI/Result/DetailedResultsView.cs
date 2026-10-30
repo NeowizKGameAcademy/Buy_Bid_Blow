@@ -1,4 +1,5 @@
 using System;
+using BuyBidBlow.Systems.Types;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -26,7 +27,7 @@ namespace BuyBidBlow.UI.Result
         {
             if(entries.Length==0)return;selected=Mathf.Clamp(selected,0,entries.Length-1);var e=entries[selected];title.text=e.Nickname+(e.IsLocal?" · 나":"");total.text=$"총자산  ${e.TotalAssets:N0}";cash.text=$"현금  ${e.Cash:N0}";stock.text=$"최종 주식 가치  ${e.StockValue:N0}";
             for(int i=0;i<playerButtons.Length;i++){playerButtons[i].gameObject.SetActive(i<entries.Length);if(i>=entries.Length)continue;var row=entries[i];playerLabels[i].text=$"{row.Rank}위  {row.Nickname}\n${row.TotalAssets:N0}";playerLabels[i].color=AssetHistoryGraph.Palette[i];playerButtons[i].GetComponent<Image>().color=i==selected?Color.white:new Color(.72f,.78f,.75f);}
-            for(int i=0;i<3;i++){int shares=e.CompanyShares!=null&&i<e.CompanyShares.Length?e.CompanyShares[i]:0;int price=e.FinalPrices!=null&&i<e.FinalPrices.Length?e.FinalPrices[i]:0;stockRows[i].text=$"{new[]{"Straw","Timber","Brick"}[i]}     {shares}주 × ${price}     = ${(long)shares*price:N0}";}
+            for(int i=0;i<3;i++){int shares=e.CompanyShares!=null&&i<e.CompanyShares.Length?e.CompanyShares[i]:0;int price=e.FinalPrices!=null&&i<e.FinalPrices.Length?e.FinalPrices[i]:0;stockRows[i].text=$"{((Company)i).DisplayName()}     {shares}주 × ${price}     = ${(long)shares*price:N0}";}
             graph.Present(entries,selected,round);for(int i=0;i<yAxis.Length;i++)yAxis[i].text="$"+(graph.Maximum*(4-i)/4).ToString("N0");
             var points=e.AssetHistory;int sample=points==null||points.Length==0?0:Mathf.Clamp(round,0,points.Length-1);readout.text=points==null||points.Length==0?"라운드 기록 없음":$"{(sample==0?"시작":sample+"R 정산 후")} · {e.Nickname}  ${points[sample]:N0}";
             legend.text="모든 플레이어 표시 · 선택한 플레이어의 선을 강조\n그래프 클릭: 해당 라운드 자산 확인";

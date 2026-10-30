@@ -69,7 +69,7 @@ namespace BuyBidBlow.UI.HUD
         }
         public void OnNotice(MatchNotice n)
         {
-            string company=((Company)n.Company).ToString();
+            string company=((Company)n.Company).DisplayName();
             switch(n.Kind)
             {
                 case MatchNoticeKind.Trade:BuyBidBlow.Audio.GameAudio.Play("market.trade",this);notices.TradeCompleted(company,n.Quantity,n.Buy?-n.Amount:n.Amount,n.Buy);break;

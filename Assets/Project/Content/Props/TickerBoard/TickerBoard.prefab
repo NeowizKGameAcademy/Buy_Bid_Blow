@@ -1068,7 +1068,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: TMBR
+  m_text: WOOD
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0bd5caece4e99f54e9369442e4056485, type: 2}
   m_sharedMaterial: {fileID: 6202209459708363578, guid: 0bd5caece4e99f54e9369442e4056485, type: 2}

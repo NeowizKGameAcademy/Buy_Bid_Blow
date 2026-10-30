@@ -16,12 +16,19 @@ namespace BuyBidBlow.Systems.Auction
         // 경매마다 4개 라운드를 섞어 물건 2개씩 미리 생성해 큐에 저장
         // prices[n][company] is the close of round n; prices[0] holds the starting prices.
         // Pass the match's Random so one seed replays prices and lots together.
-        public LotGenerator(IReadOnlyList<int> auctionRounds, IReadOnlyList<int[]> prices, Random random)
+        public LotGenerator(IReadOnlyList<int> auctionRounds, IReadOnlyList<int[]> prices, Random random, bool currentRoundOnly = false)
         {
             int companyCount = Enum.GetValues(typeof(Company)).Length;
 
             foreach (int start in auctionRounds)
             {
+                if (currentRoundOnly)
+                {
+                    if (start < 1 || start >= prices.Count)
+                        throw new ArgumentOutOfRangeException(nameof(auctionRounds));
+                    lots.Enqueue(new Lot(Make(start, prices, companyCount, random)));
+                    continue;
+                }
                 if (start < 1 || start + RoundsPerAuction - 1 >= prices.Count)
                     throw new ArgumentOutOfRangeException(nameof(auctionRounds), $"Auction at round {start} needs prices up to round {start + RoundsPerAuction - 1}.");
 

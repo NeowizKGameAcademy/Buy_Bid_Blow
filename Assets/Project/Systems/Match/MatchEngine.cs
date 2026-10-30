@@ -38,7 +38,7 @@ public sealed class MatchEngine {
  var rng=new Random(seed);prices.Add(settings.RollStartingPrices(rng));
  for(int i=0;i<settings.RoundCount;i++){var next=(int[])prices[i].Clone();foreach(var change in PriceChangeGenerator.Generate(settings.PriceChange,rng))next[(int)change.Company]=Math.Max(settings.MinPrice,next[(int)change.Company]+change.Amount);prices.Add(next);}
  history=PriceChangeGenerator.GenerateHistory(settings.PriceChange,prices[0],settings.MinPrice,seed);
- lots=new LotGenerator(settings.AuctionRounds,prices,rng);Trades=new TradeService(assets,Price,inventory);foreach(var p in players)assetHistory[p]=new List<int>();RecordAssets(0);StartRound(now);
+ lots=new LotGenerator(settings.AuctionRounds,prices,rng,settings.SingleAuctionPerRound);Trades=new TradeService(assets,Price,inventory);foreach(var p in players)assetHistory[p]=new List<int>();RecordAssets(0);StartRound(now);
  }
  int PriceIndex=>Complete?Settings.RoundCount:Round-1;
  // 현재 공개된 회사 가격을 반환
@@ -59,7 +59,7 @@ public sealed class MatchEngine {
  // 플레이어의 베팅 참가금을 반환 (없으면 0)
  public int BetStake(PlayerId p)=>bets.TryGetValue(p,out var b)?b.Stake:0;
  // 플레이어의 베팅 내용을 표시용 문자열로 반환
- public string BetDescription(PlayerId p)=>bets.TryGetValue(p,out var b)?$"↓ {b.Company} · ${b.Stake} → ${b.Stake*2}":"";
+ public string BetDescription(PlayerId p)=>bets.TryGetValue(p,out var b)?$"↓ {b.Company.DisplayName()} · ${b.Stake} → ${b.Stake*2}":"";
  // 매치 진행 중·마감 전·참가 플레이어인지 확인
  bool Accept(PlayerId p,double now)=>!Complete&&now<Deadline&&assets.ContainsKey(p);
  // 요청을 받을 수 있으면 매수/매도를 처리하고 결과 메시지를 반환
@@ -86,11 +86,13 @@ public sealed class MatchEngine {
  void StartRound(double now){Deadline=now+(roundSecondsOverride>0?roundSecondsOverride:Settings.GetRoundSeconds(Round));Auction=null;if(Settings.IsAuctionRound(Round)){
  // No agreed minimum yet: retain the existing local $1 fallback.
  // Fast playtests keep both auctions inside their shortened round, preserving slot order.
- double scale=roundSecondsOverride>0?roundSecondsOverride/(double)Settings.AuctionRoundSeconds:1;
- Auction=new AuctionRound(lots.Next(),lots.Next(),now,Settings.AuctionSlots,1,assets,scale);
+ double scale=Settings.AuctionTimeScale(Round,roundSecondsOverride);
+ Auction=Settings.SingleAuctionPerRound
+  ?new AuctionRound(lots.Next(),Settings.IsSecretAuctionRound(Round),now,Settings.AuctionSlots[0],1,assets,scale)
+  :new AuctionRound(lots.Next(),lots.Next(),now,Settings.AuctionSlots,1,assets,scale);
  Auction.OpenClosed+=r=>{if(r.Sold)Award(r);PublicResolved?.Invoke(r);};Auction.SecretClosed+=r=>{if(r.Result.Sold)Award(r.Result);SecretResolved?.Invoke(r);};Auction.Tick(now);
  }}
- void Award(AuctionResult result){information[result.Winner].Add(result.Lot.First);information[result.Winner].Add(result.Lot.Second);InformationAwarded?.Invoke(result);}
+ void Award(AuctionResult result){information[result.Winner].Add(result.Lot.First);if(result.Lot.HasSecond)information[result.Winner].Add(result.Lot.Second);InformationAwarded?.Invoke(result);}
  // 마감 시각이 지난 라운드를 닫아 베팅을 정산하고 다음 라운드로 진행하거나 매치 종료
  public void Tick(double now){if(Complete)return;bool changed=false;while(!Complete&&now>=Deadline){Auction?.Tick(Deadline);int closing=Round;foreach(var entry in bets){var b=entry.Value;int payout=prices[closing][(int)b.Company]<prices[closing-1][(int)b.Company]?b.Stake*2:0;if(payout>0)assets[entry.Key].Credit(payout);BetSettled?.Invoke(entry.Key,b.Company,b.Stake,payout);}bets.Clear();RecordAssets(closing);double boundary=Deadline;if(Round==Settings.RoundCount){Complete=true;Auction=null;}else{Round++;StartRound(boundary);}changed=true;}Auction?.Tick(now);if(changed)Changed?.Invoke();}
  // 현금과 보유 주식 평가액을 합한 총자산을 계산

@@ -14,6 +14,6 @@ namespace BuyBidBlow.Systems.Types
         }
 
         // 회사와 부호 붙은 변동량을 문자열로 반환
-        public override string ToString() => $"{Company} {Amount:+#;-#;0}";
+        public override string ToString() => $"{Company.DisplayName()} {Amount:+#;-#;0}";
     }
 }

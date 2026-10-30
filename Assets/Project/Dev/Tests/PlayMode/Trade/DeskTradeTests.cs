@@ -65,7 +65,8 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
 
                 int cash = assets.Cash, shares = assets.GetShares(company), price = MatchNet.Current.GetPrice(company);
                 var view = UnityEngine.Object.FindObjectsByType<TradingPanelView>(FindObjectsSortMode.None).Single();
-                Assert.AreEqual(company.ToString(), Label(view, "Company Header/Company Name"), "company panel shown");
+                Assert.AreEqual(company.DisplayName(), Label(view, "Company Header/Company Name"), "company panel shown");
+                if (company == Company.Timber) Assert.AreEqual("Wood", Label(view, "Company Header/Company Name"), "name matches the physical WOOD counter");
                 Assert.AreEqual("$" + price, Label(view, "Company Header/Current Price"), "published price shown");
 
                 int stock = MatchNet.Current.GetStock(company);

@@ -23,6 +23,9 @@ namespace BuyBidBlow.Dev.Tests.PlayMode
         // Takes a rig out of the player so the test can aim it still. Stop destroys it, or it would outlive the player.
         public void Detach(Transform rig)
         {
+            // The new input reader applies even zero mouse delta to the camera each frame.
+            // Freeze only this test body while the test aims the detached sensor explicitly.
+            Body.GetComponent<PlayerInputReader>().enabled = false;
             rig.SetParent(null, true);
             detached.Add(rig.gameObject);
         }

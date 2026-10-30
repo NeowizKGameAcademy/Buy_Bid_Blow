@@ -130,7 +130,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8060034712135703962, guid: 16da808c57d7cbe4880606fcfc261aa9, type: 3}
       propertyPath: m_Text
-      value: Timber
+      value: Wood
       objectReference: {fileID: 0}
     - target: {fileID: 9177862283430982322, guid: 16da808c57d7cbe4880606fcfc261aa9, type: 3}
       propertyPath: m_Text

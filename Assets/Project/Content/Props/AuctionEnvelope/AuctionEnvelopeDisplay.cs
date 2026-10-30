@@ -13,7 +13,7 @@ namespace BuyBidBlow.Props {
   // 라운드 값이 바뀌면 저장하고 라벨 갱신
   public void SetRounds(int first,int second){if(firstRound==first&&secondRound==second)return;firstRound=first;secondRound=second;RefreshLabel();}
   // 라운드 라벨 텍스트 갱신
-  public void RefreshLabel(){if(roundLabel){roundLabel.text=$"{firstRound}R · {secondRound}R";roundLabel.ForceMeshUpdate(true);}}
+  public void RefreshLabel(){if(roundLabel){roundLabel.text=secondRound>0?$"{firstRound}R · {secondRound}R":$"{firstRound}R";roundLabel.ForceMeshUpdate(true);}}
  }
 }
 
