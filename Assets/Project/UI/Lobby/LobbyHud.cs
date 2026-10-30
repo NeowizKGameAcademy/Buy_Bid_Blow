@@ -22,13 +22,14 @@ namespace BuyBidBlow.UI.Lobby
         public GameNetworkManager room;
         public LobbySpriteLibrary library;
         [SerializeField] ConnectionController session;
-        [SerializeField] RectTransform canvasRect, selector, leftArrow, rightArrow;
+        [SerializeField] RectTransform canvasRect;
         [SerializeField] RectTransform[] seats;
-        [SerializeField] Text[] names, statuses, categories;
+        [SerializeField] Text[] names, statuses;
         [SerializeField] Image[] plates;
         [SerializeField] GameObject[] crowns, selfBadges, vacant;
-        [SerializeField] Button ready, options, exit, previous, next;
-        Button start;
+        [SerializeField] Button ready, options, exit, customize, start;
+        // 커스터마이징은 캐릭터 옆 선택기 대신 오른쪽 위 버튼으로 여는 팝업에서 한다
+        [SerializeField] CustomizePopupView popup;
         [SerializeField] Text readyText, count, notice, optionRows;
         [SerializeField] GameObject connection, optionPanel;
         [SerializeField] InputField address, nickname, port;
@@ -36,7 +37,6 @@ namespace BuyBidBlow.UI.Lobby
         public Transform selectionRing;
         static readonly Vector2 C=Vector2.one*.5f;
         static readonly Color Cream=new Color(1,.94f,.77f);
-        static readonly string[] CategoryNames={"상의","하의","넥타이"};
         int category,focus,optionRow;
         int connectionFocus=-1;
         bool typing;
@@ -67,11 +67,12 @@ namespace BuyBidBlow.UI.Lobby
                 var go=new GameObject("UI EventSystem",typeof(EventSystem),typeof(InputSystemUIInputModule));
                 var module=go.GetComponent<InputSystemUIInputModule>();module.AssignDefaultActions();module.move=null;module.submit=null;module.cancel=null;
             }
-            RefreshCustomizationKeyHints();
+            if(!popup)popup=FindFirstObjectByType<CustomizePopupView>();
             EnsureTextInput();
             ready.onClick.AddListener(ToggleReady);options.onClick.AddListener(ToggleOptions);exit.onClick.AddListener(Leave);
-            CreateStartButton();
-            previous.onClick.AddListener(()=>ChangeVariant(-1));next.onClick.AddListener(()=>ChangeVariant(1));
+            // 게임 시작·커스터마이징 버튼은 씬에 배치돼 있고, 표시 여부는 Refresh가 정한다
+            start.onClick.AddListener(StartMatch);start.gameObject.SetActive(false);
+            customize.onClick.AddListener(OpenCustomize);customize.gameObject.SetActive(false);
             connection.transform.Find("Host").GetComponent<Button>().onClick.AddListener(Host);
             connection.transform.Find("Join").GetComponent<Button>().onClick.AddListener(Join);
             connection.transform.Find("Cancel").GetComponent<Button>().onClick.AddListener(()=>session.Cancel());
@@ -89,6 +90,8 @@ namespace BuyBidBlow.UI.Lobby
         {
             if(BuyBidBlow.UI.Menu.GameMenuController.BlocksInput)return;
             var e=Event.current;
+            // 커스터마이징 팝업이 열려 있으면 로비 키 입력을 모두 무시
+            if(popup&&popup.IsOpen){if(e.type==EventType.KeyUp)heldKeys.Remove(e.keyCode);if(e.isKey)e.Use();return;}
             if(e.type==EventType.KeyUp){heldKeys.Remove(e.keyCode);return;}
             if(e.type!=EventType.KeyDown||e.control||e.alt||e.command||e.keyCode==KeyCode.None)return;
             if(!heldKeys.Add(e.keyCode))return;
@@ -122,24 +125,6 @@ namespace BuyBidBlow.UI.Lobby
             if(key==KeyCode.Escape){Leave();e.Use();return;}
             if(key==KeyCode.Tab){focus=(focus+1)%3;e.Use();return;}
             if(enter||key==KeyCode.Space){if(focus==0)ToggleReady();else if(focus==1)ToggleOptions();else Leave();e.Use();return;}
-            if(key==KeyCode.W){SelectCategory(-1);e.Use();}
-            if(key==KeyCode.S){SelectCategory(1);e.Use();}
-            if(key==KeyCode.A){ChangeVariant(-1);e.Use();}
-            if(key==KeyCode.D){ChangeVariant(1);e.Use();}
-        }
-        void RefreshCustomizationKeyHints()
-        {
-            for(int i=0;i<2;i++) {
-                var cap=selector.Find("Key "+i); if(!cap)continue;
-                var arrow=cap.Find("Arrow");if(arrow)arrow.gameObject.SetActive(false);
-                var label=cap.Find("Key Label");
-                if(label)label.GetComponent<Text>().text=i==0?"W":"S";
-                else Text("Key Label",cap,i==0?"W":"S",17,new Vector2(24,24),Vector2.zero,C);
-            }
-            foreach(var button in new[]{previous,next}) {
-                if(button.transform.Find("Key Hint"))continue;
-                Text("Key Hint",button.transform,button==previous?"A":"D",18,new Vector2(40,24),new Vector2(0,-42),C);
-            }
         }
         // EventSystem에 IME 지원 입력 브리지를 붙이고 입력 모듈에 연결
         static void EnsureTextInput()
@@ -151,23 +136,17 @@ namespace BuyBidBlow.UI.Lobby
         // 매 프레임 텍스트 입력 브리지 확인 후 HUD 갱신
         void LateUpdate(){EnsureTextInput();Refresh(false);}
         // 커스터마이징 카테고리 순환 선택
+        // No on-screen selector any more; kept as a code API for the Dev/Editor lobby verification tools.
         public void SelectCategory(int d){category=(category+d+3)%3;focus=0;}
         // 선택 카테고리의 외형 변형을 바꿔 로컬 플레이어에 적용
         public void ChangeVariant(int d)
         {
             var p=Local();if(!p||!NetworkClient.ready)return;
             p.Customize(category==0?(p.top+d+3)%3:p.top,category==1?(p.bottom+d+2)%2:p.bottom,category==2?(p.tie+d+6)%6:p.tie);
-            Pulse(d<0?previous:next);focus=0;
+            focus=0;
         }
-        // 준비 버튼을 복제해 방장 전용 게임 시작 버튼 생성
-        // Host-only start button, cloned from the ready button and placed above it.
-        void CreateStartButton()
-        {
-            start=Instantiate(ready,ready.transform.parent);start.name="Start";
-            var rect=(RectTransform)start.transform;rect.anchoredPosition+=new Vector2(0,((RectTransform)ready.transform).rect.height+12);
-            foreach(var label in start.GetComponentsInChildren<Text>(true))label.text="게임 시작";
-            start.onClick.AddListener(StartMatch);start.gameObject.SetActive(false);
-        }
+        // 로컬 플레이어가 방에 있으면 커스터마이징 팝업 열기
+        public void OpenCustomize(){if(popup&&Local()&&NetworkClient.ready)popup.Open();}
         // 로컬 플레이어로 매치 시작 명령 전송
         public void StartMatch(){var p=Local();if(p&&NetworkClient.ready){p.CmdStartMatch();Pulse(start);}}
         // 로컬 플레이어 준비 상태 토글
@@ -226,7 +205,7 @@ namespace BuyBidBlow.UI.Lobby
             for(int i=0;i<6;i++) {
                 var p=players.FirstOrDefault(p=>p.seat==i);bool occupied=preview?i<4:p;bool done=preview?i==2:p&&p.ready;bool mine=i==localSeat;
                 var head=Project(PlayerNet.SeatPosition(i)+Vector3.up*3f);
-                seats[i].anchoredPosition=head+new Vector2(0,mine?136:24);
+                seats[i].anchoredPosition=head+new Vector2(0,24);
                 names[i].text=occupied?(p&&!string.IsNullOrEmpty(p.nickname)?p.nickname:"WOLF "+(i+1).ToString("00")):"참가 대기";
                 names[i].supportRichText=false;names[i].resizeTextForBestFit=true;names[i].resizeTextMinSize=13;names[i].resizeTextMaxSize=21;
                 names[i].transform.parent.GetComponent<Image>().sprite=S(occupied?"08_Nameplate":"20_VacantNameplate");
@@ -237,13 +216,6 @@ namespace BuyBidBlow.UI.Lobby
                 crowns[i].SetActive(occupied&&i==(preview?0:owner));selfBadges[i].SetActive(mine);
                 vacant[i].SetActive(!occupied);vacant[i].GetComponent<RectTransform>().anchoredPosition=Project(PlayerNet.SeatPosition(i)+Vector3.up*1.45f);
             }
-            selector.gameObject.SetActive(localSeat>=0);leftArrow.gameObject.SetActive(localSeat>=0);rightArrow.gameObject.SetActive(localSeat>=0);
-            if(localSeat>=0) {
-                selector.anchoredPosition=Project(PlayerNet.SeatPosition(localSeat)+Vector3.up*3f)+new Vector2(0,16);
-                var chest=Project(PlayerNet.SeatPosition(localSeat)+Vector3.up*1.55f);
-                leftArrow.anchoredPosition=chest+new Vector2(-104,0);rightArrow.anchoredPosition=chest+new Vector2(104,0);
-                for(int i=0;i<3;i++){categories[i].text=CategoryNames[(category+i+2)%3];categories[i].color=i==1?new Color(1,.8f,.32f):new Color(Cream.r,Cream.g,Cream.b,.42f);}
-            }
             if(selectionRing){selectionRing.gameObject.SetActive(localSeat>=0);if(localSeat>=0)selectionRing.position=PlayerNet.SeatPosition(localSeat)+Vector3.up*.02f;}
             bool allReady=players.Length>=room.MinPlayers&&players.All(p=>p.ready);
             bool roomHost=local&&local.seat==owner;
@@ -252,7 +224,9 @@ namespace BuyBidBlow.UI.Lobby
             readyText.text=local&&local.ready?"준비 취소":"준비 완료";
             State(ready,"24_ReadyButtonStates",enabled,focus==0);State(options,"04_SmallButtonStates",true,focus==1||optionPanel.activeSelf);
             State(exit,"04_SmallButtonStates",preview||(session&&session.State==ConnectionState.InRoom),focus==2);
-            State(previous,"18_RoundButtonStates",enabled,false);State(next,"18_RoundButtonStates",enabled,false);
+            // 방에 들어와 있을 때만 커스터마이징 버튼 표시 (에디터 미리보기에서는 항상 표시)
+            bool inRoom=local&&session&&session.State==ConnectionState.InRoom;
+            if(customize){customize.gameObject.SetActive(preview||inRoom);if(preview||inRoom)State(customize,"04_SmallButtonStates",true,false);}
             bool showConnection=!preview&&(!session||session.State!=ConnectionState.InRoom)&&!optionPanel.activeSelf;
             connection.SetActive(showConnection);
             if(session) {
@@ -297,11 +271,11 @@ namespace BuyBidBlow.UI.Lobby
             var root=new GameObject("Lobby HUD",typeof(RectTransform),typeof(Canvas),typeof(CanvasScaler),typeof(GraphicRaycaster));root.transform.SetParent(transform,false);
             var canvas=root.GetComponent<Canvas>();canvas.renderMode=RenderMode.ScreenSpaceOverlay;canvas.sortingOrder=20;
             var scaler=root.GetComponent<CanvasScaler>();scaler.uiScaleMode=CanvasScaler.ScaleMode.ScaleWithScreenSize;scaler.referenceResolution=new Vector2(1920,1080);scaler.matchWidthOrHeight=0;
-            canvasRect=root.GetComponent<RectTransform>();var tl=new Vector2(0,1);var tr=Vector2.one;
-            var logo=Image("Logo",root.transform,"01_LogoPlate",new Vector2(450,120),new Vector2(273,-90),tl);
-            Text("Game Title",logo.transform,"BUY, BID, BLOW",35,new Vector2(410,75),new Vector2(0,-8),C);
+            canvasRect=root.GetComponent<RectTransform>();var tc=new Vector2(.5f,1);var tr=Vector2.one;
+            var logo=Image("Logo",root.transform,"01_LogoPlate",new Vector2(450,120),new Vector2(0,-90),tc);
+            Text("Game Title",logo.transform,"Lobby",35,new Vector2(410,75),new Vector2(0,-8),C);
             Image("Gavel",logo.transform,"02_Gavel",new Vector2(40,40),new Vector2(0,43),C);
-            var sub=Image("Subtitle",root.transform,"03_SubtitlePlate",new Vector2(280,44),new Vector2(273,-151),tl,true);
+            var sub=Image("Subtitle",root.transform,"03_SubtitlePlate",new Vector2(280,44),new Vector2(0,-151),tc,true);
             Text("Label",sub.transform,"경매장 대기실",24,new Vector2(240,40),Vector2.zero,C);
             var counter=Image("Player Count",root.transform,"04_SmallButtonStates_Normal",new Vector2(132,58),new Vector2(-416,-69),tr,true);
             Image("Person",counter.transform,"05_Person",new Vector2(24,24),new Vector2(-39,0),C);count=Text("Count",counter.transform,"4 / 6",25,new Vector2(80,42),new Vector2(14,0),C);
@@ -309,6 +283,7 @@ namespace BuyBidBlow.UI.Lobby
             options.transform.Find("Label").GetComponent<RectTransform>().anchoredPosition=new Vector2(15,0);Image("Cog",options.transform,"06_Options",new Vector2(24,24),new Vector2(-36,0),C);
             exit=Button("Exit",root.transform,"04_SmallButtonStates","나가기",new Vector2(144,58),new Vector2(-115,-69),tr);
             exit.transform.Find("Label").GetComponent<RectTransform>().anchoredPosition=new Vector2(15,0);Image("Door",exit.transform,"07_Exit",new Vector2(26,26),new Vector2(-44,0),C);
+            customize=Button("Customize",root.transform,"04_SmallButtonStates","커스터마이징",new Vector2(170,58),new Vector2(-584,-69),tr);
             seats=new RectTransform[6];names=new Text[6];statuses=new Text[6];plates=new Image[6];crowns=new GameObject[6];selfBadges=new GameObject[6];vacant=new GameObject[6];
             for(int i=0;i<6;i++) {
                 seats[i]=Node("Player "+(i+1),root.transform,new Vector2(190,100),Vector2.zero,C);
@@ -321,21 +296,16 @@ namespace BuyBidBlow.UI.Lobby
                 var self=Image("Self Badge",seats[i],"10_LocalBadge",new Vector2(34,34),new Vector2(94,-22),C);selfBadges[i]=self.gameObject;Text("Self",self.transform,"나",17,new Vector2(26,26),Vector2.zero,C).color=new Color(.16f,.11f,.04f);
                 var marker=Node("Vacant "+(i+1),root.transform,new Vector2(126,126),Vector2.zero,C);vacant[i]=marker.gameObject;Image("Dashed Ring",marker,"21_VacantCircle",new Vector2(126,126),Vector2.zero,C);Image("Plus",marker,"22_VacantPlus",new Vector2(30,30),Vector2.zero,C);
             }
-            selector=Node("Keyboard Category Selector",root.transform,new Vector2(168,110),Vector2.zero,C);Image("Selected Row",selector,"14_CategoryHighlight",new Vector2(146,32),Vector2.zero,C,true);
-            categories=new Text[3];for(int i=0;i<3;i++)categories[i]=Text("Category "+i,selector,CategoryNames[i],i==1?25:18,new Vector2(140,30),new Vector2(0,(1-i)*31),C);
-            Image("Up",selector,"15_CategoryChevron",new Vector2(14,8),new Vector2(0,51),C);Image("Down",selector,"15_CategoryChevron",new Vector2(14,8),new Vector2(0,-51),C).transform.localRotation=Quaternion.Euler(0,0,180);
-            for(int i=0;i<2;i++){var cap=Image("Key "+i,selector,"16_Keycap",new Vector2(24,24),new Vector2(95,14-i*28),C,true);Image("Arrow",cap.transform,"17_KeyboardArrow",new Vector2(10,12),Vector2.zero,C).transform.localRotation=Quaternion.Euler(0,0,i*180);}
-            previous=Button("Previous Variant",root.transform,"18_RoundButtonStates","",new Vector2(54,54),Vector2.zero,C);leftArrow=previous.GetComponent<RectTransform>();
-            next=Button("Next Variant",root.transform,"18_RoundButtonStates","",new Vector2(54,54),Vector2.zero,C);rightArrow=next.GetComponent<RectTransform>();
-            Image("Chevron",previous.transform,"19_SideChevron",new Vector2(17,25),Vector2.zero,C);Image("Chevron",next.transform,"19_SideChevron",new Vector2(17,25),Vector2.zero,C).transform.localRotation=Quaternion.Euler(0,0,180);
             ready=Button("Ready",root.transform,"24_ReadyButtonStates","",new Vector2(350,92),new Vector2(-223,94),new Vector2(1,0));
             Image("Check",ready.transform,"12_Check",new Vector2(32,32),new Vector2(-113,0),C).color=new Color(.12f,.08f,.02f);readyText=Text("Ready Label",ready.transform,"준비 완료",36,new Vector2(245,66),new Vector2(31,0),C);readyText.color=new Color(.12f,.08f,.02f);
+            // Host-only start button, one ready-button height + 12 above it.
+            start=Button("Start",root.transform,"24_ReadyButtonStates","",new Vector2(350,92),new Vector2(-223,198),new Vector2(1,0));
+            Image("Check",start.transform,"12_Check",new Vector2(32,32),new Vector2(-113,0),C).color=new Color(.12f,.08f,.02f);Text("Ready Label",start.transform,"게임 시작",36,new Vector2(245,66),new Vector2(31,0),C).color=new Color(.12f,.08f,.02f);
             notice=Text("Match Status",root.transform,"",18,new Vector2(650,38),new Vector2(0,60),new Vector2(.5f,0));
             var panel=Image("Connection",root.transform,"08_Nameplate",new Vector2(600,240),new Vector2(0,-180),C,true);connection=panel.gameObject;Text("Title",panel.transform,"대기실 접속",30,new Vector2(540,42),new Vector2(0,74),C);
             var field=Image("Host Address",panel.transform,"14_CategoryHighlight",new Vector2(360,42),new Vector2(0,20),C,true);field.raycastTarget=true;address=field.gameObject.AddComponent<InputField>();address.targetGraphic=field;address.textComponent=Text("Address",field.transform,"localhost",21,new Vector2(332,36),Vector2.zero,C);address.text="localhost";address.characterLimit=128;
             Button("Host",panel.transform,"04_SmallButtonStates","H  방 만들기",new Vector2(220,48),new Vector2(-125,-42),C);Button("Join",panel.transform,"04_SmallButtonStates","J  접속",new Vector2(220,48),new Vector2(125,-42),C);Text("Help",panel.transform,"J: 주소 입력 → Enter 접속   ·   H: 호스트",17,new Vector2(550,30),new Vector2(0,-89),C);
             var dialog=Image("Options Dialog",root.transform,"08_Nameplate",new Vector2(520,340),Vector2.zero,C,true);optionPanel=dialog.gameObject;Text("Title",dialog.transform,"옵션",32,new Vector2(460,50),new Vector2(0,112),C);optionRows=Text("Rows",dialog.transform,"",23,new Vector2(460,210),new Vector2(0,-20),C);RefreshOptions();optionPanel.SetActive(false);
-            RefreshCustomizationKeyHints();
             UpgradeConnectionPanel();
             Canvas.ForceUpdateCanvases();Refresh(!Application.isPlaying);
         }
